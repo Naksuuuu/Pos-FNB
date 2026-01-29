@@ -14,9 +14,9 @@
   "aliases": {
     "components": "@/Components",
     "utils": "@/Utils/cn.js",
-    "ui": "@/Components/Elements",
+    "ui": "@/Components/Elements/Shadcn",
     "lib": "@/Utils",
-    "hooks": "@/Hooks"
+    "hooks": "@/Hooks/Common"
   },
   "registries": {}
 }

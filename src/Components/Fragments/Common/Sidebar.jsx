@@ -8,39 +8,15 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/Components/Elements/sidebar";
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
-const items = [
-  {
-    title: "Home",
-    url: "#",
-    icon: Home,
-  },
-  {
-    title: "Inbox",
-    url: "#",
-    icon: Inbox,
-  },
-  {
-    title: "Calendar",
-    url: "#",
-    icon: Calendar,
-  },
-  {
-    title: "Search",
-    url: "#",
-    icon: Search,
-  },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
-  },
-];
+  SidebarProvider,
+} from "@/Components/Elements/Shadcn/Sidebar/sidebar";
+import { SidebarItem } from "@/Context/SidebarItem";
+import { memo } from "react";
+import { Link } from "react-router-dom";
 
-const SidebarApp = () => {
+const CreateSidebar = memo(() => {
   return (
-    <Sidebar>
+    <Sidebar collapsible="icon">
       <SidebarHeader>
         <h1 className="text-lg font-bold">My App</h1>
       </SidebarHeader>
@@ -49,13 +25,13 @@ const SidebarApp = () => {
           {/* <SidebarGroupLabel>Application</SidebarGroupLabel> */}
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
+              {SidebarItem.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                  <SidebarMenuButton asChild tooltip={item.title}>
+                    <Link to={item.path}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -65,6 +41,15 @@ const SidebarApp = () => {
       </SidebarContent>
     </Sidebar>
   );
-};
+});
+
+const SidebarApp = memo(({ children }) => {
+  return (
+    <SidebarProvider>
+      <CreateSidebar />
+      {children}
+    </SidebarProvider>
+  );
+});
 
 export default SidebarApp;

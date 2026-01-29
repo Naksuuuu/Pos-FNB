@@ -1,4 +1,4 @@
-import { SidebarTrigger } from "@/Components/Elements/sidebar";
+import { SidebarTrigger } from "@/Components/Elements/Shadcn/Sidebar/sidebar";
 
 const Navbar = () => {
   return (
