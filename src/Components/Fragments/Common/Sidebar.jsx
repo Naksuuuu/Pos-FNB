@@ -14,7 +14,7 @@ import { SidebarItem } from "@/Context/SidebarItem";
 import { memo } from "react";
 import { Link } from "react-router-dom";
 
-const CreateSidebar = memo(() => {
+const CreateSidebar = () => {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
@@ -41,7 +41,7 @@ const CreateSidebar = memo(() => {
       </SidebarContent>
     </Sidebar>
   );
-});
+};
 
 const SidebarApp = memo(({ children }) => {
   return (
