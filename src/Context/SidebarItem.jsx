@@ -13,13 +13,7 @@ const SIDEBAR_ITEMS = [
     children: [
       {
         title: "Products",
-        path: "/dashboard/inventory/products",
-        icon: LayoutDashboard,
-        children: null,
-      },
-      {
-        title: "Categories",
-        path: "/dashboard/inventory/categories",
+        path: "/dashboard/products",
         icon: LayoutDashboard,
         children: null,
       },

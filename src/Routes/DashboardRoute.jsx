@@ -19,7 +19,7 @@ const DashboardRoute = [
     element: createProtectedRoute(<PanelCashier />),
   },
   {
-    path: "/dashboard/inventory/products",
+    path: "/dashboard/products",
     element: createProtectedRoute(<PanelProduct />),
   },
 ];
