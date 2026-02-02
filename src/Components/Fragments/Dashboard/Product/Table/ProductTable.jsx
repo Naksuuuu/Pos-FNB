@@ -1,14 +1,5 @@
 import { Button } from "@/Components/Elements/Shadcn/Button/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/Components/Elements/Shadcn/Dialog/dialog";
+
 import {
   Table,
   TableBody,
@@ -19,15 +10,32 @@ import {
 } from "@/Components/Elements/Shadcn/Table/table";
 
 import { dummyProducts } from "@/Pages/Customer/Catalog/ListCatalog";
-import { Trash } from "lucide-react";
-import { useState } from "react";
+import { Pen, Trash } from "lucide-react";
+import { useCallback, useMemo, useState } from "react";
+import ProductDeleteModal from "../Modal/ProductDeleteModal";
+import ProductEditModal from "../Modal/ProductEditModal";
 
-function ProductTable() {
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const products = dummyProducts.map((product) => {
-    const { extra, ...productWithoutExtra } = product;
-    return productWithoutExtra;
-  });
+const ProductTable = () => {
+  const [selectedEditProduct, setSelectedEditProduct] = useState(null);
+  const [selectedDeleteProduct, setSelectedDeleteProduct] = useState(null);
+  const products = useMemo(
+    () =>
+      dummyProducts.map((product) => {
+        const { extra, ...productWithoutExtra } = product;
+        return productWithoutExtra;
+      }),
+    [],
+  );
+
+  const handleOpenDeleteModal = useCallback((productSelected) => {
+    setSelectedEditProduct(null);
+    setSelectedDeleteProduct(productSelected);
+  }, []);
+
+  const handleOpenEditModal = useCallback((productSelected) => {
+    setSelectedDeleteProduct(null);
+    setSelectedEditProduct(productSelected);
+  }, []);
 
   return (
     <div>
@@ -55,9 +63,17 @@ function ProductTable() {
                   size="icon"
                   variant="ghost"
                   className="rounded-full text-red-500 hover:bg-red-200 hover:text-red-600 cursor-pointer"
-                  onClick={() => setSelectedProduct(product)}
+                  onClick={() => handleOpenDeleteModal(product)}
                 >
                   <Trash />
+                </Button>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="rounded-full text-emerald-500 hover:bg-emerald-200 hover:text-emerald-600 cursor-pointer"
+                  onClick={() => handleOpenEditModal(product)}
+                >
+                  <Pen />
                 </Button>
               </TableCell>
             </TableRow>
@@ -65,35 +81,14 @@ function ProductTable() {
         </TableBody>
       </Table>
 
-      <Dialog open={selectedProduct !== null} onOpenChange={() => setSelectedProduct(null)}>
-        <DialogContent showCloseButton={false}>
-          <DialogHeader>
-            <DialogTitle>{`Are you sure you want to delete ${selectedProduct?.name}?`}</DialogTitle>
-            <DialogDescription>
-              This action cannot be undone. This will permanently delete your product and remove your data from our
-              servers.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="outline" className="cursor-pointer">
-                Cancel
-              </Button>
-            </DialogClose>
-            <DialogClose asChild>
-              <Button
-                variant="destructive"
-                className="cursor-pointer"
-                onClick={() => console.log(`Deleting ${selectedProduct?.id}`)}
-              >
-                Delete
-              </Button>
-            </DialogClose>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      {selectedDeleteProduct && (
+        <ProductDeleteModal selectedProduct={selectedDeleteProduct} handleOpenModal={handleOpenDeleteModal} />
+      )}
+      {selectedEditProduct && (
+        <ProductEditModal selectedProduct={selectedEditProduct} handleOpenModal={handleOpenEditModal} />
+      )}
     </div>
   );
-}
+};
 
 export default ProductTable;
