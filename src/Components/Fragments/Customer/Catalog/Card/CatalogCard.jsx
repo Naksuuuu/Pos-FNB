@@ -17,17 +17,11 @@ const ProductCard = ({ imagePath, name, category, description, id }) => {
       <img src={imagePath} alt={name} className="relative z-20 object-cover object-center w-full aspect-12/10" />
       <CardHeader className="flex items-center justify-between">
         <CardTitle>{name}</CardTitle>
-        <CardAction>
-          <Badge variant="secondary">{category}</Badge>
-        </CardAction>
       </CardHeader>
       <CardContent>
         <CardDescription>{description}</CardDescription>
       </CardContent>
       <CardFooter className="flex flex-col justify-between w-full gap-2 md:flex-row">
-        <Button variant="outline" className="w-full md:w-2/3">
-          Detail
-        </Button>
         <Button asChild className="w-full md:w-1/3 bg-emerald-600 hover:bg-emerald-700">
           <Link to={`/menu/${id}`}>Tambah</Link>
         </Button>

@@ -1,6 +1,5 @@
 import { Button } from "@/Components/Elements/Shadcn/Button/button";
 import { Card, CardContent, CardFooter } from "@/Components/Elements/Shadcn/Card/card";
-import { Minus, Plus } from "lucide-react";
 import { memo } from "react";
 
 const ActionCard = memo(({ children, onActionClick, actionTitle }) => {

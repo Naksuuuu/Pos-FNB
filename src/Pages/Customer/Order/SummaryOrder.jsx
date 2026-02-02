@@ -1,21 +1,15 @@
 import { Button } from "@/Components/Elements/Shadcn/Button/button";
-import ActionCard from "@/Components/Fragments/Customer/Card/ActionCard";
+import ActionCard from "@/Components/Fragments/Customer/Common/Card/ActionCard";
 import { rupiah } from "@/Utils/rupiahHelper";
 import { ArrowLeft, Minus, Pen, Plus } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const SummaryOrder = () => {
-  const [totalPrice, setTotalPrice] = useState(0);
   const navigate = useNavigate();
   const orderItems = JSON.parse(sessionStorage.getItem("orderItems") || "[]");
 
-  useEffect(() => {
-    if (orderItems) {
-      const total = orderItems.reduce((acc, item) => acc + item.harga, 0);
-      setTotalPrice(total);
-    }
-  }, [orderItems]);
+  const totalPrice = useMemo(() => orderItems.reduce((acc, item) => acc + item.harga, 0), [orderItems]);
 
   const handleCheckout = useCallback(() => {
     navigate("/payment");

@@ -1,8 +1,8 @@
 import { Badge } from "@/Components/Elements/Shadcn/Badge/badge";
-import ProductCard from "@/Components/Fragments/Customer/Catalog/Card/ProductCard";
+import CatalogCard from "@/Components/Fragments/Customer/Catalog/Card/CatalogCard";
 import { rupiah } from "@/Utils/rupiahHelper";
 import { ShoppingBasket } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 
 const dummyProducts = [
@@ -97,16 +97,10 @@ const dummyProducts = [
 
 const ListCatalog = () => {
   const navigate = useNavigate();
-  const [totalPrice, setTotalPrice] = useState(0);
   const productGroupByCategory = Object.groupBy(dummyProducts, (product) => product.category);
   const isOrderItems = JSON.parse(sessionStorage.getItem("orderItems") || "[]");
 
-  useEffect(() => {
-    if (isOrderItems) {
-      const total = isOrderItems.reduce((acc, item) => acc + item.harga, 0);
-      setTotalPrice(total);
-    }
-  }, [isOrderItems]);
+  const totalPrice = useMemo(() => isOrderItems.reduce((acc, item) => acc + item.harga, 0), [isOrderItems]);
 
   const handleCheckout = () => {
     navigate("/order");
@@ -127,7 +121,7 @@ const ListCatalog = () => {
                 </div>
                 <div className="grid w-full grid-cols-2 gap-3 md:grid-cols-2">
                   {products.map((product, index) => (
-                    <ProductCard
+                    <CatalogCard
                       key={index}
                       {...product}
                       imagePath={

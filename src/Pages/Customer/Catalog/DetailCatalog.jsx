@@ -5,7 +5,7 @@ import { Minus, Plus, X } from "lucide-react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { dummyProducts } from "./ListCatalog";
 import { useCallback, useState } from "react";
-import ActionCard from "@/Components/Fragments/Customer/Card/ActionCard";
+import ActionCard from "@/Components/Fragments/Customer/Common/Card/ActionCard";
 
 const DetailCatalog = () => {
   const { catalogId } = useParams();
