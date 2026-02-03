@@ -19,10 +19,6 @@ export const Routes = createBrowserRouter([
   ...DashboardRoute,
 ]);
 
-const App = () => (
-  <StrictMode>
-    <RouterProvider router={Routes} fallbackElement={<RootErrorBoundary />} />
-  </StrictMode>
-);
+const App = () => <RouterProvider router={Routes} fallbackElement={<RootErrorBoundary />} />;
 
 createRoot(document.getElementById("root")).render(<App />);

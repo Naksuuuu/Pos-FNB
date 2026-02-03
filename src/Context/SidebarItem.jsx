@@ -1,6 +1,6 @@
-import { Computer, LayoutDashboard } from "lucide-react";
+import { Computer, LayoutDashboard, Database } from "lucide-react";
 
-const SIDEBAR_ITEMS = [
+export const SidebarItem = [
   {
     title: "Dashboard",
     path: "/dashboard",
@@ -9,7 +9,7 @@ const SIDEBAR_ITEMS = [
   },
   {
     title: "Inventory",
-    icon: LayoutDashboard,
+    icon: Database,
     children: [
       {
         title: "Products",
@@ -26,5 +26,3 @@ const SIDEBAR_ITEMS = [
     children: null,
   },
 ];
-
-export const SidebarItem = SIDEBAR_ITEMS;

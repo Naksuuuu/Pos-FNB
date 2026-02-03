@@ -1,3 +1,4 @@
+import { SidebarProvider } from "@/Components/Elements/Shadcn/Sidebar/sidebar";
 import DashLayout from "@/Components/Layouts/DashLayout";
 import { lazy } from "react";
 
@@ -6,7 +7,11 @@ const PanelCashier = lazy(() => import("@/Pages/Dashboard/Cashier/PanelCashier")
 const PanelProduct = lazy(() => import("@/Pages/Dashboard/Product/PanelProduct"));
 
 const createProtectedRoute = (component) => {
-  return <DashLayout>{component}</DashLayout>;
+  return (
+    <SidebarProvider>
+      <DashLayout>{component}</DashLayout>
+    </SidebarProvider>
+  );
 };
 
 const DashboardRoute = [

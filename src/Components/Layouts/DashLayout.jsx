@@ -1,5 +1,5 @@
 import Navbar from "../Fragments/Common/Navbar";
-import SidebarApp from "../Fragments/Common/Sidebar";
+import SidebarApp from "../Fragments/Dashboard/Common/Sidebar/Sidebar";
 
 const DashLayout = ({ children }) => {
   return (
