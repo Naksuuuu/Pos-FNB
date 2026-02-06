@@ -30,21 +30,25 @@ export const createMenus = createAsyncThunk("menu/createMenus", async (menuData,
 
     throw new Error(response.message || "Failed to create menu");
   } catch (error) {
-    // Error sudah diproses di Base.js interceptor
-    const serverErrors = error?.validationErrors || error?.data?.errors || null;
-
-    // Convert array messages to single string if needed
-    const processedErrors = serverErrors
-      ? Object.entries(serverErrors).reduce((acc, [field, messages]) => {
-          acc[field] = Array.isArray(messages) ? messages[0] : messages;
-          return acc;
-        }, {})
-      : null;
-
     return rejectWithValue({
       message: error?.message || "Failed to create menu",
-      validationErrors: processedErrors,
+      validationErrors: error?.validationErrors || {},
       allErrors: error?.allErrors || [],
+      status: error?.status,
+    });
+  }
+});
+
+export const deleteMenu = createAsyncThunk("menu/deleteMenu", async (menuId, { rejectWithValue }) => {
+  try {
+    const response = await MenuService.deleteMenu(menuId);
+    if (response.success && response.httpcode === 200) {
+      return response.data;
+    }
+    throw new Error(response.message || "Failed to delete menu");
+  } catch (error) {
+    return rejectWithValue({
+      message: error?.message || "Failed to delete menu",
       status: error?.status,
     });
   }
@@ -77,6 +81,17 @@ const menuSlice = createSlice({
         state.menus.push(action.payload);
       })
       .addCase(createMenus.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || action.error.message;
+      })
+      .addCase(deleteMenu.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteMenu.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(deleteMenu.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || action.error.message;
       });

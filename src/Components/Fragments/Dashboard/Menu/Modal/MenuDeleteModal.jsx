@@ -8,14 +8,25 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/Components/Elements/Shadcn/Dialog/dialog";
-import { memo } from "react";
+import useDeleteMenu from "@/Hooks/Menu/useDeleteMenu";
+import { memo, useCallback } from "react";
 
 const MenuDeleteModal = memo(({ selectedProduct, onOpenModal }) => {
+  const { deleteMenuById } = useDeleteMenu();
+
+  const handleDelete = useCallback(
+    async (menuId) => {
+      await deleteMenuById(menuId);
+      onOpenModal(null);
+    },
+    [deleteMenuById, onOpenModal],
+  );
+
   return (
     <Dialog open={selectedProduct !== null} onOpenChange={() => onOpenModal(null)}>
       <DialogContent showCloseButton={false}>
         <DialogHeader>
-          <DialogTitle>{`Are you sure you want to delete ${selectedProduct?.name}?`}</DialogTitle>
+          <DialogTitle>{`Delete ${selectedProduct?.name}?`}</DialogTitle>
           <DialogDescription>
             This action cannot be undone. This will permanently delete your menu and remove your data from our servers.
           </DialogDescription>
@@ -26,15 +37,9 @@ const MenuDeleteModal = memo(({ selectedProduct, onOpenModal }) => {
               Cancel
             </Button>
           </DialogClose>
-          <DialogClose asChild>
-            <Button
-              variant="destructive"
-              className="cursor-pointer"
-              onClick={() => console.log(`Update ${selectedProduct?.id}`)}
-            >
-              Delete
-            </Button>
-          </DialogClose>
+          <Button variant="destructive" className="cursor-pointer" onClick={() => handleDelete(selectedProduct?.id)}>
+            Delete
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

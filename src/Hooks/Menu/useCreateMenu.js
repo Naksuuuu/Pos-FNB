@@ -7,9 +7,8 @@ const useCreateMenu = () => {
 
   const createMenu = useCallback(
     async (menuData) => {
-      const result = await dispatch(createMenus(menuData)).unwrap();
+      await dispatch(createMenus(menuData)).unwrap();
       await dispatch(fetchMenus()).unwrap();
-      console.log(result);
     },
     [dispatch],
   );

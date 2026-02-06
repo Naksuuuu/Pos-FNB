@@ -1,6 +1,6 @@
 import { selectAllMenus } from "@/Redux/Features/Menu/MenuSelector";
 import { fetchMenus } from "@/Redux/Features/Menu/MenuSlice";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const useAllMenu = () => {

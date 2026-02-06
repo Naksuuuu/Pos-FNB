@@ -13,7 +13,19 @@ export const createMenu = async (menuData) => {
     const response = await apiUtils.post(MENU_ENDPOINT, menuData);
     return response.data;
   } catch (error) {
-    console.log(error);
-    throw error;
+    // console.log(error);
+    // throw error;
+    return error;
+  }
+};
+
+export const deleteMenu = async (menuId) => {
+  try {
+    const response = await apiUtils.delete(`${MENU_ENDPOINT}/${menuId}`);
+    return response.data;
+  } catch (error) {
+    // console.log(error);
+    // throw error;
+    return error;
   }
 };
