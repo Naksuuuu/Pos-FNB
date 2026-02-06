@@ -9,7 +9,7 @@ const api = axios.create({
   baseURL: BASE_URL,
   timeout: 10000,
   headers: {
-    "Content-Type": "application/json",
+    "Content-Type": "multipart/form-data",
     Accept: "application/json",
     "x-api-key": API_KEY,
   },
@@ -47,13 +47,13 @@ api.interceptors.response.use(
         }
       }
 
-      if (status === 422 && (data?.data || data?.errors)) {
+      if (status === 422 && data?.errors) {
         const { validationErrors, allErrors } = parseValidationErrors(data);
 
         return Promise.reject({
           message: data.message || "Validation Error",
           status: 422,
-          data: data.data || data.errors,
+          data: data.data || data.errors || data.data.errors,
           validationErrors,
           allErrors,
           isValidationError: true,

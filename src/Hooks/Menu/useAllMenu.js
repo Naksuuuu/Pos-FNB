@@ -1,15 +1,22 @@
 import { selectAllMenus } from "@/Redux/Features/Menu/MenuSelector";
 import { fetchMenus } from "@/Redux/Features/Menu/MenuSlice";
-import { useEffect } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const useAllMenu = () => {
   const dispatch = useDispatch();
   const menus = useSelector(selectAllMenus);
 
-  useEffect(() => {
+  // const { current_page, data: menus } = useMemo(() => menusData, [menusData]);
+  // const { current_page, data: menus = [] } = menusData || {};
+
+  const loadMenus = useCallback(() => {
     dispatch(fetchMenus());
   }, [dispatch]);
+
+  useEffect(() => {
+    loadMenus();
+  }, [loadMenus]);
 
   return { menus };
 };

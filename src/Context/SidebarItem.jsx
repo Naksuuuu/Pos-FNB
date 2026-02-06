@@ -12,8 +12,8 @@ export const SidebarItem = [
     icon: Database,
     children: [
       {
-        title: "Products",
-        path: "/dashboard/products",
+        title: "Menu",
+        path: "/dashboard/menu",
         icon: LayoutDashboard,
         children: null,
       },

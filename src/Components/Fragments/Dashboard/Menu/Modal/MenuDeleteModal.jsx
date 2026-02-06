@@ -10,15 +10,14 @@ import {
 } from "@/Components/Elements/Shadcn/Dialog/dialog";
 import { memo } from "react";
 
-const ProductDeleteModal = memo(({ selectedProduct, handleOpenModal }) => {
+const MenuDeleteModal = memo(({ selectedProduct, onOpenModal }) => {
   return (
-    <Dialog open={selectedProduct !== null} onOpenChange={() => handleOpenModal(null)}>
+    <Dialog open={selectedProduct !== null} onOpenChange={() => onOpenModal(null)}>
       <DialogContent showCloseButton={false}>
         <DialogHeader>
           <DialogTitle>{`Are you sure you want to delete ${selectedProduct?.name}?`}</DialogTitle>
           <DialogDescription>
-            This action cannot be undone. This will permanently delete your product and remove your data from our
-            servers.
+            This action cannot be undone. This will permanently delete your menu and remove your data from our servers.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
@@ -42,4 +41,4 @@ const ProductDeleteModal = memo(({ selectedProduct, handleOpenModal }) => {
   );
 });
 
-export default ProductDeleteModal;
+export default MenuDeleteModal;

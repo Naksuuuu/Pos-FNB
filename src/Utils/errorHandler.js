@@ -1,5 +1,5 @@
 export const parseValidationErrors = (errorResponse) => {
-  const errors = errorResponse?.errors || errorResponse?.data;
+  const errors = errorResponse?.errors;
 
   if (!errors) {
     return {

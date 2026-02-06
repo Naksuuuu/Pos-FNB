@@ -20,9 +20,9 @@ import {
 import { Input } from "@/Components/Elements/Shadcn/Input/input";
 import { memo } from "react";
 
-const ProductEditModal = ({ selectedProduct, handleOpenModal }) => {
+const MenuEditModal = ({ selectedProduct, onOpenModal }) => {
   return (
-    <Dialog open={selectedProduct !== null} onOpenChange={() => handleOpenModal(null)}>
+    <Dialog open={selectedProduct !== null} onOpenChange={() => onOpenModal(null)}>
       <DialogContent showCloseButton={false}>
         <DialogHeader>
           <DialogTitle>{`Are you sure you want to edit ${selectedProduct?.name}?`}</DialogTitle>
@@ -74,4 +74,4 @@ const ProductEditModal = ({ selectedProduct, handleOpenModal }) => {
     </Dialog>
   );
 };
-export default ProductEditModal;
+export default MenuEditModal;
