@@ -15,7 +15,7 @@ export const fetchMenus = createAsyncThunk("menu/fetchMenus", async (_, { reject
       return rejectWithValue(response.message || "Failed to fetch menus");
     }
 
-    return response.data; // Return the data array from API response
+    return response.data;
   } catch (error) {
     return rejectWithValue(error.message || error);
   }
@@ -28,7 +28,7 @@ export const createMenus = createAsyncThunk("menu/createMenus", async (menuData,
       return response.data;
     }
 
-    throw new Error(response.message || "Failed to create menu");
+    throw new Error(response.data);
   } catch (error) {
     return rejectWithValue({
       message: error?.message || "Failed to create menu",
@@ -42,6 +42,21 @@ export const createMenus = createAsyncThunk("menu/createMenus", async (menuData,
 export const deleteMenu = createAsyncThunk("menu/deleteMenu", async (menuId, { rejectWithValue }) => {
   try {
     const response = await MenuService.deleteMenu(menuId);
+    if (response.success && response.httpcode === 200) {
+      return response.data;
+    }
+    throw new Error(response.message || "Failed to delete menu");
+  } catch (error) {
+    return rejectWithValue({
+      message: error?.message || "Failed to delete menu",
+      status: error?.status,
+    });
+  }
+});
+
+export const editMenu = createAsyncThunk("menu/editMenu", async ([menuId, menuData], { rejectWithValue }) => {
+  try {
+    const response = await MenuService.editMenu(menuId, menuData);
     if (response.success && response.httpcode === 200) {
       return response.data;
     }
@@ -81,6 +96,18 @@ const menuSlice = createSlice({
         state.menus.push(action.payload);
       })
       .addCase(createMenus.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || action.error.message;
+      })
+      .addCase(editMenu.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(editMenu.fulfilled, (state) => {
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(editMenu.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || action.error.message;
       })

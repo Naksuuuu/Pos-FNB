@@ -20,12 +20,12 @@ import {
 import { memo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import CreateMenuSchema from "@/Schema/Menu/CreateMenu";
+import { CreateMenuSchema } from "@/Schema/Menu/MenuSchema";
 import { Input } from "@/Components/Elements/Shadcn/Input/input";
 import useCreateMenu from "@/Hooks/Menu/useCreateMenu";
 import { Textarea } from "@/Components/Elements/Shadcn/Input/textarea";
 
-const MenuAddModal = memo(({ isOpen, onOpenModal }) => {
+const MenuCreateModal = memo(({ isOpen, onOpenModal }) => {
   const { createMenu } = useCreateMenu();
   const {
     register,
@@ -38,22 +38,11 @@ const MenuAddModal = memo(({ isOpen, onOpenModal }) => {
 
   const onSubmit = async (data) => {
     try {
-      const formData = new FormData();
-      formData.append("image", data.image[0]);
-      formData.append("name", data.name);
-      formData.append("price", data.price);
-      formData.append("stock", data.stock);
-      formData.append("category_id", data.category_id);
-      formData.append("description", data.description);
-      formData.append("is_available", data.is_available);
-
       console.log("before create menu");
-
-      await createMenu(formData);
+      await createMenu(data);
       console.log("after create menu");
       onOpenModal(false);
     } catch (error) {
-      console.log("error in modal:", error);
       if (error?.validationErrors) {
         Object.entries(error.validationErrors).forEach(([field, message]) => {
           setError(field, { type: "server", message });
@@ -134,14 +123,14 @@ const MenuAddModal = memo(({ isOpen, onOpenModal }) => {
                 {errors.description && <FieldError>{errors.description.message}</FieldError>}
               </Field>
 
-              <DialogFooter>
-                <Field orientation="horizontal" className="justify-end">
-                  <DialogClose asChild>
-                    <Button variant="outline" className="cursor-pointer">
-                      Cancel
-                    </Button>
-                  </DialogClose>
-                  <Button type="submit" className="cursor-pointer bg-emerald-500 hover:bg-emerald-600">
+              <DialogFooter className="justify-end">
+                <DialogClose asChild>
+                  <Button variant="outline" className="cursor-pointer">
+                    Cancel
+                  </Button>
+                </DialogClose>
+                <Field>
+                  <Button type="submit" className="cursor-pointer bg-primaryhover:bg-emerald-600">
                     Add
                   </Button>
                 </Field>
@@ -153,4 +142,4 @@ const MenuAddModal = memo(({ isOpen, onOpenModal }) => {
     </Dialog>
   );
 });
-export default MenuAddModal;
+export default MenuCreateModal;

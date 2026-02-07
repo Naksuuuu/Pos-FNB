@@ -8,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/Components/Elements/Shadcn/Table/table";
+import { rupiah } from "@/Utils/rupiahHelper";
 
 import { Pen, Trash } from "lucide-react";
 import { memo } from "react";
@@ -29,19 +30,19 @@ const MenuTable = memo(({ menus, onOpenDeleteModal, onOpenEditModal }) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {menus.map((product) => (
-            <TableRow key={product.id}>
-              <TableCell>{product.id}</TableCell>
-              <TableCell>{product.name.length > 100 ? `${product.name.substring(0, 50)}...` : product.name}</TableCell>
-              <TableCell>{product.category?.name ?? "loading"}</TableCell>
-              <TableCell>{product.price}</TableCell>
-              <TableCell>{product.stock}</TableCell>
+          {menus.map((menu) => (
+            <TableRow key={menu.id}>
+              <TableCell>{menu.id}</TableCell>
+              <TableCell>{menu.name.length > 100 ? `${menu.name.substring(0, 50)}...` : menu.name}</TableCell>
+              <TableCell>{menu.category?.name ?? "loading"}</TableCell>
+              <TableCell>{rupiah(menu.price)}</TableCell>
+              <TableCell>{menu.stock}</TableCell>
               <TableCell>
                 <Button
                   size="icon"
                   variant="ghost"
                   className="rounded-full text-red-500 hover:bg-red-200 hover:text-red-600 cursor-pointer"
-                  onClick={() => onOpenDeleteModal(product)}
+                  onClick={() => onOpenDeleteModal(menu)}
                 >
                   <Trash />
                 </Button>
@@ -49,7 +50,7 @@ const MenuTable = memo(({ menus, onOpenDeleteModal, onOpenEditModal }) => {
                   size="icon"
                   variant="ghost"
                   className="rounded-full text-emerald-500 hover:bg-emerald-200 hover:text-emerald-600 cursor-pointer"
-                  onClick={() => onOpenEditModal(product)}
+                  onClick={() => onOpenEditModal(menu)}
                 >
                   <Pen />
                 </Button>

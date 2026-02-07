@@ -1,5 +1,5 @@
 import { Button } from "@/Components/Elements/Shadcn/Button/button";
-import MenuAddModal from "@/Components/Fragments/Dashboard/Menu/Modal/MenuAddModal";
+import MenuCreateModal from "@/Components/Fragments/Dashboard/Menu/Modal/MenuCreateModal";
 import MenuDeleteModal from "@/Components/Fragments/Dashboard/Menu/Modal/MenuDeleteModal";
 import MenuEditModal from "@/Components/Fragments/Dashboard/Menu/Modal/MenuEditModal";
 import MenuTable from "@/Components/Fragments/Dashboard/Menu/Table/MenuTable";
@@ -11,8 +11,6 @@ const PanelMenu = () => {
   const [selectedEditProduct, setSelectedEditProduct] = useState(null);
   const [selectedDeleteProduct, setSelectedDeleteProduct] = useState(null);
   const [selectedAddProduct, setSelectedAddProduct] = useState(false);
-
-  // console.log(current_page);
 
   const handleOpenDeleteModal = useCallback((productSelected) => {
     setSelectedEditProduct(null);
@@ -46,7 +44,7 @@ const PanelMenu = () => {
       )}
       {selectedEditProduct && <MenuEditModal selectedProduct={selectedEditProduct} onOpenModal={handleOpenEditModal} />}
 
-      {selectedAddProduct && <MenuAddModal isOpen={selectedAddProduct} onOpenModal={handleOpenAddModal} />}
+      {selectedAddProduct && <MenuCreateModal isOpen={selectedAddProduct} onOpenModal={handleOpenAddModal} />}
     </div>
   );
 };
