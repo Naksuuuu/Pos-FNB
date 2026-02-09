@@ -38,7 +38,7 @@ const CreateMenuSchema = z.object({
     .any()
     .refine((files) => !files || files instanceof FileList, "File is required")
     .refine((files) => !files || ["image/jpeg", "image/png"].includes(files[0]?.type), "Only JPG/PNG allowed")
-    .refine((files) => !files || files[0]?.size <= 5 * 1024 * 1024, "Max file size is 5MB"),
+    .refine((files) => !files || files[0]?.size <= 2 * 1024 * 1024, "Max file size is 2MB"),
   is_available,
 });
 
@@ -60,8 +60,8 @@ const EditMenuSchema = z.object({
       "Only JPG/PNG allowed",
     )
     .refine(
-      (files) => !files || !(files instanceof FileList) || files.length === 0 || files[0]?.size <= 10 * 1024 * 1024,
-      "Max file size is 5MB",
+      (files) => !files || !(files instanceof FileList) || files.length === 0 || files[0]?.size <= 2 * 1024 * 1024,
+      "Max file size is 2MB",
     ),
   is_available,
 });

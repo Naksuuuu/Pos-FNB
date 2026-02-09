@@ -14,9 +14,12 @@ import { Textarea } from "@/Components/Elements/Shadcn/Input/textarea";
 import useEditMenu from "@/Hooks/Menu/useEditMenu";
 import { EditMenuSchema } from "@/Schema/Menu/MenuSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Upload } from "lucide-react";
+import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 
 const MenuEditModal = ({ selectedProduct, onOpenModal }) => {
+  const [imagePreview, setImagePreview] = useState(null);
   const { edit } = useEditMenu();
 
   const {
@@ -48,94 +51,129 @@ const MenuEditModal = ({ selectedProduct, onOpenModal }) => {
     }
   };
 
+  const onFileChange = useCallback((e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    setImagePreview(url);
+  }, []);
+
   return (
     <Dialog open={selectedProduct !== null} onOpenChange={() => onOpenModal(null)}>
       <DialogContent showCloseButton={false}>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <FieldSet>
-            <DialogHeader>
-              <DialogTitle>Edit Menu</DialogTitle>
-              <DialogDescription>Create New Menu</DialogDescription>
-            </DialogHeader>
-            <FieldGroup>
-              <Field>
-                <FieldLabel htmlFor="image">Menu Image</FieldLabel>
-                <Input
-                  type="file"
-                  id="image"
-                  autoComplete="off"
-                  {...register("image", {
-                    setValueAs: (files) => (files && files.length > 0 ? files : undefined),
-                  })}
-                  aria-invalid={errors.image ? "true" : "false"}
-                />
-                {errors.image && <FieldError>{errors.image.message}</FieldError>}
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="name">Menu Name</FieldLabel>
-                <Input
-                  id="name"
-                  autoComplete="off"
-                  {...register("name")}
-                  aria-invalid={errors.name ? "true" : "false"}
-                />
-                {errors.name && <FieldError>{errors.name.message}</FieldError>}
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="price">Price</FieldLabel>
-                <Input
-                  id="price"
-                  autoComplete="off"
-                  {...register("price")}
-                  aria-invalid={errors.price ? "true" : "false"}
-                />
-                {errors.price && <FieldError>{errors.price.message}</FieldError>}
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="stock">Stock</FieldLabel>
-                <Input
-                  id="stock"
-                  autoComplete="off"
-                  {...register("stock")}
-                  aria-invalid={errors.stock ? "true" : "false"}
-                />
-                {errors.stock && <FieldError>{errors.stock.message}</FieldError>}
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="category_id">Category ID</FieldLabel>
-                <Input
-                  id="category_id"
-                  autoComplete="off"
-                  {...register("category_id")}
-                  aria-invalid={errors.category_id ? "true" : "false"}
-                />
-                {errors.category_id && <FieldError>{errors.category_id.message}</FieldError>}
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="description">Description</FieldLabel>
-                <Textarea
-                  id="description"
-                  autoComplete="off"
-                  {...register("description")}
-                  aria-invalid={errors.description ? "true" : "false"}
-                />
-                {errors.description && <FieldError>{errors.description.message}</FieldError>}
-              </Field>
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+          <DialogHeader>
+            <DialogTitle>Edit Menu</DialogTitle>
+            <DialogDescription>Create New Menu</DialogDescription>
+          </DialogHeader>
 
-              <DialogFooter>
-                <DialogClose asChild>
-                  <Button variant="outline" className="cursor-pointer">
-                    Cancel
-                  </Button>
-                </DialogClose>
-                <Field orientation="horizontal" className="justify-end">
-                  <Button type="submit" className="cursor-pointer bg-emerald-500 hover:bg-emerald-600">
-                    Edit
-                  </Button>
+          <div className="no-scrollbar max-h-[50vh] overflow-y-auto">
+            <FieldSet>
+              <FieldGroup>
+                <div className="w-full ">
+                  <img
+                    src={selectedProduct.image_url}
+                    alt={selectedProduct.name}
+                    className="mx-auto w-full object-cover rounded-md aspect-video"
+                  />
+                </div>
+                <Field>
+                  <FieldLabel htmlFor="image">Foto Baru</FieldLabel>
+                  {imagePreview && (
+                    <div className="w-full ">
+                      <img
+                        src={imagePreview}
+                        alt={selectedProduct.name}
+                        className="mx-auto w-full object-cover rounded-md aspect-video"
+                      />
+                    </div>
+                  )}
+
+                  <label
+                    htmlFor="image"
+                    className="block cursor-pointer rounded-md border border-dashed p-2 text-center hover:bg-primary/5"
+                  >
+                    <div className="text-sm font-medium flex items-center justify-center gap-2">
+                      <Upload className="size-4" /> Pilih gambar
+                    </div>
+                  </label>
+
+                  <Input
+                    type="file"
+                    id="image"
+                    autoComplete="off"
+                    {...register("image", {
+                      setValueAs: (files) => (files && files.length > 0 ? files : undefined),
+                      onChange: onFileChange,
+                    })}
+                    aria-invalid={errors.image ? "true" : "false"}
+                    className="hidden"
+                  />
+                  {errors.image && <FieldError>{errors.image.message}</FieldError>}
                 </Field>
-              </DialogFooter>
-            </FieldGroup>
-          </FieldSet>
+                <Field>
+                  <FieldLabel htmlFor="name">Menu Name</FieldLabel>
+                  <Input
+                    id="name"
+                    autoComplete="off"
+                    {...register("name")}
+                    aria-invalid={errors.name ? "true" : "false"}
+                  />
+                  {errors.name && <FieldError>{errors.name.message}</FieldError>}
+                </Field>
+                <Field>
+                  <FieldLabel htmlFor="price">Price</FieldLabel>
+                  <Input
+                    id="price"
+                    autoComplete="off"
+                    {...register("price")}
+                    aria-invalid={errors.price ? "true" : "false"}
+                  />
+                  {errors.price && <FieldError>{errors.price.message}</FieldError>}
+                </Field>
+                <Field>
+                  <FieldLabel htmlFor="stock">Stock</FieldLabel>
+                  <Input
+                    id="stock"
+                    autoComplete="off"
+                    {...register("stock")}
+                    aria-invalid={errors.stock ? "true" : "false"}
+                  />
+                  {errors.stock && <FieldError>{errors.stock.message}</FieldError>}
+                </Field>
+                <Field>
+                  <FieldLabel htmlFor="category_id">Category ID</FieldLabel>
+                  <Input
+                    id="category_id"
+                    autoComplete="off"
+                    {...register("category_id")}
+                    aria-invalid={errors.category_id ? "true" : "false"}
+                  />
+                  {errors.category_id && <FieldError>{errors.category_id.message}</FieldError>}
+                </Field>
+                <Field>
+                  <FieldLabel htmlFor="description">Description</FieldLabel>
+                  <Textarea
+                    id="description"
+                    autoComplete="off"
+                    {...register("description")}
+                    aria-invalid={errors.description ? "true" : "false"}
+                  />
+                  {errors.description && <FieldError>{errors.description.message}</FieldError>}
+                </Field>
+              </FieldGroup>
+            </FieldSet>
+          </div>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline" className="cursor-pointer">
+                Cancel
+              </Button>
+            </DialogClose>
+            <Button type="submit" className="cursor-pointer bg-emerald-500 hover:bg-emerald-600">
+              Edit
+            </Button>
+          </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>

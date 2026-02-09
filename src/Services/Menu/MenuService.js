@@ -34,7 +34,6 @@ export const uploadImageMenu = async (menuId, menuImage) => {
   const response = await apiUtils.post(`${MENU_ENDPOINT}/${menuId}/upload-image`, formData, {
     headers: { "Content-Type": undefined },
   });
-  console.log(response);
   return response.data;
 };
 
