@@ -9,7 +9,7 @@ const api = axios.create({
   baseURL: BASE_URL,
   timeout: 10000,
   headers: {
-    "Content-Type": "multipart/form-data",
+    "Content-Type": "application/json",
     Accept: "application/json",
     "x-api-key": API_KEY,
   },

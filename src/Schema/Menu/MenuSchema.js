@@ -60,7 +60,7 @@ const EditMenuSchema = z.object({
       "Only JPG/PNG allowed",
     )
     .refine(
-      (files) => !files || !(files instanceof FileList) || files.length === 0 || files[0]?.size <= 5 * 1024 * 1024,
+      (files) => !files || !(files instanceof FileList) || files.length === 0 || files[0]?.size <= 10 * 1024 * 1024,
       "Max file size is 5MB",
     ),
   is_available,

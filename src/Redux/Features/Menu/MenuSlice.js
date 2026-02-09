@@ -56,14 +56,21 @@ export const deleteMenu = createAsyncThunk("menu/deleteMenu", async (menuId, { r
 
 export const editMenu = createAsyncThunk("menu/editMenu", async ([menuId, menuData], { rejectWithValue }) => {
   try {
-    const response = await MenuService.editMenu(menuId, menuData);
+    const { image, ...menuDataWithoutImage } = menuData;
+    if (image && image[0]) {
+      await MenuService.uploadImageMenu(menuId, image);
+    }
+
+    const response = await MenuService.editMenu(menuId, menuDataWithoutImage);
     if (response.success && response.httpcode === 200) {
       return response.data;
     }
-    throw new Error(response.message || "Failed to delete menu");
+    throw new Error(response.message || "Failed to edit menu");
   } catch (error) {
     return rejectWithValue({
-      message: error?.message || "Failed to delete menu",
+      message: error?.message || "Failed to edit menu",
+      validationErrors: error?.validationErrors || {},
+      allErrors: error?.allErrors || [],
       status: error?.status,
     });
   }
