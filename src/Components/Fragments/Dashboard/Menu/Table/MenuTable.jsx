@@ -10,10 +10,7 @@ import { Skeleton } from "@/Components/Elements/Shadcn/Skeleton/skeleton";
 import { Spinner } from "@/Components/Elements/Shadcn/Spinner/spinner";
 
 const MenuTable = memo(({ onOpenDeleteModal, onOpenEditModal }) => {
-  // console.log(menus);
-
   const { menus, loading, errorMessage } = useAllMenu();
-  // const loading = true;
 
   return (
     <div className="overflow-hidden border rounded-lg">
@@ -54,7 +51,7 @@ const MenuTable = memo(({ onOpenDeleteModal, onOpenEditModal }) => {
   );
 });
 
-const TableSkeleton = () => {
+const TableSkeleton = memo(() => {
   return (
     <TableRow>
       <TableCell colSpan={6}>
@@ -65,6 +62,6 @@ const TableSkeleton = () => {
       </TableCell>
     </TableRow>
   );
-};
+});
 
 export default MenuTable;

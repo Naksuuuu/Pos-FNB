@@ -21,8 +21,6 @@ export const fetchMenus = createAsyncThunk("menu/fetchMenus", async (_, { reject
       return rejectWithValue(response.message || "Failed to fetch menus");
     }
 
-    console.log(response);
-
     return response.data;
   } catch (error) {
     return rejectWithValue(error.message || error);
@@ -38,11 +36,17 @@ export const createMenu = createAsyncThunk("menu/createMenu", async (menuData, {
 
     throw new Error(response.data);
   } catch (error) {
+    if (error?.isValidationError) {
+      return rejectWithValue({
+        message: error?.message || "Failed to create menu",
+        validationErrors: error?.validationErrors,
+        allErrors: error?.allErrors || [],
+        status: error?.status,
+      });
+    }
+
     return rejectWithValue({
       message: error?.message || "Failed to create menu",
-      validationErrors: error?.validationErrors || {},
-      allErrors: error?.allErrors || [],
-      status: error?.status,
     });
   }
 });
@@ -70,19 +74,22 @@ export const editMenu = createAsyncThunk("menu/editMenu", async ([menuId, menuDa
     }
 
     const response = await MenuService.editMenu(menuId, menuDataWithoutImage);
-    console.log(response.data);
     if (response.success && (response.httpcode === 200 || response.httpcode === 201)) {
       return response;
     }
     throw new Error(response.message || "Failed to edit menu");
   } catch (error) {
-    console.log(error.message);
+    if (error?.isValidationError) {
+      return rejectWithValue({
+        message: error?.message || "Failed to edit menu",
+        validationErrors: error?.validationErrors,
+        allErrors: error?.allErrors || [],
+        status: error?.status,
+      });
+    }
 
     return rejectWithValue({
       message: error?.message || "Failed to edit menu",
-      validationErrors: error?.validationErrors || {},
-      allErrors: error?.allErrors || [],
-      status: error?.status,
     });
   }
 });
