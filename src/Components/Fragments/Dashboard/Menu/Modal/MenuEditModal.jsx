@@ -17,7 +17,7 @@ import { toast } from "sonner";
 
 const MenuEditModal = ({ selectedProduct, onOpenModal }) => {
   const [imagePreview, setImagePreview] = useState(null);
-  const { edit, loading, errorMessage } = useEditMenu();
+  const { edit, loading } = useEditMenu();
 
   const {
     register,
@@ -48,7 +48,7 @@ const MenuEditModal = ({ selectedProduct, onOpenModal }) => {
         return;
       }
 
-      toast.error(error?.message || errorMessage || "Failed to update menu");
+      toast.error(error?.message || "Failed to update menu");
     }
   };
 

@@ -16,7 +16,7 @@ import { Spinner } from "@/Components/Elements/Shadcn/Spinner/spinner";
 import { toast } from "sonner";
 
 const MenuCreateModal = memo(({ isOpen, onOpenModal }) => {
-  const { create, loading, errorMessage } = useCreateMenu();
+  const { create, loading } = useCreateMenu();
   const [imagePreview, setImagePreview] = useState(null);
   const {
     register,
@@ -40,7 +40,7 @@ const MenuCreateModal = memo(({ isOpen, onOpenModal }) => {
         return;
       }
 
-      toast.error(error?.message || errorMessage || "Failed to create menu");
+      toast.error(error?.message || "Failed to create menu");
     }
   };
 

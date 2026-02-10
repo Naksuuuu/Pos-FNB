@@ -7,7 +7,6 @@ import { selectMenuDeleteLoading } from "@/Redux/Features/Menu/MenuSelector";
 const useDeleteMenu = () => {
   const dispatch = useDispatch();
   const loading = useSelector(selectMenuDeleteLoading);
-  const errorMessage = useSelector(selectMenuDeleteLoading);
 
   const deleteMenuById = useCallback(
     async (menuId) => {
@@ -18,7 +17,7 @@ const useDeleteMenu = () => {
     [dispatch],
   );
 
-  return { deleteMenuById, loading, errorMessage };
+  return { deleteMenuById, loading };
 };
 
 export default useDeleteMenu;

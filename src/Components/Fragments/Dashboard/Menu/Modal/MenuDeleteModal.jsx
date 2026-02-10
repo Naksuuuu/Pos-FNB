@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { Spinner } from "@/Components/Elements/Shadcn/Spinner/spinner";
 
 const MenuDeleteModal = ({ selectedProduct, onOpenModal }) => {
-  const { deleteMenuById, loading, errorMessage } = useDeleteMenu();
+  const { deleteMenuById, loading } = useDeleteMenu();
 
   const handleDelete = async (menuId) => {
     try {
@@ -14,7 +14,7 @@ const MenuDeleteModal = ({ selectedProduct, onOpenModal }) => {
       onOpenModal(null);
       toast.success(`Menu ${selectedProduct?.name} berhasil dihapus`);
     } catch (error) {
-      toast.error(error?.message || errorMessage || "Failed to delete menu");
+      toast.error(error?.message || "Failed to delete menu");
     }
   };
 

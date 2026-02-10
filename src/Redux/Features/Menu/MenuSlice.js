@@ -6,11 +6,8 @@ const initialState = {
   loading: false,
   error: null,
   loadingCreate: false,
-  errorCreate: null,
   loadingEdit: false,
-  errorEdit: null,
   loadingDelete: false,
-  errorDelete: null,
 };
 
 export const fetchMenus = createAsyncThunk("menu/fetchMenus", async (_, { rejectWithValue }) => {
@@ -114,38 +111,30 @@ const menuSlice = createSlice({
       })
       .addCase(createMenu.pending, (state) => {
         state.loadingCreate = true;
-        state.errorCreate = null;
       })
       .addCase(createMenu.fulfilled, (state) => {
         state.loadingCreate = false;
-        state.errorCreate = null;
       })
-      .addCase(createMenu.rejected, (state, action) => {
+      .addCase(createMenu.rejected, (state) => {
         state.loadingCreate = false;
-        state.errorCreate = action.payload?.message || "Failed to create menu";
       })
       .addCase(editMenu.pending, (state) => {
         state.loadingEdit = true;
-        state.errorEdit = null;
       })
       .addCase(editMenu.fulfilled, (state) => {
         state.loadingEdit = false;
-        state.errorEdit = null;
       })
-      .addCase(editMenu.rejected, (state, action) => {
+      .addCase(editMenu.rejected, (state) => {
         state.loadingEdit = false;
-        state.errorEdit = action.payload?.message || "Failed to edit menu";
       })
       .addCase(deleteMenu.pending, (state) => {
         state.loadingDelete = true;
-        state.errorDelete = null;
       })
       .addCase(deleteMenu.fulfilled, (state) => {
         state.loadingDelete = false;
       })
-      .addCase(deleteMenu.rejected, (state, action) => {
+      .addCase(deleteMenu.rejected, (state) => {
         state.loadingDelete = false;
-        state.errorDelete = action.payload?.message || "Failed to delete menu";
       });
   },
 });

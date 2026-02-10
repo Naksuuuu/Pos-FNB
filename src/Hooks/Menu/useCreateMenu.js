@@ -7,7 +7,6 @@ import { selectMenuCreateLoading } from "@/Redux/Features/Menu/MenuSelector";
 const useCreateMenu = () => {
   const dispatch = useDispatch();
   const loading = useSelector(selectMenuCreateLoading);
-  const errorMessage = useSelector(selectMenuCreateLoading);
 
   const create = useCallback(
     async (menuData) => {
@@ -18,7 +17,7 @@ const useCreateMenu = () => {
     [dispatch],
   );
 
-  return { create, loading, errorMessage };
+  return { create, loading };
 };
 
 export default useCreateMenu;
