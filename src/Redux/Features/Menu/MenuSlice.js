@@ -5,6 +5,12 @@ const initialState = {
   menus: [],
   loading: false,
   error: null,
+  loadingCreate: false,
+  errorCreate: null,
+  loadingEdit: false,
+  errorEdit: null,
+  loadingDelete: false,
+  errorDelete: null,
 };
 
 export const fetchMenus = createAsyncThunk("menu/fetchMenus", async (_, { rejectWithValue }) => {
@@ -24,7 +30,7 @@ export const fetchMenus = createAsyncThunk("menu/fetchMenus", async (_, { reject
 export const createMenus = createAsyncThunk("menu/createMenus", async (menuData, { rejectWithValue }) => {
   try {
     const response = await MenuService.createMenu(menuData);
-    if (response.success && response.httpcode === 201) {
+    if (response.success && (response.httpcode === 200 || response.httpcode === 201)) {
       return response.data;
     }
 
@@ -42,7 +48,7 @@ export const createMenus = createAsyncThunk("menu/createMenus", async (menuData,
 export const deleteMenu = createAsyncThunk("menu/deleteMenu", async (menuId, { rejectWithValue }) => {
   try {
     const response = await MenuService.deleteMenu(menuId);
-    if (response.success && response.httpcode === 200) {
+    if (response.success && (response.httpcode === 200 || response.httpcode === 201)) {
       return response.data;
     }
     throw new Error(response.message || "Failed to delete menu");
@@ -62,7 +68,7 @@ export const editMenu = createAsyncThunk("menu/editMenu", async ([menuId, menuDa
     }
 
     const response = await MenuService.editMenu(menuId, menuDataWithoutImage);
-    if (response.success && response.httpcode === 200) {
+    if (response.success && (response.httpcode === 200 || response.httpcode === 201)) {
       return response.data;
     }
     throw new Error(response.message || "Failed to edit menu");
@@ -95,39 +101,38 @@ const menuSlice = createSlice({
         state.error = action.payload || action.error.message;
       })
       .addCase(createMenus.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+        state.loadingCreate = true;
+        state.errorCreate = null;
       })
-      .addCase(createMenus.fulfilled, (state, action) => {
-        state.loading = false;
-        state.menus.push(action.payload);
+      .addCase(createMenus.fulfilled, (state) => {
+        state.loadingCreate = false;
       })
       .addCase(createMenus.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload || action.error.message;
+        state.loadingCreate = false;
+        state.errorCreate = action.payload.message || action.error.message;
       })
       .addCase(editMenu.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+        state.loadingEdit = true;
+        state.errorEdit = null;
       })
       .addCase(editMenu.fulfilled, (state) => {
-        state.loading = false;
-        state.error = null;
+        state.loadingEdit = false;
+        state.errorEdit = null;
       })
       .addCase(editMenu.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload || action.error.message;
+        state.loadingEdit = false;
+        state.errorEdit = action.payload.message || action.error.message;
       })
       .addCase(deleteMenu.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+        state.loadingDelete = true;
+        state.errorDelete = null;
       })
       .addCase(deleteMenu.fulfilled, (state) => {
-        state.loading = false;
+        state.loadingDelete = false;
       })
       .addCase(deleteMenu.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload || action.error.message;
+        state.loadingDelete = false;
+        state.errorDelete = action.payload.message || action.error.message;
       });
   },
 });

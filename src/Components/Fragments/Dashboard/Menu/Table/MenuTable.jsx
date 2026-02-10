@@ -4,14 +4,7 @@ import { Pen, Trash } from "lucide-react";
 import { rupiah } from "@/Utils/rupiahHelper";
 
 import { Button } from "@/Components/Elements/Shadcn/Button/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/Components/Elements/Shadcn/Table/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/Elements/Shadcn/Table/table";
 
 const MenuTable = memo(({ menus, onOpenDeleteModal, onOpenEditModal }) => {
   // console.log(menus);
@@ -38,20 +31,10 @@ const MenuTable = memo(({ menus, onOpenDeleteModal, onOpenEditModal }) => {
               <TableCell>{rupiah(menu.price)}</TableCell>
               <TableCell>{menu.stock}</TableCell>
               <TableCell>
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  className="rounded-full text-red-500 hover:bg-red-200 hover:text-red-600 cursor-pointer"
-                  onClick={() => onOpenDeleteModal(menu)}
-                >
+                <Button size="icon" variant="ghost" className="rounded-full text-red-500 hover:bg-red-200 hover:text-red-600 cursor-pointer" onClick={() => onOpenDeleteModal(menu)}>
                   <Trash />
                 </Button>
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  className="rounded-full text-emerald-500 hover:bg-emerald-200 hover:text-emerald-600 cursor-pointer"
-                  onClick={() => onOpenEditModal(menu)}
-                >
+                <Button size="icon" variant="ghost" className="rounded-full text-emerald-500 hover:bg-emerald-200 hover:text-emerald-600 cursor-pointer" onClick={() => onOpenEditModal(menu)}>
                   <Pen />
                 </Button>
               </TableCell>
