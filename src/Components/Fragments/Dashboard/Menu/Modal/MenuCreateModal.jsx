@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -11,9 +11,13 @@ import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, Di
 import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/Components/Elements/Shadcn/Field/field";
 import { Input } from "@/Components/Elements/Shadcn/Input/input";
 import { Textarea } from "@/Components/Elements/Shadcn/Input/textarea";
+import { Upload } from "lucide-react";
+import { Spinner } from "@/Components/Elements/Shadcn/Spinner/spinner";
+import { toast } from "sonner";
 
 const MenuCreateModal = memo(({ isOpen, onOpenModal }) => {
-  const { createMenu } = useCreateMenu();
+  const { create, loading, errorMessage } = useCreateMenu();
+  const [imagePreview, setImagePreview] = useState(null);
   const {
     register,
     handleSubmit,
@@ -25,74 +29,110 @@ const MenuCreateModal = memo(({ isOpen, onOpenModal }) => {
 
   const onSubmit = async (data) => {
     try {
-      console.log("before create menu");
-      await createMenu(data);
-      console.log("after create menu");
+      const response = await create(data);
       onOpenModal(false);
+      toast.success(response.message);
     } catch (error) {
       if (error?.validationErrors) {
         Object.entries(error.validationErrors).forEach(([field, message]) => {
           setError(field, { type: "server", message });
         });
+        return;
       }
+
+      toast.error(error?.message || errorMessage || "Failed to create menu");
     }
   };
+
+  const onFileChange = useCallback((e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    setImagePreview(url);
+  }, []);
 
   return (
     <Dialog open={isOpen} onOpenChange={() => onOpenModal(false)}>
       <DialogContent showCloseButton={false}>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <FieldSet>
-            <DialogHeader>
-              <DialogTitle>Add Menu</DialogTitle>
-              <DialogDescription>Create New Menu</DialogDescription>
-            </DialogHeader>
-            <FieldGroup>
-              <Field>
-                <FieldLabel htmlFor="image">Menu Image</FieldLabel>
-                <Input type="file" id="image" autoComplete="off" {...register("image")} aria-invalid={errors.image ? "true" : "false"} />
-                {errors.image && <FieldError>{errors.image.message}</FieldError>}
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="name">Menu Name</FieldLabel>
-                <Input id="name" autoComplete="off" {...register("name")} aria-invalid={errors.name ? "true" : "false"} />
-                {errors.name && <FieldError>{errors.name.message}</FieldError>}
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="price">Price</FieldLabel>
-                <Input id="price" autoComplete="off" {...register("price")} aria-invalid={errors.price ? "true" : "false"} />
-                {errors.price && <FieldError>{errors.price.message}</FieldError>}
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="stock">Stock</FieldLabel>
-                <Input id="stock" autoComplete="off" {...register("stock")} aria-invalid={errors.stock ? "true" : "false"} />
-                {errors.stock && <FieldError>{errors.stock.message}</FieldError>}
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="category_id">Category ID</FieldLabel>
-                <Input id="category_id" autoComplete="off" {...register("category_id")} aria-invalid={errors.category_id ? "true" : "false"} />
-                {errors.category_id && <FieldError>{errors.category_id.message}</FieldError>}
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="description">Description</FieldLabel>
-                <Textarea id="description" autoComplete="off" {...register("description")} aria-invalid={errors.description ? "true" : "false"} />
-                {errors.description && <FieldError>{errors.description.message}</FieldError>}
-              </Field>
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+          <DialogHeader>
+            <DialogTitle>Add Menu</DialogTitle>
+            <DialogDescription>Create New Menu</DialogDescription>
+          </DialogHeader>
 
-              <DialogFooter className="justify-end">
-                <DialogClose asChild>
-                  <Button variant="outline" className="cursor-pointer">
-                    Cancel
-                  </Button>
-                </DialogClose>
+          <div className="no-scrollbar max-h-[50vh] overflow-y-auto">
+            <FieldSet>
+              <FieldGroup>
                 <Field>
-                  <Button type="submit" className="cursor-pointer bg-primaryhover:bg-emerald-600">
-                    Add
-                  </Button>
+                  <FieldLabel htmlFor="image">Image</FieldLabel>
+                  {imagePreview && (
+                    <div className="w-full ">
+                      <img src={imagePreview} alt={"preview"} className="object-cover w-full mx-auto rounded-md aspect-video" />
+                    </div>
+                  )}
+
+                  <label htmlFor="image" className="block p-2 text-center border border-dashed rounded-md cursor-pointer hover:bg-primary/5">
+                    <div className="flex items-center justify-center gap-2 text-sm font-medium">
+                      <Upload className="size-4" /> Pilih gambar
+                    </div>
+                  </label>
+
+                  <Input
+                    type="file"
+                    id="image"
+                    autoComplete="off"
+                    {...register("image", {
+                      setValueAs: (files) => (files && files.length > 0 ? files : undefined),
+                      onChange: onFileChange,
+                    })}
+                    aria-invalid={errors.image ? "true" : "false"}
+                    className="hidden"
+                  />
+                  {errors.image && <FieldError>{errors.image.message}</FieldError>}
                 </Field>
-              </DialogFooter>
-            </FieldGroup>
-          </FieldSet>
+                <Field>
+                  <FieldLabel htmlFor="name">Menu Name</FieldLabel>
+                  <Input id="name" autoComplete="off" {...register("name")} aria-invalid={errors.name ? "true" : "false"} />
+                  {errors.name && <FieldError>{errors.name.message}</FieldError>}
+                </Field>
+                <Field>
+                  <FieldLabel htmlFor="price">Price</FieldLabel>
+                  <Input id="price" autoComplete="off" {...register("price")} aria-invalid={errors.price ? "true" : "false"} />
+                  {errors.price && <FieldError>{errors.price.message}</FieldError>}
+                </Field>
+                <Field>
+                  <FieldLabel htmlFor="stock">Stock</FieldLabel>
+                  <Input id="stock" autoComplete="off" {...register("stock")} aria-invalid={errors.stock ? "true" : "false"} />
+                  {errors.stock && <FieldError>{errors.stock.message}</FieldError>}
+                </Field>
+                <Field>
+                  <FieldLabel htmlFor="category_id">Category ID</FieldLabel>
+                  <Input id="category_id" autoComplete="off" {...register("category_id")} aria-invalid={errors.category_id ? "true" : "false"} />
+                  {errors.category_id && <FieldError>{errors.category_id.message}</FieldError>}
+                </Field>
+                <Field>
+                  <FieldLabel htmlFor="description">Description</FieldLabel>
+                  <Textarea id="description" autoComplete="off" {...register("description")} aria-invalid={errors.description ? "true" : "false"} />
+                  {errors.description && <FieldError>{errors.description.message}</FieldError>}
+                </Field>
+              </FieldGroup>
+            </FieldSet>
+          </div>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline" className="cursor-pointer">
+                Cancel
+              </Button>
+            </DialogClose>
+            <Button type="submit" disabled={loading} className="relative cursor-pointer" size="default">
+              <span className={loading ? "invisible" : "visible"}>Add</span>
+              {loading && (
+                <div className="absolute ">
+                  <Spinner />
+                </div>
+              )}
+            </Button>
+          </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>

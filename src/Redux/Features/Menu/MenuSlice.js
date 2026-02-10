@@ -27,11 +27,11 @@ export const fetchMenus = createAsyncThunk("menu/fetchMenus", async (_, { reject
   }
 });
 
-export const createMenus = createAsyncThunk("menu/createMenus", async (menuData, { rejectWithValue }) => {
+export const createMenu = createAsyncThunk("menu/createMenu", async (menuData, { rejectWithValue }) => {
   try {
     const response = await MenuService.createMenu(menuData);
     if (response.success && (response.httpcode === 200 || response.httpcode === 201)) {
-      return response.data;
+      return response;
     }
 
     throw new Error(response.data);
@@ -49,7 +49,7 @@ export const deleteMenu = createAsyncThunk("menu/deleteMenu", async (menuId, { r
   try {
     const response = await MenuService.deleteMenu(menuId);
     if (response.success && (response.httpcode === 200 || response.httpcode === 201)) {
-      return response.data;
+      return response;
     }
     throw new Error(response.message || "Failed to delete menu");
   } catch (error) {
@@ -68,8 +68,9 @@ export const editMenu = createAsyncThunk("menu/editMenu", async ([menuId, menuDa
     }
 
     const response = await MenuService.editMenu(menuId, menuDataWithoutImage);
+    console.log(response.data);
     if (response.success && (response.httpcode === 200 || response.httpcode === 201)) {
-      return response.data;
+      return response;
     }
     throw new Error(response.message || "Failed to edit menu");
   } catch (error) {
@@ -100,14 +101,15 @@ const menuSlice = createSlice({
         state.loading = false;
         state.error = action.payload || action.error.message;
       })
-      .addCase(createMenus.pending, (state) => {
+      .addCase(createMenu.pending, (state) => {
         state.loadingCreate = true;
         state.errorCreate = null;
       })
-      .addCase(createMenus.fulfilled, (state) => {
+      .addCase(createMenu.fulfilled, (state) => {
         state.loadingCreate = false;
+        state.errorCreate = null;
       })
-      .addCase(createMenus.rejected, (state, action) => {
+      .addCase(createMenu.rejected, (state, action) => {
         state.loadingCreate = false;
         state.errorCreate = action.payload?.message || "Failed to create menu";
       })

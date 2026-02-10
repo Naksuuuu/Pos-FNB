@@ -1,20 +1,24 @@
 import { useCallback } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-import { createMenus, fetchMenus } from "@/Redux/Features/Menu/MenuSlice";
+import { createMenu, fetchMenus } from "@/Redux/Features/Menu/MenuSlice";
+import { selectMenuCreateLoading } from "@/Redux/Features/Menu/MenuSelector";
 
 const useCreateMenu = () => {
   const dispatch = useDispatch();
+  const loading = useSelector(selectMenuCreateLoading);
+  const errorMessage = useSelector(selectMenuCreateLoading);
 
-  const createMenu = useCallback(
+  const create = useCallback(
     async (menuData) => {
-      await dispatch(createMenus(menuData)).unwrap();
-      await dispatch(fetchMenus()).unwrap();
+      const response = await dispatch(createMenu(menuData)).unwrap();
+      dispatch(fetchMenus()).unwrap();
+      return response;
     },
     [dispatch],
   );
 
-  return { createMenu };
+  return { create, loading, errorMessage };
 };
 
 export default useCreateMenu;
