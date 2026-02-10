@@ -1,7 +1,5 @@
 import { useCallback, useState } from "react";
 
-import useAllMenu from "@/Hooks/Menu/useAllMenu";
-
 import { Button } from "@/Components/Elements/Shadcn/Button/button";
 import MenuCreateModal from "@/Components/Fragments/Dashboard/Menu/Modal/MenuCreateModal";
 import MenuDeleteModal from "@/Components/Fragments/Dashboard/Menu/Modal/MenuDeleteModal";
@@ -9,7 +7,6 @@ import MenuEditModal from "@/Components/Fragments/Dashboard/Menu/Modal/MenuEditM
 import MenuTable from "@/Components/Fragments/Dashboard/Menu/Table/MenuTable";
 
 const PanelMenu = () => {
-  const { menus } = useAllMenu();
   const [selectedEditProduct, setSelectedEditProduct] = useState(null);
   const [selectedDeleteProduct, setSelectedDeleteProduct] = useState(null);
   const [selectedAddProduct, setSelectedAddProduct] = useState(false);
@@ -33,17 +30,15 @@ const PanelMenu = () => {
   return (
     <div>
       <div>
-        <div className="w-full flex justify-end">
+        <div className="flex justify-end w-full">
           <Button className="mb-4" onClick={handleOpenAddModal}>
             Add New Menu
           </Button>
         </div>
-        <MenuTable menus={menus} onOpenDeleteModal={handleOpenDeleteModal} onOpenEditModal={handleOpenEditModal} />
+        <MenuTable onOpenDeleteModal={handleOpenDeleteModal} onOpenEditModal={handleOpenEditModal} />
       </div>
 
-      {selectedDeleteProduct && (
-        <MenuDeleteModal selectedProduct={selectedDeleteProduct} onOpenModal={handleOpenDeleteModal} />
-      )}
+      {selectedDeleteProduct && <MenuDeleteModal selectedProduct={selectedDeleteProduct} onOpenModal={handleOpenDeleteModal} />}
       {selectedEditProduct && <MenuEditModal selectedProduct={selectedEditProduct} onOpenModal={handleOpenEditModal} />}
 
       {selectedAddProduct && <MenuCreateModal isOpen={selectedAddProduct} onOpenModal={handleOpenAddModal} />}

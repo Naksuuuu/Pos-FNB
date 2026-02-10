@@ -9,6 +9,8 @@ const useEditMenu = () => {
   const loading = useSelector(selectMenuEditLoading);
   const errorMessage = useSelector(selectMenuEditError);
 
+  console.log(errorMessage);
+
   const edit = useCallback(
     async (menuId, menuData) => {
       const response = await dispatch(editMenu([menuId, menuData])).unwrap();

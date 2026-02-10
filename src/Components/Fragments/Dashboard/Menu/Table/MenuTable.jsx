@@ -2,15 +2,21 @@ import { memo } from "react";
 import { Pen, Trash } from "lucide-react";
 
 import { rupiah } from "@/Utils/rupiahHelper";
+import useAllMenu from "@/Hooks/Menu/useAllMenu";
 
 import { Button } from "@/Components/Elements/Shadcn/Button/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/Elements/Shadcn/Table/table";
+import { Skeleton } from "@/Components/Elements/Shadcn/Skeleton/skeleton";
+import { Spinner } from "@/Components/Elements/Shadcn/Spinner/spinner";
 
-const MenuTable = memo(({ menus, onOpenDeleteModal, onOpenEditModal }) => {
+const MenuTable = memo(({ onOpenDeleteModal, onOpenEditModal }) => {
   // console.log(menus);
 
+  const { menus, loading, errorMessage } = useAllMenu();
+  // const loading = true;
+
   return (
-    <div className="rounded-lg overflow-hidden border">
+    <div className="overflow-hidden border rounded-lg">
       <Table>
         <TableHeader>
           <TableRow>
@@ -23,27 +29,42 @@ const MenuTable = memo(({ menus, onOpenDeleteModal, onOpenEditModal }) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {menus.map((menu) => (
-            <TableRow key={menu.id}>
-              <TableCell>{menu.id}</TableCell>
-              <TableCell>{menu.name.length > 100 ? `${menu.name.substring(0, 50)}...` : menu.name}</TableCell>
-              <TableCell>{menu.category?.name ?? "loading"}</TableCell>
-              <TableCell>{rupiah(menu.price)}</TableCell>
-              <TableCell>{menu.stock}</TableCell>
-              <TableCell>
-                <Button size="icon" variant="ghost" className="rounded-full text-red-500 hover:bg-red-200 hover:text-red-600 cursor-pointer" onClick={() => onOpenDeleteModal(menu)}>
-                  <Trash />
-                </Button>
-                <Button size="icon" variant="ghost" className="rounded-full text-emerald-500 hover:bg-emerald-200 hover:text-emerald-600 cursor-pointer" onClick={() => onOpenEditModal(menu)}>
-                  <Pen />
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
+          {loading && <TableSkeleton />}
+          {!loading &&
+            menus.map((menu) => (
+              <TableRow key={menu.id}>
+                <TableCell>{menu.id}</TableCell>
+                <TableCell>{menu.name.length > 100 ? `${menu.name.substring(0, 50)}...` : menu.name}</TableCell>
+                <TableCell>{menu.category?.name ?? "loading"}</TableCell>
+                <TableCell>{rupiah(menu.price)}</TableCell>
+                <TableCell>{menu.stock}</TableCell>
+                <TableCell>
+                  <Button size="icon" variant="ghost" className="text-red-500 rounded-full cursor-pointer hover:bg-red-200 hover:text-red-600" onClick={() => onOpenDeleteModal(menu)}>
+                    <Trash />
+                  </Button>
+                  <Button size="icon" variant="ghost" className="rounded-full cursor-pointer text-emerald-500 hover:bg-emerald-200 hover:text-emerald-600" onClick={() => onOpenEditModal(menu)}>
+                    <Pen />
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
     </div>
   );
 });
+
+const TableSkeleton = () => {
+  return (
+    <TableRow>
+      <TableCell colSpan={6}>
+        <div className="relative flex items-center justify-center">
+          <Skeleton className="w-full h-125" />
+          <Spinner className="absolute size-8" />
+        </div>
+      </TableCell>
+    </TableRow>
+  );
+};
 
 export default MenuTable;

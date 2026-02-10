@@ -21,6 +21,8 @@ export const fetchMenus = createAsyncThunk("menu/fetchMenus", async (_, { reject
       return rejectWithValue(response.message || "Failed to fetch menus");
     }
 
+    console.log(response);
+
     return response.data;
   } catch (error) {
     return rejectWithValue(error.message || error);
@@ -74,6 +76,8 @@ export const editMenu = createAsyncThunk("menu/editMenu", async ([menuId, menuDa
     }
     throw new Error(response.message || "Failed to edit menu");
   } catch (error) {
+    console.log(error.message);
+
     return rejectWithValue({
       message: error?.message || "Failed to edit menu",
       validationErrors: error?.validationErrors || {},
@@ -99,7 +103,7 @@ const menuSlice = createSlice({
       })
       .addCase(fetchMenus.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || action.error.message;
+        state.error = action.payload.message || action.error.message;
       })
       .addCase(createMenu.pending, (state) => {
         state.loadingCreate = true;

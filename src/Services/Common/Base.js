@@ -40,6 +40,8 @@ api.interceptors.response.use(
     if (error.response) {
       const { status, data } = error.response;
 
+      console.log(error.response);
+
       if (status === 401) {
         // clearAuthToken();
         if (typeof window !== "undefined" && !window.location.pathname.includes("/login")) {
@@ -68,6 +70,8 @@ api.interceptors.response.use(
     }
 
     if (error.request) {
+      console.log(error.request);
+
       return Promise.reject({
         message: "Cannot connect to server. Please check your internet connection.",
         type: "network",
