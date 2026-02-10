@@ -1,21 +1,24 @@
 import { useCallback } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { deleteMenu, fetchMenus } from "@/Redux/Features/Menu/MenuSlice";
+import { selectMenuDeleteLoading } from "@/Redux/Features/Menu/MenuSelector";
 
 const useDeleteMenu = () => {
   const dispatch = useDispatch();
+  const loading = useSelector(selectMenuDeleteLoading);
+  const errorMessage = useSelector(selectMenuDeleteLoading);
 
   const deleteMenuById = useCallback(
     async (menuId) => {
-      const result = await dispatch(deleteMenu(menuId)).unwrap();
+      const response = await dispatch(deleteMenu(menuId)).unwrap();
       await dispatch(fetchMenus()).unwrap();
-      console.log(result);
+      return response;
     },
     [dispatch],
   );
 
-  return { deleteMenuById };
+  return { deleteMenuById, loading, errorMessage };
 };
 
 export default useDeleteMenu;
