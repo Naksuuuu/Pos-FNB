@@ -12,10 +12,12 @@ import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, Di
 import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/Components/Elements/Shadcn/Field/field";
 import { Input } from "@/Components/Elements/Shadcn/Input/input";
 import { Textarea } from "@/Components/Elements/Shadcn/Input/textarea";
+import { Spinner } from "@/Components/Elements/Shadcn/Spinner/spinner";
+import { toast } from "sonner";
 
 const MenuEditModal = ({ selectedProduct, onOpenModal }) => {
   const [imagePreview, setImagePreview] = useState(null);
-  const { edit } = useEditMenu();
+  const { edit, loading, errorMessage } = useEditMenu();
 
   const {
     register,
@@ -35,14 +37,18 @@ const MenuEditModal = ({ selectedProduct, onOpenModal }) => {
 
   const onSubmit = async (data) => {
     try {
-      await edit(selectedProduct.id, data);
+      const response = await edit(selectedProduct.id, data);
       onOpenModal(false);
+      toast.success(response.message || "Menu updated successfully");
     } catch (error) {
       if (error?.validationErrors) {
         Object.entries(error.validationErrors).forEach(([field, message]) => {
           setError(field, { type: "server", message });
         });
+        return;
       }
+
+      toast.error(error?.message || errorMessage || "Failed to update menu");
     }
   };
 
@@ -66,18 +72,18 @@ const MenuEditModal = ({ selectedProduct, onOpenModal }) => {
             <FieldSet>
               <FieldGroup>
                 <div className="w-full ">
-                  <img src={selectedProduct.image_url} alt={selectedProduct.name} className="mx-auto w-full object-cover rounded-md aspect-video" />
+                  <img src={selectedProduct.image_url} alt={selectedProduct.name} className="object-cover w-full mx-auto rounded-md aspect-video" />
                 </div>
                 <Field>
                   <FieldLabel htmlFor="image">Foto Baru</FieldLabel>
                   {imagePreview && (
                     <div className="w-full ">
-                      <img src={imagePreview} alt={selectedProduct.name} className="mx-auto w-full object-cover rounded-md aspect-video" />
+                      <img src={imagePreview} alt={selectedProduct.name} className="object-cover w-full mx-auto rounded-md aspect-video" />
                     </div>
                   )}
 
-                  <label htmlFor="image" className="block cursor-pointer rounded-md border border-dashed p-2 text-center hover:bg-primary/5">
-                    <div className="text-sm font-medium flex items-center justify-center gap-2">
+                  <label htmlFor="image" className="block p-2 text-center border border-dashed rounded-md cursor-pointer hover:bg-primary/5">
+                    <div className="flex items-center justify-center gap-2 text-sm font-medium">
                       <Upload className="size-4" /> Pilih gambar
                     </div>
                   </label>
@@ -129,8 +135,14 @@ const MenuEditModal = ({ selectedProduct, onOpenModal }) => {
                 Cancel
               </Button>
             </DialogClose>
-            <Button type="submit" className="cursor-pointer bg-emerald-500 hover:bg-emerald-600">
-              Edit
+            <Button type="submit" disabled={loading} className="relative cursor-pointer bg-emerald-500 hover:bg-emerald-600" size="default">
+              <span className={loading ? "invisible" : "visible"}>Edit</span>
+
+              {loading && (
+                <div className="absolute ">
+                  <Spinner />
+                </div>
+              )}
             </Button>
           </DialogFooter>
         </form>

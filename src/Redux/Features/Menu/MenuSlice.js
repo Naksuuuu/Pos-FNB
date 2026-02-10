@@ -109,7 +109,7 @@ const menuSlice = createSlice({
       })
       .addCase(createMenus.rejected, (state, action) => {
         state.loadingCreate = false;
-        state.errorCreate = action.payload.message || action.error.message;
+        state.errorCreate = action.payload?.message || "Failed to create menu";
       })
       .addCase(editMenu.pending, (state) => {
         state.loadingEdit = true;
@@ -121,7 +121,7 @@ const menuSlice = createSlice({
       })
       .addCase(editMenu.rejected, (state, action) => {
         state.loadingEdit = false;
-        state.errorEdit = action.payload.message || action.error.message;
+        state.errorEdit = action.payload?.message || "Failed to edit menu";
       })
       .addCase(deleteMenu.pending, (state) => {
         state.loadingDelete = true;
@@ -132,7 +132,7 @@ const menuSlice = createSlice({
       })
       .addCase(deleteMenu.rejected, (state, action) => {
         state.loadingDelete = false;
-        state.errorDelete = action.payload.message || action.error.message;
+        state.errorDelete = action.payload?.message || "Failed to delete menu";
       });
   },
 });
