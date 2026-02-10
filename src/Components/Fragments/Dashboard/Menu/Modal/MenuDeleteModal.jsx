@@ -1,3 +1,7 @@
+import { memo, useCallback } from "react";
+
+import useDeleteMenu from "@/Hooks/Menu/useDeleteMenu";
+
 import { Button } from "@/Components/Elements/Shadcn/Button/button";
 import {
   Dialog,
@@ -8,8 +12,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/Components/Elements/Shadcn/Dialog/dialog";
-import useDeleteMenu from "@/Hooks/Menu/useDeleteMenu";
-import { memo, useCallback } from "react";
 
 const MenuDeleteModal = memo(({ selectedProduct, onOpenModal }) => {
   const { deleteMenuById } = useDeleteMenu();

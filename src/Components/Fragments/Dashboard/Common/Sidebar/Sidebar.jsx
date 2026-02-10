@@ -1,3 +1,9 @@
+import { memo, useMemo } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { ChevronRight, LogOut } from "lucide-react";
+
+import { SidebarItem } from "@/Context/SidebarItem";
+
 import {
   Collapsible,
   CollapsibleContent,
@@ -17,10 +23,6 @@ import {
   SidebarMenuSubItem,
   SidebarProvider,
 } from "@/Components/Elements/Shadcn/Sidebar/sidebar";
-import { SidebarItem } from "@/Context/SidebarItem";
-import { ChevronRight, LogOut } from "lucide-react";
-import { memo, useMemo } from "react";
-import { Link, useLocation } from "react-router-dom";
 
 const CreateSidebar = memo(({ pathname }) => {
   const SIDEBAR_ITEMS = useMemo(() => SidebarItem, []);

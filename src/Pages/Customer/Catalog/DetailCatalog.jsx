@@ -1,11 +1,14 @@
+import { useCallback, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { Minus, Plus, X } from "lucide-react";
+
+import { rupiah } from "@/Utils/rupiahHelper";
+
 import { Button } from "@/Components/Elements/Shadcn/Button/button";
 import { Checkbox } from "@/Components/Elements/Shadcn/Checkbox/checkbox";
-import { rupiah } from "@/Utils/rupiahHelper";
-import { Minus, Plus, X } from "lucide-react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { dummyProducts } from "./ListCatalog";
-import { useCallback, useState } from "react";
 import ActionCard from "@/Components/Fragments/Customer/Common/Card/ActionCard";
+
+import { dummyProducts } from "./ListCatalog";
 
 const DetailCatalog = () => {
   const { catalogId } = useParams();

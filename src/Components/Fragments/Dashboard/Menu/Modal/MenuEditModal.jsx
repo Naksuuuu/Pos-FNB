@@ -1,22 +1,17 @@
+import { useCallback, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Upload } from "lucide-react";
+
+import { EditMenuSchema } from "@/Schema/Menu/MenuSchema";
+
+import useEditMenu from "@/Hooks/Menu/useEditMenu";
+
 import { Button } from "@/Components/Elements/Shadcn/Button/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/Components/Elements/Shadcn/Dialog/dialog";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/Components/Elements/Shadcn/Dialog/dialog";
 import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/Components/Elements/Shadcn/Field/field";
 import { Input } from "@/Components/Elements/Shadcn/Input/input";
 import { Textarea } from "@/Components/Elements/Shadcn/Input/textarea";
-import useEditMenu from "@/Hooks/Menu/useEditMenu";
-import { EditMenuSchema } from "@/Schema/Menu/MenuSchema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Upload } from "lucide-react";
-import { useCallback, useState } from "react";
-import { useForm } from "react-hook-form";
 
 const MenuEditModal = ({ selectedProduct, onOpenModal }) => {
   const [imagePreview, setImagePreview] = useState(null);
@@ -71,28 +66,17 @@ const MenuEditModal = ({ selectedProduct, onOpenModal }) => {
             <FieldSet>
               <FieldGroup>
                 <div className="w-full ">
-                  <img
-                    src={selectedProduct.image_url}
-                    alt={selectedProduct.name}
-                    className="mx-auto w-full object-cover rounded-md aspect-video"
-                  />
+                  <img src={selectedProduct.image_url} alt={selectedProduct.name} className="mx-auto w-full object-cover rounded-md aspect-video" />
                 </div>
                 <Field>
                   <FieldLabel htmlFor="image">Foto Baru</FieldLabel>
                   {imagePreview && (
                     <div className="w-full ">
-                      <img
-                        src={imagePreview}
-                        alt={selectedProduct.name}
-                        className="mx-auto w-full object-cover rounded-md aspect-video"
-                      />
+                      <img src={imagePreview} alt={selectedProduct.name} className="mx-auto w-full object-cover rounded-md aspect-video" />
                     </div>
                   )}
 
-                  <label
-                    htmlFor="image"
-                    className="block cursor-pointer rounded-md border border-dashed p-2 text-center hover:bg-primary/5"
-                  >
+                  <label htmlFor="image" className="block cursor-pointer rounded-md border border-dashed p-2 text-center hover:bg-primary/5">
                     <div className="text-sm font-medium flex items-center justify-center gap-2">
                       <Upload className="size-4" /> Pilih gambar
                     </div>
@@ -113,52 +97,27 @@ const MenuEditModal = ({ selectedProduct, onOpenModal }) => {
                 </Field>
                 <Field>
                   <FieldLabel htmlFor="name">Menu Name</FieldLabel>
-                  <Input
-                    id="name"
-                    autoComplete="off"
-                    {...register("name")}
-                    aria-invalid={errors.name ? "true" : "false"}
-                  />
+                  <Input id="name" autoComplete="off" {...register("name")} aria-invalid={errors.name ? "true" : "false"} />
                   {errors.name && <FieldError>{errors.name.message}</FieldError>}
                 </Field>
                 <Field>
                   <FieldLabel htmlFor="price">Price</FieldLabel>
-                  <Input
-                    id="price"
-                    autoComplete="off"
-                    {...register("price")}
-                    aria-invalid={errors.price ? "true" : "false"}
-                  />
+                  <Input id="price" autoComplete="off" {...register("price")} aria-invalid={errors.price ? "true" : "false"} />
                   {errors.price && <FieldError>{errors.price.message}</FieldError>}
                 </Field>
                 <Field>
                   <FieldLabel htmlFor="stock">Stock</FieldLabel>
-                  <Input
-                    id="stock"
-                    autoComplete="off"
-                    {...register("stock")}
-                    aria-invalid={errors.stock ? "true" : "false"}
-                  />
+                  <Input id="stock" autoComplete="off" {...register("stock")} aria-invalid={errors.stock ? "true" : "false"} />
                   {errors.stock && <FieldError>{errors.stock.message}</FieldError>}
                 </Field>
                 <Field>
                   <FieldLabel htmlFor="category_id">Category ID</FieldLabel>
-                  <Input
-                    id="category_id"
-                    autoComplete="off"
-                    {...register("category_id")}
-                    aria-invalid={errors.category_id ? "true" : "false"}
-                  />
+                  <Input id="category_id" autoComplete="off" {...register("category_id")} aria-invalid={errors.category_id ? "true" : "false"} />
                   {errors.category_id && <FieldError>{errors.category_id.message}</FieldError>}
                 </Field>
                 <Field>
                   <FieldLabel htmlFor="description">Description</FieldLabel>
-                  <Textarea
-                    id="description"
-                    autoComplete="off"
-                    {...register("description")}
-                    aria-invalid={errors.description ? "true" : "false"}
-                  />
+                  <Textarea id="description" autoComplete="off" {...register("description")} aria-invalid={errors.description ? "true" : "false"} />
                   {errors.description && <FieldError>{errors.description.message}</FieldError>}
                 </Field>
               </FieldGroup>

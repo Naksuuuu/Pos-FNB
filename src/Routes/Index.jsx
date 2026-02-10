@@ -1,11 +1,11 @@
-// import App from "@/Pages/App";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
+import { Provider } from "react-redux";
+
+import store from "@/Redux/Store";
 import DashboardRoute from "./DashboardRoute";
 import PublicRoute from "./PublicRoute";
-import { Provider } from "react-redux";
-import store from "@/Redux/Store";
 
 const RootErrorBoundary = () => {
   return <div>Something went wrong!</div>;

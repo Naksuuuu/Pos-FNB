@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 import { Badge } from "@/Components/Elements/Shadcn/Badge/badge";
 import { Button } from "@/Components/Elements/Shadcn/Button/button";
 import {
@@ -9,7 +11,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/Components/Elements/Shadcn/Card/card";
-import { Link } from "react-router-dom";
 
 const ProductCard = ({ imagePath, name, category, description, id }) => {
   return (

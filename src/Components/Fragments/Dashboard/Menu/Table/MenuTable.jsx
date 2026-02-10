@@ -1,5 +1,9 @@
-import { Button } from "@/Components/Elements/Shadcn/Button/button";
+import { memo } from "react";
+import { Pen, Trash } from "lucide-react";
 
+import { rupiah } from "@/Utils/rupiahHelper";
+
+import { Button } from "@/Components/Elements/Shadcn/Button/button";
 import {
   Table,
   TableBody,
@@ -8,10 +12,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/Components/Elements/Shadcn/Table/table";
-import { rupiah } from "@/Utils/rupiahHelper";
-
-import { Pen, Trash } from "lucide-react";
-import { memo } from "react";
 
 const MenuTable = memo(({ menus, onOpenDeleteModal, onOpenEditModal }) => {
   // console.log(menus);
