@@ -2,22 +2,19 @@ import { memo } from "react";
 import { Pen, Trash } from "lucide-react";
 
 import { rupiah } from "@/Utils/rupiahHelper";
-import useAllMenu from "@/Hooks/Menu/useAllMenu";
 
 import { Button } from "@/Components/Elements/Shadcn/Button/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/Elements/Shadcn/Table/table";
 import { Skeleton } from "@/Components/Elements/Shadcn/Skeleton/skeleton";
 import { Spinner } from "@/Components/Elements/Shadcn/Spinner/spinner";
 
-const MenuTable = memo(({ onOpenDeleteModal, onOpenEditModal }) => {
-  const { menus, loadMenus, loading, errorMessage } = useAllMenu();
-
+const MenuTable = memo(({ loading, errorMessage, menus = [], pagination, loadMenus, onOpenDeleteModal, onOpenEditModal }) => {
   return (
     <div className="overflow-hidden border rounded-lg">
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>ID</TableHead>
+            <TableHead>No</TableHead>
             <TableHead>Name</TableHead>
             <TableHead>Category</TableHead>
             <TableHead>Price</TableHead>
@@ -30,9 +27,9 @@ const MenuTable = memo(({ onOpenDeleteModal, onOpenEditModal }) => {
           {errorMessage && !loading && <TableError message={errorMessage} loadMenus={loadMenus} />}
           {!loading &&
             !errorMessage &&
-            menus.map((menu) => (
+            menus.map((menu, index) => (
               <TableRow key={menu.id}>
-                <TableCell>{menu.id}</TableCell>
+                <TableCell>{pagination.from + index}</TableCell>
                 <TableCell>{menu.name}</TableCell>
                 <TableCell>{menu.category?.name ?? "loading"}</TableCell>
                 <TableCell>{rupiah(menu.price)}</TableCell>

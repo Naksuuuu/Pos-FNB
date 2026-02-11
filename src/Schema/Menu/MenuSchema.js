@@ -15,11 +15,7 @@ const stock = z
   .transform((v) => Number(v))
   .refine((v) => v >= 0, "Price must be at least 0");
 
-const category_id = z
-  .string()
-  .min(1, "Category wajib diisi")
-  .refine((v) => !Number.isNaN(Number(v)), "Category id must be a number")
-  .transform((v) => Number(v));
+const category_id = z.string().min(1, "Category wajib diisi");
 
 const description = z.string().min(1, "Description is required");
 
@@ -51,18 +47,8 @@ const EditMenuSchema = z.object({
   image: z
     .any()
     .optional()
-    .refine(
-      (files) =>
-        !files ||
-        !(files instanceof FileList) ||
-        files.length === 0 ||
-        ["image/jpeg", "image/png"].includes(files[0]?.type),
-      "Only JPG/PNG allowed",
-    )
-    .refine(
-      (files) => !files || !(files instanceof FileList) || files.length === 0 || files[0]?.size <= 2 * 1024 * 1024,
-      "Max file size is 2MB",
-    ),
+    .refine((files) => !files || !(files instanceof FileList) || files.length === 0 || ["image/jpeg", "image/png"].includes(files[0]?.type), "Only JPG/PNG allowed")
+    .refine((files) => !files || !(files instanceof FileList) || files.length === 0 || files[0]?.size <= 2 * 1024 * 1024, "Max file size is 2MB"),
   is_available,
 });
 

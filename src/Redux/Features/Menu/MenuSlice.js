@@ -8,17 +8,33 @@ const initialState = {
   loadingCreate: false,
   loadingEdit: false,
   loadingDelete: false,
+  filters: {
+    search: null,
+    category_id: null,
+    is_available: null,
+    sort_by: "created_at",
+    sort_direction: "desc",
+    per_page: 10,
+  },
+  pagination: {
+    current_page: 1,
+    from: 1,
+    last_page: 1,
+    next_page: null,
+    prev_page: null,
+    per_page: 10,
+    total: 0,
+    total_pages: 0,
+  },
 };
 
-export const fetchMenus = createAsyncThunk("menu/fetchMenus", async (_, { rejectWithValue }) => {
+export const fetchMenus = createAsyncThunk("menu/fetchMenus", async (params, { rejectWithValue }) => {
   try {
-    const response = await MenuService.getAllMenu();
+    const response = await MenuService.getAllMenu(params);
 
     if (!response.success) {
       return rejectWithValue(response.message || "Failed to fetch menus");
     }
-
-    console.log("Fetched menus:", response.data);
 
     return response.data;
   } catch (error) {
@@ -31,7 +47,7 @@ export const fetchMenus = createAsyncThunk("menu/fetchMenus", async (_, { reject
 export const createMenu = createAsyncThunk("menu/createMenu", async (menuData, { rejectWithValue }) => {
   try {
     const response = await MenuService.createMenu(menuData);
-    if (response.success && (response.httpcode === 200 || response.httpcode === 201)) {
+    if (response.success && (response.status === 200 || response.status === 201)) {
       return response;
     }
 
@@ -55,7 +71,7 @@ export const createMenu = createAsyncThunk("menu/createMenu", async (menuData, {
 export const deleteMenu = createAsyncThunk("menu/deleteMenu", async (menuId, { rejectWithValue }) => {
   try {
     const response = await MenuService.deleteMenu(menuId);
-    if (response.success && (response.httpcode === 200 || response.httpcode === 201)) {
+    if (response.success && (response.status === 200 || response.status === 201)) {
       return response;
     }
     throw new Error(response.message || "Failed to delete menu");
@@ -75,7 +91,7 @@ export const editMenu = createAsyncThunk("menu/editMenu", async ([menuId, menuDa
     }
 
     const response = await MenuService.editMenu(menuId, menuDataWithoutImage);
-    if (response.success && (response.httpcode === 200 || response.httpcode === 201)) {
+    if (response.success && (response.status === 200 || response.status === 201)) {
       return response;
     }
     throw new Error(response.message || "Failed to edit menu");
@@ -108,6 +124,16 @@ const menuSlice = createSlice({
       .addCase(fetchMenus.fulfilled, (state, action) => {
         state.loading = false;
         state.menus = action.payload.menus;
+        state.pagination = {
+          ...action.payload.pagination,
+          current_page: parseInt(action.payload.pagination.current_page),
+          per_page: parseInt(action.payload.pagination.per_page),
+          last_page: parseInt(action.payload.pagination.last_page),
+          total: parseInt(action.payload.pagination.total),
+          next_page: action.payload.pagination.next_page ? parseInt(action.payload.pagination.next_page) : null,
+          prev_page: action.payload.pagination.prev_page ? parseInt(action.payload.pagination.prev_page) : null,
+        };
+        state.filters = action.payload.filters;
       })
       .addCase(fetchMenus.rejected, (state, action) => {
         state.loading = false;

@@ -2,8 +2,15 @@ import { apiUtils } from "../Common/Base";
 
 const MENU_ENDPOINT = "/menus";
 
-export const getAllMenu = async () => {
-  const response = await apiUtils.get(MENU_ENDPOINT);
+export const getAllMenu = async (params = {}) => {
+  const { page = 1, per_page } = params;
+
+  const queryParams = {
+    page: parseInt(page),
+    per_page: parseInt(per_page),
+  };
+
+  const response = await apiUtils.get(MENU_ENDPOINT, { params: queryParams });
   return response.data;
 };
 

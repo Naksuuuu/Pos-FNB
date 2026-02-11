@@ -6,7 +6,7 @@ import DashLayout from "@/Components/Layouts/DashLayout";
 import LoadingApp from "@/Pages/Common/LoadingApp";
 const Dashboard = lazy(() => import("@/Pages/Dashboard/Dashboard"));
 const PanelCashier = lazy(() => import("@/Pages/Dashboard/Cashier/PanelCashier"));
-const PanelMenu = lazy(() => import("@/Pages/Dashboard/Menu/PanelMenu"));
+const DashboardMenu = lazy(() => import("@/Pages/Dashboard/Menu/DashboardMenu"));
 
 const createProtectedRoute = (component) => {
   return (
@@ -29,7 +29,7 @@ const DashboardRoute = [
   },
   {
     path: "/dashboard/menu",
-    element: createProtectedRoute(<PanelMenu />),
+    element: createProtectedRoute(<DashboardMenu />),
   },
 ];
 

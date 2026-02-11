@@ -1,7 +1,7 @@
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { selectAllMenus, selectMenuError, selectMenuLoading } from "@/Redux/Features/Menu/MenuSelector";
+import { selectAllMenus, selectMenuError, selectMenuLoading, selectMenuPagination } from "@/Redux/Features/Menu/MenuSelector";
 import { fetchMenus } from "@/Redux/Features/Menu/MenuSlice";
 
 const useAllMenu = () => {
@@ -9,21 +9,24 @@ const useAllMenu = () => {
   const menus = useSelector(selectAllMenus);
   const loading = useSelector(selectMenuLoading);
   const errorMessage = useSelector(selectMenuError);
+  const pagination = useSelector(selectMenuPagination);
 
-  // const { current_page, data: menus } = useMemo(() => menusData, [menusData]);
-  // const { current_page, data: menus = [] } = menusData || {};
+  const loadMenus = useCallback(
+    (params = {}) => {
+      const { page, per_page, ...otherParams } = params;
 
-  const loadMenus = useCallback(() => {
-    if (menus.length === 0) {
-      dispatch(fetchMenus());
-    }
-  }, [dispatch, menus]);
+      const safeParams = {
+        page: parseInt(page) || 1,
+        per_page: parseInt(per_page) || 10,
+        ...otherParams,
+      };
 
-  useEffect(() => {
-    loadMenus();
-  }, [loadMenus]);
+      dispatch(fetchMenus(safeParams)).unwrap();
+    },
+    [dispatch],
+  );
 
-  return { menus, loadMenus, loading, errorMessage };
+  return { menus, loadMenus, loading, errorMessage, pagination };
 };
 
 export default useAllMenu;
