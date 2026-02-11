@@ -20,7 +20,9 @@ export const fetchMenus = createAsyncThunk("menu/fetchMenus", async (_, { reject
 
     return response.data;
   } catch (error) {
-    return rejectWithValue(error.message || error);
+    return rejectWithValue({
+      message: error?.message || "Failed to fetch menus",
+    });
   }
 });
 

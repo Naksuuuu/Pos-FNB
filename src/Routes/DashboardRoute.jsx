@@ -1,4 +1,4 @@
-import { lazy } from "react";
+import { lazy, Suspense } from "react";
 
 import { SidebarProvider } from "@/Components/Elements/Shadcn/Sidebar/sidebar";
 import DashLayout from "@/Components/Layouts/DashLayout";
@@ -9,9 +9,11 @@ const PanelMenu = lazy(() => import("@/Pages/Dashboard/Menu/PanelMenu"));
 
 const createProtectedRoute = (component) => {
   return (
-    <SidebarProvider>
-      <DashLayout>{component}</DashLayout>
-    </SidebarProvider>
+    <Suspense fallback={<div>Loading...</div>}>
+      <SidebarProvider>
+        <DashLayout>{component}</DashLayout>
+      </SidebarProvider>
+    </Suspense>
   );
 };
 

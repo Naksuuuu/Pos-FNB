@@ -21,7 +21,7 @@ const useAllMenu = () => {
     loadMenus();
   }, [loadMenus]);
 
-  return { menus, loading, errorMessage };
+  return { menus, loadMenus, loading, errorMessage };
 };
 
 export default useAllMenu;

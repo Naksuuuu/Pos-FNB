@@ -10,7 +10,7 @@ import { Skeleton } from "@/Components/Elements/Shadcn/Skeleton/skeleton";
 import { Spinner } from "@/Components/Elements/Shadcn/Spinner/spinner";
 
 const MenuTable = memo(({ onOpenDeleteModal, onOpenEditModal }) => {
-  const { menus, loading, errorMessage } = useAllMenu();
+  const { menus, loadMenus, loading, errorMessage } = useAllMenu();
 
   return (
     <div className="overflow-hidden border rounded-lg">
@@ -26,12 +26,14 @@ const MenuTable = memo(({ onOpenDeleteModal, onOpenEditModal }) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {loading && <TableSkeleton />}
+          {loading && !errorMessage && <TableSkeleton />}
+          {errorMessage && !loading && <TableError message={errorMessage} loadMenus={loadMenus} />}
           {!loading &&
+            !errorMessage &&
             menus.map((menu) => (
               <TableRow key={menu.id}>
                 <TableCell>{menu.id}</TableCell>
-                <TableCell>{menu.name.length > 100 ? `${menu.name.substring(0, 50)}...` : menu.name}</TableCell>
+                <TableCell>{menu.name}</TableCell>
                 <TableCell>{menu.category?.name ?? "loading"}</TableCell>
                 <TableCell>{rupiah(menu.price)}</TableCell>
                 <TableCell>{menu.stock}</TableCell>
@@ -58,6 +60,21 @@ const TableSkeleton = memo(() => {
         <div className="relative flex items-center justify-center">
           <Skeleton className="w-full h-125" />
           <Spinner className="absolute size-8" />
+        </div>
+      </TableCell>
+    </TableRow>
+  );
+});
+
+const TableError = memo(({ message = "Cannot connect to the server", loadMenus }) => {
+  return (
+    <TableRow>
+      <TableCell colSpan={6}>
+        <div className="flex flex-col items-center justify-center gap-4 p-4 text-center text-red-500 h-125">
+          <p>{message}</p>
+          <Button className="ml-4" onClick={loadMenus}>
+            Reload
+          </Button>
         </div>
       </TableCell>
     </TableRow>
