@@ -7,11 +7,19 @@ import store from "@/Redux/Store";
 import RootErrorBoundary from "@/Pages/Common/RootErrorBoundary";
 import DashboardRoute from "./DashboardRoute";
 import PublicRoute from "./PublicRoute";
+import NotFound from "@/Pages/Common/NotFound";
 
 export const Routes = createBrowserRouter([
   {
     errorElement: <RootErrorBoundary />,
-    children: [...PublicRoute, ...DashboardRoute],
+    children: [
+      ...PublicRoute,
+      ...DashboardRoute,
+      {
+        path: "*",
+        element: <NotFound />,
+      },
+    ],
   },
 ]);
 
