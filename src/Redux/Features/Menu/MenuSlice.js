@@ -18,6 +18,8 @@ export const fetchMenus = createAsyncThunk("menu/fetchMenus", async (_, { reject
       return rejectWithValue(response.message || "Failed to fetch menus");
     }
 
+    console.log("Fetched menus:", response.data);
+
     return response.data;
   } catch (error) {
     return rejectWithValue({
@@ -105,7 +107,7 @@ const menuSlice = createSlice({
       })
       .addCase(fetchMenus.fulfilled, (state, action) => {
         state.loading = false;
-        state.menus = action.payload.data;
+        state.menus = action.payload.menus;
       })
       .addCase(fetchMenus.rejected, (state, action) => {
         state.loading = false;

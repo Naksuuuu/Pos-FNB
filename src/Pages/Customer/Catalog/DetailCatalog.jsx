@@ -40,10 +40,8 @@ const DetailCatalog = () => {
   return (
     <main className="relative flex flex-col w-full h-screen ">
       <div className="absolute top-4 right-4 ">
-        <Button asChild variant="outline" size="icon" className="rounded-full">
-          <Link to={"/menu"}>
-            <X />
-          </Link>
+        <Button variant="outline" size="icon" className="rounded-full" render={(props) => <Link {...props} to="/menu" />}>
+          <X />
         </Button>
       </div>
       <div className="h-1/3">

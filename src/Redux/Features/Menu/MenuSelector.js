@@ -1,10 +1,10 @@
 import { createSelector } from "@reduxjs/toolkit";
 
-export const selectMenuState = (state) => state.menu;
+export const selectMenuState = (state) => state.menu || { menus: [], loading: false, error: null };
 
-export const selectAllMenus = createSelector([selectMenuState], (menuState) => menuState.menus);
-export const selectMenuLoading = createSelector([selectMenuState], (menuState) => menuState.loading);
-export const selectMenuError = createSelector([selectMenuState], (menuState) => menuState.error);
+export const selectAllMenus = createSelector([selectMenuState], (menuState) => menuState.menus || []);
+export const selectMenuLoading = createSelector([selectMenuState], (menuState) => menuState.loading || false);
+export const selectMenuError = createSelector([selectMenuState], (menuState) => menuState.error || null);
 
 export const selectMenuCreateLoading = createSelector([selectMenuState], (menuState) => menuState.loadingCreate);
 

@@ -130,10 +130,8 @@ const MenuEditModal = ({ selectedProduct, onOpenModal }) => {
             </FieldSet>
           </div>
           <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="outline" className="cursor-pointer">
-                Cancel
-              </Button>
+            <DialogClose render={(props) => <Button {...props} variant="outline" className="cursor-pointer" />}>
+              Cancel
             </DialogClose>
             <Button type="submit" disabled={loading} className="relative cursor-pointer bg-emerald-500 hover:bg-emerald-600" size="default">
               <span className={loading ? "invisible" : "visible"}>Edit</span>

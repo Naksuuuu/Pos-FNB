@@ -4,11 +4,7 @@ import { ChevronRight, LogOut } from "lucide-react";
 
 import { SidebarItem } from "@/Context/SidebarItem";
 
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/Components/Elements/Shadcn/Collapsible/collapsible";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/Components/Elements/Shadcn/Collapsible/collapsible";
 import {
   Sidebar,
   SidebarContent,
@@ -26,25 +22,21 @@ import {
 
 const CreateSidebar = memo(({ pathname }) => {
   const SIDEBAR_ITEMS = useMemo(() => SidebarItem, []);
-  // console.log(pathname);
 
   return (
     <Sidebar>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild className="py-6">
-              <Link to="/">
-                <img
-                  src={"https://avatars.githubusercontent.com/u/144807673?v=4"}
-                  alt="Logo"
-                  width={35}
-                  height={35}
-                  className="rounded-full select-none"
-                />
-                <span className="select-none">Ariel</span>
-              </Link>
-            </SidebarMenuButton>
+            <SidebarMenuButton
+              className="py-6"
+              render={
+                <Link to="/">
+                  <img src={"https://avatars.githubusercontent.com/u/144807673?v=4"} alt="Logo" width={35} height={35} className="rounded-full select-none" />
+                  <span className="select-none">Ariel</span>
+                </Link>
+              }
+            ></SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
@@ -63,15 +55,14 @@ const CreateSidebar = memo(({ pathname }) => {
         <SidebarGroup>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip={`Logout`}>
-                <Link
-                  to={"/dashboard"}
-                  className="flex justify-between border border-red-500 text-red-500 hover:bg-red-500! hover:text-white! font-semibold"
-                >
-                  <span>Logout</span>
-                  <LogOut />
-                </Link>
-              </SidebarMenuButton>
+              <SidebarMenuButton
+                render={
+                  <Link to={"/dashboard"} className="flex justify-between border border-red-500 text-red-500 hover:bg-red-500! hover:text-white! font-semibold">
+                    <span>Logout</span>
+                    <LogOut />
+                  </Link>
+                }
+              ></SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroup>
@@ -84,12 +75,15 @@ const StaticSidebarMenuItem = memo(({ item, activePath }) => {
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <SidebarMenuButton asChild isActive={activePath === item.path} tooltip={item.title}>
-          <Link to={item.path} className={activePath === item.path ? "bg-primary! text-background!" : ""}>
-            <item.icon />
-            <span>{item.title}</span>
-          </Link>
-        </SidebarMenuButton>
+        <SidebarMenuButton
+          render={(props) => (
+            <Link {...props} to={item.path}>
+              {item.icon && <item.icon />}
+              <span>{item.title}</span>
+            </Link>
+          )}
+          className={activePath === item.path ? "bg-primary! text-background!" : ""}
+        />
       </SidebarMenuItem>
     </SidebarMenu>
   );
@@ -98,33 +92,39 @@ const StaticSidebarMenuItem = memo(({ item, activePath }) => {
 const CollapsibleSidebarMenuItem = memo(({ item, activePath }) => {
   return (
     <SidebarMenu>
-      <Collapsible asChild defaultOpen={true} className="group/collapsible">
-        <SidebarMenuItem>
-          <CollapsibleTrigger asChild>
-            <SidebarMenuButton tooltip={item.title}>
-              {item.icon && <item.icon />}
-              <span>{item.title}</span>
-              <ChevronRight className="ml-auto cursor-pointer transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-            </SidebarMenuButton>
-          </CollapsibleTrigger>
-          <CollapsibleContent>
-            <SidebarMenuSub className="my-1 border-primary/50!">
-              {item.children?.map((subItem) => (
-                <SidebarMenuSubItem key={subItem.title}>
-                  <SidebarMenuSubButton asChild isActive={activePath === subItem.path}>
-                    <Link
-                      to={subItem.path}
+      <Collapsible
+        defaultOpen={true}
+        className="group/collapsible"
+        render={(props, state) => (
+          <SidebarMenuItem {...props} data-state={state.open ? "open" : "closed"}>
+            <CollapsibleTrigger
+              render={
+                <SidebarMenuButton>
+                  {item.icon && <item.icon />}
+                  <span>{item.title}</span>
+                  <ChevronRight className="ml-auto cursor-pointer transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                </SidebarMenuButton>
+              }
+            ></CollapsibleTrigger>
+            <CollapsibleContent>
+              <SidebarMenuSub className="my-1 border-primary/50!">
+                {item.children?.map((subItem) => (
+                  <SidebarMenuSubItem key={subItem.title}>
+                    <SidebarMenuSubButton
+                      render={(props) => (
+                        <Link {...props} to={subItem.path}>
+                          <span>{subItem.title}</span>
+                        </Link>
+                      )}
                       className={activePath === subItem.path ? "bg-primary! text-background!" : ""}
-                    >
-                      <span>{subItem.title}</span>
-                    </Link>
-                  </SidebarMenuSubButton>
-                </SidebarMenuSubItem>
-              ))}
-            </SidebarMenuSub>
-          </CollapsibleContent>
-        </SidebarMenuItem>
-      </Collapsible>
+                    ></SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                ))}
+              </SidebarMenuSub>
+            </CollapsibleContent>
+          </SidebarMenuItem>
+        )}
+      ></Collapsible>
     </SidebarMenu>
   );
 });

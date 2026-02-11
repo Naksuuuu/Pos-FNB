@@ -23,8 +23,8 @@ const ProductCard = ({ imagePath, name, category, description, id }) => {
         <CardDescription>{description}</CardDescription>
       </CardContent>
       <CardFooter className="flex flex-col justify-between w-full gap-2 md:flex-row">
-        <Button asChild className="w-full md:w-1/3 bg-emerald-600 hover:bg-emerald-700">
-          <Link to={`/menu/${id}`}>Tambah</Link>
+        <Button className="w-full md:w-1/3 bg-emerald-600 hover:bg-emerald-700" render={(props) => <Link {...props} to={`/menu/${id}`} />}>
+          Tambah
         </Button>
       </CardFooter>
     </Card>

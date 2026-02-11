@@ -26,10 +26,8 @@ const MenuDeleteModal = ({ selectedProduct, onOpenModal }) => {
           <DialogDescription>This action cannot be undone. This will permanently delete your menu and remove your data from our servers.</DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <DialogClose asChild>
-            <Button variant="outline" className="cursor-pointer">
-              Cancel
-            </Button>
+          <DialogClose render={(props) => <Button {...props} variant="outline" className="cursor-pointer" />}>
+            Cancel
           </DialogClose>
           <Button variant="destructive" disabled={loading} className="relative cursor-pointer" onClick={() => handleDelete(selectedProduct?.id)} size="default">
             <span className={loading ? "invisible" : "visible"}>Delete</span>

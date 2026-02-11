@@ -119,10 +119,8 @@ const MenuCreateModal = memo(({ isOpen, onOpenModal }) => {
             </FieldSet>
           </div>
           <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="outline" className="cursor-pointer">
-                Cancel
-              </Button>
+            <DialogClose render={(props) => <Button {...props} variant="outline" className="cursor-pointer" />}>
+              Cancel
             </DialogClose>
             <Button type="submit" disabled={loading} className="relative cursor-pointer" size="default">
               <span className={loading ? "invisible" : "visible"}>Add</span>
