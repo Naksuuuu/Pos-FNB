@@ -14,8 +14,10 @@ const useAllMenu = () => {
   // const { current_page, data: menus = [] } = menusData || {};
 
   const loadMenus = useCallback(() => {
-    dispatch(fetchMenus());
-  }, [dispatch]);
+    if (menus.length === 0) {
+      dispatch(fetchMenus());
+    }
+  }, [dispatch, menus]);
 
   useEffect(() => {
     loadMenus();

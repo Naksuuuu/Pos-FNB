@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { memo, useCallback, useState } from "react";
 
 import { Button } from "@/Components/Elements/Shadcn/Button/button";
 import MenuCreateModal from "@/Components/Fragments/Dashboard/Menu/Modal/MenuCreateModal";
@@ -6,7 +6,7 @@ import MenuDeleteModal from "@/Components/Fragments/Dashboard/Menu/Modal/MenuDel
 import MenuEditModal from "@/Components/Fragments/Dashboard/Menu/Modal/MenuEditModal";
 import MenuTable from "@/Components/Fragments/Dashboard/Menu/Table/MenuTable";
 
-const PanelMenu = () => {
+const PanelMenu = memo(() => {
   const [selectedEditProduct, setSelectedEditProduct] = useState(null);
   const [selectedDeleteProduct, setSelectedDeleteProduct] = useState(null);
   const [selectedAddProduct, setSelectedAddProduct] = useState(false);
@@ -44,6 +44,6 @@ const PanelMenu = () => {
       {selectedAddProduct && <MenuCreateModal isOpen={selectedAddProduct} onOpenModal={handleOpenAddModal} />}
     </div>
   );
-};
+});
 
 export default PanelMenu;
