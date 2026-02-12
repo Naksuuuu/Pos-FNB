@@ -1,23 +1,23 @@
 import { z } from "zod";
 
-const name = z.string().min(1, "Name is required");
+const name = z.string().min(1, "Nama Wajib diisi!");
 
 const price = z
   .string()
-  .min(1, "Price is required")
-  .refine((v) => !Number.isNaN(Number(v)), "Price must be a number")
+  .min(1, "Harga Wajib diisi!")
+  .refine((v) => !Number.isNaN(Number(v)), "Harga harus berupa angka!")
   .transform((v) => Number(v))
-  .refine((v) => v >= 0, "Price must be at least 0");
+  .refine((v) => v >= 0, "Minimal harga 0 Rupiah!");
 const stock = z
   .string()
-  .min(1, "Stock is required")
-  .refine((v) => !Number.isNaN(Number(v)), "Stock must be a number")
+  .min(1, "Stok Wajib diisi!")
+  .refine((v) => !Number.isNaN(Number(v)), "Stok harus berupa angka!")
   .transform((v) => Number(v))
-  .refine((v) => v >= 0, "Price must be at least 0");
+  .refine((v) => v >= 0, "Minimal stok 0");
 
-const category_id = z.string().min(1, "Category wajib diisi");
+const category_id = z.string().min(1, "Kategori wajib diisi");
 
-const description = z.string().min(1, "Description is required");
+const description = z.string().optional();
 
 const is_available = z
   .boolean()
@@ -32,9 +32,9 @@ const CreateMenuSchema = z.object({
   description,
   image: z
     .any()
-    .refine((files) => !files || files instanceof FileList, "File is required")
-    .refine((files) => !files || ["image/jpeg", "image/png"].includes(files[0]?.type), "Only JPG/PNG allowed")
-    .refine((files) => !files || files[0]?.size <= 2 * 1024 * 1024, "Max file size is 2MB"),
+    .refine((files) => !files || files instanceof FileList, "Foto wajib diisi")
+    .refine((files) => !files || ["image/jpeg", "image/jpg", "image/png"].includes(files[0]?.type), "Hanya JPEG/JPG/PNG yang diperbolehkan")
+    .refine((files) => !files || files[0]?.size <= 2 * 1024 * 1024, "Ukuran file maksimal 2MB"),
   is_available,
 });
 
@@ -47,8 +47,8 @@ const EditMenuSchema = z.object({
   image: z
     .any()
     .optional()
-    .refine((files) => !files || !(files instanceof FileList) || files.length === 0 || ["image/jpeg", "image/png"].includes(files[0]?.type), "Only JPG/PNG allowed")
-    .refine((files) => !files || !(files instanceof FileList) || files.length === 0 || files[0]?.size <= 2 * 1024 * 1024, "Max file size is 2MB"),
+    .refine((files) => !files || !(files instanceof FileList) || files.length === 0 || ["image/jpeg", "image/jpg", "image/png"].includes(files[0]?.type), "Hanya JPEG/JPG/PNG yang diperbolehkan")
+    .refine((files) => !files || !(files instanceof FileList) || files.length === 0 || files[0]?.size <= 2 * 1024 * 1024, "Ukuran file maksimal 2MB"),
   is_available,
 });
 

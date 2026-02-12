@@ -2,11 +2,17 @@ import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, Pagi
 
 const DashboardPagination = ({ pagination, onPageChange }) => {
   return (
-    <Pagination className="justify-end!">
-      <PaginationContent className="bg-background">
-        <PaginationItem>
-          <PaginationPrevious onClick={() => onPageChange(pagination.prev_page)} disabled={!pagination.prev_page} />
-        </PaginationItem>
+    <Pagination className="">
+      <PaginationContent className="bg-background cursor-pointer">
+        {pagination.prev_page ? (
+          <PaginationItem>
+            <PaginationPrevious onClick={() => onPageChange(pagination.prev_page)} text="Sebelumnya" />
+          </PaginationItem>
+        ) : (
+          <PaginationItem>
+            <PaginationPrevious className="text-muted-foreground cursor-not-allowed" text="Sebelumnya" />
+          </PaginationItem>
+        )}
 
         {pagination.prev_page && (
           <PaginationItem>
@@ -15,7 +21,9 @@ const DashboardPagination = ({ pagination, onPageChange }) => {
         )}
         {pagination.current_page && (
           <PaginationItem>
-            <PaginationLink onClick={() => onPageChange(pagination.current_page)}>{pagination.current_page}</PaginationLink>
+            <PaginationLink onClick={() => onPageChange(pagination.current_page)} isActive={true}>
+              {pagination.current_page}
+            </PaginationLink>
           </PaginationItem>
         )}
         {pagination.next_page && (
@@ -23,12 +31,27 @@ const DashboardPagination = ({ pagination, onPageChange }) => {
             <PaginationLink onClick={() => onPageChange(pagination.next_page)}>{pagination.next_page}</PaginationLink>
           </PaginationItem>
         )}
-        <PaginationItem>
-          <PaginationEllipsis />
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationNext onClick={() => onPageChange(pagination.next_page)} disabled={!pagination.next_page} />
-        </PaginationItem>
+
+        {pagination.last_page !== pagination.current_page && pagination.last_page !== pagination.next_page && (
+          <>
+            <PaginationItem>
+              <PaginationEllipsis className="text-muted-foreground cursor-default" />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink onClick={() => onPageChange(pagination.last_page)}>{pagination.last_page}</PaginationLink>
+            </PaginationItem>
+          </>
+        )}
+
+        {pagination.next_page ? (
+          <PaginationItem>
+            <PaginationNext onClick={() => onPageChange(pagination.next_page)} text="Selanjutnya" />
+          </PaginationItem>
+        ) : (
+          <PaginationItem>
+            <PaginationNext className="text-muted-foreground cursor-not-allowed" text="Selanjutnya" />
+          </PaginationItem>
+        )}
       </PaginationContent>
     </Pagination>
   );

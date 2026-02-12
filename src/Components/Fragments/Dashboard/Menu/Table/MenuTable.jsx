@@ -15,11 +15,11 @@ const MenuTable = memo(({ loading, errorMessage, menus = [], pagination, loadMen
         <TableHeader>
           <TableRow>
             <TableHead>No</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead>Category</TableHead>
-            <TableHead>Price</TableHead>
-            <TableHead>Stock</TableHead>
-            <TableHead>Actions</TableHead>
+            <TableHead>Nama</TableHead>
+            <TableHead>Kategori</TableHead>
+            <TableHead>Harga</TableHead>
+            <TableHead>Stok</TableHead>
+            <TableHead>Aksi</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -70,7 +70,7 @@ const TableError = memo(({ message = "Cannot connect to the server", loadMenus }
         <div className="flex flex-col items-center justify-center gap-4 p-4 text-center text-red-500 h-125">
           <p>{message}</p>
           <Button className="ml-4" onClick={loadMenus}>
-            Reload
+            Muat Ulang
           </Button>
         </div>
       </TableCell>

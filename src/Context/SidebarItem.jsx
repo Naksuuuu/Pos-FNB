@@ -8,7 +8,7 @@ export const SidebarItem = [
     children: null,
   },
   {
-    title: "Inventory",
+    title: "Inventaris",
     icon: Database,
     children: [
       {
@@ -20,7 +20,7 @@ export const SidebarItem = [
     ],
   },
   {
-    title: "Cashier",
+    title: "Kasir",
     path: "/dashboard/cashier",
     icon: Computer,
     children: null,

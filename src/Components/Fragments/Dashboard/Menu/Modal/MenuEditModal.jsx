@@ -64,8 +64,8 @@ const MenuEditModal = ({ selectedProduct, onOpenModal }) => {
       <DialogContent showCloseButton={false}>
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <DialogHeader>
-            <DialogTitle>Edit Menu</DialogTitle>
-            <DialogDescription>Create New Menu</DialogDescription>
+            <DialogTitle>Ubah Menu</DialogTitle>
+            <DialogDescription>Ubah Menu yang sudah ada</DialogDescription>
           </DialogHeader>
 
           <div className="no-scrollbar max-h-[50vh] overflow-y-auto">
@@ -102,27 +102,27 @@ const MenuEditModal = ({ selectedProduct, onOpenModal }) => {
                   {errors.image && <FieldError>{errors.image.message}</FieldError>}
                 </Field>
                 <Field>
-                  <FieldLabel htmlFor="name">Menu Name</FieldLabel>
+                  <FieldLabel htmlFor="name">Nama Menu</FieldLabel>
                   <Input id="name" autoComplete="off" {...register("name")} aria-invalid={errors.name ? "true" : "false"} />
                   {errors.name && <FieldError>{errors.name.message}</FieldError>}
                 </Field>
                 <Field>
-                  <FieldLabel htmlFor="price">Price</FieldLabel>
+                  <FieldLabel htmlFor="price">Harga</FieldLabel>
                   <Input id="price" autoComplete="off" {...register("price")} aria-invalid={errors.price ? "true" : "false"} />
                   {errors.price && <FieldError>{errors.price.message}</FieldError>}
                 </Field>
                 <Field>
-                  <FieldLabel htmlFor="stock">Stock</FieldLabel>
+                  <FieldLabel htmlFor="stock">Stok</FieldLabel>
                   <Input id="stock" autoComplete="off" {...register("stock")} aria-invalid={errors.stock ? "true" : "false"} />
                   {errors.stock && <FieldError>{errors.stock.message}</FieldError>}
                 </Field>
                 <Field>
-                  <FieldLabel htmlFor="category_id">Category ID</FieldLabel>
+                  <FieldLabel htmlFor="category_id">ID Kategori</FieldLabel>
                   <Input id="category_id" autoComplete="off" {...register("category_id")} aria-invalid={errors.category_id ? "true" : "false"} />
                   {errors.category_id && <FieldError>{errors.category_id.message}</FieldError>}
                 </Field>
                 <Field>
-                  <FieldLabel htmlFor="description">Description</FieldLabel>
+                  <FieldLabel htmlFor="description">Deskripsi</FieldLabel>
                   <Textarea id="description" autoComplete="off" {...register("description")} aria-invalid={errors.description ? "true" : "false"} />
                   {errors.description && <FieldError>{errors.description.message}</FieldError>}
                 </Field>
@@ -130,9 +130,9 @@ const MenuEditModal = ({ selectedProduct, onOpenModal }) => {
             </FieldSet>
           </div>
           <DialogFooter>
-            <DialogClose render={(props) => <Button {...props} variant="outline" className="cursor-pointer" />}>Cancel</DialogClose>
-            <Button type="submit" disabled={loading} className="relative cursor-pointer bg-emerald-500 hover:bg-emerald-600" size="default">
-              <span className={loading ? "invisible" : "visible"}>Edit</span>
+            <DialogClose render={(props) => <Button {...props} variant="outline" className="cursor-pointer" />}>Batal</DialogClose>
+            <Button type="submit" disabled={loading} className="relative cursor-pointer bg-emerald-500 hover:bg-emerald-600">
+              <span className={loading ? "invisible" : "visible"}>Ubah</span>
 
               {loading && (
                 <div className="absolute ">

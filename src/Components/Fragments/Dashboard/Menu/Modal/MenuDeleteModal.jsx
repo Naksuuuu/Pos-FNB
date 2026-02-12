@@ -22,15 +22,13 @@ const MenuDeleteModal = ({ selectedProduct, onOpenModal }) => {
     <Dialog open={selectedProduct !== null} onOpenChange={() => onOpenModal(null)}>
       <DialogContent showCloseButton={false}>
         <DialogHeader>
-          <DialogTitle>{`Delete ${selectedProduct?.name}?`}</DialogTitle>
-          <DialogDescription>This action cannot be undone. This will permanently delete your menu and remove your data from our servers.</DialogDescription>
+          <DialogTitle>{`Hapus ${selectedProduct?.name}?`}</DialogTitle>
+          <DialogDescription>Aksi ini tidak dapat dibatalkan, menu akan dihapus secara permanen.</DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <DialogClose render={(props) => <Button {...props} variant="outline" className="cursor-pointer" />}>
-            Cancel
-          </DialogClose>
+          <DialogClose render={(props) => <Button {...props} variant="outline" className="cursor-pointer" />}>Batal</DialogClose>
           <Button variant="destructive" disabled={loading} className="relative cursor-pointer" onClick={() => handleDelete(selectedProduct?.id)} size="default">
-            <span className={loading ? "invisible" : "visible"}>Delete</span>
+            <span className={loading ? "invisible" : "visible"}>Hapus</span>
 
             {loading && (
               <div className="absolute ">

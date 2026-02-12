@@ -102,8 +102,8 @@ const DashboardMenu = memo(() => {
     <div>
       <div className="flex flex-col gap-4">
         <div className="flex justify-between gap-4 w-full">
-          <DashboardSearch onSearchChange={(e) => handleSearchChange(e)} value={optimisticSearch} />
-          <Button onClick={handleOpenCreateModal}>Add New Menu</Button>
+          <DashboardSearch onSearchChange={(e) => handleSearchChange(e)} value={optimisticSearch} placeholder="Cari menu..." />
+          <Button onClick={handleOpenCreateModal}>Tambah Menu</Button>
         </div>
         <MenuTable
           loading={loading}
