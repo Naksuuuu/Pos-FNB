@@ -35,10 +35,10 @@ const MenuTable = memo(({ loading, errorMessage, menus = [], pagination, loadMen
                 <TableCell>{rupiah(menu.price)}</TableCell>
                 <TableCell>{menu.stock}</TableCell>
                 <TableCell>
-                  <Button size="icon" variant="ghost" className="text-red-500 rounded-full cursor-pointer hover:bg-red-200 hover:text-red-600" onClick={() => onOpenDeleteModal(menu)}>
+                  <Button size="icon" variant="ghost" className="text-red-500 rounded-full hover:bg-red-200 hover:text-red-600" onClick={() => onOpenDeleteModal(menu)}>
                     <Trash />
                   </Button>
-                  <Button size="icon" variant="ghost" className="rounded-full cursor-pointer text-emerald-500 hover:bg-emerald-200 hover:text-emerald-600" onClick={() => onOpenEditModal(menu)}>
+                  <Button size="icon" variant="ghost" className="rounded-full  text-emerald-500 hover:bg-emerald-200 hover:text-emerald-600" onClick={() => onOpenEditModal(menu)}>
                     <Pen />
                   </Button>
                 </TableCell>

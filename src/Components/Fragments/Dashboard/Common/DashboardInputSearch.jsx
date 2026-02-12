@@ -13,7 +13,7 @@ const DashboardInputSearch = memo(({ onSearchChange, placeholder = "Search...", 
       </InputGroupAddon>
       {props?.value && (
         <InputGroupAddon align="inline-end" className="">
-          <Button variant="destructive" size="xs" className="cursor-pointer" onClick={() => onSearchChange({ target: { value: "" } })}>
+          <Button variant="destructive" size="xs" onClick={() => onSearchChange({ target: { value: "" } })}>
             <X />
           </Button>
         </InputGroupAddon>

@@ -4,7 +4,7 @@ import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, Pagi
 const DashboardPagination = memo(({ pagination, onPageChange }) => {
   return (
     <Pagination className="">
-      <PaginationContent className="bg-background cursor-pointer">
+      <PaginationContent className="bg-background">
         {pagination.prev_page ? (
           <PaginationItem>
             <PaginationPrevious onClick={() => onPageChange(pagination.prev_page)} text="Sebelumnya" />
