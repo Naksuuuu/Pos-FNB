@@ -222,18 +222,14 @@ const DashboardMenu = memo(() => {
   }, [updateUrlParams, per_page, search, searchParams]);
 
   const handleOpenDeleteModal = useCallback((productSelected) => {
-    setSelectedEditProduct(null);
     setSelectedDeleteProduct(productSelected);
   }, []);
 
   const handleOpenEditModal = useCallback((productSelected) => {
-    setSelectedDeleteProduct(null);
     setSelectedEditProduct(productSelected);
   }, []);
 
   const handleOpenCreateModal = useCallback((state) => {
-    setSelectedEditProduct(null);
-    setSelectedDeleteProduct(null);
     setSelectedAddProduct(state);
   }, []);
 
@@ -258,7 +254,7 @@ const DashboardMenu = memo(() => {
 
       <div className="flex flex-col gap-4">
         <div className="flex justify-between w-full gap-4">
-          <DashboardInputSearch onSearchChange={(e) => handleSearchChange(e)} value={optimisticSearch} placeholder="Cari menu..." />
+          <DashboardInputSearch onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari menu..." />
           <Button onClick={handleOpenCreateModal}>Tambah Menu</Button>
         </div>
         <MenuTable

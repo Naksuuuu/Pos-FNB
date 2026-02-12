@@ -49,7 +49,7 @@ export const createCategory = createAsyncThunk("category/createCategory", async 
   }
 });
 
-export const editCategory = createAsyncThunk("category/editCategory", async ({ categoryId, categoryData }, { rejectWithValue }) => {
+export const editCategory = createAsyncThunk("category/editCategory", async ([categoryId, categoryData], { rejectWithValue }) => {
   try {
     const response = await CategoryService.editCategory(categoryId, categoryData);
     if (response.success && response.status === 200) {

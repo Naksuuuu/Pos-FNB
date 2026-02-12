@@ -7,7 +7,7 @@ import { InputGroup, InputGroupAddon, InputGroupInput } from "@/Components/Eleme
 const DashboardInputSearch = memo(({ onSearchChange, placeholder = "Search...", ...props }) => {
   return (
     <InputGroup className="">
-      <InputGroupInput placeholder={placeholder} onChange={onSearchChange} {...props} />
+      <InputGroupInput placeholder={placeholder} onChange={(e) => onSearchChange(e)} {...props} />
       <InputGroupAddon>
         <Search />
       </InputGroupAddon>

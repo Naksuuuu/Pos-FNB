@@ -4,6 +4,7 @@ import useAllCategory from "@/Hooks/Category/useAllCategory";
 import CategoryTable from "@/Components/Fragments/Dashboard/Category/Table/CategoryTable";
 import DashboardInputSearch from "@/Components/Fragments/Dashboard/Common/DashboardInputSearch";
 import { Button } from "@/Components/Elements/Shadcn/button";
+import CategoryEditModal from "@/Components/Fragments/Dashboard/Category/Modal/CategoryEditModal";
 
 const DashboardCategoryPage = () => {
   const { categories, loading, errorMessage, loadCategories } = useAllCategory();
@@ -43,6 +44,8 @@ const DashboardCategoryPage = () => {
           onOpenDeleteModal={handleOpenDeleteModal}
         />
       </div>
+
+      {selectedEditCategory && <CategoryEditModal selectedCategory={selectedEditCategory} onOpenModal={handleOpenEditModal} />}
     </div>
   );
 };
