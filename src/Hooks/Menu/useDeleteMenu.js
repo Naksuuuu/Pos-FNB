@@ -11,7 +11,7 @@ const useDeleteMenu = () => {
   const deleteMenuById = useCallback(
     async (menuId) => {
       const response = await dispatch(deleteMenu(menuId)).unwrap();
-      await dispatch(fetchMenus()).unwrap();
+      await dispatch(fetchMenus());
       return response;
     },
     [dispatch],

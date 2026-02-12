@@ -17,7 +17,7 @@ const useEditMenu = () => {
           page: pagination.current_page,
           per_page: pagination.per_page,
         }),
-      ).unwrap();
+      );
       return response;
     },
     [dispatch, pagination.current_page, pagination.per_page],

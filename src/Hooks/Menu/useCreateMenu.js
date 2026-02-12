@@ -17,7 +17,7 @@ const useCreateMenu = () => {
           page: 1,
           per_page: pagination.per_page,
         }),
-      ).unwrap();
+      );
       return response;
     },
     [dispatch, pagination.current_page, pagination.per_page],

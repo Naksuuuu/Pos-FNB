@@ -21,7 +21,7 @@ const useAllMenu = () => {
         ...otherParams,
       };
 
-      dispatch(fetchMenus(safeParams)).unwrap();
+      dispatch(fetchMenus(safeParams));
     },
     [dispatch],
   );
