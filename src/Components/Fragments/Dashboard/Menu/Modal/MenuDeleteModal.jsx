@@ -1,9 +1,9 @@
 import useDeleteMenu from "@/Hooks/Menu/useDeleteMenu";
-
-import { Button } from "@/Components/Elements/Shadcn/Button/button";
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/Components/Elements/Shadcn/Dialog/dialog";
 import { toast } from "sonner";
-import { Spinner } from "@/Components/Elements/Shadcn/Spinner/spinner";
+
+import { Button } from "@/Components/Elements/Shadcn/button";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/Components/Elements/Shadcn/dialog";
+import { Spinner } from "@/Components/Elements/Shadcn/spinner";
 
 const MenuDeleteModal = ({ selectedProduct, onOpenModal }) => {
   const { deleteMenuById, loading } = useDeleteMenu();

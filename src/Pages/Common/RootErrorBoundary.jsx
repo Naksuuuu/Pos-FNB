@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { Button } from "@/Components/Elements/Shadcn/Button/button";
+import { Button } from "@/Components/Elements/Shadcn/button";
 
 const RootErrorBoundary = memo(() => (
   <div className="flex items-center justify-center min-h-screen bg-background">

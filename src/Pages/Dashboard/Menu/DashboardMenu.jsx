@@ -3,14 +3,15 @@ import { useSearchParams } from "react-router";
 
 import useAllMenu from "@/Hooks/Menu/useAllMenu";
 
-import { Button } from "@/Components/Elements/Shadcn/Button/button";
+import { Button } from "@/Components/Elements/Shadcn/button";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/Components/Elements/Shadcn/select";
 import MenuCreateModal from "@/Components/Fragments/Dashboard/Menu/Modal/MenuCreateModal";
 import MenuDeleteModal from "@/Components/Fragments/Dashboard/Menu/Modal/MenuDeleteModal";
 import MenuEditModal from "@/Components/Fragments/Dashboard/Menu/Modal/MenuEditModal";
 import MenuTable from "@/Components/Fragments/Dashboard/Menu/Table/MenuTable";
 import DashboardPagination from "@/Components/Fragments/Dashboard/Common/DashboardPagination";
-import DashboardSearch from "@/Components/Fragments/Dashboard/Common/DashboardSearch";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/Components/Elements/Shadcn/Input/select";
+import DashboardInputSearch from "@/Components/Fragments/Dashboard/Common/DashboardInputSearch";
+import DashboardSelectFilter, { DashboardResetFilter } from "@/Components/Fragments/Dashboard/Common/DashboardSelectFilter";
 
 const SORY_BY_OPTIONS = [
   { label: "Tanggal Dibuat", value: "created_at" },
@@ -241,83 +242,24 @@ const DashboardMenu = memo(() => {
     <div>
       <div className="grid grid-cols-2 gap-4 py-4 xl:grid-cols-4">
         <div className="w-full">
-          <Select items={SORY_BY_OPTIONS} onValueChange={(e) => handleSortByChange(e)} value={sort_by || null}>
-            <SelectTrigger className="w-full ">
-              <SelectValue placeholder="Pilih opsi" />
-            </SelectTrigger>
-            <SelectContent alignItemWithTrigger={false}>
-              <SelectGroup>
-                <SelectLabel>Cari Berdasarkan</SelectLabel>
-                {SORY_BY_OPTIONS.map((item) => (
-                  <SelectItem key={item.value} value={item.value}>
-                    {item.label}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+          <DashboardSelectFilter items={SORY_BY_OPTIONS} onValueChange={handleSortByChange} value={sort_by} label="Cari Berdasarkan" placeholder="Pilih opsi" />
         </div>
         <div className="w-full">
-          <Select items={SORT_DIRECTION_OPTIONS} onValueChange={(e) => handleSortDirectionChange(e)} value={sort_direction || null}>
-            <SelectTrigger className="w-full ">
-              <SelectValue placeholder="Pilih urutan" />
-            </SelectTrigger>
-            <SelectContent alignItemWithTrigger={false}>
-              <SelectGroup>
-                <SelectLabel>Urutan</SelectLabel>
-                {SORT_DIRECTION_OPTIONS.map((item) => (
-                  <SelectItem key={item.value} value={item.value}>
-                    {item.label}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+          <DashboardSelectFilter items={SORT_DIRECTION_OPTIONS} onValueChange={handleSortDirectionChange} value={sort_direction} label="Urutan" placeholder="Pilih urutan" />
+        </div>
+
+        <div className="w-full">
+          <DashboardSelectFilter items={IS_AVAILABLE_OPTIONS} onValueChange={handleIsAvailableChange} value={is_available} label="Ketersediaan" placeholder="Pilih ketersediaan" />
         </div>
         <div className="w-full">
-          <Select items={IS_AVAILABLE_OPTIONS} onValueChange={(e) => handleIsAvailableChange(e)} value={is_available || null}>
-            <SelectTrigger className="w-full ">
-              <SelectValue placeholder="Pilih ketersediaan" />
-            </SelectTrigger>
-            <SelectContent alignItemWithTrigger={false}>
-              <SelectGroup>
-                <SelectLabel>Ketersediaan</SelectLabel>
-                {IS_AVAILABLE_OPTIONS.map((item) => (
-                  <SelectItem key={item.value} value={item.value}>
-                    {item.label}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+          <DashboardSelectFilter items={CATEGORY_ID_OPTIONS} onValueChange={handleCategoryIdChange} value={category_id} label="Kategori" placeholder="Pilih kategori" />
         </div>
-        <div className="w-full">
-          <Select items={CATEGORY_ID_OPTIONS} onValueChange={(e) => handleCategoryIdChange(e)} value={category_id || null}>
-            <SelectTrigger className="w-full ">
-              <SelectValue placeholder="Pilih kategori" />
-            </SelectTrigger>
-            <SelectContent alignItemWithTrigger={false}>
-              <SelectGroup>
-                <SelectLabel>Kategori</SelectLabel>
-                {CATEGORY_ID_OPTIONS.map((item) => (
-                  <SelectItem key={item.value} value={item.value}>
-                    {item.label}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </div>
-        <div className={`col-span-2 xl:col-span-4 transition-all duration-300 ease-out ${showReset ? "max-h-16 opacity-100 translate-y-0" : "max-h-0 opacity-0 -translate-y-1 pointer-events-none"}`}>
-          <Button className="w-full" onClick={handleResetFilter}>
-            Reset Filter
-          </Button>
-        </div>
+        <DashboardResetFilter onResetFilter={handleResetFilter} condition={showReset} />
       </div>
 
       <div className="flex flex-col gap-4">
         <div className="flex justify-between w-full gap-4">
-          <DashboardSearch onSearchChange={(e) => handleSearchChange(e)} value={optimisticSearch} placeholder="Cari menu..." />
+          <DashboardInputSearch onSearchChange={(e) => handleSearchChange(e)} value={optimisticSearch} placeholder="Cari menu..." />
           <Button onClick={handleOpenCreateModal}>Tambah Menu</Button>
         </div>
         <MenuTable

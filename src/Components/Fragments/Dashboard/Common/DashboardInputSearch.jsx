@@ -1,10 +1,10 @@
 import { memo } from "react";
 import { Search, X } from "lucide-react";
 
-import { Button } from "@/Components/Elements/Shadcn/Button/button";
-import { InputGroup, InputGroupAddon, InputGroupInput } from "@/Components/Elements/Shadcn/Input/input-group";
+import { Button } from "@/Components/Elements/Shadcn/button";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/Components/Elements/Shadcn/input-group";
 
-const DashboardSearch = memo(({ onSearchChange, placeholder = "Search...", ...props }) => {
+const DashboardInputSearch = memo(({ onSearchChange, placeholder = "Search...", ...props }) => {
   return (
     <InputGroup className="">
       <InputGroupInput placeholder={placeholder} onChange={onSearchChange} {...props} />
@@ -22,4 +22,4 @@ const DashboardSearch = memo(({ onSearchChange, placeholder = "Search...", ...pr
   );
 });
 
-export default DashboardSearch;
+export default DashboardInputSearch;

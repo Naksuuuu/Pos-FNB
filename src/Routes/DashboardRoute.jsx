@@ -1,6 +1,6 @@
 import { lazy, Suspense } from "react";
 
-import { SidebarProvider } from "@/Components/Elements/Shadcn/Sidebar/sidebar";
+import { SidebarProvider } from "@/Components/Elements/Shadcn/sidebar";
 
 import LoadingApp from "@/Pages/Common/LoadingApp";
 const DashLayout = lazy(() => import("@/Components/Layouts/DashLayout"));

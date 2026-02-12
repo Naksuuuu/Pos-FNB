@@ -1,6 +1,7 @@
-import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/Components/Elements/Shadcn/Pagination/pagination";
+import { memo } from "react";
+import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/Components/Elements/Shadcn/pagination";
 
-const DashboardPagination = ({ pagination, onPageChange }) => {
+const DashboardPagination = memo(({ pagination, onPageChange }) => {
   return (
     <Pagination className="">
       <PaginationContent className="bg-background cursor-pointer">
@@ -55,5 +56,5 @@ const DashboardPagination = ({ pagination, onPageChange }) => {
       </PaginationContent>
     </Pagination>
   );
-};
+});
 export default DashboardPagination;

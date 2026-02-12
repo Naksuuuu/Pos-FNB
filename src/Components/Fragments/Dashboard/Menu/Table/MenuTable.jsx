@@ -3,10 +3,10 @@ import { Pen, Trash } from "lucide-react";
 
 import { rupiah } from "@/Utils/rupiahHelper";
 
-import { Button } from "@/Components/Elements/Shadcn/Button/button";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/Elements/Shadcn/Table/table";
-import { Skeleton } from "@/Components/Elements/Shadcn/Skeleton/skeleton";
-import { Spinner } from "@/Components/Elements/Shadcn/Spinner/spinner";
+import { Button } from "@/Components/Elements/Shadcn/button";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/Elements/Shadcn/table";
+import { Skeleton } from "@/Components/Elements/Shadcn/skeleton";
+import { Spinner } from "@/Components/Elements/Shadcn/spinner";
 
 const MenuTable = memo(({ loading, errorMessage, menus = [], pagination, loadMenus, onOpenDeleteModal, onOpenEditModal }) => {
   return (

@@ -4,8 +4,8 @@ import { Minus, Plus, X } from "lucide-react";
 
 import { rupiah } from "@/Utils/rupiahHelper";
 
-import { Button } from "@/Components/Elements/Shadcn/Button/button";
-import { Checkbox } from "@/Components/Elements/Shadcn/Checkbox/checkbox";
+import { Button } from "@/Components/Elements/Shadcn/button";
+import { Checkbox } from "@/Components/Elements/Shadcn/checkbox";
 import ActionCard from "@/Components/Fragments/Customer/Common/Card/ActionCard";
 
 import { dummyProducts } from "./ListCatalog";

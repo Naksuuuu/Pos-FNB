@@ -5,12 +5,12 @@ import { cva } from "class-variance-authority";
 
 import { useIsMobile } from "@/Hooks/Common/useMobile";
 import { cn } from "@/Utils/cn";
-import { Button } from "@/Components/Elements/Shadcn/Button/button";
-import { Input } from "@/Components/Elements/Shadcn/Input/input";
-import { Separator } from "@/Components/Elements/Shadcn/Separator/separator";
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/Components/Elements/Shadcn/Sheet/sheet";
-import { Skeleton } from "@/Components/Elements/Shadcn/Skeleton/skeleton";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/Components/Elements/Shadcn/Tooltip/tooltip";
+import { Button } from "@/Components/Elements/Shadcn/button";
+import { Input } from "@/Components/Elements/Shadcn/input";
+import { Separator } from "@/Components/Elements/Shadcn/separator";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/Components/Elements/Shadcn/sheet";
+import { Skeleton } from "@/Components/Elements/Shadcn/skeleton";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/Components/Elements/Shadcn/tooltip";
 import { PanelLeftIcon } from "lucide-react";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";

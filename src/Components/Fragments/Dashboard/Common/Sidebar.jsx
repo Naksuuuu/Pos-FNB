@@ -4,7 +4,7 @@ import { ChevronRight, LogOut } from "lucide-react";
 
 import { SidebarItem } from "@/Context/SidebarItem";
 
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/Components/Elements/Shadcn/Collapsible/collapsible";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/Components/Elements/Shadcn/collapsible";
 import {
   Sidebar,
   SidebarContent,
@@ -18,7 +18,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
   SidebarProvider,
-} from "@/Components/Elements/Shadcn/Sidebar/sidebar";
+} from "@/Components/Elements/Shadcn/sidebar";
 
 const CreateSidebar = memo(({ pathname }) => {
   const SIDEBAR_ITEMS = useMemo(() => SidebarItem, []);

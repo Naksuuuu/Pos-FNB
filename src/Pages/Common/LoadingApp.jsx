@@ -1,6 +1,6 @@
 import { memo } from "react";
-import { Skeleton } from "@/Components/Elements/Shadcn/Skeleton/skeleton";
-import { Spinner } from "@/Components/Elements/Shadcn/Spinner/spinner";
+import { Skeleton } from "@/Components/Elements/Shadcn/skeleton";
+import { Spinner } from "@/Components/Elements/Shadcn/spinner";
 
 const LoadingApp = memo(() => {
   return (

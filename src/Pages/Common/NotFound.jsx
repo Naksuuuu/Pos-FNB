@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { useNavigate } from "react-router";
-import { Button } from "@/Components/Elements/Shadcn/Button/button";
+import { Button } from "@/Components/Elements/Shadcn/button";
 
 const NotFound = memo(() => {
   const navigate = useNavigate();

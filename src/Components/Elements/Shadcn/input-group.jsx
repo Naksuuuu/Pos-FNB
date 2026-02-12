@@ -4,9 +4,9 @@ import * as React from "react";
 import { cva } from "class-variance-authority";
 
 import { cn } from "@/Utils/cn";
-import { Button } from "@/Components/Elements/Shadcn/Button/button";
-import { Input } from "@/Components/Elements/Shadcn/Input/input";
-import { Textarea } from "@/Components/Elements/Shadcn/Input/textarea";
+import { Button } from "@/Components/Elements/Shadcn/button";
+import { Input } from "@/Components/Elements/Shadcn/input";
+import { Textarea } from "@/Components/Elements/Shadcn/textarea";
 
 function InputGroup({ className, ...props }) {
   return (

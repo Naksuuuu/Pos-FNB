@@ -4,7 +4,7 @@ import { ShoppingBasket } from "lucide-react";
 
 import { rupiah } from "@/Utils/rupiahHelper";
 
-import { Badge } from "@/Components/Elements/Shadcn/Badge/badge";
+import { Badge } from "@/Components/Elements/Shadcn/badge";
 import CatalogCard from "@/Components/Fragments/Customer/Catalog/Card/CatalogCard";
 
 const dummyProducts = [

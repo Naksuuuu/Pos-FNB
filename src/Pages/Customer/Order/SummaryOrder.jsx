@@ -4,7 +4,7 @@ import { ArrowLeft, Minus, Pen, Plus } from "lucide-react";
 
 import { rupiah } from "@/Utils/rupiahHelper";
 
-import { Button } from "@/Components/Elements/Shadcn/Button/button";
+import { Button } from "@/Components/Elements/Shadcn/button";
 import ActionCard from "@/Components/Fragments/Customer/Common/Card/ActionCard";
 
 const SummaryOrder = () => {
