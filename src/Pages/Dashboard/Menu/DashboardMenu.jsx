@@ -51,6 +51,8 @@ const DashboardMenu = memo(() => {
   const is_available = searchParams.get("is_available") || "";
   const category_id = searchParams.get("category_id") || "";
 
+  const showReset = !!(sort_by || sort_direction || is_available || category_id);
+
   useEffect(() => {
     const filters = {
       page,
@@ -204,6 +206,21 @@ const DashboardMenu = memo(() => {
     [updateUrlParams, per_page, search, sort_by, sort_direction, is_available],
   );
 
+  const handleResetFilter = useCallback(() => {
+    const newParams = {
+      page: 1,
+      per_page,
+      search,
+    };
+
+    searchParams.delete("sort_by");
+    searchParams.delete("sort_direction");
+    searchParams.delete("is_available");
+    searchParams.delete("category_id");
+
+    updateUrlParams(newParams);
+  }, [updateUrlParams, per_page, search, searchParams]);
+
   const handleOpenDeleteModal = useCallback((productSelected) => {
     setSelectedEditProduct(null);
     setSelectedDeleteProduct(productSelected);
@@ -290,6 +307,11 @@ const DashboardMenu = memo(() => {
               </SelectGroup>
             </SelectContent>
           </Select>
+        </div>
+        <div className={`col-span-2 xl:col-span-4 transition-all duration-300 ease-out ${showReset ? "max-h-16 opacity-100 translate-y-0" : "max-h-0 opacity-0 -translate-y-1 pointer-events-none"}`}>
+          <Button className="w-full" onClick={handleResetFilter}>
+            Reset Filter
+          </Button>
         </div>
       </div>
 
