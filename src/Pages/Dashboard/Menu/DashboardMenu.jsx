@@ -24,6 +24,11 @@ const SORT_DIRECTION_OPTIONS = [
   { label: "Z-A", value: "desc" },
 ];
 
+const IS_AVAILABLE_OPTIONS = [
+  { label: "Aktif", value: "1" },
+  { label: "Tidak Aktif", value: "0" },
+];
+
 const DashboardMenu = memo(() => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { menus, loadMenus, loading, errorMessage, pagination } = useAllMenu();
@@ -37,7 +42,7 @@ const DashboardMenu = memo(() => {
   const [optimisticSearch, setOptimisticSearch] = useState(search);
   const sort_by = searchParams.get("sort_by") || "";
   const sort_direction = searchParams.get("sort_direction") || "";
-
+  const is_available = searchParams.get("is_available") || "";
   useEffect(() => {
     const filters = {
       page,
@@ -45,9 +50,10 @@ const DashboardMenu = memo(() => {
       search,
       sort_by,
       sort_direction,
+      is_available,
     };
     loadMenus(filters);
-  }, [loadMenus, page, per_page, search, sort_by, sort_direction]);
+  }, [loadMenus, page, per_page, search, sort_by, sort_direction, is_available]);
 
   const updateUrlParams = useCallback(
     (newParams) => {
@@ -68,6 +74,10 @@ const DashboardMenu = memo(() => {
         params.set("sort_direction", newParams.sort_direction);
       }
 
+      if (newParams.is_available) {
+        params.set("is_available", newParams.is_available);
+      }
+
       return setSearchParams(params);
     },
     [setSearchParams],
@@ -81,9 +91,10 @@ const DashboardMenu = memo(() => {
         search,
         sort_by,
         sort_direction,
+        is_available,
       });
     },
-    [updateUrlParams, per_page, search, sort_by, sort_direction],
+    [updateUrlParams, per_page, search, sort_by, sort_direction, is_available],
   );
 
   const timerRef = useRef(null);
@@ -95,6 +106,7 @@ const DashboardMenu = memo(() => {
         search: e.target.value,
         sort_by,
         sort_direction,
+        is_available,
       };
 
       setOptimisticSearch(newParams.search);
@@ -106,7 +118,7 @@ const DashboardMenu = memo(() => {
         updateUrlParams(newParams);
       }, 300);
     },
-    [updateUrlParams, per_page, sort_by, sort_direction],
+    [updateUrlParams, per_page, sort_by, sort_direction, is_available],
   );
 
   const handleSortByChange = useCallback(
@@ -117,11 +129,12 @@ const DashboardMenu = memo(() => {
         search,
         sort_by: e,
         sort_direction,
+        is_available,
       };
 
       updateUrlParams(newParams);
     },
-    [updateUrlParams, per_page, search, sort_direction],
+    [updateUrlParams, per_page, search, sort_direction, is_available],
   );
 
   const handleSortDirectionChange = useCallback(
@@ -132,11 +145,28 @@ const DashboardMenu = memo(() => {
         search,
         sort_by,
         sort_direction: e,
+        is_available,
       };
 
       updateUrlParams(newParams);
     },
-    [updateUrlParams, per_page, search, sort_by],
+    [updateUrlParams, per_page, search, sort_by, is_available],
+  );
+
+  const handleIsAvailableChange = useCallback(
+    (e) => {
+      const newParams = {
+        page: 1,
+        per_page,
+        search,
+        sort_by,
+        sort_direction,
+        is_available: e,
+      };
+
+      updateUrlParams(newParams);
+    },
+    [updateUrlParams, per_page, search, sort_by, sort_direction],
   );
 
   const handleOpenDeleteModal = useCallback((productSelected) => {
@@ -193,14 +223,14 @@ const DashboardMenu = memo(() => {
           </Select>
         </div>
         <div className="w-full">
-          <Select items={SORY_BY_OPTIONS} defaultValue={SORY_BY_OPTIONS[0].value}>
+          <Select items={IS_AVAILABLE_OPTIONS} onValueChange={(e) => handleIsAvailableChange(e)} value={is_available || null}>
             <SelectTrigger className="w-full ">
-              <SelectValue />
+              <SelectValue placeholder="Pilih ketersediaan" />
             </SelectTrigger>
             <SelectContent alignItemWithTrigger={false}>
               <SelectGroup>
-                <SelectLabel>sorting</SelectLabel>
-                {SORY_BY_OPTIONS.map((item) => (
+                <SelectLabel>Ketersediaan</SelectLabel>
+                {IS_AVAILABLE_OPTIONS.map((item) => (
                   <SelectItem key={item.value} value={item.value}>
                     {item.label}
                   </SelectItem>
