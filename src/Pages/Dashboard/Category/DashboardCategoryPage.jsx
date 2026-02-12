@@ -5,6 +5,7 @@ import CategoryTable from "@/Components/Fragments/Dashboard/Category/Table/Categ
 import DashboardInputSearch from "@/Components/Fragments/Dashboard/Common/DashboardInputSearch";
 import { Button } from "@/Components/Elements/Shadcn/button";
 import CategoryEditModal from "@/Components/Fragments/Dashboard/Category/Modal/CategoryEditModal";
+import CategoryCreateModal from "@/Components/Fragments/Dashboard/Category/Modal/CategoryCreateModal";
 
 const DashboardCategoryPage = () => {
   const { categories, loading, errorMessage, loadCategories } = useAllCategory();
@@ -13,18 +14,14 @@ const DashboardCategoryPage = () => {
   const [selectedDeleteCategory, setSelectedDeleteCategory] = useState(null);
 
   const handleOpenDeleteModal = useCallback((categorySelected) => {
-    setSelectedEditCategory(null);
     setSelectedDeleteCategory(categorySelected);
   }, []);
 
   const handleOpenEditModal = useCallback((categorySelected) => {
-    setSelectedDeleteCategory(null);
     setSelectedEditCategory(categorySelected);
   }, []);
 
   const handleOpenCreateModal = useCallback((state) => {
-    setSelectedEditCategory(null);
-    setSelectedDeleteCategory(null);
     setSelectedCreateCategory(state);
   }, []);
 
@@ -46,6 +43,7 @@ const DashboardCategoryPage = () => {
       </div>
 
       {selectedEditCategory && <CategoryEditModal selectedCategory={selectedEditCategory} onOpenModal={handleOpenEditModal} />}
+      {selectedCreateCategory && <CategoryCreateModal isOpen={selectedCreateCategory} onOpenModal={handleOpenCreateModal} />}
     </div>
   );
 };

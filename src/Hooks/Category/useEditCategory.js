@@ -10,13 +10,7 @@ const useEditCategory = () => {
   const edit = useCallback(
     async (categoryId, data) => {
       const response = await dispatch(editCategory([categoryId, data])).unwrap();
-
-      dispatch(
-        fetchCategories({
-          search: "",
-        }),
-      );
-
+      dispatch(fetchCategories({ search: "" }));
       return response;
     },
     [dispatch],
