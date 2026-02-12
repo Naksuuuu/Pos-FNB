@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { ShoppingBasket } from "lucide-react";
 
 import { rupiah } from "@/Utils/rupiahHelper";
@@ -123,13 +123,7 @@ const ListCatalog = () => {
                 </div>
                 <div className="grid w-full grid-cols-2 gap-3 md:grid-cols-2">
                   {products.map((product, index) => (
-                    <CatalogCard
-                      key={index}
-                      {...product}
-                      imagePath={
-                        "https://studioreplikamakanan.com/wp-content/uploads/2023/09/studioreplikamakanan-1.jpg"
-                      }
-                    />
+                    <CatalogCard key={index} {...product} imagePath={"https://studioreplikamakanan.com/wp-content/uploads/2023/09/studioreplikamakanan-1.jpg"} />
                   ))}
                 </div>
               </div>

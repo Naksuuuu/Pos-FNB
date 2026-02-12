@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router";
 import { ArrowLeft, Minus, Pen, Plus } from "lucide-react";
 
 import { rupiah } from "@/Utils/rupiahHelper";
@@ -41,11 +41,7 @@ const SummaryOrder = () => {
           <div key={index} className="border-b py-4 space-y-4">
             <div className="flex justify-between items-center">
               <h4 className="text-md font-semibold">{item.name}</h4>
-              <Button
-                variant="outline"
-                size="xs"
-                className="px-3! border-emerald-600 text-emerald-600 hover:bg-emerald-50"
-              >
+              <Button variant="outline" size="xs" className="px-3! border-emerald-600 text-emerald-600 hover:bg-emerald-50">
                 <Pen className="size-3" /> <Link to={"/menu"}>Edit</Link>
               </Button>
             </div>

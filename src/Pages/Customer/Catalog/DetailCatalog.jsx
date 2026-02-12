@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router";
 import { Minus, Plus, X } from "lucide-react";
 
 import { rupiah } from "@/Utils/rupiahHelper";
@@ -45,11 +45,7 @@ const DetailCatalog = () => {
         </Button>
       </div>
       <div className="h-1/3">
-        <img
-          src="https://studioreplikamakanan.com/wp-content/uploads/2023/09/studioreplikamakanan-1.jpg"
-          alt={product.name}
-          className="object-cover object-center w-full h-full aspect-video"
-        />
+        <img src="https://studioreplikamakanan.com/wp-content/uploads/2023/09/studioreplikamakanan-1.jpg" alt={product.name} className="object-cover object-center w-full h-full aspect-video" />
       </div>
       <div className="relative min-h-2/3">
         <div className="absolute w-full h-4 -top-3 bg-background rounded-t-2xl"></div>
@@ -76,9 +72,7 @@ const DetailCatalog = () => {
                               <div className="flex items-center justify-between" key={value.title}>
                                 <p>
                                   {value.title}
-                                  {value.harga > 0 && (
-                                    <span className="text-xs font-bold"> (+{rupiah(value.harga)})</span>
-                                  )}
+                                  {value.harga > 0 && <span className="text-xs font-bold"> (+{rupiah(value.harga)})</span>}
                                 </p>
                                 <Checkbox
                                   className="border-gray-400"
