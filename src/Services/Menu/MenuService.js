@@ -3,7 +3,7 @@ import { apiUtils } from "../Common/Base";
 const MENU_ENDPOINT = "/menus";
 
 export const getAllMenu = async (params = {}) => {
-  const { page = 1, per_page, search, sort_by, sort_direction, is_available } = params;
+  const { page = 1, per_page, search, sort_by, sort_direction, is_available, category_id } = params;
 
   const queryParams = {
     page: parseInt(page),
@@ -12,6 +12,7 @@ export const getAllMenu = async (params = {}) => {
     sort_by,
     sort_direction,
     is_available,
+    category_id,
   };
 
   Object.keys(queryParams).forEach((key) => {

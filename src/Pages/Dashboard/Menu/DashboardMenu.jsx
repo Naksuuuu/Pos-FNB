@@ -29,6 +29,12 @@ const IS_AVAILABLE_OPTIONS = [
   { label: "Tidak Aktif", value: "0" },
 ];
 
+const CATEGORY_ID_OPTIONS = [
+  { label: "Makanan Berat", value: "01kh6gyke26g9k421yftvt5j38" },
+  { label: "Dessert", value: "01kh6gykjhxjvgfmqmke0f3q7n" },
+  { label: "Makanan Ringan", value: "01kh6gykhshb2spdq8f241dr52" },
+];
+
 const DashboardMenu = memo(() => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { menus, loadMenus, loading, errorMessage, pagination } = useAllMenu();
@@ -43,6 +49,8 @@ const DashboardMenu = memo(() => {
   const sort_by = searchParams.get("sort_by") || "";
   const sort_direction = searchParams.get("sort_direction") || "";
   const is_available = searchParams.get("is_available") || "";
+  const category_id = searchParams.get("category_id") || "";
+
   useEffect(() => {
     const filters = {
       page,
@@ -51,9 +59,10 @@ const DashboardMenu = memo(() => {
       sort_by,
       sort_direction,
       is_available,
+      category_id,
     };
     loadMenus(filters);
-  }, [loadMenus, page, per_page, search, sort_by, sort_direction, is_available]);
+  }, [loadMenus, page, per_page, search, sort_by, sort_direction, is_available, category_id]);
 
   const updateUrlParams = useCallback(
     (newParams) => {
@@ -78,6 +87,10 @@ const DashboardMenu = memo(() => {
         params.set("is_available", newParams.is_available);
       }
 
+      if (newParams.category_id) {
+        params.set("category_id", newParams.category_id);
+      }
+
       return setSearchParams(params);
     },
     [setSearchParams],
@@ -92,9 +105,10 @@ const DashboardMenu = memo(() => {
         sort_by,
         sort_direction,
         is_available,
+        category_id,
       });
     },
-    [updateUrlParams, per_page, search, sort_by, sort_direction, is_available],
+    [updateUrlParams, per_page, search, sort_by, sort_direction, is_available, category_id],
   );
 
   const timerRef = useRef(null);
@@ -107,6 +121,7 @@ const DashboardMenu = memo(() => {
         sort_by,
         sort_direction,
         is_available,
+        category_id,
       };
 
       setOptimisticSearch(newParams.search);
@@ -118,7 +133,7 @@ const DashboardMenu = memo(() => {
         updateUrlParams(newParams);
       }, 300);
     },
-    [updateUrlParams, per_page, sort_by, sort_direction, is_available],
+    [updateUrlParams, per_page, sort_by, sort_direction, is_available, category_id],
   );
 
   const handleSortByChange = useCallback(
@@ -130,11 +145,12 @@ const DashboardMenu = memo(() => {
         sort_by: e,
         sort_direction,
         is_available,
+        category_id,
       };
 
       updateUrlParams(newParams);
     },
-    [updateUrlParams, per_page, search, sort_direction, is_available],
+    [updateUrlParams, per_page, search, sort_direction, is_available, category_id],
   );
 
   const handleSortDirectionChange = useCallback(
@@ -146,11 +162,12 @@ const DashboardMenu = memo(() => {
         sort_by,
         sort_direction: e,
         is_available,
+        category_id,
       };
 
       updateUrlParams(newParams);
     },
-    [updateUrlParams, per_page, search, sort_by, is_available],
+    [updateUrlParams, per_page, search, sort_by, is_available, category_id],
   );
 
   const handleIsAvailableChange = useCallback(
@@ -162,11 +179,29 @@ const DashboardMenu = memo(() => {
         sort_by,
         sort_direction,
         is_available: e,
+        category_id,
       };
 
       updateUrlParams(newParams);
     },
-    [updateUrlParams, per_page, search, sort_by, sort_direction],
+    [updateUrlParams, per_page, search, sort_by, sort_direction, category_id],
+  );
+
+  const handleCategoryIdChange = useCallback(
+    (e) => {
+      const newParams = {
+        page: 1,
+        per_page,
+        search,
+        sort_by,
+        sort_direction,
+        is_available,
+        category_id: e,
+      };
+
+      updateUrlParams(newParams);
+    },
+    [updateUrlParams, per_page, search, sort_by, sort_direction, is_available],
   );
 
   const handleOpenDeleteModal = useCallback((productSelected) => {
@@ -240,14 +275,14 @@ const DashboardMenu = memo(() => {
           </Select>
         </div>
         <div className="w-full">
-          <Select items={SORY_BY_OPTIONS} defaultValue={SORY_BY_OPTIONS[0].value}>
+          <Select items={CATEGORY_ID_OPTIONS} onValueChange={(e) => handleCategoryIdChange(e)} value={category_id || null}>
             <SelectTrigger className="w-full ">
-              <SelectValue />
+              <SelectValue placeholder="Pilih kategori" />
             </SelectTrigger>
             <SelectContent alignItemWithTrigger={false}>
               <SelectGroup>
-                <SelectLabel>sorting</SelectLabel>
-                {SORY_BY_OPTIONS.map((item) => (
+                <SelectLabel>Kategori</SelectLabel>
+                {CATEGORY_ID_OPTIONS.map((item) => (
                   <SelectItem key={item.value} value={item.value}>
                     {item.label}
                   </SelectItem>
