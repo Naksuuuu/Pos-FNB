@@ -3,14 +3,21 @@ import { apiUtils } from "../Common/Base";
 const MENU_ENDPOINT = "/menus";
 
 export const getAllMenu = async (params = {}) => {
-  const { page = 1, per_page, search, sort_by } = params;
+  const { page = 1, per_page, search, sort_by, sort_direction } = params;
 
   const queryParams = {
     page: parseInt(page),
     per_page: parseInt(per_page),
     search,
     sort_by,
+    sort_direction,
   };
+
+  Object.keys(queryParams).forEach((key) => {
+    if (queryParams[key] === undefined || queryParams[key] === null || queryParams[key] === "") {
+      delete queryParams[key];
+    }
+  });
 
   const response = await apiUtils.get(MENU_ENDPOINT, { params: queryParams });
   return response.data;

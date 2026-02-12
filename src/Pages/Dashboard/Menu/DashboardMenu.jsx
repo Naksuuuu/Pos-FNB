@@ -36,6 +36,7 @@ const DashboardMenu = memo(() => {
   const search = searchParams.get("search") || "";
   const [optimisticSearch, setOptimisticSearch] = useState(search);
   const sort_by = searchParams.get("sort_by") || "";
+  const sort_direction = searchParams.get("sort_direction") || "";
 
   useEffect(() => {
     const filters = {
@@ -43,9 +44,10 @@ const DashboardMenu = memo(() => {
       per_page,
       search,
       sort_by,
+      sort_direction,
     };
     loadMenus(filters);
-  }, [loadMenus, page, per_page, search, sort_by]);
+  }, [loadMenus, page, per_page, search, sort_by, sort_direction]);
 
   const updateUrlParams = useCallback(
     (newParams) => {
@@ -62,6 +64,9 @@ const DashboardMenu = memo(() => {
       if (newParams.sort_by) {
         params.set("sort_by", newParams.sort_by);
       }
+      if (newParams.sort_direction) {
+        params.set("sort_direction", newParams.sort_direction);
+      }
 
       return setSearchParams(params);
     },
@@ -75,9 +80,10 @@ const DashboardMenu = memo(() => {
         per_page,
         search,
         sort_by,
+        sort_direction,
       });
     },
-    [updateUrlParams, per_page, search, sort_by],
+    [updateUrlParams, per_page, search, sort_by, sort_direction],
   );
 
   const timerRef = useRef(null);
@@ -88,6 +94,7 @@ const DashboardMenu = memo(() => {
         per_page,
         search: e.target.value,
         sort_by,
+        sort_direction,
       };
 
       setOptimisticSearch(newParams.search);
@@ -99,7 +106,7 @@ const DashboardMenu = memo(() => {
         updateUrlParams(newParams);
       }, 300);
     },
-    [updateUrlParams, per_page, sort_by],
+    [updateUrlParams, per_page, sort_by, sort_direction],
   );
 
   const handleSortByChange = useCallback(
@@ -109,11 +116,27 @@ const DashboardMenu = memo(() => {
         per_page,
         search,
         sort_by: e,
+        sort_direction,
       };
 
       updateUrlParams(newParams);
     },
-    [updateUrlParams, per_page, search],
+    [updateUrlParams, per_page, search, sort_direction],
+  );
+
+  const handleSortDirectionChange = useCallback(
+    (e) => {
+      const newParams = {
+        page: 1,
+        per_page,
+        search,
+        sort_by,
+        sort_direction: e,
+      };
+
+      updateUrlParams(newParams);
+    },
+    [updateUrlParams, per_page, search, sort_by],
   );
 
   const handleOpenDeleteModal = useCallback((productSelected) => {
@@ -136,7 +159,7 @@ const DashboardMenu = memo(() => {
     <div>
       <div className="grid grid-cols-2 gap-4 py-4 xl:grid-cols-4">
         <div className="w-full">
-          <Select items={SORY_BY_OPTIONS} onValueChange={(e) => handleSortByChange(e)}>
+          <Select items={SORY_BY_OPTIONS} onValueChange={(e) => handleSortByChange(e)} value={sort_by || null}>
             <SelectTrigger className="w-full ">
               <SelectValue placeholder="Pilih opsi" />
             </SelectTrigger>
@@ -153,9 +176,9 @@ const DashboardMenu = memo(() => {
           </Select>
         </div>
         <div className="w-full">
-          <Select items={SORT_DIRECTION_OPTIONS} defaultValue={SORT_DIRECTION_OPTIONS[0].value}>
+          <Select items={SORT_DIRECTION_OPTIONS} onValueChange={(e) => handleSortDirectionChange(e)} value={sort_direction || null}>
             <SelectTrigger className="w-full ">
-              <SelectValue />
+              <SelectValue placeholder="Pilih urutan" />
             </SelectTrigger>
             <SelectContent alignItemWithTrigger={false}>
               <SelectGroup>
