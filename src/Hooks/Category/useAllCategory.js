@@ -9,9 +9,12 @@ const useAllCategory = () => {
   const loading = useSelector(selectCategoryLoading);
   const errorMessage = useSelector(selectCategoryError);
 
-  const loadCategories = useCallback(() => {
-    dispatch(fetchCategories());
-  }, [dispatch]);
+  const loadCategories = useCallback(
+    (filters = {}) => {
+      dispatch(fetchCategories(filters));
+    },
+    [dispatch],
+  );
 
   useEffect(() => {
     loadCategories();
