@@ -13,11 +13,10 @@ const useAllMenu = () => {
 
   const loadMenus = useCallback(
     (params = {}) => {
-      const { page, per_page, ...otherParams } = params;
+      const { page, ...otherParams } = params;
 
       const safeParams = {
         page: parseInt(page) || 1,
-        per_page: parseInt(per_page) || 10,
         ...otherParams,
       };
 

@@ -1,59 +1,43 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import useAllCategory from "@/Hooks/Category/useAllCategory";
+import useFilterParams from "@/Hooks/Common/useFilterParams";
+
 import CategoryTable from "@/Components/Fragments/Dashboard/Category/Table/CategoryTable";
 import DashboardInputSearch from "@/Components/Fragments/Dashboard/Common/DashboardInputSearch";
 import { Button } from "@/Components/Elements/Shadcn/button";
 import CategoryEditModal from "@/Components/Fragments/Dashboard/Category/Modal/CategoryEditModal";
 import CategoryCreateModal from "@/Components/Fragments/Dashboard/Category/Modal/CategoryCreateModal";
 import CategoryDeleteModal from "@/Components/Fragments/Dashboard/Category/Modal/CategoryDeleteModal";
-import { useSearchParams } from "react-router";
 
 const DashboardCategoryPage = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
   const { categories, loading, errorMessage, loadCategories } = useAllCategory();
+  const { filters, updateFilters } = useFilterParams();
+
   const [selectedCreateCategory, setSelectedCreateCategory] = useState(null);
   const [selectedEditCategory, setSelectedEditCategory] = useState(null);
   const [selectedDeleteCategory, setSelectedDeleteCategory] = useState(null);
 
-  const search = searchParams.get("search") || "";
+  const search = filters.search || "";
   const [optimisticSearch, setOptimisticSearch] = useState(search);
 
   useEffect(() => {
-    const filters = {
-      search,
-    };
     loadCategories(filters);
-  }, [loadCategories, search]);
-
-  const updateUrlParams = useCallback(
-    (newParams) => {
-      const params = new URLSearchParams();
-
-      if (newParams.search) params.set("search", newParams.search);
-
-      return setSearchParams(params);
-    },
-    [setSearchParams],
-  );
+  }, [filters, loadCategories]);
 
   const timerRef = useRef(null);
   const handleSearchChange = useCallback(
     (e) => {
-      const newParams = {
-        search: e.target.value,
-      };
-
-      setOptimisticSearch(newParams.search);
+      setOptimisticSearch(e.target.value);
       if (timerRef.current) {
         clearTimeout(timerRef.current);
       }
 
       timerRef.current = setTimeout(() => {
-        updateUrlParams(newParams);
+        updateFilters({ search: e.target.value });
       }, 300);
     },
-    [updateUrlParams],
+    [updateFilters],
   );
 
   const handleOpenDeleteModal = useCallback((categorySelected) => {

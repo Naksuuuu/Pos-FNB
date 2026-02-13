@@ -3,7 +3,13 @@ import { apiUtils } from "../Common/Base";
 const CATEGORY_ENDPOINT = "/categories";
 
 export const getAllCategories = async (params) => {
-  const response = await apiUtils.get(CATEGORY_ENDPOINT, { params });
+  const { search } = params;
+
+  const queryParams = {
+    search,
+  };
+
+  const response = await apiUtils.get(CATEGORY_ENDPOINT, { params: queryParams });
   return response.data;
 };
 
