@@ -1,10 +1,10 @@
 "use client";
-
+import { memo } from "react";
 import { Separator as SeparatorPrimitive } from "@base-ui/react/separator";
 
 import { cn } from "@/Utils/cn";
 
-function Separator({ className, orientation = "horizontal", ...props }) {
+const Separator = memo(({ className, orientation = "horizontal", ...props }) => {
   return (
     <SeparatorPrimitive
       data-slot="separator"
@@ -13,6 +13,6 @@ function Separator({ className, orientation = "horizontal", ...props }) {
       {...props}
     />
   );
-}
+});
 
 export { Separator };

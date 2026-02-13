@@ -8,7 +8,7 @@ import { Button } from "@/Components/Elements/Shadcn/button";
 import { Input } from "@/Components/Elements/Shadcn/input";
 import { Textarea } from "@/Components/Elements/Shadcn/textarea";
 
-function InputGroup({ className, ...props }) {
+const InputGroup = React.memo(({ className, ...props }) => {
   return (
     <div
       data-slot="input-group"
@@ -20,7 +20,7 @@ function InputGroup({ className, ...props }) {
       {...props}
     />
   );
-}
+});
 
 const inputGroupAddonVariants = cva(
   "text-muted-foreground h-auto gap-2 py-1.5 text-sm font-medium group-data-[disabled=true]/input-group:opacity-50 [&>kbd]:rounded-[calc(var(--radius)-5px)] [&>svg:not([class*='size-'])]:size-4 flex cursor-text items-center justify-center select-none",
@@ -39,7 +39,7 @@ const inputGroupAddonVariants = cva(
   },
 );
 
-function InputGroupAddon({ className, align = "inline-start", ...props }) {
+const InputGroupAddon = React.memo(({ className, align = "inline-start", ...props }) => {
   return (
     <div
       role="group"
@@ -55,7 +55,7 @@ function InputGroupAddon({ className, align = "inline-start", ...props }) {
       {...props}
     />
   );
-}
+});
 
 const inputGroupButtonVariants = cva("gap-2 text-sm shadow-none flex items-center", {
   variants: {
@@ -71,15 +71,15 @@ const inputGroupButtonVariants = cva("gap-2 text-sm shadow-none flex items-cente
   },
 });
 
-function InputGroupButton({ className, type = "button", variant = "ghost", size = "xs", ...props }) {
+const InputGroupButton = React.memo(({ className, type = "button", variant = "ghost", size = "xs", ...props }) => {
   return <Button type={type} data-size={size} variant={variant} className={cn(inputGroupButtonVariants({ size }), className)} {...props} />;
-}
+});
 
-function InputGroupText({ className, ...props }) {
+const InputGroupText = React.memo(({ className, ...props }) => {
   return <span className={cn("text-muted-foreground gap-2 text-sm [&_svg:not([class*='size-'])]:size-4 flex items-center [&_svg]:pointer-events-none", className)} {...props} />;
-}
+});
 
-function InputGroupInput({ className, ...props }) {
+const InputGroupInput = React.memo(({ className, ...props }) => {
   return (
     <Input
       data-slot="input-group-control"
@@ -87,9 +87,9 @@ function InputGroupInput({ className, ...props }) {
       {...props}
     />
   );
-}
+});
 
-function InputGroupTextarea({ className, ...props }) {
+const InputGroupTextarea = React.memo(({ className, ...props }) => {
   return (
     <Textarea
       data-slot="input-group-control"
@@ -97,6 +97,6 @@ function InputGroupTextarea({ className, ...props }) {
       {...props}
     />
   );
-}
+});
 
 export { InputGroup, InputGroupAddon, InputGroupButton, InputGroupText, InputGroupInput, InputGroupTextarea };

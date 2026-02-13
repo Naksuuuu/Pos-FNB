@@ -1,20 +1,21 @@
 import { Tooltip as TooltipPrimitive } from "@base-ui/react/tooltip";
 
 import { cn } from "@/Utils/cn";
+import { memo } from "react";
 
-function TooltipProvider({ delay = 0, ...props }) {
+const TooltipProvider = memo(({ delay = 0, ...props }) => {
   return <TooltipPrimitive.Provider data-slot="tooltip-provider" delay={delay} {...props} />;
-}
+});
 
-function Tooltip({ ...props }) {
+const Tooltip = memo(({ ...props }) => {
   return <TooltipPrimitive.Root data-slot="tooltip" {...props} />;
-}
+});
 
-function TooltipTrigger({ ...props }) {
+const TooltipTrigger = memo(({ ...props }) => {
   return <TooltipPrimitive.Trigger data-slot="tooltip-trigger" {...props} />;
-}
+});
 
-function TooltipContent({ className, side = "top", sideOffset = 4, align = "center", alignOffset = 0, children, ...props }) {
+const TooltipContent = memo(({ className, side = "top", sideOffset = 4, align = "center", alignOffset = 0, children, ...props }) => {
   return (
     <TooltipPrimitive.Portal>
       <TooltipPrimitive.Positioner align={align} alignOffset={alignOffset} side={side} sideOffset={sideOffset} className="isolate z-50">
@@ -32,6 +33,6 @@ function TooltipContent({ className, side = "top", sideOffset = 4, align = "cent
       </TooltipPrimitive.Positioner>
     </TooltipPrimitive.Portal>
   );
-}
+});
 
 export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider };

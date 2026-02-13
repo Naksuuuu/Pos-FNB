@@ -7,23 +7,23 @@ import { cn } from "@/Utils/cn";
 import { Button } from "@/Components/Elements/Shadcn/button";
 import { XIcon } from "lucide-react";
 
-function Sheet({ ...props }) {
+const Sheet = React.memo(({ ...props }) => {
   return <SheetPrimitive.Root data-slot="sheet" {...props} />;
-}
+});
 
-function SheetTrigger({ ...props }) {
+const SheetTrigger = React.memo(({ ...props }) => {
   return <SheetPrimitive.Trigger data-slot="sheet-trigger" {...props} />;
-}
+});
 
-function SheetClose({ ...props }) {
+const SheetClose = React.memo(({ ...props }) => {
   return <SheetPrimitive.Close data-slot="sheet-close" {...props} />;
-}
+});
 
-function SheetPortal({ ...props }) {
+const SheetPortal = React.memo(({ ...props }) => {
   return <SheetPrimitive.Portal data-slot="sheet-portal" {...props} />;
-}
+});
 
-function SheetOverlay({ className, ...props }) {
+const SheetOverlay = React.memo(({ className, ...props }) => {
   return (
     <SheetPrimitive.Backdrop
       data-slot="sheet-overlay"
@@ -34,9 +34,9 @@ function SheetOverlay({ className, ...props }) {
       {...props}
     />
   );
-}
+});
 
-function SheetContent({ className, children, side = "right", showCloseButton = true, ...props }) {
+const SheetContent = React.memo(({ className, children, side = "right", showCloseButton = true, ...props }) => {
   return (
     <SheetPortal>
       <SheetOverlay />
@@ -59,22 +59,22 @@ function SheetContent({ className, children, side = "right", showCloseButton = t
       </SheetPrimitive.Popup>
     </SheetPortal>
   );
-}
+});
 
-function SheetHeader({ className, ...props }) {
+const SheetHeader = React.memo(({ className, ...props }) => {
   return <div data-slot="sheet-header" className={cn("gap-1.5 p-4 flex flex-col", className)} {...props} />;
-}
+});
 
-function SheetFooter({ className, ...props }) {
+const SheetFooter = React.memo(({ className, ...props }) => {
   return <div data-slot="sheet-footer" className={cn("gap-2 p-4 mt-auto flex flex-col", className)} {...props} />;
-}
+});
 
-function SheetTitle({ className, ...props }) {
+const SheetTitle = React.memo(({ className, ...props }) => {
   return <SheetPrimitive.Title data-slot="sheet-title" className={cn("text-foreground font-medium", className)} {...props} />;
-}
+});
 
-function SheetDescription({ className, ...props }) {
+const SheetDescription = React.memo(({ className, ...props }) => {
   return <SheetPrimitive.Description data-slot="sheet-description" className={cn("text-muted-foreground text-sm", className)} {...props} />;
-}
+});
 
 export { Sheet, SheetTrigger, SheetClose, SheetContent, SheetHeader, SheetFooter, SheetTitle, SheetDescription };

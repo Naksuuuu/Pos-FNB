@@ -4,17 +4,17 @@ import { Select as SelectPrimitive } from "@base-ui/react/select";
 import { cn } from "@/Utils/cn";
 import { ChevronDownIcon, CheckIcon, ChevronUpIcon } from "lucide-react";
 
-const Select = SelectPrimitive.Root;
+const Select = React.memo(SelectPrimitive.Root);
 
-function SelectGroup({ className, ...props }) {
+const SelectGroup = React.memo(({ className, ...props }) => {
   return <SelectPrimitive.Group data-slot="select-group" className={cn("scroll-my-1 p-1", className)} {...props} />;
-}
+});
 
-function SelectValue({ className, ...props }) {
+const SelectValue = React.memo(({ className, ...props }) => {
   return <SelectPrimitive.Value data-slot="select-value" className={cn("flex flex-1 text-left", className)} {...props} />;
-}
+});
 
-function SelectTrigger({ className, size = "default", children, ...props }) {
+const SelectTrigger = React.memo(({ className, size = "default", children, ...props }) => {
   return (
     <SelectPrimitive.Trigger
       data-slot="select-trigger"
@@ -29,9 +29,9 @@ function SelectTrigger({ className, size = "default", children, ...props }) {
       <SelectPrimitive.Icon render={<ChevronDownIcon className="text-muted-foreground size-4 pointer-events-none" />} />
     </SelectPrimitive.Trigger>
   );
-}
+});
 
-function SelectContent({ className, children, side = "bottom", sideOffset = 4, align = "center", alignOffset = 0, alignItemWithTrigger = true, ...props }) {
+const SelectContent = React.memo(({ className, children, side = "bottom", sideOffset = 4, align = "center", alignOffset = 0, alignItemWithTrigger = true, ...props }) => {
   return (
     <SelectPrimitive.Portal>
       <SelectPrimitive.Positioner side={side} sideOffset={sideOffset} align={align} alignOffset={alignOffset} alignItemWithTrigger={alignItemWithTrigger} className="isolate z-50">
@@ -51,13 +51,13 @@ function SelectContent({ className, children, side = "bottom", sideOffset = 4, a
       </SelectPrimitive.Positioner>
     </SelectPrimitive.Portal>
   );
-}
+});
 
-function SelectLabel({ className, ...props }) {
+const SelectLabel = React.memo(({ className, ...props }) => {
   return <SelectPrimitive.GroupLabel data-slot="select-label" className={cn("text-muted-foreground px-2 py-1.5 text-xs", className)} {...props} />;
-}
+});
 
-function SelectItem({ className, children, ...props }) {
+const SelectItem = React.memo(({ className, children, ...props }) => {
   return (
     <SelectPrimitive.Item
       data-slot="select-item"
@@ -73,13 +73,13 @@ function SelectItem({ className, children, ...props }) {
       </SelectPrimitive.ItemIndicator>
     </SelectPrimitive.Item>
   );
-}
+});
 
-function SelectSeparator({ className, ...props }) {
+const SelectSeparator = React.memo(({ className, ...props }) => {
   return <SelectPrimitive.Separator data-slot="select-separator" className={cn("bg-border -mx-1 my-1 h-px pointer-events-none", className)} {...props} />;
-}
+});
 
-function SelectScrollUpButton({ className, ...props }) {
+const SelectScrollUpButton = React.memo(({ className, ...props }) => {
   return (
     <SelectPrimitive.ScrollUpArrow
       data-slot="select-scroll-up-button"
@@ -89,9 +89,9 @@ function SelectScrollUpButton({ className, ...props }) {
       <ChevronUpIcon />
     </SelectPrimitive.ScrollUpArrow>
   );
-}
+});
 
-function SelectScrollDownButton({ className, ...props }) {
+const SelectScrollDownButton = React.memo(({ className, ...props }) => {
   return (
     <SelectPrimitive.ScrollDownArrow
       data-slot="select-scroll-down-button"
@@ -101,6 +101,6 @@ function SelectScrollDownButton({ className, ...props }) {
       <ChevronDownIcon />
     </SelectPrimitive.ScrollDownArrow>
   );
-}
+});
 
 export { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue };

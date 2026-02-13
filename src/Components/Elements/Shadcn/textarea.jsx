@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { cn } from "@/Utils/cn";
 
-function Textarea({ className, ...props }) {
+const Textarea = React.memo(({ className, ...props }) => {
   return (
     <textarea
       data-slot="textarea"
@@ -13,6 +13,6 @@ function Textarea({ className, ...props }) {
       {...props}
     />
   );
-}
+});
 
 export { Textarea };

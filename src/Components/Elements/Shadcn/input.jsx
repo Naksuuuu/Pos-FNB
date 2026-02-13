@@ -3,7 +3,7 @@ import { Input as InputPrimitive } from "@base-ui/react/input";
 
 import { cn } from "@/Utils/cn";
 
-function Input({ className, type, ...props }) {
+const Input = React.memo(({ className, type, ...props }) => {
   return (
     <InputPrimitive
       type={type}
@@ -15,6 +15,6 @@ function Input({ className, type, ...props }) {
       {...props}
     />
   );
-}
+});
 
 export { Input };

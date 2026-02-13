@@ -1,19 +1,19 @@
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 import { cva } from "class-variance-authority";
 
 import { cn } from "@/Utils/cn";
 import { Label } from "@/Components/Elements/Shadcn/label";
 import { Separator } from "@/Components/Elements/Shadcn/separator";
 
-function FieldSet({ className, ...props }) {
+const FieldSet = memo(({ className, ...props }) => {
   return <fieldset data-slot="field-set" className={cn("gap-6 has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3 flex flex-col", className)} {...props} />;
-}
+});
 
-function FieldLegend({ className, variant = "legend", ...props }) {
+const FieldLegend = memo(({ className, variant = "legend", ...props }) => {
   return <legend data-slot="field-legend" data-variant={variant} className={cn("mb-3 font-medium data-[variant=label]:text-sm data-[variant=legend]:text-base", className)} {...props} />;
-}
+});
 
-function FieldGroup({ className, ...props }) {
+const FieldGroup = memo(({ className, ...props }) => {
   return (
     <div
       data-slot="field-group"
@@ -21,7 +21,7 @@ function FieldGroup({ className, ...props }) {
       {...props}
     />
   );
-}
+});
 
 const fieldVariants = cva("data-[invalid=true]:text-destructive gap-3 group/field flex w-full", {
   variants: {
@@ -37,15 +37,15 @@ const fieldVariants = cva("data-[invalid=true]:text-destructive gap-3 group/fiel
   },
 });
 
-function Field({ className, orientation = "vertical", ...props }) {
+const Field = memo(({ className, orientation = "vertical", ...props }) => {
   return <div role="group" data-slot="field" data-orientation={orientation} className={cn(fieldVariants({ orientation }), className)} {...props} />;
-}
+});
 
-function FieldContent({ className, ...props }) {
+const FieldContent = memo(({ className, ...props }) => {
   return <div data-slot="field-content" className={cn("gap-1 group/field-content flex flex-1 flex-col leading-snug", className)} {...props} />;
-}
+});
 
-function FieldLabel({ className, ...props }) {
+const FieldLabel = memo(({ className, ...props }) => {
   return (
     <Label
       data-slot="field-label"
@@ -57,13 +57,13 @@ function FieldLabel({ className, ...props }) {
       {...props}
     />
   );
-}
+});
 
-function FieldTitle({ className, ...props }) {
+const FieldTitle = memo(({ className, ...props }) => {
   return <div data-slot="field-label" className={cn("gap-2 text-sm font-medium group-data-[disabled=true]/field:opacity-50 flex w-fit items-center leading-snug", className)} {...props} />;
-}
+});
 
-function FieldDescription({ className, ...props }) {
+const FieldDescription = memo(({ className, ...props }) => {
   return (
     <p
       data-slot="field-description"
@@ -76,9 +76,9 @@ function FieldDescription({ className, ...props }) {
       {...props}
     />
   );
-}
+});
 
-function FieldSeparator({ children, className, ...props }) {
+const FieldSeparator = memo(({ children, className, ...props }) => {
   return (
     <div data-slot="field-separator" data-content={!!children} className={cn("-my-2 h-5 text-sm group-data-[variant=outline]/field-group:-mb-2 relative", className)} {...props}>
       <Separator className="absolute inset-0 top-1/2" />
@@ -89,9 +89,9 @@ function FieldSeparator({ children, className, ...props }) {
       )}
     </div>
   );
-}
+});
 
-function FieldError({ className, children, errors, ...props }) {
+const FieldError = memo(({ className, children, errors, ...props }) => {
   const content = useMemo(() => {
     if (children) {
       return children;
@@ -119,6 +119,6 @@ function FieldError({ className, children, errors, ...props }) {
       {content}
     </div>
   );
-}
+});
 
 export { Field, FieldLabel, FieldDescription, FieldError, FieldGroup, FieldLegend, FieldSeparator, FieldSet, FieldContent, FieldTitle };

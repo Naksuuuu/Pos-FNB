@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { cn } from "@/Utils/cn";
 
-function Card({ className, size = "default", ...props }) {
+const Card = React.memo(({ className, size = "default", ...props }) => {
   return (
     <div
       data-slot="card"
@@ -14,9 +14,9 @@ function Card({ className, size = "default", ...props }) {
       {...props}
     />
   );
-}
+});
 
-function CardHeader({ className, ...props }) {
+const CardHeader = React.memo(({ className, ...props }) => {
   return (
     <div
       data-slot="card-header"
@@ -27,25 +27,25 @@ function CardHeader({ className, ...props }) {
       {...props}
     />
   );
-}
+});
 
-function CardTitle({ className, ...props }) {
+const CardTitle = React.memo(({ className, ...props }) => {
   return <div data-slot="card-title" className={cn("text-base leading-normal font-medium group-data-[size=sm]/card:text-sm", className)} {...props} />;
-}
+});
 
-function CardDescription({ className, ...props }) {
+const CardDescription = React.memo(({ className, ...props }) => {
   return <div data-slot="card-description" className={cn("text-muted-foreground text-sm", className)} {...props} />;
-}
+});
 
-function CardAction({ className, ...props }) {
+const CardAction = React.memo(({ className, ...props }) => {
   return <div data-slot="card-action" className={cn("col-start-2 row-span-2 row-start-1 self-start justify-self-end", className)} {...props} />;
-}
+});
 
-function CardContent({ className, ...props }) {
+const CardContent = React.memo(({ className, ...props }) => {
   return <div data-slot="card-content" className={cn("px-6 group-data-[size=sm]/card:px-4", className)} {...props} />;
-}
+});
 
-function CardFooter({ className, ...props }) {
+const CardFooter = React.memo(({ className, ...props }) => {
   return (
     <div
       data-slot="card-footer"
@@ -53,6 +53,6 @@ function CardFooter({ className, ...props }) {
       {...props}
     />
   );
-}
+});
 
 export { Card, CardHeader, CardFooter, CardTitle, CardAction, CardDescription, CardContent };

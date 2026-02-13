@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { cn } from "@/Utils/cn";
 
-function Label({ className, ...props }) {
+const Label = React.memo(({ className, ...props }) => {
   return (
     <label
       data-slot="label"
@@ -13,6 +13,6 @@ function Label({ className, ...props }) {
       {...props}
     />
   );
-}
+});
 
 export { Label };

@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Button as ButtonPrimitive } from "@base-ui/react/button";
 import { cva } from "class-variance-authority";
 
@@ -35,8 +36,8 @@ const buttonVariants = cva(
   },
 );
 
-function Button({ className, variant = "default", size = "default", ...props }) {
+const Button = memo(({ className, variant = "default", size = "default", ...props }) => {
   return <ButtonPrimitive data-slot="button" className={cn(buttonVariants({ variant, size, className }))} {...props} />;
-}
+});
 
 export { Button, buttonVariants };

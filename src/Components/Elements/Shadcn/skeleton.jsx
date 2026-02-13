@@ -1,7 +1,8 @@
 import { cn } from "@/Utils/cn";
+import { memo } from "react";
 
-function Skeleton({ className, ...props }) {
+const Skeleton = memo(({ className, ...props }) => {
   return <div data-slot="skeleton" className={cn("bg-muted rounded-md animate-pulse", className)} {...props} />;
-}
+});
 
 export { Skeleton };

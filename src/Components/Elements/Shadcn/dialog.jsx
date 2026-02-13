@@ -7,23 +7,23 @@ import { cn } from "@/Utils/cn";
 import { Button } from "@/Components/Elements/Shadcn/button";
 import { XIcon } from "lucide-react";
 
-function Dialog({ ...props }) {
+const Dialog = React.memo(({ ...props }) => {
   return <DialogPrimitive.Root data-slot="dialog" {...props} />;
-}
+});
 
-function DialogTrigger({ ...props }) {
+const DialogTrigger = React.memo(({ ...props }) => {
   return <DialogPrimitive.Trigger data-slot="dialog-trigger" {...props} />;
-}
+});
 
-function DialogPortal({ ...props }) {
+const DialogPortal = React.memo(({ ...props }) => {
   return <DialogPrimitive.Portal data-slot="dialog-portal" {...props} />;
-}
+});
 
-function DialogClose({ ...props }) {
+const DialogClose = React.memo(({ ...props }) => {
   return <DialogPrimitive.Close data-slot="dialog-close" {...props} />;
-}
+});
 
-function DialogOverlay({ className, ...props }) {
+const DialogOverlay = React.memo(({ className, ...props }) => {
   return (
     <DialogPrimitive.Backdrop
       data-slot="dialog-overlay"
@@ -34,9 +34,9 @@ function DialogOverlay({ className, ...props }) {
       {...props}
     />
   );
-}
+});
 
-function DialogContent({ className, children, showCloseButton = true, ...props }) {
+const DialogContent = React.memo(({ className, children, showCloseButton = true, ...props }) => {
   return (
     <DialogPortal>
       <DialogOverlay />
@@ -58,26 +58,26 @@ function DialogContent({ className, children, showCloseButton = true, ...props }
       </DialogPrimitive.Popup>
     </DialogPortal>
   );
-}
+});
 
-function DialogHeader({ className, ...props }) {
+const DialogHeader = React.memo(({ className, ...props }) => {
   return <div data-slot="dialog-header" className={cn("gap-2 flex flex-col", className)} {...props} />;
-}
+});
 
-function DialogFooter({ className, showCloseButton = false, children, ...props }) {
+const DialogFooter = React.memo(({ className, showCloseButton = false, children, ...props }) => {
   return (
     <div data-slot="dialog-footer" className={cn("flex flex-col-reverse gap-2 sm:flex-row sm:justify-end", className)} {...props}>
       {children}
       {showCloseButton && <DialogPrimitive.Close render={<Button variant="outline" />}>Close</DialogPrimitive.Close>}
     </div>
   );
-}
+});
 
-function DialogTitle({ className, ...props }) {
+const DialogTitle = React.memo(({ className, ...props }) => {
   return <DialogPrimitive.Title data-slot="dialog-title" className={cn("leading-none font-medium", className)} {...props} />;
-}
+});
 
-function DialogDescription({ className, ...props }) {
+const DialogDescription = React.memo(({ className, ...props }) => {
   return (
     <DialogPrimitive.Description
       data-slot="dialog-description"
@@ -85,6 +85,6 @@ function DialogDescription({ className, ...props }) {
       {...props}
     />
   );
-}
+});
 
 export { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogOverlay, DialogPortal, DialogTitle, DialogTrigger };
