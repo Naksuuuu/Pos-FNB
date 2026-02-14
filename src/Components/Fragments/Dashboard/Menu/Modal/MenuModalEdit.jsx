@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Upload } from "lucide-react";
 import { toast } from "sonner";
@@ -12,16 +12,18 @@ import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/Component
 import { Input } from "@/Components/Elements/Shadcn/input";
 import { Textarea } from "@/Components/Elements/Shadcn/textarea";
 import DashboardModalForm from "@/Components/Fragments/Dashboard/Common/Modal/DashboardModalForm";
+import DashboardSelectFilter from "@/Components/Fragments/Dashboard/Common/DashboardSelectFilter";
 
 const MenuModalEdit = ({ selectedProduct, onOpenModal }) => {
   const [imagePreview, setImagePreview] = useState(null);
-  const { edit, loading } = useEditMenu();
+  const { edit, loading, categoryOptions } = useEditMenu();
 
   const {
     register,
     handleSubmit,
     setError,
     formState: { errors },
+    control,
   } = useForm({
     resolver: zodResolver(EditMenuSchema),
     defaultValues: {
@@ -108,7 +110,20 @@ const MenuModalEdit = ({ selectedProduct, onOpenModal }) => {
           </Field>
           <Field>
             <FieldLabel htmlFor="category_id">ID Kategori</FieldLabel>
-            <Input id="category_id" autoComplete="off" {...register("category_id")} aria-invalid={errors.category_id ? "true" : "false"} />
+            <Controller
+              name="category_id"
+              control={control}
+              render={({ field }) => (
+                <DashboardSelectFilter
+                  items={categoryOptions}
+                  label="Kategori"
+                  placeholder="Pilih kategori"
+                  value={field.value || ""}
+                  onValueChange={(val) => field.onChange(val)}
+                  aria-invalid={errors.category_id ? "true" : "false"}
+                />
+              )}
+            />
             {errors.category_id && <FieldError>{errors.category_id.message}</FieldError>}
           </Field>
           <Field>

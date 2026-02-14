@@ -129,19 +129,10 @@ const MenuPage = memo(() => {
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-2  gap-4 xl:grid-cols-4">
-        <div className="w-full">
-          <DashboardSelectFilter items={SORY_BY_OPTIONS} onValueChange={handleSortByChange} value={filters.sort_by} label="Cari Berdasarkan" placeholder="Pilih opsi" />
-        </div>
-        <div className="w-full">
-          <DashboardSelectFilter items={SORT_DIRECTION_OPTIONS} onValueChange={handleSortDirectionChange} value={filters.sort_direction} label="Urutan" placeholder="Pilih urutan" />
-        </div>
-
-        <div className="w-full">
-          <DashboardSelectFilter items={IS_AVAILABLE_OPTIONS} onValueChange={handleIsAvailableChange} value={filters.is_available} label="Ketersediaan" placeholder="Pilih ketersediaan" />
-        </div>
-        <div className="w-full">
-          <DashboardSelectFilter items={categoryOptions} onValueChange={handleCategoryIdChange} value={filters.category_id} label="Kategori" placeholder="Pilih kategori" />
-        </div>
+        <DashboardSelectFilter items={SORY_BY_OPTIONS} onValueChange={handleSortByChange} value={filters.sort_by || null} label="Cari Berdasarkan" placeholder="Pilih opsi" />
+        <DashboardSelectFilter items={SORT_DIRECTION_OPTIONS} onValueChange={handleSortDirectionChange} value={filters.sort_direction || null} label="Urutan" placeholder="Pilih urutan" />
+        <DashboardSelectFilter items={IS_AVAILABLE_OPTIONS} onValueChange={handleIsAvailableChange} value={filters.is_available || null} label="Ketersediaan" placeholder="Pilih ketersediaan" />
+        <DashboardSelectFilter items={categoryOptions} onValueChange={handleCategoryIdChange} value={filters.category_id || null} label="Kategori" placeholder="Pilih kategori" />
       </div>
 
       <div className="flex justify-between w-full gap-4">

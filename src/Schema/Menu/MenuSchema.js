@@ -15,9 +15,9 @@ const stock = z
   .transform((v) => Number(v))
   .refine((v) => v >= 0, "Minimal stok 0");
 
-const category_id = z.string().min(1, "Kategori wajib diisi");
+const category_id = z.string("Kategori wajib diisi!").min(1, "Kategori wajib diisi!");
 
-const description = z.string().optional();
+const description = z.any().optional();
 
 const is_available = z
   .boolean()

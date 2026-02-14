@@ -2,10 +2,12 @@ import { memo } from "react";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/Components/Elements/Shadcn/select";
 import { Button } from "@/Components/Elements/Shadcn/button";
 
-const DashboardSelectFilter = memo(({ items, onValueChange, value, label, placeholder }) => {
+const DashboardSelectFilter = memo(({ items, label, placeholder, ...props }) => {
+  const ariaInvalid = props["aria-invalid"] || false;
+
   return (
-    <Select items={items} onValueChange={onValueChange} value={value || null}>
-      <SelectTrigger className="w-full ">
+    <Select items={items} {...props}>
+      <SelectTrigger className="w-full " aria-invalid={ariaInvalid}>
         <SelectValue placeholder={placeholder || "Pilih opsi"} />
       </SelectTrigger>
       <SelectContent alignItemWithTrigger={false}>
