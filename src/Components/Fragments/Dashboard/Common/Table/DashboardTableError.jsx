@@ -9,7 +9,7 @@ const DashboardTableError = memo(({ message = "Cannot connect to the server" }) 
 
   return (
     <TableRow>
-      <TableCell colSpan={6}>
+      <TableCell colSpan={99}>
         <div className="flex flex-col items-center justify-center gap-4 p-4 text-center text-red-500 h-125">
           <p>{message}</p>
           <Button className="ml-4" onClick={() => resetFilters()}>

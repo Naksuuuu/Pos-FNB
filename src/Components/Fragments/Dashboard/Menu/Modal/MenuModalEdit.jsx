@@ -8,11 +8,12 @@ import { EditMenuSchema } from "@/Schema/Menu/MenuSchema";
 
 import useEditMenu from "@/Hooks/Menu/useEditMenu";
 
-import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/Components/Elements/Shadcn/field";
+import { Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/Components/Elements/Shadcn/field";
 import { Input } from "@/Components/Elements/Shadcn/input";
 import { Textarea } from "@/Components/Elements/Shadcn/textarea";
 import DashboardModalForm from "@/Components/Fragments/Dashboard/Common/Modal/DashboardModalForm";
 import DashboardSelectFilter from "@/Components/Fragments/Dashboard/Common/DashboardSelectFilter";
+import { Switch } from "@/Components/Elements/Shadcn/switch";
 
 const MenuModalEdit = ({ selectedProduct, onOpenModal }) => {
   const [imagePreview, setImagePreview] = useState(null);
@@ -32,6 +33,7 @@ const MenuModalEdit = ({ selectedProduct, onOpenModal }) => {
       stock: String(selectedProduct.stock),
       description: selectedProduct.description,
       category_id: String(selectedProduct.category_id),
+      is_available: selectedProduct.is_available,
     },
   });
 
@@ -61,7 +63,7 @@ const MenuModalEdit = ({ selectedProduct, onOpenModal }) => {
 
   return (
     <DashboardModalForm isOpen={!!selectedProduct} onOpenModal={onOpenModal} loading={loading} handleSubmit={handleSubmit} onSubmitForm={handleSubmitForm}>
-      <FieldSet>
+      <FieldSet className="px-2">
         <FieldGroup>
           <div className="w-full ">
             <img src={selectedProduct.image_url} alt={selectedProduct.name} className="object-cover w-full mx-auto rounded-md aspect-video" />
@@ -134,9 +136,25 @@ const MenuModalEdit = ({ selectedProduct, onOpenModal }) => {
             <Textarea id="description" name="description" autoComplete="off" {...register("description")} aria-invalid={errors.description ? "true" : "false"} />
             {errors.description && <FieldError>{errors.description.message}</FieldError>}
           </Field>
+
+          <Field orientation="horizontal" className="max-w-sm">
+            <FieldContent>
+              <FieldLabel htmlFor="is_available">Status Ketersediaan</FieldLabel>
+              <FieldDescription>Atur apakah menu ini tersedia untuk pelanggan.</FieldDescription>
+            </FieldContent>
+            <Controller
+              name="is_available"
+              control={control}
+              render={({ field }) => {
+                return <Switch id="is_available" name="is_available" checked={field.value} onCheckedChange={field.onChange} aria-invalid={errors.is_available ? "true" : "false"} />;
+              }}
+            />
+          </Field>
+          {errors.is_available && <FieldError>{errors.is_available.message}</FieldError>}
         </FieldGroup>
       </FieldSet>
     </DashboardModalForm>
   );
 };
+
 export default MenuModalEdit;

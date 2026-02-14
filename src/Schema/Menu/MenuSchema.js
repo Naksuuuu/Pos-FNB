@@ -19,10 +19,7 @@ const category_id = z.string("Kategori wajib diisi!").min(1, "Kategori wajib dii
 
 const description = z.any().optional();
 
-const is_available = z
-  .boolean()
-  .default(true)
-  .transform((val) => (val ? 1 : 0));
+const is_available = z.boolean().transform((val) => (val ? 1 : 0));
 
 const CreateMenuSchema = z.object({
   name,

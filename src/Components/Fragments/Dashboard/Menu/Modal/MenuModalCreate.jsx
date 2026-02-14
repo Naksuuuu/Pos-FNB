@@ -7,11 +7,12 @@ import { Upload } from "lucide-react";
 import { CreateMenuSchema } from "@/Schema/Menu/MenuSchema";
 import useCreateMenu from "@/Hooks/Menu/useCreateMenu";
 
-import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/Components/Elements/Shadcn/field";
+import { Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/Components/Elements/Shadcn/field";
 import { Input } from "@/Components/Elements/Shadcn/input";
 import { Textarea } from "@/Components/Elements/Shadcn/textarea";
 import DashboardModalForm from "@/Components/Fragments/Dashboard/Common/Modal/DashboardModalForm";
 import DashboardSelectFilter from "@/Components/Fragments/Dashboard/Common/DashboardSelectFilter";
+import { Switch } from "@/Components/Elements/Shadcn/switch";
 
 const MenuModalCreate = memo(({ isOpen, onOpenModal }) => {
   const { create, loading, categoryOptions } = useCreateMenu();
@@ -53,7 +54,7 @@ const MenuModalCreate = memo(({ isOpen, onOpenModal }) => {
 
   return (
     <DashboardModalForm isOpen={isOpen} onOpenModal={onOpenModal} loading={loading} handleSubmit={handleSubmit} onSubmitForm={handleSubmitForm}>
-      <FieldSet>
+      <FieldSet className="px-2">
         <FieldGroup>
           <Field>
             <FieldLabel htmlFor="image">Foto</FieldLabel>
@@ -123,6 +124,20 @@ const MenuModalCreate = memo(({ isOpen, onOpenModal }) => {
             <FieldLabel htmlFor="description">Deskripsi</FieldLabel>
             <Textarea id="description" name="description" autoComplete="off" {...register("description")} aria-invalid={errors.description ? "true" : "false"} />
             {errors.description && <FieldError>{errors.description.message}</FieldError>}
+          </Field>
+          <Field orientation="horizontal" className="max-w-sm">
+            <FieldContent>
+              <FieldLabel htmlFor="is_available">Status Ketersediaan</FieldLabel>
+              <FieldDescription>Atur apakah menu ini tersedia untuk pelanggan.</FieldDescription>
+            </FieldContent>
+            <Controller
+              name="is_available"
+              control={control}
+              render={({ field }) => {
+                return <Switch id="is_available" name="is_available" checked={field.value} onCheckedChange={field.onChange} aria-invalid={errors.is_available ? "true" : "false"} />;
+              }}
+            />
+            {errors.is_available && <FieldError>{errors.is_available.message}</FieldError>}
           </Field>
         </FieldGroup>
       </FieldSet>

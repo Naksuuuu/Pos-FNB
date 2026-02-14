@@ -28,8 +28,8 @@ const SORT_DIRECTION_OPTIONS = [
 
 const IS_AVAILABLE_OPTIONS = [
   { label: "Semua", value: "" },
-  { label: "Aktif", value: "1" },
-  { label: "Tidak Aktif", value: "0" },
+  { label: "Tersedia", value: "1" },
+  { label: "Tidak Tersedia", value: "0" },
 ];
 
 const DEFAULT_CATEGORY_ID_OPTIONS = [{ label: "Semua", value: "" }];

@@ -7,7 +7,7 @@ import { TableCell, TableRow } from "@/Components/Elements/Shadcn/table";
 const DashboardTableLoading = memo(() => {
   return (
     <TableRow>
-      <TableCell colSpan={6}>
+      <TableCell colSpan={99}>
         <div className="relative flex items-center justify-center">
           <Skeleton className="w-full h-125" />
           <Spinner className="absolute size-8" />
