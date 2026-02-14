@@ -47,7 +47,7 @@ const CategoryModalEdit = ({ selectedCategory, onOpenModal }) => {
         <FieldGroup>
           <Field>
             <FieldLabel htmlFor="name">Nama Kategori</FieldLabel>
-            <Input id="name" autoComplete="off" {...register("name")} aria-invalid={errors.name ? "true" : "false"} />
+            <Input id="name" name="name" autoComplete="off" {...register("name")} aria-invalid={errors.name ? "true" : "false"} />
             {errors.name && <FieldError>{errors.name.message}</FieldError>}
           </Field>
         </FieldGroup>

@@ -11,4 +11,16 @@ export default defineConfig({
       "@": path.resolve(__dirname, "src"),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          baseui: ["@base-ui/react"],
+          router: ["react-router"],
+          redux: ["@reduxjs/toolkit", "react-redux"],
+          lucide: ["lucide-react"],
+        },
+      },
+    },
+  },
 });

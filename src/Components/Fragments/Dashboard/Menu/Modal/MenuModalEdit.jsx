@@ -83,6 +83,7 @@ const MenuModalEdit = ({ selectedProduct, onOpenModal }) => {
             <Input
               type="file"
               id="image"
+              name="image"
               autoComplete="off"
               {...register("image", {
                 setValueAs: (files) => (files && files.length > 0 ? files : undefined),
@@ -95,17 +96,17 @@ const MenuModalEdit = ({ selectedProduct, onOpenModal }) => {
           </Field>
           <Field>
             <FieldLabel htmlFor="name">Nama Menu</FieldLabel>
-            <Input id="name" autoComplete="off" {...register("name")} aria-invalid={errors.name ? "true" : "false"} />
+            <Input id="name" name="name" autoComplete="off" {...register("name")} aria-invalid={errors.name ? "true" : "false"} />
             {errors.name && <FieldError>{errors.name.message}</FieldError>}
           </Field>
           <Field>
             <FieldLabel htmlFor="price">Harga</FieldLabel>
-            <Input id="price" autoComplete="off" {...register("price")} aria-invalid={errors.price ? "true" : "false"} />
+            <Input id="price" name="price" autoComplete="off" {...register("price")} aria-invalid={errors.price ? "true" : "false"} />
             {errors.price && <FieldError>{errors.price.message}</FieldError>}
           </Field>
           <Field>
             <FieldLabel htmlFor="stock">Stok</FieldLabel>
-            <Input id="stock" autoComplete="off" {...register("stock")} aria-invalid={errors.stock ? "true" : "false"} />
+            <Input id="stock" name="stock" autoComplete="off" {...register("stock")} aria-invalid={errors.stock ? "true" : "false"} />
             {errors.stock && <FieldError>{errors.stock.message}</FieldError>}
           </Field>
           <Field>
@@ -117,6 +118,8 @@ const MenuModalEdit = ({ selectedProduct, onOpenModal }) => {
                 <DashboardSelectFilter
                   items={categoryOptions}
                   label="Kategori"
+                  id="category_id"
+                  name="category_id"
                   placeholder="Pilih kategori"
                   value={field.value || ""}
                   onValueChange={(val) => field.onChange(val)}
@@ -128,7 +131,7 @@ const MenuModalEdit = ({ selectedProduct, onOpenModal }) => {
           </Field>
           <Field>
             <FieldLabel htmlFor="description">Deskripsi</FieldLabel>
-            <Textarea id="description" autoComplete="off" {...register("description")} aria-invalid={errors.description ? "true" : "false"} />
+            <Textarea id="description" name="description" autoComplete="off" {...register("description")} aria-invalid={errors.description ? "true" : "false"} />
             {errors.description && <FieldError>{errors.description.message}</FieldError>}
           </Field>
         </FieldGroup>

@@ -16,6 +16,7 @@ const CategoryModalCreate = memo(({ isOpen, onOpenModal }) => {
     handleSubmit,
     setError,
     formState: { errors },
+    register,
   } = useForm({
     resolver: zodResolver(CreateCategorySchema),
   });
@@ -42,8 +43,8 @@ const CategoryModalCreate = memo(({ isOpen, onOpenModal }) => {
       <FieldSet>
         <FieldGroup>
           <Field>
-            <FieldLabel htmlFor="name">Nama Menu</FieldLabel>
-            <Input id="name" autoComplete="off" {...register("name")} aria-invalid={errors.name ? "true" : "false"} />
+            <FieldLabel htmlFor="name">Nama Kategori</FieldLabel>
+            <Input id="name" name="name" autoComplete="off" {...register("name")} aria-invalid={errors.name ? "true" : "false"} />
             {errors.name && <FieldError>{errors.name.message}</FieldError>}
           </Field>
         </FieldGroup>

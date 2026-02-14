@@ -37,9 +37,11 @@ const MenuTable = memo(({ loading, errorMessage, menus = [], pagination, onOpenD
                 <TableCell>
                   <Button size="icon" variant="ghost" className="text-red-500 rounded-full hover:bg-red-200 hover:text-red-600" onClick={() => onOpenDeleteModal(menu)}>
                     <Trash />
+                    <span className="sr-only">Hapus</span>
                   </Button>
                   <Button size="icon" variant="ghost" className="rounded-full  text-emerald-500 hover:bg-emerald-200 hover:text-emerald-600" onClick={() => onOpenEditModal(menu)}>
                     <Pen />
+                    <span className="sr-only">Edit</span>
                   </Button>
                 </TableCell>
               </TableRow>
