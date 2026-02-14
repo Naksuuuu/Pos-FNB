@@ -5,10 +5,10 @@ import { rupiah } from "@/Utils/rupiahHelper";
 
 import { Button } from "@/Components/Elements/Shadcn/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/Elements/Shadcn/table";
-import { Skeleton } from "@/Components/Elements/Shadcn/skeleton";
-import { Spinner } from "@/Components/Elements/Shadcn/spinner";
+import TableError from "@/Components/Fragments/Dashboard/Common/Table/TableError";
+import TableLoading from "@/Components/Fragments/Dashboard/Common/Table/TableLoading";
 
-const MenuTable = memo(({ loading, errorMessage, menus = [], pagination, loadMenus, onOpenDeleteModal, onOpenEditModal }) => {
+const MenuTable = memo(({ loading, errorMessage, menus = [], pagination, onOpenDeleteModal, onOpenEditModal }) => {
   return (
     <div className="overflow-hidden border rounded-lg">
       <Table>
@@ -23,8 +23,8 @@ const MenuTable = memo(({ loading, errorMessage, menus = [], pagination, loadMen
           </TableRow>
         </TableHeader>
         <TableBody>
-          {loading && !errorMessage && <TableSkeleton />}
-          {errorMessage && !loading && <TableError message={errorMessage} loadMenus={loadMenus} />}
+          {loading && !errorMessage && <TableLoading />}
+          {errorMessage && !loading && <TableError message={errorMessage} />}
           {!loading &&
             !errorMessage &&
             menus.map((menu, index) => (
@@ -47,34 +47,6 @@ const MenuTable = memo(({ loading, errorMessage, menus = [], pagination, loadMen
         </TableBody>
       </Table>
     </div>
-  );
-});
-
-const TableSkeleton = memo(() => {
-  return (
-    <TableRow>
-      <TableCell colSpan={6}>
-        <div className="relative flex items-center justify-center">
-          <Skeleton className="w-full h-125" />
-          <Spinner className="absolute size-8" />
-        </div>
-      </TableCell>
-    </TableRow>
-  );
-});
-
-const TableError = memo(({ message = "Cannot connect to the server", loadMenus }) => {
-  return (
-    <TableRow>
-      <TableCell colSpan={6}>
-        <div className="flex flex-col items-center justify-center gap-4 p-4 text-center text-red-500 h-125">
-          <p>{message}</p>
-          <Button className="ml-4" onClick={loadMenus}>
-            Muat Ulang
-          </Button>
-        </div>
-      </TableCell>
-    </TableRow>
   );
 });
 

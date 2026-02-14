@@ -24,7 +24,9 @@ const DashboardSelectFilter = memo(({ items, onValueChange, value, label, placeh
 
 const DashboardResetFilter = memo(({ onResetFilter, condition }) => {
   return (
-    <div className={`col-span-2 xl:col-span-4 transition-all duration-300 ease-out ${condition ? "max-h-16 opacity-100 translate-y-0" : "max-h-0 opacity-0 -translate-y-1 pointer-events-none"}`}>
+    <div
+      className={`transition-all overflow-hidden h-fit  duration-500 ease-out ${condition ? "max-h-16 visible opacity-100 translate-y-0" : "max-h-0 invisible m-0 p-0 opacity-0 -translate-y-5 pointer-events-none"}`}
+    >
       <Button className="w-full" onClick={onResetFilter}>
         Reset Filter
       </Button>

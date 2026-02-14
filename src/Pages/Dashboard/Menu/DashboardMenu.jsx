@@ -49,7 +49,11 @@ const DashboardMenu = memo(() => {
   const search = filters.search || "";
   const [optimisticSearch, setOptimisticSearch] = useState(search);
 
-  const showReset = !!(filters.sort_by || filters.sort_direction || filters.is_available || filters.category_id);
+  useEffect(() => {
+    setOptimisticSearch(search);
+  }, [search]);
+
+  const showReset = !!(filters.sort_by || filters.sort_direction || filters.is_available || filters.category_id || search);
 
   useEffect(() => {
     loadMenus(filters);
@@ -106,7 +110,6 @@ const DashboardMenu = memo(() => {
   );
 
   const handleResetFilter = useCallback(() => {
-    setOptimisticSearch("");
     resetFilters();
   }, [resetFilters]);
 
@@ -123,8 +126,8 @@ const DashboardMenu = memo(() => {
   }, []);
 
   return (
-    <div>
-      <div className="grid grid-cols-2 gap-4 py-4 xl:grid-cols-4">
+    <div className="space-y-4">
+      <div className="grid grid-cols-2  gap-4 xl:grid-cols-4">
         <div className="w-full">
           <DashboardSelectFilter items={SORY_BY_OPTIONS} onValueChange={handleSortByChange} value={filters.sort_by} label="Cari Berdasarkan" placeholder="Pilih opsi" />
         </div>
@@ -138,30 +141,21 @@ const DashboardMenu = memo(() => {
         <div className="w-full">
           <DashboardSelectFilter items={CATEGORY_ID_OPTIONS} onValueChange={handleCategoryIdChange} value={filters.category_id} label="Kategori" placeholder="Pilih kategori" />
         </div>
-        <DashboardResetFilter onResetFilter={handleResetFilter} condition={showReset} />
       </div>
 
-      <div className="flex flex-col gap-4">
-        <div className="flex justify-between w-full gap-4">
-          <DashboardInputSearch onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari menu..." />
-          <Button onClick={handleOpenCreateModal}>Tambah Menu</Button>
-        </div>
-        <MenuTable
-          loading={loading}
-          errorMessage={errorMessage}
-          menus={menus}
-          pagination={pagination}
-          loadMenus={loadMenus}
-          onOpenDeleteModal={handleOpenDeleteModal}
-          onOpenEditModal={handleOpenEditModal}
-        />
-
-        <DashboardPagination pagination={pagination} onPageChange={handlePageChange} />
+      <div className="flex justify-between w-full gap-4">
+        <DashboardInputSearch onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari menu..." />
+        <Button onClick={handleOpenCreateModal}>Tambah Menu</Button>
       </div>
+
+      <DashboardResetFilter onResetFilter={handleResetFilter} condition={showReset} />
+
+      <MenuTable loading={loading} errorMessage={errorMessage} menus={menus} pagination={pagination} onOpenDeleteModal={handleOpenDeleteModal} onOpenEditModal={handleOpenEditModal} />
+
+      <DashboardPagination pagination={pagination} onPageChange={handlePageChange} />
 
       {selectedDeleteProduct && <MenuDeleteModal selectedProduct={selectedDeleteProduct} onOpenModal={handleOpenDeleteModal} />}
       {selectedEditProduct && <MenuEditModal selectedProduct={selectedEditProduct} onOpenModal={handleOpenEditModal} />}
-
       {selectedAddProduct && <MenuCreateModal isOpen={selectedAddProduct} onOpenModal={handleOpenCreateModal} />}
     </div>
   );

@@ -9,10 +9,11 @@ import { Button } from "@/Components/Elements/Shadcn/button";
 import CategoryEditModal from "@/Components/Fragments/Dashboard/Category/Modal/CategoryEditModal";
 import CategoryCreateModal from "@/Components/Fragments/Dashboard/Category/Modal/CategoryCreateModal";
 import CategoryDeleteModal from "@/Components/Fragments/Dashboard/Category/Modal/CategoryDeleteModal";
+import { DashboardResetFilter } from "@/Components/Fragments/Dashboard/Common/DashboardSelectFilter";
 
 const DashboardCategoryPage = () => {
   const { categories, loading, errorMessage, loadCategories } = useAllCategory();
-  const { filters, updateFilters } = useFilterParams();
+  const { filters, updateFilters, resetFilters } = useFilterParams();
 
   const [selectedCreateCategory, setSelectedCreateCategory] = useState(null);
   const [selectedEditCategory, setSelectedEditCategory] = useState(null);
@@ -20,6 +21,9 @@ const DashboardCategoryPage = () => {
 
   const search = filters.search || "";
   const [optimisticSearch, setOptimisticSearch] = useState(search);
+  useEffect(() => {
+    setOptimisticSearch(search);
+  }, [search]);
 
   useEffect(() => {
     loadCategories(filters);
@@ -40,6 +44,10 @@ const DashboardCategoryPage = () => {
     [updateFilters],
   );
 
+  const handleResetFilter = useCallback(() => {
+    resetFilters();
+  }, [resetFilters]);
+
   const handleOpenDeleteModal = useCallback((categorySelected) => {
     setSelectedDeleteCategory(categorySelected);
   }, []);
@@ -53,21 +61,22 @@ const DashboardCategoryPage = () => {
   }, []);
 
   return (
-    <div>
-      <div className="flex flex-col gap-4">
-        <div className="flex justify-between w-full gap-4">
-          <DashboardInputSearch onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari menu..." />
-          <Button onClick={handleOpenCreateModal}>Tambah Menu</Button>
-        </div>
-        <CategoryTable
-          loading={loading}
-          categories={categories}
-          errorMessage={errorMessage}
-          loadCategories={loadCategories}
-          onOpenEditModal={handleOpenEditModal}
-          onOpenDeleteModal={handleOpenDeleteModal}
-        />
+    <div className="space-y-4">
+      <div className="flex justify-between w-full gap-4">
+        <DashboardInputSearch onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari menu..." />
+        <Button onClick={handleOpenCreateModal}>Tambah Menu</Button>
       </div>
+
+      <DashboardResetFilter onResetFilter={handleResetFilter} condition={search} />
+
+      <CategoryTable
+        loading={loading}
+        categories={categories}
+        errorMessage={errorMessage}
+        loadCategories={loadCategories}
+        onOpenEditModal={handleOpenEditModal}
+        onOpenDeleteModal={handleOpenDeleteModal}
+      />
 
       {selectedEditCategory && <CategoryEditModal selectedCategory={selectedEditCategory} onOpenModal={handleOpenEditModal} />}
       {selectedCreateCategory && <CategoryCreateModal isOpen={selectedCreateCategory} onOpenModal={handleOpenCreateModal} />}
