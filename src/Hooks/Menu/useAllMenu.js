@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { selectAllMenus, selectMenuError, selectMenuLoading, selectMenuPagination } from "@/Redux/Features/Menu/MenuSelector";
 import { fetchMenus } from "@/Redux/Features/Menu/MenuSlice";
+import { selectAllCategories } from "@/Redux/Features/Category/CategorySelector";
+import { fetchCategories } from "@/Redux/Features/Category/CategorySlice";
 
 const useAllMenu = () => {
   const dispatch = useDispatch();
@@ -10,22 +12,23 @@ const useAllMenu = () => {
   const loading = useSelector(selectMenuLoading);
   const errorMessage = useSelector(selectMenuError);
   const pagination = useSelector(selectMenuPagination);
+  const categories = useSelector(selectAllCategories);
 
   const loadMenus = useCallback(
-    (params = {}) => {
+    async (params = {}) => {
       const { page, ...otherParams } = params;
 
       const safeParams = {
         page: parseInt(page) || 1,
         ...otherParams,
       };
-
-      dispatch(fetchMenus(safeParams));
+      await dispatch(fetchMenus(safeParams));
+      dispatch(fetchCategories({}));
     },
     [dispatch],
   );
 
-  return { menus, loadMenus, loading, errorMessage, pagination };
+  return { menus, loadMenus, loading, errorMessage, pagination, categories };
 };
 
 export default useAllMenu;

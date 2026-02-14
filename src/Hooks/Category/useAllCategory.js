@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCategories } from "@/Redux/Features/Category/CategorySlice";
 import { selectAllCategories, selectCategoryError, selectCategoryLoading } from "@/Redux/Features/Category/CategorySelector";
@@ -10,15 +10,11 @@ const useAllCategory = () => {
   const errorMessage = useSelector(selectCategoryError);
 
   const loadCategories = useCallback(
-    (filters = {}) => {
-      dispatch(fetchCategories(filters));
+    async (filters = {}) => {
+      await dispatch(fetchCategories(filters));
     },
     [dispatch],
   );
-
-  useEffect(() => {
-    loadCategories();
-  }, [loadCategories]);
 
   return { categories, loading, errorMessage, loadCategories };
 };

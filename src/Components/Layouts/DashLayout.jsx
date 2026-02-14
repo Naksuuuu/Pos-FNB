@@ -1,6 +1,6 @@
 import { Toaster } from "sonner";
-import Navbar from "@/Components/Fragments/Dashboard/Common/Navbar";
-import SidebarApp from "@/Components/Fragments/Dashboard/Common/Sidebar";
+import Navbar from "@/Components/Fragments/Dashboard/Common/Navigation/Navbar";
+import SidebarApp from "@/Components/Fragments/Dashboard/Common/Navigation/Sidebar";
 
 const DashLayout = ({ children }) => {
   return (

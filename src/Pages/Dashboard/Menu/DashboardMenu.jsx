@@ -32,15 +32,10 @@ const IS_AVAILABLE_OPTIONS = [
   { label: "Tidak Aktif", value: "0" },
 ];
 
-const CATEGORY_ID_OPTIONS = [
-  { label: "Semua", value: "" },
-  { label: "Makanan Berat", value: "01kh6gyke26g9k421yftvt5j38" },
-  { label: "Dessert", value: "01kh6gykjhxjvgfmqmke0f3q7n" },
-  { label: "Makanan Ringan", value: "01kh6gykhshb2spdq8f241dr52" },
-];
+const DEFAULT_CATEGORY_ID_OPTIONS = [{ label: "Semua", value: "" }];
 
 const DashboardMenu = memo(() => {
-  const { menus, loadMenus, loading, errorMessage, pagination } = useAllMenu();
+  const { menus, loadMenus, loading, errorMessage, pagination, categories } = useAllMenu();
   const { filters, updateFilters, resetFilters } = useFilterParams();
   const [selectedEditProduct, setSelectedEditProduct] = useState(null);
   const [selectedDeleteProduct, setSelectedDeleteProduct] = useState(null);
@@ -48,6 +43,12 @@ const DashboardMenu = memo(() => {
 
   const search = filters.search || "";
   const [optimisticSearch, setOptimisticSearch] = useState(search);
+  const [categoryOptions, setCategoryOptions] = useState([DEFAULT_CATEGORY_ID_OPTIONS]);
+
+  useEffect(() => {
+    if (categories.length === 0) return;
+    setCategoryOptions([...DEFAULT_CATEGORY_ID_OPTIONS, ...categories.map((category) => ({ label: category.name, value: category.id }))]);
+  }, [categories]);
 
   useEffect(() => {
     setOptimisticSearch(search);
@@ -139,7 +140,7 @@ const DashboardMenu = memo(() => {
           <DashboardSelectFilter items={IS_AVAILABLE_OPTIONS} onValueChange={handleIsAvailableChange} value={filters.is_available} label="Ketersediaan" placeholder="Pilih ketersediaan" />
         </div>
         <div className="w-full">
-          <DashboardSelectFilter items={CATEGORY_ID_OPTIONS} onValueChange={handleCategoryIdChange} value={filters.category_id} label="Kategori" placeholder="Pilih kategori" />
+          <DashboardSelectFilter items={categoryOptions} onValueChange={handleCategoryIdChange} value={filters.category_id} label="Kategori" placeholder="Pilih kategori" />
         </div>
       </div>
 
