@@ -6,12 +6,12 @@ import useFilterParams from "@/Hooks/Common/useFilterParams";
 import CategoryTable from "@/Components/Fragments/Dashboard/Category/Table/CategoryTable";
 import DashboardInputSearch from "@/Components/Fragments/Dashboard/Common/DashboardInputSearch";
 import { Button } from "@/Components/Elements/Shadcn/button";
-import CategoryEditModal from "@/Components/Fragments/Dashboard/Category/Modal/CategoryEditModal";
-import CategoryCreateModal from "@/Components/Fragments/Dashboard/Category/Modal/CategoryCreateModal";
-import CategoryDeleteModal from "@/Components/Fragments/Dashboard/Category/Modal/CategoryDeleteModal";
+import CategoryModalEdit from "@/Components/Fragments/Dashboard/Category/Modal/CategoryModalEdit";
+import CategoryModalCreate from "@/Components/Fragments/Dashboard/Category/Modal/CategoryModalCreate";
+import CategoryModalDelete from "@/Components/Fragments/Dashboard/Category/Modal/CategoryModalDelete";
 import { DashboardResetFilter } from "@/Components/Fragments/Dashboard/Common/DashboardSelectFilter";
 
-const DashboardCategoryPage = () => {
+const CategoryPage = () => {
   const { categories, loading, errorMessage, loadCategories } = useAllCategory();
   const { filters, updateFilters, resetFilters } = useFilterParams();
 
@@ -78,10 +78,10 @@ const DashboardCategoryPage = () => {
         onOpenDeleteModal={handleOpenDeleteModal}
       />
 
-      {selectedEditCategory && <CategoryEditModal selectedCategory={selectedEditCategory} onOpenModal={handleOpenEditModal} />}
-      {selectedCreateCategory && <CategoryCreateModal isOpen={selectedCreateCategory} onOpenModal={handleOpenCreateModal} />}
-      {selectedDeleteCategory && <CategoryDeleteModal selectedCategory={selectedDeleteCategory} onOpenModal={handleOpenDeleteModal} />}
+      {selectedEditCategory && <CategoryModalEdit selectedCategory={selectedEditCategory} onOpenModal={handleOpenEditModal} />}
+      {selectedCreateCategory && <CategoryModalCreate isOpen={selectedCreateCategory} onOpenModal={handleOpenCreateModal} />}
+      {selectedDeleteCategory && <CategoryModalDelete selectedCategory={selectedDeleteCategory} onOpenModal={handleOpenDeleteModal} />}
     </div>
   );
 };
-export default DashboardCategoryPage;
+export default CategoryPage;

@@ -1,16 +1,16 @@
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
 import useAllMenu from "@/Hooks/Menu/useAllMenu";
+import useFilterParams from "@/Hooks/Common/useFilterParams";
 
 import { Button } from "@/Components/Elements/Shadcn/button";
-import MenuCreateModal from "@/Components/Fragments/Dashboard/Menu/Modal/MenuCreateModal";
-import MenuDeleteModal from "@/Components/Fragments/Dashboard/Menu/Modal/MenuDeleteModal";
-import MenuEditModal from "@/Components/Fragments/Dashboard/Menu/Modal/MenuEditModal";
+import MenuModalCreate from "@/Components/Fragments/Dashboard/Menu/Modal/MenuModalCreate";
+import MenuModalEdit from "@/Components/Fragments/Dashboard/Menu/Modal/MenuModalEdit";
+import MenuModalDelete from "@/Components/Fragments/Dashboard/Menu/Modal/MenuModalDelete";
 import MenuTable from "@/Components/Fragments/Dashboard/Menu/Table/MenuTable";
 import DashboardPagination from "@/Components/Fragments/Dashboard/Common/DashboardPagination";
 import DashboardInputSearch from "@/Components/Fragments/Dashboard/Common/DashboardInputSearch";
 import DashboardSelectFilter, { DashboardResetFilter } from "@/Components/Fragments/Dashboard/Common/DashboardSelectFilter";
-import useFilterParams from "@/Hooks/Common/useFilterParams";
 
 const SORY_BY_OPTIONS = [
   { label: "Semua", value: "" },
@@ -34,7 +34,7 @@ const IS_AVAILABLE_OPTIONS = [
 
 const DEFAULT_CATEGORY_ID_OPTIONS = [{ label: "Semua", value: "" }];
 
-const DashboardMenu = memo(() => {
+const MenuPage = memo(() => {
   const { menus, loadMenus, loading, errorMessage, pagination, categories } = useAllMenu();
   const { filters, updateFilters, resetFilters } = useFilterParams();
   const [selectedEditProduct, setSelectedEditProduct] = useState(null);
@@ -155,11 +155,11 @@ const DashboardMenu = memo(() => {
 
       <DashboardPagination pagination={pagination} onPageChange={handlePageChange} />
 
-      {selectedDeleteProduct && <MenuDeleteModal selectedProduct={selectedDeleteProduct} onOpenModal={handleOpenDeleteModal} />}
-      {selectedEditProduct && <MenuEditModal selectedProduct={selectedEditProduct} onOpenModal={handleOpenEditModal} />}
-      {selectedAddProduct && <MenuCreateModal isOpen={selectedAddProduct} onOpenModal={handleOpenCreateModal} />}
+      {selectedDeleteProduct && <MenuModalDelete selectedProduct={selectedDeleteProduct} onOpenModal={handleOpenDeleteModal} />}
+      {selectedEditProduct && <MenuModalEdit selectedProduct={selectedEditProduct} onOpenModal={handleOpenEditModal} />}
+      {selectedAddProduct && <MenuModalCreate isOpen={selectedAddProduct} onOpenModal={handleOpenCreateModal} />}
     </div>
   );
 });
 
-export default DashboardMenu;
+export default MenuPage;

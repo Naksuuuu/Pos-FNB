@@ -4,7 +4,7 @@ import { Skeleton } from "@/Components/Elements/Shadcn/skeleton";
 import { Spinner } from "@/Components/Elements/Shadcn/spinner";
 import { TableCell, TableRow } from "@/Components/Elements/Shadcn/table";
 
-const TableLoading = memo(() => {
+const DashboardTableLoading = memo(() => {
   return (
     <TableRow>
       <TableCell colSpan={6}>
@@ -17,4 +17,4 @@ const TableLoading = memo(() => {
   );
 });
 
-export default TableLoading;
+export default DashboardTableLoading;

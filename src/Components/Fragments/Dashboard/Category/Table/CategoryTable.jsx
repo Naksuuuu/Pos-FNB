@@ -3,8 +3,8 @@ import { Pen, Trash } from "lucide-react";
 
 import { Button } from "@/Components/Elements/Shadcn/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/Elements/Shadcn/table";
-import TableLoading from "@/Components/Fragments/Dashboard/Common/Table/TableLoading";
-import TableError from "@/Components/Fragments/Dashboard/Common/Table/TableError";
+import DashboardTableError from "@/Components/Fragments/Dashboard/Common/Table/DashboardTableError";
+import DashboardTableLoading from "@/Components/Fragments/Dashboard/Common/Table/DashboardTableLoading";
 
 const CategoryTable = memo(({ loading, errorMessage, categories = [], onOpenDeleteModal, onOpenEditModal }) => {
   return (
@@ -18,8 +18,8 @@ const CategoryTable = memo(({ loading, errorMessage, categories = [], onOpenDele
           </TableRow>
         </TableHeader>
         <TableBody>
-          {loading && !errorMessage && <TableLoading />}
-          {errorMessage && !loading && <TableError message={errorMessage} />}
+          {loading && !errorMessage && <DashboardTableLoading />}
+          {errorMessage && !loading && <DashboardTableError message={errorMessage} />}
           {!loading &&
             !errorMessage &&
             categories.map((category, index) => (

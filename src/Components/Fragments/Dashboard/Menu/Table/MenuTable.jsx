@@ -5,8 +5,8 @@ import { rupiah } from "@/Utils/rupiahHelper";
 
 import { Button } from "@/Components/Elements/Shadcn/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/Elements/Shadcn/table";
-import TableError from "@/Components/Fragments/Dashboard/Common/Table/TableError";
-import TableLoading from "@/Components/Fragments/Dashboard/Common/Table/TableLoading";
+import DashboardTableError from "@/Components/Fragments/Dashboard/Common/Table/DashboardTableError";
+import DashboardTableLoading from "@/Components/Fragments/Dashboard/Common/Table/DashboardTableLoading";
 
 const MenuTable = memo(({ loading, errorMessage, menus = [], pagination, onOpenDeleteModal, onOpenEditModal }) => {
   return (
@@ -23,15 +23,15 @@ const MenuTable = memo(({ loading, errorMessage, menus = [], pagination, onOpenD
           </TableRow>
         </TableHeader>
         <TableBody>
-          {loading && !errorMessage && <TableLoading />}
-          {errorMessage && !loading && <TableError message={errorMessage} />}
+          {loading && !errorMessage && <DashboardTableLoading />}
+          {errorMessage && !loading && <DashboardTableError message={errorMessage} />}
           {!loading &&
             !errorMessage &&
             menus.map((menu, index) => (
               <TableRow key={menu.id}>
                 <TableCell>{pagination.from + index}</TableCell>
                 <TableCell>{menu.name}</TableCell>
-                <TableCell>{menu.category?.name ?? "loading"}</TableCell>
+                <TableCell>{menu.category?.name ?? "Tidak ada Kategorgi"}</TableCell>
                 <TableCell>{rupiah(menu.price)}</TableCell>
                 <TableCell>{menu.stock}</TableCell>
                 <TableCell>

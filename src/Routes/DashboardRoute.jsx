@@ -6,8 +6,8 @@ import LoadingApp from "@/Pages/Common/LoadingApp";
 const DashLayout = lazy(() => import("@/Components/Layouts/DashLayout"));
 const Dashboard = lazy(() => import("@/Pages/Dashboard/Dashboard"));
 const PanelCashier = lazy(() => import("@/Pages/Dashboard/Cashier/PanelCashier"));
-const DashboardMenu = lazy(() => import("@/Pages/Dashboard/Menu/DashboardMenu"));
-const DashboardCategoryPage = lazy(() => import("@/Pages/Dashboard/Category/DashboardCategoryPage"));
+const MenuPage = lazy(() => import("@/Pages/Dashboard/Menu/MenuPage"));
+const CategoryPage = lazy(() => import("@/Pages/Dashboard/Category/CategoryPage"));
 const createProtectedRoute = (component) => {
   return (
     <Suspense fallback={<LoadingApp />}>
@@ -29,11 +29,11 @@ const DashboardRoute = [
   },
   {
     path: "/dashboard/menu",
-    element: createProtectedRoute(<DashboardMenu />),
+    element: createProtectedRoute(<MenuPage />),
   },
   {
     path: "/dashboard/category",
-    element: createProtectedRoute(<DashboardCategoryPage />),
+    element: createProtectedRoute(<CategoryPage />),
   },
 ];
 
