@@ -10,7 +10,7 @@ import { Input } from "@/Components/Elements/Shadcn/input";
 import { CreateCategorySchema } from "@/Schema/Category/CategorySchema";
 import DashboardModalForm from "@/Components/Fragments/Dashboard/Common/Modal/DashboardModalForm";
 
-const CategoryModalCreate = memo(({ isOpen, onOpenModal }) => {
+const CategoryModalCreate = ({ isOpen, onOpenModal }) => {
   const { create, loading } = useCreateCategory();
   const {
     handleSubmit,
@@ -25,7 +25,7 @@ const CategoryModalCreate = memo(({ isOpen, onOpenModal }) => {
     try {
       const response = await create(data);
       onOpenModal(false);
-      toast.success(response.message);
+      toast.success(response.message || "Kategori berhasil dibuat");
     } catch (error) {
       if (error?.validationErrors) {
         Object.entries(error.validationErrors).forEach(([field, message]) => {
@@ -34,12 +34,12 @@ const CategoryModalCreate = memo(({ isOpen, onOpenModal }) => {
         return;
       }
 
-      toast.error(error?.message || "Failed to create menu");
+      toast.error(error?.message || "Gagal membuat kategori");
     }
   };
 
   return (
-    <DashboardModalForm isOpen={isOpen} onOpenModal={onOpenModal} loading={loading} handleSubmit={handleSubmit} onSubmitForm={handleSubmitForm}>
+    <DashboardModalForm isOpen={isOpen} onOpenModal={onOpenModal} loading={loading} handleSubmit={handleSubmit} onSubmitForm={handleSubmitForm} title="Tambah Kategori">
       <FieldSet>
         <FieldGroup>
           <Field>
@@ -51,5 +51,5 @@ const CategoryModalCreate = memo(({ isOpen, onOpenModal }) => {
       </FieldSet>
     </DashboardModalForm>
   );
-});
+};
 export default CategoryModalCreate;

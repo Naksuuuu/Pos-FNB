@@ -1,4 +1,3 @@
-import { memo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -10,7 +9,7 @@ import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/Component
 import { Input } from "@/Components/Elements/Shadcn/input";
 import DashboardModalForm from "@/Components/Fragments/Dashboard/Common/Modal/DashboardModalForm";
 
-const DiningTableModalCreate = memo(({ isOpen, onOpenModal }) => {
+const DiningTableModalCreate = ({ isOpen, onOpenModal }) => {
   const { create, loading } = useCreateDiningTable();
   const {
     handleSubmit,
@@ -25,7 +24,7 @@ const DiningTableModalCreate = memo(({ isOpen, onOpenModal }) => {
     try {
       const response = await create(data);
       onOpenModal(false);
-      toast.success(response.message);
+      toast.success(response.message || "Meja berhasil dibuat");
     } catch (error) {
       if (error?.validationErrors) {
         Object.entries(error.validationErrors).forEach(([field, message]) => {
@@ -34,12 +33,12 @@ const DiningTableModalCreate = memo(({ isOpen, onOpenModal }) => {
         return;
       }
 
-      toast.error(error?.message || "Failed to create dining table");
+      toast.error(error?.message || "Gagal membuat meja makan");
     }
   };
 
   return (
-    <DashboardModalForm isOpen={isOpen} onOpenModal={onOpenModal} loading={loading} handleSubmit={handleSubmit} onSubmitForm={handleSubmitForm}>
+    <DashboardModalForm isOpen={isOpen} onOpenModal={onOpenModal} loading={loading} handleSubmit={handleSubmit} onSubmitForm={handleSubmitForm} title="Tambah Meja Makan">
       <FieldSet>
         <FieldGroup>
           <Field>
@@ -51,5 +50,5 @@ const DiningTableModalCreate = memo(({ isOpen, onOpenModal }) => {
       </FieldSet>
     </DashboardModalForm>
   );
-});
+};
 export default DiningTableModalCreate;

@@ -6,7 +6,7 @@ import { Label } from "@/Components/Elements/Shadcn/label";
 import { Separator } from "@/Components/Elements/Shadcn/separator";
 
 const FieldSet = memo(({ className, ...props }) => {
-  return <fieldset data-slot="field-set" className={cn("gap-6 has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3 flex flex-col", className)} {...props} />;
+  return <fieldset data-slot="field-set" className={cn("gap-6 has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3 flex flex-col p-2", className)} {...props} />;
 });
 
 const FieldLegend = memo(({ className, variant = "legend", ...props }) => {

@@ -37,9 +37,9 @@ const DEFAULT_CATEGORY_ID_OPTIONS = [{ label: "Semua", value: "" }];
 const MenuPage = memo(() => {
   const { menus, loadMenus, loading, errorMessage, pagination, categories } = useAllMenu();
   const { filters, updateFilters, resetFilters } = useFilterParams();
-  const [selectedEditProduct, setSelectedEditProduct] = useState(null);
-  const [selectedDeleteProduct, setSelectedDeleteProduct] = useState(null);
-  const [selectedAddProduct, setSelectedAddProduct] = useState(false);
+  const [selectedEditMenu, setSelectedEditMenu] = useState(null);
+  const [selectedDeleteMenu, setSelectedDeleteMenu] = useState(null);
+  const [selectedAddMenu, setSelectedAddMenu] = useState(false);
 
   const search = filters.search || "";
   const [optimisticSearch, setOptimisticSearch] = useState(search);
@@ -114,16 +114,16 @@ const MenuPage = memo(() => {
     resetFilters();
   }, [resetFilters]);
 
-  const handleOpenDeleteModal = useCallback((productSelected) => {
-    setSelectedDeleteProduct(productSelected);
+  const handleOpenDeleteModal = useCallback((menuSelected) => {
+    setSelectedDeleteMenu(menuSelected);
   }, []);
 
-  const handleOpenEditModal = useCallback((productSelected) => {
-    setSelectedEditProduct(productSelected);
+  const handleOpenEditModal = useCallback((menuSelected) => {
+    setSelectedEditMenu(menuSelected);
   }, []);
 
   const handleOpenCreateModal = useCallback((state) => {
-    setSelectedAddProduct(state);
+    setSelectedAddMenu(state);
   }, []);
 
   return (
@@ -146,9 +146,9 @@ const MenuPage = memo(() => {
 
       <DashboardPagination pagination={pagination} onPageChange={handlePageChange} />
 
-      {selectedDeleteProduct && <MenuModalDelete selectedProduct={selectedDeleteProduct} onOpenModal={handleOpenDeleteModal} />}
-      {selectedEditProduct && <MenuModalEdit selectedProduct={selectedEditProduct} onOpenModal={handleOpenEditModal} />}
-      {selectedAddProduct && <MenuModalCreate isOpen={selectedAddProduct} onOpenModal={handleOpenCreateModal} />}
+      {selectedDeleteMenu && <MenuModalDelete selectedMenu={selectedDeleteMenu} onOpenModal={handleOpenDeleteModal} />}
+      {selectedEditMenu && <MenuModalEdit selectedMenu={selectedEditMenu} onOpenModal={handleOpenEditModal} />}
+      {selectedAddMenu && <MenuModalCreate isOpen={selectedAddMenu} onOpenModal={handleOpenCreateModal} />}
     </div>
   );
 });

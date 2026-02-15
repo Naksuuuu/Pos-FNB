@@ -12,7 +12,7 @@ const CategoryModalDelete = ({ selectedCategory, onOpenModal }) => {
       onOpenModal(null);
       toast.success(`Category ${selectedCategory?.name} berhasil dihapus`);
     } catch (error) {
-      toast.error(error?.message || "Failed to delete category");
+      toast.error(error?.message || "Gagal menghapus kategori");
     }
   };
 

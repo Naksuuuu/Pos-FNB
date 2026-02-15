@@ -9,13 +9,13 @@ import { EditMenuSchema } from "@/Schema/Menu/MenuSchema";
 import useEditMenu from "@/Hooks/Menu/useEditMenu";
 
 import { Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/Components/Elements/Shadcn/field";
+import { Switch } from "@/Components/Elements/Shadcn/switch";
 import { Input } from "@/Components/Elements/Shadcn/input";
 import { Textarea } from "@/Components/Elements/Shadcn/textarea";
 import DashboardModalForm from "@/Components/Fragments/Dashboard/Common/Modal/DashboardModalForm";
 import DashboardSelectFilter from "@/Components/Fragments/Dashboard/Common/DashboardSelectFilter";
-import { Switch } from "@/Components/Elements/Shadcn/switch";
 
-const MenuModalEdit = ({ selectedProduct, onOpenModal }) => {
+const MenuModalEdit = ({ selectedMenu, onOpenModal }) => {
   const [imagePreview, setImagePreview] = useState(null);
   const { edit, loading, categoryOptions } = useEditMenu();
 
@@ -28,20 +28,20 @@ const MenuModalEdit = ({ selectedProduct, onOpenModal }) => {
   } = useForm({
     resolver: zodResolver(EditMenuSchema),
     defaultValues: {
-      name: selectedProduct.name,
-      price: String(selectedProduct.price),
-      stock: String(selectedProduct.stock),
-      description: selectedProduct.description,
-      category_id: String(selectedProduct.category_id),
-      is_available: selectedProduct.is_available,
+      name: selectedMenu.name,
+      price: String(selectedMenu.price),
+      stock: String(selectedMenu.stock),
+      description: selectedMenu.description,
+      category_id: String(selectedMenu.category_id),
+      is_available: selectedMenu.is_available,
     },
   });
 
   const handleSubmitForm = async (data) => {
     try {
-      const response = await edit(selectedProduct.id, data);
+      const response = await edit(selectedMenu.id, data);
       onOpenModal(null);
-      toast.success(response.message || "Menu updated successfully");
+      toast.success(response.message || "Menu berhasil diperbarui");
     } catch (error) {
       if (error?.validationErrors) {
         Object.entries(error.validationErrors).forEach(([field, message]) => {
@@ -50,7 +50,7 @@ const MenuModalEdit = ({ selectedProduct, onOpenModal }) => {
         return;
       }
 
-      toast.error(error?.message || "Failed to update menu");
+      toast.error(error?.message || "Gagal memperbarui menu");
     }
   };
 
@@ -62,17 +62,17 @@ const MenuModalEdit = ({ selectedProduct, onOpenModal }) => {
   }, []);
 
   return (
-    <DashboardModalForm isOpen={!!selectedProduct} onOpenModal={onOpenModal} loading={loading} handleSubmit={handleSubmit} onSubmitForm={handleSubmitForm}>
-      <FieldSet className="px-2">
+    <DashboardModalForm isOpen={!!selectedMenu} onOpenModal={onOpenModal} loading={loading} handleSubmit={handleSubmit} onSubmitForm={handleSubmitForm} title={`Edit Menu ${selectedMenu?.name}`}>
+      <FieldSet>
         <FieldGroup>
           <div className="w-full ">
-            <img src={selectedProduct.image_url} alt={selectedProduct.name} className="object-cover w-full mx-auto rounded-md aspect-video" />
+            <img src={selectedMenu.image_url} alt={selectedMenu.name} className="object-cover w-full mx-auto rounded-md aspect-video" />
           </div>
           <Field>
             <FieldLabel htmlFor="image">Foto Baru</FieldLabel>
             {imagePreview && (
               <div className="w-full ">
-                <img src={imagePreview} alt={selectedProduct.name} className="object-cover w-full mx-auto rounded-md aspect-video" />
+                <img src={imagePreview} alt={selectedMenu.name} className="object-cover w-full mx-auto rounded-md aspect-video" />
               </div>
             )}
 
@@ -141,6 +141,7 @@ const MenuModalEdit = ({ selectedProduct, onOpenModal }) => {
             <FieldContent>
               <FieldLabel htmlFor="is_available">Status Ketersediaan</FieldLabel>
               <FieldDescription>Atur apakah menu ini tersedia untuk pelanggan.</FieldDescription>
+              {errors.is_available && <FieldError>{errors.is_available.message}</FieldError>}
             </FieldContent>
             <Controller
               name="is_available"
@@ -150,7 +151,6 @@ const MenuModalEdit = ({ selectedProduct, onOpenModal }) => {
               }}
             />
           </Field>
-          {errors.is_available && <FieldError>{errors.is_available.message}</FieldError>}
         </FieldGroup>
       </FieldSet>
     </DashboardModalForm>

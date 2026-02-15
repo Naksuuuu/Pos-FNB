@@ -1,4 +1,3 @@
-import { memo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -10,7 +9,7 @@ import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/Component
 import DashboardModalForm from "@/Components/Fragments/Dashboard/Common/Modal/DashboardModalForm";
 import DashboardSelectFilter from "@/Components/Fragments/Dashboard/Common/DashboardSelectFilter";
 
-const DiningTableModalEdit = memo(({ selectedDiningTable, onOpenModal }) => {
+const DiningTableModalEdit = ({ selectedDiningTable, onOpenModal }) => {
   const { edit, loading, statusOptions } = useEditDiningTable();
   const {
     handleSubmit,
@@ -28,7 +27,7 @@ const DiningTableModalEdit = memo(({ selectedDiningTable, onOpenModal }) => {
     try {
       const response = await edit(selectedDiningTable.id, data);
       onOpenModal(false);
-      toast.success(response.message);
+      toast.success(response.message || "Meja berhasil diperbarui");
     } catch (error) {
       if (error?.validationErrors) {
         Object.entries(error.validationErrors).forEach(([field, message]) => {
@@ -37,15 +36,21 @@ const DiningTableModalEdit = memo(({ selectedDiningTable, onOpenModal }) => {
         return;
       }
 
-      toast.error(error?.message || "Failed to edit dining table");
+      toast.error(error?.message || "Gagal memperbarui meja makan");
     }
   };
 
   return (
-    <DashboardModalForm isOpen={!!selectedDiningTable} onOpenModal={onOpenModal} loading={loading} handleSubmit={handleSubmit} onSubmitForm={handleSubmitForm}>
+    <DashboardModalForm
+      isOpen={!!selectedDiningTable}
+      onOpenModal={onOpenModal}
+      loading={loading}
+      handleSubmit={handleSubmit}
+      onSubmitForm={handleSubmitForm}
+      title={`Edit Meja ${selectedDiningTable?.code}`}
+    >
       <FieldSet>
         <FieldGroup>
-          <div>{selectedDiningTable.code}</div>
           <Field>
             <FieldLabel htmlFor="status">Status</FieldLabel>
             <Controller
@@ -70,5 +75,5 @@ const DiningTableModalEdit = memo(({ selectedDiningTable, onOpenModal }) => {
       </FieldSet>
     </DashboardModalForm>
   );
-});
+};
 export default DiningTableModalEdit;

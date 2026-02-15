@@ -1,15 +1,14 @@
 import { Button } from "@/Components/Elements/Shadcn/button";
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/Components/Elements/Shadcn/dialog";
+import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/Components/Elements/Shadcn/dialog";
 import { Spinner } from "@/Components/Elements/Shadcn/spinner";
 
-const ModalForm = ({ isOpen, onOpenModal, children, loading, handleSubmit, onSubmitForm }) => {
+const ModalForm = ({ isOpen, onOpenModal, title, loading, handleSubmit, onSubmitForm, children }) => {
   return (
     <Dialog open={isOpen} onOpenChange={() => onOpenModal(false)}>
       <DialogContent showCloseButton={false}>
         <form onSubmit={handleSubmit(onSubmitForm)} className="flex flex-col gap-4">
           <DialogHeader>
-            <DialogTitle>Tambah Menu</DialogTitle>
-            <DialogDescription>Tambah Menu Baru</DialogDescription>
+            <DialogTitle>{title}</DialogTitle>
           </DialogHeader>
 
           <div className="no-scrollbar max-h-[50vh] overflow-y-auto">{children}</div>

@@ -1,4 +1,4 @@
-import { memo, useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -14,7 +14,7 @@ import DashboardModalForm from "@/Components/Fragments/Dashboard/Common/Modal/Da
 import DashboardSelectFilter from "@/Components/Fragments/Dashboard/Common/DashboardSelectFilter";
 import { Switch } from "@/Components/Elements/Shadcn/switch";
 
-const MenuModalCreate = memo(({ isOpen, onOpenModal }) => {
+const MenuModalCreate = ({ isOpen, onOpenModal }) => {
   const { create, loading, categoryOptions } = useCreateMenu();
   const [imagePreview, setImagePreview] = useState(null);
 
@@ -32,7 +32,7 @@ const MenuModalCreate = memo(({ isOpen, onOpenModal }) => {
     try {
       const response = await create(data);
       onOpenModal(false);
-      toast.success(response.message);
+      toast.success(response.message || "Menu berhasil dibuat");
     } catch (error) {
       if (error?.validationErrors) {
         Object.entries(error.validationErrors).forEach(([field, message]) => {
@@ -41,7 +41,7 @@ const MenuModalCreate = memo(({ isOpen, onOpenModal }) => {
         return;
       }
 
-      toast.error(error?.message || "Failed to create menu");
+      toast.error(error?.message || "Gagal membuat menu");
     }
   };
 
@@ -53,8 +53,8 @@ const MenuModalCreate = memo(({ isOpen, onOpenModal }) => {
   }, []);
 
   return (
-    <DashboardModalForm isOpen={isOpen} onOpenModal={onOpenModal} loading={loading} handleSubmit={handleSubmit} onSubmitForm={handleSubmitForm}>
-      <FieldSet className="px-2">
+    <DashboardModalForm isOpen={isOpen} onOpenModal={onOpenModal} loading={loading} handleSubmit={handleSubmit} onSubmitForm={handleSubmitForm} title="Tambah Menu">
+      <FieldSet>
         <FieldGroup>
           <Field>
             <FieldLabel htmlFor="image">Foto</FieldLabel>
@@ -129,6 +129,7 @@ const MenuModalCreate = memo(({ isOpen, onOpenModal }) => {
             <FieldContent>
               <FieldLabel htmlFor="is_available">Status Ketersediaan</FieldLabel>
               <FieldDescription>Atur apakah menu ini tersedia untuk pelanggan.</FieldDescription>
+              {errors.is_available && <FieldError>{errors.is_available.message}</FieldError>}
             </FieldContent>
             <Controller
               name="is_available"
@@ -137,11 +138,10 @@ const MenuModalCreate = memo(({ isOpen, onOpenModal }) => {
                 return <Switch id="is_available" name="is_available" checked={field.value} onCheckedChange={field.onChange} aria-invalid={errors.is_available ? "true" : "false"} />;
               }}
             />
-            {errors.is_available && <FieldError>{errors.is_available.message}</FieldError>}
           </Field>
         </FieldGroup>
       </FieldSet>
     </DashboardModalForm>
   );
-});
+};
 export default MenuModalCreate;

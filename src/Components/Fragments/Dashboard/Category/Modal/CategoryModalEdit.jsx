@@ -28,7 +28,7 @@ const CategoryModalEdit = ({ selectedCategory, onOpenModal }) => {
     try {
       const response = await edit(selectedCategory.id, data);
       onOpenModal(null);
-      toast.success(response.message || "Kategori updated successfully");
+      toast.success(response.message || "Kategori berhasil diperbarui");
     } catch (error) {
       if (error?.validationErrors) {
         Object.entries(error.validationErrors).forEach(([field, message]) => {
@@ -37,12 +37,19 @@ const CategoryModalEdit = ({ selectedCategory, onOpenModal }) => {
         return;
       }
 
-      toast.error(error?.message || "Failed to update kategori");
+      toast.error(error?.message || "Gagal memperbarui kategori");
     }
   };
 
   return (
-    <DashboardModalForm isOpen={!!selectedCategory} onOpenModal={onOpenModal} loading={loading} handleSubmit={handleSubmit} onSubmitForm={handleSubmitForm}>
+    <DashboardModalForm
+      isOpen={!!selectedCategory}
+      onOpenModal={onOpenModal}
+      loading={loading}
+      handleSubmit={handleSubmit}
+      onSubmitForm={handleSubmitForm}
+      title={`Edit Kategori ${selectedCategory?.name}`}
+    >
       <FieldSet>
         <FieldGroup>
           <Field>
