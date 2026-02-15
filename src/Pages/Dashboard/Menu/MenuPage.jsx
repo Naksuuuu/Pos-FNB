@@ -1,6 +1,6 @@
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
-import useAllMenu from "@/Hooks/Menu/useAllMenu";
+import useAllMenu from "@/Hooks/Dashboard/Menu/useAllMenu";
 import useFilterParams from "@/Hooks/Common/useFilterParams";
 
 import { Button } from "@/Components/Elements/Shadcn/button";

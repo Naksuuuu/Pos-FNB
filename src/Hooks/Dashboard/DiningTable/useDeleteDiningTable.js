@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteDiningTable, fetchDiningTables } from "@/Redux/Features/DiningTable/DiningTableSlice";
-import { selectDiningTableDeleteLoading } from "@/Redux/Features/DiningTable/DiningTableSelector";
+import { deleteDiningTable, fetchDiningTables } from "@/Redux/Features/Dashboard/DiningTable/DiningTableSlice";
+import { selectDiningTableDeleteLoading } from "@/Redux/Features/Dashboard/DiningTable/DiningTableSelector";
 
 const useDeleteDiningTable = () => {
   const dispatch = useDispatch();

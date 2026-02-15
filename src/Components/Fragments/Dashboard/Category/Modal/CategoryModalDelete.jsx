@@ -1,4 +1,4 @@
-import useDeleteCategory from "@/Hooks/Category/useDeleteCategory";
+import useDeleteCategory from "@/Hooks/Dashboard/Category/useDeleteCategory";
 import { toast } from "sonner";
 
 import DashboardModalConfirmation from "@/Components/Fragments/Dashboard/Common/Modal/DashboardModalConfirmation";

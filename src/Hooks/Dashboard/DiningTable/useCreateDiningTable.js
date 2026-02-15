@@ -1,7 +1,7 @@
 import { useCallback } from "react";
-import { createDiningTable, fetchDiningTables } from "@/Redux/Features/DiningTable/DiningTableSlice";
+import { createDiningTable, fetchDiningTables } from "@/Redux/Features/Dashboard/DiningTable/DiningTableSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { selectDiningTableCreateLoading } from "@/Redux/Features/DiningTable/DiningTableSelector";
+import { selectDiningTableCreateLoading } from "@/Redux/Features/Dashboard/DiningTable/DiningTableSelector";
 
 const useCreateDiningTable = () => {
   const dispatch = useDispatch();

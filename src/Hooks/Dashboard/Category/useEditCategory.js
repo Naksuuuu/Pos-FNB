@@ -1,5 +1,5 @@
-import { selectCategoryEditLoading } from "@/Redux/Features/Category/CategorySelector";
-import { editCategory, fetchCategories } from "@/Redux/Features/Category/CategorySlice";
+import { selectCategoryEditLoading } from "@/Redux/Features/Dashboard/Category/CategorySelector";
+import { editCategory, fetchCategories } from "@/Redux/Features/Dashboard/Category/CategorySlice";
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 

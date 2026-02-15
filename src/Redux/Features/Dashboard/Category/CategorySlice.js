@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import * as CategoryService from "../../../Services/Category/CategoryService";
+import * as CategoryService from "@/Services/Dashboard/Category/CategoryService";
 
 const initialState = {
   categories: [],

@@ -1,6 +1,6 @@
 import { toast } from "sonner";
 
-import useDeleteDiningTable from "@/Hooks/DiningTable/useDeleteDiningTable";
+import useDeleteDiningTable from "@/Hooks/Dashboard/DiningTable/useDeleteDiningTable";
 
 import DashboardModalConfirmation from "@/Components/Fragments/Dashboard/Common/Modal/DashboardModalConfirmation";
 

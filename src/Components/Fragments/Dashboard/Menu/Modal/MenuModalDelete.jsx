@@ -1,4 +1,4 @@
-import useDeleteMenu from "@/Hooks/Menu/useDeleteMenu";
+import useDeleteMenu from "@/Hooks/Dashboard/Menu/useDeleteMenu";
 import { toast } from "sonner";
 
 import DashboardModalConfirmation from "@/Components/Fragments/Dashboard/Common/Modal/DashboardModalConfirmation";

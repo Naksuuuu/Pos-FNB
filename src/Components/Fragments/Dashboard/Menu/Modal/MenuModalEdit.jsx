@@ -6,7 +6,7 @@ import { toast } from "sonner";
 
 import { EditMenuSchema } from "@/Schema/Menu/MenuSchema";
 
-import useEditMenu from "@/Hooks/Menu/useEditMenu";
+import useEditMenu from "@/Hooks/Dashboard/Menu/useEditMenu";
 
 import { Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/Components/Elements/Shadcn/field";
 import { Switch } from "@/Components/Elements/Shadcn/switch";

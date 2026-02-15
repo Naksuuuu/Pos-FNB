@@ -1,4 +1,4 @@
-import { apiUtils } from "../Common/Base";
+import { apiUtils } from "@/Services/Common/Base";
 
 const CATEGORY_ENDPOINT = "/categories";
 

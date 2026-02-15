@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchCategories } from "@/Redux/Features/Category/CategorySlice";
-import { selectAllCategories, selectCategoryError, selectCategoryLoading } from "@/Redux/Features/Category/CategorySelector";
+import { fetchCategories } from "@/Redux/Features/Dashboard/Category/CategorySlice";
+import { selectAllCategories, selectCategoryError, selectCategoryLoading } from "@/Redux/Features/Dashboard/Category/CategorySelector";
 
 const useAllCategory = () => {
   const dispatch = useDispatch();

@@ -1,9 +1,8 @@
-import { memo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 
-import useCreateCategory from "@/Hooks/Category/useCreateCategory";
+import useCreateCategory from "@/Hooks/Dashboard/Category/useCreateCategory";
 
 import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/Components/Elements/Shadcn/field";
 import { Input } from "@/Components/Elements/Shadcn/input";

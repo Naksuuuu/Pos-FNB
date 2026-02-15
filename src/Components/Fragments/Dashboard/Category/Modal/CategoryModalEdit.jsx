@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 
 import { EditCategorySchema } from "@/Schema/Category/CategorySchema";
-import useEditCategory from "@/Hooks/Category/useEditCategory";
+import useEditCategory from "@/Hooks/Dashboard/Category/useEditCategory";
 
 import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/Components/Elements/Shadcn/field";
 import { Input } from "@/Components/Elements/Shadcn/input";

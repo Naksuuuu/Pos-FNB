@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import useAllCategory from "@/Hooks/Category/useAllCategory";
+import useAllCategory from "@/Hooks/Dashboard/Category/useAllCategory";
 import useFilterParams from "@/Hooks/Common/useFilterParams";
 
 import CategoryTable from "@/Components/Fragments/Dashboard/Category/Table/CategoryTable";

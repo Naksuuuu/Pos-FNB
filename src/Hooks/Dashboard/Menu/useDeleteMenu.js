@@ -1,8 +1,8 @@
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { deleteMenu, fetchMenus } from "@/Redux/Features/Menu/MenuSlice";
-import { selectMenuDeleteLoading } from "@/Redux/Features/Menu/MenuSelector";
+import { deleteMenu, fetchMenus } from "@/Redux/Features/Dashboard/Menu/MenuSlice";
+import { selectMenuDeleteLoading } from "@/Redux/Features/Dashboard/Menu/MenuSelector";
 
 const useDeleteMenu = () => {
   const dispatch = useDispatch();

@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { Upload } from "lucide-react";
 
 import { CreateMenuSchema } from "@/Schema/Menu/MenuSchema";
-import useCreateMenu from "@/Hooks/Menu/useCreateMenu";
+import useCreateMenu from "@/Hooks/Dashboard/Menu/useCreateMenu";
 
 import { Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/Components/Elements/Shadcn/field";
 import { Input } from "@/Components/Elements/Shadcn/input";

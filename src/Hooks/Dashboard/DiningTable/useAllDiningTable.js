@@ -1,5 +1,5 @@
-import { selectAllDiningTables, selectDiningTableError, selectDiningTableLoading } from "@/Redux/Features/DiningTable/DiningTableSelector";
-import { fetchDiningTables } from "@/Redux/Features/DiningTable/DiningTableSlice";
+import { selectAllDiningTables, selectDiningTableError, selectDiningTableLoading } from "@/Redux/Features/Dashboard/DiningTable/DiningTableSelector";
+import { fetchDiningTables } from "@/Redux/Features/Dashboard/DiningTable/DiningTableSlice";
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 

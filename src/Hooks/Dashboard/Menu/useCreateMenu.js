@@ -1,9 +1,9 @@
 import { useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { createMenu, fetchMenus } from "@/Redux/Features/Menu/MenuSlice";
-import { selectMenuCreateLoading, selectMenuPagination } from "@/Redux/Features/Menu/MenuSelector";
-import { selectAllCategories } from "@/Redux/Features/Category/CategorySelector";
+import { createMenu, fetchMenus } from "@/Redux/Features/Dashboard/Menu/MenuSlice";
+import { selectMenuCreateLoading, selectMenuPagination } from "@/Redux/Features/Dashboard/Menu/MenuSelector";
+import { selectAllCategories } from "@/Redux/Features/Dashboard/Category/CategorySelector";
 
 const useCreateMenu = () => {
   const dispatch = useDispatch();

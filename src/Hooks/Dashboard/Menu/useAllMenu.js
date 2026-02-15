@@ -1,10 +1,10 @@
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { selectAllMenus, selectMenuError, selectMenuLoading, selectMenuPagination } from "@/Redux/Features/Menu/MenuSelector";
-import { fetchMenus } from "@/Redux/Features/Menu/MenuSlice";
-import { selectAllCategories } from "@/Redux/Features/Category/CategorySelector";
-import { fetchCategories } from "@/Redux/Features/Category/CategorySlice";
+import { selectAllMenus, selectMenuError, selectMenuLoading, selectMenuPagination } from "@/Redux/Features/Dashboard/Menu/MenuSelector";
+import { fetchMenus } from "@/Redux/Features/Dashboard/Menu/MenuSlice";
+import { selectAllCategories } from "@/Redux/Features/Dashboard/Category/CategorySelector";
+import { fetchCategories } from "@/Redux/Features/Dashboard/Category/CategorySlice";
 
 const useAllMenu = () => {
   const dispatch = useDispatch();

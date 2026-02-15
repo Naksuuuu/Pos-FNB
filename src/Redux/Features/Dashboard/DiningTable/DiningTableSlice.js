@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import * as DiningTableService from "../../../Services/DiningTable/DiningTableService";
+import * as DiningTableService from "@/Services/Dashboard/DiningTable/DiningTableService";
 
 const initialState = {
   diningTables: [],

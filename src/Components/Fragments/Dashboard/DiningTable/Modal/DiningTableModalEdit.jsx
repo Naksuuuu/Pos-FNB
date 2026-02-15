@@ -2,7 +2,7 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 
-import useEditDiningTable from "@/Hooks/DiningTable/useEditDiningTable";
+import useEditDiningTable from "@/Hooks/Dashboard/DiningTable/useEditDiningTable";
 import { editDiningTableSchema } from "@/Schema/DiningTable/DiningTableSchema";
 
 import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/Components/Elements/Shadcn/field";

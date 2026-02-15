@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import useAllDiningTable from "@/Hooks/DiningTable/useAllDiningTable";
+import useAllDiningTable from "@/Hooks/Dashboard/DiningTable/useAllDiningTable";
 import useFilterParams from "@/Hooks/Common/useFilterParams";
 
 import { Button } from "@/Components/Elements/Shadcn/button";
