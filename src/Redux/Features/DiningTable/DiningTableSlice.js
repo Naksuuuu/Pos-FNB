@@ -5,6 +5,9 @@ const initialState = {
   diningTables: [],
   loading: false,
   error: null,
+  loadingCreate: false,
+  loadingEdit: false,
+  loadingDelete: false,
 };
 
 export const fetchDiningTables = createAsyncThunk("diningTable/fetchDiningTables", async (_, { rejectWithValue }) => {
@@ -18,6 +21,29 @@ export const fetchDiningTables = createAsyncThunk("diningTable/fetchDiningTables
   } catch (error) {
     return rejectWithValue({
       message: error?.message || "Failed to fetch dining tables",
+    });
+  }
+});
+
+export const createDiningTable = createAsyncThunk("diningTable/createDiningTable", async (tableData, { rejectWithValue }) => {
+  try {
+    const response = await DiningTableService.createDiningTable(tableData);
+    if (response.success && response.status === 201) {
+      return response;
+    }
+    return rejectWithValue(response.message || "Failed to create dining table");
+  } catch (error) {
+    if (error.isValidationError) {
+      return rejectWithValue({
+        message: error?.message || "Failed to create dining table",
+        validationErrors: error?.validationErrors,
+        allErrors: error?.allErrors || [],
+        status: error?.status || 400,
+      });
+    }
+
+    return rejectWithValue({
+      message: error?.message || "Failed to create dining table",
     });
   }
 });
@@ -39,6 +65,15 @@ const diningTableSlice = createSlice({
       .addCase(fetchDiningTables.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload?.message || "Failed to fetch dining tables";
+      })
+      .addCase(createDiningTable.pending, (state) => {
+        state.loadingCreate = true;
+      })
+      .addCase(createDiningTable.fulfilled, (state) => {
+        state.loadingCreate = false;
+      })
+      .addCase(createDiningTable.rejected, (state) => {
+        state.loadingCreate = false;
       });
   },
 });
