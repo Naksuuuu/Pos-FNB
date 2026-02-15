@@ -2,8 +2,14 @@ import { apiUtils } from "../Common/Base";
 
 const DINING_TABLE_ENDPOINT = "/tables";
 
-export const getAllDiningTables = async () => {
-  const response = await apiUtils.get(DINING_TABLE_ENDPOINT);
+export const getAllDiningTables = async (params) => {
+  const { search } = params;
+
+  const queryParams = {
+    code: search,
+  };
+
+  const response = await apiUtils.get(DINING_TABLE_ENDPOINT, { params: queryParams });
   return response.data;
 };
 

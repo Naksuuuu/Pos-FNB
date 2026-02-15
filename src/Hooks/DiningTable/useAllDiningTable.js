@@ -9,9 +9,12 @@ const useAllDiningTable = () => {
   const loading = useSelector(selectDiningTableLoading);
   const errorMessage = useSelector(selectDiningTableError);
 
-  const loadDiningTables = useCallback(async () => {
-    await dispatch(fetchDiningTables());
-  }, [dispatch]);
+  const loadDiningTables = useCallback(
+    async (params) => {
+      await dispatch(fetchDiningTables(params));
+    },
+    [dispatch],
+  );
 
   return { diningTables, loadDiningTables, loading, errorMessage };
 };

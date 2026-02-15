@@ -10,9 +10,9 @@ const initialState = {
   loadingDelete: false,
 };
 
-export const fetchDiningTables = createAsyncThunk("diningTable/fetchDiningTables", async (_, { rejectWithValue }) => {
+export const fetchDiningTables = createAsyncThunk("diningTable/fetchDiningTables", async (params, { rejectWithValue }) => {
   try {
-    const response = await DiningTableService.getAllDiningTables();
+    const response = await DiningTableService.getAllDiningTables(params);
     if (!response.success) {
       return rejectWithValue(response.message || "Failed to fetch dining tables");
     }
