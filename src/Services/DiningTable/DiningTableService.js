@@ -16,3 +16,8 @@ export const editDiningTable = async (tableId, tableData) => {
   const response = await apiUtils.put(`${DINING_TABLE_ENDPOINT}/${tableId}`, tableData);
   return response.data;
 };
+
+export const deleteDiningTable = async (tableId) => {
+  const response = await apiUtils.delete(`${DINING_TABLE_ENDPOINT}/${tableId}`);
+  return response.data;
+};

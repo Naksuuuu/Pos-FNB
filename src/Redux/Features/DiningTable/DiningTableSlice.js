@@ -69,6 +69,20 @@ export const editDiningTable = createAsyncThunk("diningTable/editDiningTable", a
   }
 });
 
+export const deleteDiningTable = createAsyncThunk("diningTable/deleteDiningTable", async (tableId, { rejectWithValue }) => {
+  try {
+    const response = await DiningTableService.deleteDiningTable(tableId);
+    if (response.success && response.status === 200) {
+      return response;
+    }
+    return rejectWithValue(response.message || "Failed to delete dining table");
+  } catch (error) {
+    return rejectWithValue({
+      message: error?.message || "Failed to delete dining table",
+    });
+  }
+});
+
 const diningTableSlice = createSlice({
   name: "diningTable",
   initialState,
