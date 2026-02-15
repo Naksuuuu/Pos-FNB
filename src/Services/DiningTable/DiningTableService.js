@@ -11,3 +11,8 @@ export const createDiningTable = async (tableData) => {
   const response = await apiUtils.post(DINING_TABLE_ENDPOINT, tableData);
   return response.data;
 };
+
+export const editDiningTable = async (tableId, tableData) => {
+  const response = await apiUtils.put(`${DINING_TABLE_ENDPOINT}/${tableId}`, tableData);
+  return response.data;
+};

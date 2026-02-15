@@ -10,4 +10,8 @@ const CreateDiningTableSchema = z.object({
   code,
 });
 
-export { CreateDiningTableSchema };
+const editDiningTableSchema = z.object({
+  status,
+});
+
+export { CreateDiningTableSchema, editDiningTableSchema };

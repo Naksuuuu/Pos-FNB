@@ -48,6 +48,27 @@ export const createDiningTable = createAsyncThunk("diningTable/createDiningTable
   }
 });
 
+export const editDiningTable = createAsyncThunk("diningTable/editDiningTable", async ([tableId, tableData], { rejectWithValue }) => {
+  try {
+    const response = await DiningTableService.editDiningTable(tableId, tableData);
+    if (response.success && response.status === 200) {
+      return response;
+    }
+  } catch (error) {
+    if (error.isValidationError) {
+      return rejectWithValue({
+        message: error?.message || "Failed to edit dining table",
+        validationErrors: error?.validationErrors,
+        allErrors: error?.allErrors || [],
+        status: error?.status || 422,
+      });
+    }
+    return rejectWithValue({
+      message: error?.message || "Failed to edit dining table",
+    });
+  }
+});
+
 const diningTableSlice = createSlice({
   name: "diningTable",
   initialState,
