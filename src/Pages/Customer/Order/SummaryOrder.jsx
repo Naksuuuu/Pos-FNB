@@ -1,6 +1,7 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { ArrowLeft, Minus, Pen, Plus } from "lucide-react";
+import { useForm } from "react-hook-form";
 
 import { rupiah } from "@/Utils/rupiahHelper";
 
@@ -12,13 +13,49 @@ import { Input } from "@/Components/Elements/Shadcn/input";
 
 const SummaryOrder = () => {
   const navigate = useNavigate();
-  const { orderItems, totalPrice, chekout } = useAllOrder();
+  const { orderItems, totalPrice, checkout } = useAllOrder();
+  const [serverErrors, setServerErrors] = useState([]);
+
+  const {
+    register,
+    handleSubmit,
+    setError,
+    clearErrors,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    defaultValues: { customer_name: "" },
+  });
 
   const handleCheckout = useCallback(
-    (orderData) => {
-      chekout(orderData);
+    async (values) => {
+      if (orderItems.length === 0) {
+        setError("items", { type: "manual", message: "Belum ada pesanan." });
+        return;
+      }
+
+      clearErrors();
+      setServerErrors([]);
+
+      try {
+        await checkout({ customerName: values.customer_name, items: orderItems });
+        navigate("/payment");
+      } catch (error) {
+        console.error("Checkout gagal", error);
+
+        if (error?.validationErrors) {
+          const validationList = Object.values(error.validationErrors);
+          setServerErrors(validationList);
+
+          Object.entries(error.validationErrors).forEach(([field, message]) => {
+            setError(field, { type: "server", message: message || "Tidak valid" });
+          });
+          return;
+        }
+
+        setServerErrors([error?.message || "Checkout gagal, silakan coba lagi."]);
+      }
     },
-    [chekout],
+    [checkout, clearErrors, navigate, orderItems, setError],
   );
 
   return (
@@ -71,14 +108,25 @@ const SummaryOrder = () => {
             <FieldGroup>
               <Field>
                 <FieldLabel htmlFor="customer_name">Nama</FieldLabel>
-                <Input id="customer_name" name="customer_name" autoComplete="off" aria-invalid={false} />
+                <Input id="customer_name" autoComplete="off" aria-invalid={Boolean(errors.customer_name)} {...register("customer_name", { required: "Nama pelanggan wajib diisi" })} />
+                {errors.customer_name?.message && <p className="text-xs text-destructive mt-1">{errors.customer_name.message}</p>}
               </Field>
             </FieldGroup>
           </FieldSet>
         </Field>
       </div>
 
-      <ActionCard onActionClick={() => handleCheckout(orderItems)} actionTitle="Lanjut ke Pembayaran">
+      {serverErrors.length > 0 && (
+        <div className="mx-3 rounded-md border border-destructive/40 bg-destructive/5 p-3 text-sm text-destructive">
+          <ul className="list-disc list-inside space-y-1">
+            {serverErrors.map((errMsg, idx) => (
+              <li key={idx}>{errMsg}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      <ActionCard onActionClick={handleSubmit(handleCheckout)} actionTitle={isSubmitting ? "Memproses..." : "Lanjut ke Pembayaran"}>
         <p>Total Pembayaran</p>
         <div className="flex items-center gap-4">
           <h4 className="text-md font-semibold">{rupiah(totalPrice)}</h4>

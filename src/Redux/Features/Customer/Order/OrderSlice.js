@@ -16,7 +16,7 @@ export const createOrders = createAsyncThunk("order/createOrder", async (orderDa
     }
     return response;
   } catch (error) {
-    return rejectWithValue(error.message);
+    return rejectWithValue(error);
   }
 });
 
@@ -32,11 +32,12 @@ const orderSlice = createSlice({
       })
       .addCase(createOrders.fulfilled, (state, action) => {
         state.loading = false;
-        state.order = action.data;
+        state.order = action.payload?.order || action.payload || {};
+        state.totalPrice = state.order?.total_amount || 0;
       })
       .addCase(createOrders.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || "Failed to create order";
+        state.error = action.payload?.message || action.payload || "Failed to create order";
       });
   },
 });

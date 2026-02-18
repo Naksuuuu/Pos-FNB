@@ -4,6 +4,7 @@ import menuReducer from "./Features/Dashboard/Menu/MenuSlice";
 import categoryReducer from "./Features/Dashboard/Category/CategorySlice";
 import diningTableReducer from "./Features/Dashboard/DiningTable/DiningTableSlice";
 import catalogReducer from "./Features/Customer/Catalog/CatalogSlice";
+import orderReducer from "./Features/Customer/Order/OrderSlice";
 
 const dashboardReducer = combineReducers({
   menu: menuReducer,
@@ -13,6 +14,7 @@ const dashboardReducer = combineReducers({
 
 const customerReducer = combineReducers({
   catalog: catalogReducer,
+  order: orderReducer,
 });
 
 const store = configureStore({
