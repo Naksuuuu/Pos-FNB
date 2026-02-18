@@ -1,7 +1,7 @@
 import { lazy } from "react";
 import { Navigate } from "react-router";
-const ListCatalog = lazy(() => import("@/Pages/Customer/Catalog/ListCatalog"));
-const DetailCatalog = lazy(() => import("@/Pages/Customer/Catalog/DetailCatalog"));
+const CatalogPage = lazy(() => import("@/Pages/Customer/Catalog/CatalogPage"));
+const CatalogDetailPage = lazy(() => import("@/Pages/Customer/Catalog/CatalogDetailPage"));
 const SummaryOrder = lazy(() => import("@/Pages/Customer/Order/SummaryOrder"));
 
 const PublicRoute = [
@@ -10,12 +10,12 @@ const PublicRoute = [
     element: <Navigate to="/dashboard" />,
   },
   {
-    path: "/menu",
-    element: <ListCatalog />,
+    path: "/catalog",
+    element: <CatalogPage />,
   },
   {
-    path: "/menu/:catalogId",
-    element: <DetailCatalog />,
+    path: "/catalog/:catalogId",
+    element: <CatalogDetailPage />,
   },
   {
     path: "/order",

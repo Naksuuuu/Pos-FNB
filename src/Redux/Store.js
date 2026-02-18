@@ -1,13 +1,24 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
 import menuReducer from "./Features/Dashboard/Menu/MenuSlice";
 import categoryReducer from "./Features/Dashboard/Category/CategorySlice";
 import diningTableReducer from "./Features/Dashboard/DiningTable/DiningTableSlice";
+import catalogReducer from "./Features/Customer/Catalog/CatalogSlice";
+
+const dashboardReducer = combineReducers({
+  menu: menuReducer,
+  category: categoryReducer,
+  diningTable: diningTableReducer,
+});
+
+const customerReducer = combineReducers({
+  catalog: catalogReducer,
+});
+
 const store = configureStore({
   reducer: {
-    menu: menuReducer,
-    category: categoryReducer,
-    diningTable: diningTableReducer,
+    dashboard: dashboardReducer,
+    customer: customerReducer,
   },
 });
 export default store;

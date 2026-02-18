@@ -1,6 +1,6 @@
 import { createSelector } from "@reduxjs/toolkit";
 
-export const selectMenuState = (state) => state.menu || { menus: [], loading: false, error: null };
+export const selectMenuState = (state) => state.dashboard.menu || { menus: [], loading: false, error: null };
 
 export const selectAllMenus = createSelector([selectMenuState], (menuState) => menuState.menus || []);
 export const selectMenuLoading = createSelector([selectMenuState], (menuState) => menuState.loading || false);

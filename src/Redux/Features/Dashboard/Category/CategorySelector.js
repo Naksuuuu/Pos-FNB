@@ -1,6 +1,6 @@
 import { createSelector } from "@reduxjs/toolkit";
 
-export const selectCategoryState = (state) => state.category || { categories: [], loading: false, error: null };
+export const selectCategoryState = (state) => state.dashboard.category || { categories: [], loading: false, error: null };
 
 export const selectAllCategories = createSelector([selectCategoryState], (categoryState) => categoryState.categories || []);
 export const selectCategoryLoading = createSelector([selectCategoryState], (categoryState) => categoryState.loading || false);
