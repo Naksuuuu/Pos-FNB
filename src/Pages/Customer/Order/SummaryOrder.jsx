@@ -1,6 +1,6 @@
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { Link, useNavigate } from "react-router";
-import { ArrowLeft, Minus, Pen, Plus } from "lucide-react";
+import { ArrowLeft, Pen, Plus, Trash } from "lucide-react";
 import { useForm } from "react-hook-form";
 
 import { rupiah } from "@/Utils/rupiahHelper";
@@ -8,13 +8,16 @@ import { rupiah } from "@/Utils/rupiahHelper";
 import { Button } from "@/Components/Elements/Shadcn/button";
 import ActionCard from "@/Components/Fragments/Customer/Common/Card/ActionCard";
 import useAllOrder from "@/Hooks/Customer/Order/useAllOrder";
-import { FieldGroup, FieldSet, Field, FieldLabel } from "@/Components/Elements/Shadcn/field";
+import { Card, CardContent } from "@/Components/Elements/Shadcn/card";
+import { Field, FieldLabel, FieldError } from "@/Components/Elements/Shadcn/field";
 import { Input } from "@/Components/Elements/Shadcn/input";
+import { Badge } from "@/Components/Elements/Shadcn/badge";
+import CustomerNavbar from "@/Components/Fragments/Customer/Common/Navigation/CustomerNavbar";
 
 const SummaryOrder = () => {
   const navigate = useNavigate();
-  const { orderItems, totalPrice, checkout } = useAllOrder();
-  const [serverErrors, setServerErrors] = useState([]);
+  const code = "VIP2";
+  const { orderItems, totalPrice, checkout, deleteOrderItem } = useAllOrder();
 
   const {
     register,
@@ -23,7 +26,7 @@ const SummaryOrder = () => {
     clearErrors,
     formState: { errors, isSubmitting },
   } = useForm({
-    defaultValues: { customer_name: "" },
+    defaultValues: { customer_name: "", code },
   });
 
   const handleCheckout = useCallback(
@@ -34,102 +37,125 @@ const SummaryOrder = () => {
       }
 
       clearErrors();
-      setServerErrors([]);
 
       try {
-        await checkout({ customerName: values.customer_name, items: orderItems });
+        await checkout({ customerName: values.customer_name, items: orderItems, code: values.code });
         navigate("/payment");
       } catch (error) {
-        console.error("Checkout gagal", error);
-
         if (error?.validationErrors) {
-          const validationList = Object.values(error.validationErrors);
-          setServerErrors(validationList);
-
+          console.log("validationErrors", error.validationErrors);
           Object.entries(error.validationErrors).forEach(([field, message]) => {
             setError(field, { type: "server", message: message || "Tidak valid" });
           });
           return;
         }
-
-        setServerErrors([error?.message || "Checkout gagal, silakan coba lagi."]);
       }
     },
     [checkout, clearErrors, navigate, orderItems, setError],
   );
 
   return (
-    <div className="flex w-full min-h-screen flex-col gap-4">
-      <nav className="flex h-16 items-center w-full shadow-lg">
-        <div className="relative w-full h-fit flex justify-center items-center">
-          <div className="absolute left-5">
-            <Link to={"/catalog"}>
-              <ArrowLeft />
-            </Link>
-          </div>
-          <h2 className="text-lg uppercase font-semibold">Order</h2>
-        </div>
-      </nav>
+    <div className="flex flex-col min-h-screen ">
+      <CustomerNavbar navbarTitle="Pesanan" backLink="/catalog" />
 
-      <div className="px-3">
-        <div className="py-4 border-b flex justify-between items-center">
-          <h4 className="text-md font-semibold">Ringkasan Pesanan ({orderItems.length})</h4>
-          <Button variant="outline" size="sm" className="border-emerald-600 text-emerald-600 hover:bg-emerald-50">
-            <Plus className="size-3" /> <Link to={"/catalog"}>Tambah Lagi</Link>
-          </Button>
-        </div>
-        {orderItems.map((item, index) => (
-          <div key={index} className="border-b py-4 space-y-4">
-            <div className="flex justify-between items-center">
-              <h4 className="text-md font-semibold">{item.name}</h4>
-              <Button variant="outline" size="xs" className="px-3! border-emerald-600 text-emerald-600 hover:bg-emerald-50">
-                <Pen className="size-3" /> <Link to={"/catalog"}>Edit</Link>
-              </Button>
-            </div>
-            <div className="flex items-center justify-between">
-              <p className="text-sm font-semibold text-muted-foreground">{rupiah(item.price)}</p>
-              <div className="flex items-center gap-4">
-                <Button size="icon" className="rounded-full size-6" variant="outline">
-                  <Minus />
-                </Button>
-                {item.qty}
-                <Button size="icon" className="rounded-full size-6" variant="outline">
-                  <Plus />
-                </Button>
+      <div className="flex-1 pb-32">
+        <section className="px-2 pt-5 md:px-4">
+          <p className="text-xs font-semibold tracking-widest uppercase text-muted-foreground">Ringkasan Pesanan</p>
+
+          <Card className="py-0 mt-3 border-none rounded-md shadow-md">
+            <CardContent className="px-2 ">
+              <div className="flex items-center justify-between py-4 border-b">
+                <p className="font-semibold text-md">{orderItems.length} item dipilih</p>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  nativeButton={false}
+                  render={(props) => (
+                    <Link {...props} to="/catalog">
+                      <div className="flex items-center gap-2">
+                        <Plus className="size-4" />
+                        <span className="text-sm font-semibold">Tambah Lagi</span>
+                      </div>
+                    </Link>
+                  )}
+                />
               </div>
-            </div>
-          </div>
-        ))}
-      </div>
 
-      <div className="px-1">
-        <Field>
-          <FieldSet>
-            <FieldGroup>
-              <Field>
-                <FieldLabel htmlFor="customer_name">Nama</FieldLabel>
-                <Input id="customer_name" autoComplete="off" aria-invalid={Boolean(errors.customer_name)} {...register("customer_name", { required: "Nama pelanggan wajib diisi" })} />
-                {errors.customer_name?.message && <p className="text-xs text-destructive mt-1">{errors.customer_name.message}</p>}
-              </Field>
-            </FieldGroup>
-          </FieldSet>
-        </Field>
-      </div>
+              <div className="">
+                {orderItems.map((item, index) => (
+                  <div key={index} className="py-4 border-b">
+                    <div key={`${item.menu_id}-${item.name}`} className="flex items-center justify-between ">
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center justify-center px-3 py-2 text-sm font-semibold rounded-lg bg-slate-100 text-slate-700">x{item.qty}</div>
+                        <div>
+                          <p className="text-sm font-semibold">{item.name}</p>
+                          <p className="text-sm text-muted-foreground">{rupiah(item.price)}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          nativeButton={false}
+                          render={(props) => (
+                            <Link {...props} to={`/catalog/${item.menu_id}`} state={{ fromOrder: true }}>
+                              <div className="flex items-center gap-1">
+                                <Pen className="size-3" />
+                                <span className="text-sm font-semibold">Edit</span>
+                              </div>
+                            </Link>
+                          )}
+                        />
+                        <Button onClick={() => deleteOrderItem(item.menu_id)} variant="destructive" size="sm">
+                          <Trash className="size-4" />
+                        </Button>
+                      </div>
+                    </div>
+                    {errors.items?.[index] && <FieldError>{errors.items[index].message}</FieldError>}
+                  </div>
+                ))}
 
-      {serverErrors.length > 0 && (
-        <div className="mx-3 rounded-md border border-destructive/40 bg-destructive/5 p-3 text-sm text-destructive">
-          <ul className="list-disc list-inside space-y-1">
-            {serverErrors.map((errMsg, idx) => (
-              <li key={idx}>{errMsg}</li>
-            ))}
-          </ul>
-        </div>
-      )}
+                {orderItems.length === 0 && <p className="py-4 text-sm text-muted-foreground">Belum ada pesanan.</p>}
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+
+        <section className="px-2 pt-6 space-y-3 md:px-4">
+          <p className="text-xs font-semibold tracking-widest uppercase text-muted-foreground">Detail Pesanan</p>
+
+          <Card className="py-0 mt-3 border-none rounded-md shadow-md">
+            <CardContent className="px-2">
+              <div className="flex flex-col w-full py-4 border-b">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-semibold ">Nomor Meja</p>
+
+                  <Badge variant="secondary">{code}</Badge>
+                </div>
+                <Input id="code" type="hidden" {...register("code", { required: "Nomor meja wajib diisi" })} disabled={true} className="hidden" />
+                {errors.code?.message && <FieldError>{errors.code.message}</FieldError>}
+              </div>
+
+              <div className="py-4 space-y-2 border-b">
+                <p className="text-sm font-semibold ">Nama Pemesan</p>
+                <Input
+                  id="customer_name"
+                  placeholder="Masukkan nama kamu..."
+                  autoComplete="off"
+                  aria-invalid={Boolean(errors.customer_name)}
+                  {...register("customer_name", { required: "Nama pelanggan wajib diisi" })}
+                />
+                {errors.customer_name?.message && <FieldError>{errors.customer_name.message}</FieldError>}
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+      </div>
 
       <ActionCard onActionClick={handleSubmit(handleCheckout)} actionTitle={isSubmitting ? "Memproses..." : "Lanjut ke Pembayaran"}>
         <p>Total Pembayaran</p>
         <div className="flex items-center gap-4">
-          <h4 className="text-md font-semibold">{rupiah(totalPrice)}</h4>
+          <h4 className="font-semibold text-md">{rupiah(totalPrice)}</h4>
         </div>
       </ActionCard>
     </div>

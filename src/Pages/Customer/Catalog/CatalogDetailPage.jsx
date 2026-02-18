@@ -1,5 +1,5 @@
-import { useCallback, useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { useCallback, useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router";
 import { Minus, Plus, X } from "lucide-react";
 
 import useDetailCatalog from "@/Hooks/Customer/Catalog/useDetailCatalog";
@@ -14,7 +14,20 @@ const CatalogDetailPage = () => {
   const { catalog, loading } = useDetailCatalog();
 
   const navigate = useNavigate();
+  const { state } = useLocation();
+  const isFromOrder = Boolean(state?.fromOrder);
   const [quantity, setQuantity] = useState(1);
+
+  useEffect(() => {
+    if (!catalog) return;
+
+    const storedOrders = JSON.parse(sessionStorage.getItem("orderItems") || "[]");
+    const existing = storedOrders.find((item) => item.menu_id === catalog.id);
+
+    if (existing?.qty) {
+      setQuantity(existing.qty);
+    }
+  }, [catalog]);
 
   const incrementQuantity = useCallback((qty) => {
     setQuantity((prev) => Math.max(1, prev + qty));
@@ -26,20 +39,32 @@ const CatalogDetailPage = () => {
 
   const handleOrder = useCallback(
     (catalog, quantity) => {
-      const orderItems = [
-        {
+      const storedOrders = JSON.parse(sessionStorage.getItem("orderItems") || "[]");
+      const existingIndex = storedOrders.findIndex((item) => item.menu_id === catalog.id && item.name === catalog.name);
+      const unitPrice = catalog.price || 0;
+
+      if (existingIndex !== -1) {
+        const existing = storedOrders[existingIndex];
+        const nextQty = isFromOrder ? quantity : existing.qty + quantity;
+        const updated = {
+          ...existing,
+          qty: nextQty,
+          price: unitPrice * nextQty,
+        };
+        storedOrders.splice(existingIndex, 1, updated);
+      } else {
+        storedOrders.unshift({
           name: catalog.name,
           menu_id: catalog.id,
           qty: quantity,
-          price: (catalog.price || 0) * quantity,
-        },
-      ];
-      orderItems.push(...JSON.parse(sessionStorage.getItem("orderItems") || "[]"));
+          price: unitPrice * quantity,
+        });
+      }
 
-      sessionStorage.setItem("orderItems", JSON.stringify(orderItems));
-      navigate("/catalog");
+      sessionStorage.setItem("orderItems", JSON.stringify(storedOrders));
+      navigate(isFromOrder ? "/order" : "/catalog");
     },
-    [navigate],
+    [isFromOrder, navigate],
   );
 
   return (
@@ -70,8 +95,8 @@ const CatalogDetailPage = () => {
               <p className="mt-2 mb-4 text-xs text-muted-foreground">{catalog.description}</p>
             </div>
 
-            <ActionCard onActionClick={() => handleOrder(catalog, quantity)} actionTitle="Tambah Order">
-              <p>Total Order</p>
+            <ActionCard onActionClick={() => handleOrder(catalog, quantity)} actionTitle={isFromOrder ? "Update Order" : "Tambah Order"}>
+              <p>Total Items</p>
               <div className="flex items-center gap-4">
                 <Button size="icon" className="rounded-full size-6" variant="outline" onClick={() => decrentQuantity(1)}>
                   <Minus />

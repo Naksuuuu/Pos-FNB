@@ -62,7 +62,7 @@ const ListCatalog = () => {
                     {isOrderItems.length}
                   </Badge>
                 </div>
-                <div className="bg-emerald-700 w-full h-full flex justify-between items-center text-background px-4 py-2">
+                <div className="bg-primary w-full h-full flex justify-between items-center text-background px-4 py-2">
                   <div className="flex flex-col">
                     <h3 className="">Total :</h3>
                     <h3 className="font-semibold">{rupiah(totalPrice)}</h3>
