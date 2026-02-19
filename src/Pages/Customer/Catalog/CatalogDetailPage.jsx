@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { Minus, Plus, X } from "lucide-react";
 
@@ -9,6 +9,7 @@ import { Button } from "@/Components/Elements/Shadcn/button";
 import ActionCard from "@/Components/Fragments/Customer/Common/Card/ActionCard";
 import { Skeleton } from "@/Components/Elements/Shadcn/skeleton";
 import { Spinner } from "@/Components/Elements/Shadcn/spinner";
+import { ImageWithFallback } from "@/Components/Elements/Images/ImageWithFallback";
 
 const CatalogDetailPage = () => {
   const { catalog, loading } = useDetailCatalog();
@@ -16,18 +17,7 @@ const CatalogDetailPage = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
   const isFromOrder = Boolean(state?.fromOrder);
-  const [quantity, setQuantity] = useState(1);
-
-  useEffect(() => {
-    if (!catalog) return;
-
-    const storedOrders = JSON.parse(sessionStorage.getItem("orderItems") || "[]");
-    const existing = storedOrders.find((item) => item.menu_id === catalog.id);
-
-    if (existing?.qty) {
-      setQuantity(existing.qty);
-    }
-  }, [catalog]);
+  const [quantity, setQuantity] = useState(isFromOrder ? state.quantity : 1);
 
   const incrementQuantity = useCallback((qty) => {
     setQuantity((prev) => Math.max(1, prev + qty));
@@ -69,14 +59,14 @@ const CatalogDetailPage = () => {
 
   return (
     <main className="relative flex flex-col w-full h-screen ">
-      <div className="absolute top-4 right-4 ">
-        <Button variant="outline" size="icon" className="rounded-full" nativeButton={false} render={(props) => <Link {...props} to="/catalog" />}>
+      <div className="absolute top-4 right-4">
+        <Button variant="outline" size="icon" className="rounded-full" nativeButton={false} render={(props) => <Link {...props} to={isFromOrder ? "/order" : "/catalog"} />}>
           <X />
         </Button>
       </div>
 
       {loading && (
-        <Skeleton className="h-full w-full flex items-center justify-center">
+        <Skeleton className="flex items-center justify-center w-full h-full">
           <Spinner className="size-8" />
         </Skeleton>
       )}
@@ -84,7 +74,7 @@ const CatalogDetailPage = () => {
       {catalog && !loading && (
         <>
           <div className="h-1/3">
-            <img src={catalog.image_url} alt={catalog.name} className="object-cover object-center w-full h-full aspect-video" />
+            <ImageWithFallback src={catalog.image_url} alt={catalog.name} className="object-cover object-center w-full h-full aspect-video" />
           </div>
           <div className="relative min-h-2/3">
             <div className="absolute w-full h-4 -top-3 bg-background rounded-t-2xl"></div>

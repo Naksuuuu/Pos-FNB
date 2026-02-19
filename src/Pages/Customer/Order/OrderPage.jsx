@@ -1,20 +1,20 @@
 import { useCallback } from "react";
 import { Link, useNavigate } from "react-router";
-import { ArrowLeft, Pen, Plus, Trash } from "lucide-react";
+import { Pen, Plus, Trash } from "lucide-react";
 import { useForm } from "react-hook-form";
 
 import { rupiah } from "@/Utils/rupiahHelper";
+import useAllOrder from "@/Hooks/Customer/Order/useAllOrder";
 
 import { Button } from "@/Components/Elements/Shadcn/button";
-import ActionCard from "@/Components/Fragments/Customer/Common/Card/ActionCard";
-import useAllOrder from "@/Hooks/Customer/Order/useAllOrder";
-import { Card, CardContent } from "@/Components/Elements/Shadcn/card";
-import { Field, FieldLabel, FieldError } from "@/Components/Elements/Shadcn/field";
 import { Input } from "@/Components/Elements/Shadcn/input";
 import { Badge } from "@/Components/Elements/Shadcn/badge";
+import { FieldError } from "@/Components/Elements/Shadcn/field";
+import { Card, CardContent } from "@/Components/Elements/Shadcn/card";
+import ActionCard from "@/Components/Fragments/Customer/Common/Card/ActionCard";
 import CustomerNavbar from "@/Components/Fragments/Customer/Common/Navigation/CustomerNavbar";
 
-const SummaryOrder = () => {
+const OrderPage = () => {
   const navigate = useNavigate();
   const code = "VIP2";
   const { orderItems, totalPrice, checkout, deleteOrderItem } = useAllOrder();
@@ -43,7 +43,6 @@ const SummaryOrder = () => {
         navigate("/payment");
       } catch (error) {
         if (error?.validationErrors) {
-          console.log("validationErrors", error.validationErrors);
           Object.entries(error.validationErrors).forEach(([field, message]) => {
             setError(field, { type: "server", message: message || "Tidak valid" });
           });
@@ -55,15 +54,15 @@ const SummaryOrder = () => {
   );
 
   return (
-    <div className="flex flex-col min-h-screen ">
+    <>
       <CustomerNavbar navbarTitle="Pesanan" backLink="/catalog" />
 
-      <div className="flex-1 pb-32">
-        <section className="px-2 pt-5 md:px-4">
+      <div className="flex-1 w-full px-3 space-y-4">
+        <section className="md:px-4">
           <p className="text-xs font-semibold tracking-widest uppercase text-muted-foreground">Ringkasan Pesanan</p>
 
-          <Card className="py-0 mt-3 border-none rounded-md shadow-md">
-            <CardContent className="px-2 ">
+          <Card className="py-0 mt-3 border-none shadow-md">
+            <CardContent className="px-4">
               <div className="flex items-center justify-between py-4 border-b">
                 <p className="font-semibold text-md">{orderItems.length} item dipilih</p>
                 <Button
@@ -81,14 +80,15 @@ const SummaryOrder = () => {
                 />
               </div>
 
-              <div className="">
+              <div>
                 {orderItems.map((item, index) => (
                   <div key={index} className="py-4 border-b">
                     <div key={`${item.menu_id}-${item.name}`} className="flex items-center justify-between ">
                       <div className="flex items-center gap-3">
-                        <div className="flex items-center justify-center px-3 py-2 text-sm font-semibold rounded-lg bg-slate-100 text-slate-700">x{item.qty}</div>
                         <div>
-                          <p className="text-sm font-semibold">{item.name}</p>
+                          <p className="text-sm font-semibold">
+                            {item.name} <span className="text-xs font-light">(x{item.qty})</span>
+                          </p>
                           <p className="text-sm text-muted-foreground">{rupiah(item.price)}</p>
                         </div>
                       </div>
@@ -98,7 +98,7 @@ const SummaryOrder = () => {
                           size="sm"
                           nativeButton={false}
                           render={(props) => (
-                            <Link {...props} to={`/catalog/${item.menu_id}`} state={{ fromOrder: true }}>
+                            <Link {...props} to={`/catalog/${item.menu_id}`} state={{ fromOrder: true, quantity: item.qty }}>
                               <div className="flex items-center gap-1">
                                 <Pen className="size-3" />
                                 <span className="text-sm font-semibold">Edit</span>
@@ -121,11 +121,11 @@ const SummaryOrder = () => {
           </Card>
         </section>
 
-        <section className="px-2 pt-6 space-y-3 md:px-4">
-          <p className="text-xs font-semibold tracking-widest uppercase text-muted-foreground">Detail Pesanan</p>
+        <section className="md:px-4">
+          <p className="text-xs font-semibold tracking-widest uppercase text-muted-foreground">Detail Pemesan</p>
 
           <Card className="py-0 mt-3 border-none rounded-md shadow-md">
-            <CardContent className="px-2">
+            <CardContent className="px-4">
               <div className="flex flex-col w-full py-4 border-b">
                 <div className="flex items-center justify-between">
                   <p className="text-sm font-semibold ">Nomor Meja</p>
@@ -158,8 +158,8 @@ const SummaryOrder = () => {
           <h4 className="font-semibold text-md">{rupiah(totalPrice)}</h4>
         </div>
       </ActionCard>
-    </div>
+    </>
   );
 };
 
-export default SummaryOrder;
+export default OrderPage;

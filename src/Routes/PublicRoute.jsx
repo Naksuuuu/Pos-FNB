@@ -2,8 +2,9 @@ import { lazy } from "react";
 import { Navigate } from "react-router";
 const CatalogPage = lazy(() => import("@/Pages/Customer/Catalog/CatalogPage"));
 const CatalogDetailPage = lazy(() => import("@/Pages/Customer/Catalog/CatalogDetailPage"));
-const SummaryOrder = lazy(() => import("@/Pages/Customer/Order/SummaryOrder"));
+const OrderPage = lazy(() => import("@/Pages/Customer/Order/OrderPage"));
 const PaymentPage = lazy(() => import("@/Pages/Customer/Payment/PaymentPage"));
+const CustLayout = lazy(() => import("@/Components/Layouts/CustLayout"));
 
 const PublicRoute = [
   {
@@ -12,19 +13,19 @@ const PublicRoute = [
   },
   {
     path: "/catalog",
-    element: <CatalogPage />,
+    element: <CustLayout children={<CatalogPage />} />,
   },
   {
     path: "/catalog/:catalogId",
-    element: <CatalogDetailPage />,
+    element: <CustLayout children={<CatalogDetailPage />} />,
   },
   {
     path: "/order",
-    element: <SummaryOrder />,
+    element: <CustLayout children={<OrderPage />} />,
   },
   {
     path: "/payment",
-    element: <PaymentPage />,
+    element: <CustLayout children={<PaymentPage />} />,
   },
 ];
 

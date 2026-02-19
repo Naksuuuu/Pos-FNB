@@ -7,11 +7,6 @@ const initialState = {
   error: null,
   filters: {
     search: null,
-    category_id: null,
-    is_available: null,
-    sort_by: "created_at",
-    sort_direction: "desc",
-    per_page: 10,
   },
 };
 

@@ -1,11 +1,12 @@
-import { Button } from "@/Components/Elements/Shadcn/button";
-import { ArrowLeft } from "lucide-react";
 import { memo } from "react";
 import { Link } from "react-router";
+import { ArrowLeft } from "lucide-react";
+
+import { Button } from "@/Components/Elements/Shadcn/button";
 
 const CustomerNavbar = memo(({ navbarTitle, backLink }) => {
   return (
-    <nav className="sticky top-0 z-10 shadow-sm">
+    <nav className="sticky top-0 z-10 w-full shadow-sm bg-background">
       <div className="flex items-center px-4 h-14">
         <Button
           variant="ghost"
