@@ -5,9 +5,8 @@ import { toast } from "sonner";
 import { EditCategorySchema } from "@/Schema/Category/CategorySchema";
 import useEditCategory from "@/Hooks/Dashboard/Category/useEditCategory";
 
-import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/Components/Elements/Shadcn/field";
-import { Input } from "@/Components/Elements/Shadcn/input";
 import DashboardModalForm from "@/Components/Fragments/Dashboard/Common/Modal/DashboardModalForm";
+import CategoryForm from "@/Components/Fragments/Dashboard/Category/Form/CategoryForm";
 
 const CategoryModalEdit = ({ selectedCategory, onOpenModal }) => {
   const { edit, loading } = useEditCategory();
@@ -50,15 +49,7 @@ const CategoryModalEdit = ({ selectedCategory, onOpenModal }) => {
       onSubmitForm={handleSubmitForm}
       title={`Edit Kategori ${selectedCategory?.name}`}
     >
-      <FieldSet>
-        <FieldGroup>
-          <Field>
-            <FieldLabel htmlFor="name">Nama Kategori</FieldLabel>
-            <Input id="name" name="name" autoComplete="off" {...register("name")} aria-invalid={errors.name ? "true" : "false"} />
-            {errors.name && <FieldError>{errors.name.message}</FieldError>}
-          </Field>
-        </FieldGroup>
-      </FieldSet>
+      <CategoryForm register={register} errors={errors} />
     </DashboardModalForm>
   );
 };

@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import { Pen, Trash } from "lucide-react";
 
 import { Button } from "@/Components/Elements/Shadcn/button";
@@ -7,18 +7,28 @@ import DashboardTableError from "@/Components/Fragments/Dashboard/Common/Table/D
 import DashboardTableLoading from "@/Components/Fragments/Dashboard/Common/Table/DashboardTableLoading";
 
 const CategoryTable = memo(({ loading, errorMessage, categories = [], onOpenDeleteModal, onOpenEditModal }) => {
+  const columns = useMemo(() => {
+    return [
+      { header: "No", width: "w-[50px]" },
+      { header: "Nama", width: "min-w-[300px] max-w-full" },
+      { header: "Aksi", width: "w-[200px]" },
+    ];
+  }, []);
+
   return (
     <div className="overflow-hidden border rounded-lg">
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>No</TableHead>
-            <TableHead>Nama</TableHead>
-            <TableHead>Aksi</TableHead>
+            {columns.map((col) => (
+              <TableHead key={col.header} className={`${col.width}`}>
+                {col.header}
+              </TableHead>
+            ))}
           </TableRow>
         </TableHeader>
         <TableBody>
-          {loading && !errorMessage && <DashboardTableLoading />}
+          {loading && !errorMessage && <DashboardTableLoading rows="15" columns={columns.length} />}
           {errorMessage && !loading && <DashboardTableError message={errorMessage} />}
           {!loading &&
             !errorMessage &&
