@@ -90,7 +90,7 @@ const MenuForm = memo(({ errors, control, register, categoryOptions, type = "cre
         </FieldGroup>
       )}
 
-      <FieldGroup className="grid grid-cols-2">
+      <FieldGroup className="grid grid-cols-1 md:grid-cols-2">
         <Field>
           <FieldLabel htmlFor="name">
             Nama Menu <span className="text-destructive">*</span>
@@ -142,7 +142,7 @@ const MenuForm = memo(({ errors, control, register, categoryOptions, type = "cre
             }}
           />
         </Field>
-        <Field className="col-span-2">
+        <Field className="md:col-span-2">
           <FieldLabel htmlFor="description">Deskripsi</FieldLabel>
           <Textarea id="description" name="description" autoComplete="off" {...register("description")} aria-invalid={errors.description ? "true" : "false"} />
           {errors.description && <FieldError>{errors.description.message}</FieldError>}

@@ -5,7 +5,7 @@ import { Spinner } from "@/Components/Elements/Shadcn/spinner";
 const ModalForm = ({ isOpen, onOpenModal, title, loading, handleSubmit, onSubmitForm, children }) => {
   return (
     <Dialog open={isOpen} onOpenChange={() => onOpenModal(false)}>
-      <DialogContent showCloseButton={false} className="w-full max-w-3xl!">
+      <DialogContent showCloseButton={false} className="w-full md:max-w-3xl!">
         <form onSubmit={handleSubmit(onSubmitForm)} className="flex flex-col gap-4">
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
