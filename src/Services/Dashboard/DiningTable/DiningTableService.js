@@ -3,10 +3,10 @@ import { apiUtils } from "@/Services/Common/Base";
 const DINING_TABLE_ENDPOINT = "/dashboard/tables";
 
 export const getAllDiningTables = async (params) => {
-  const { search } = params;
+  const { search = "" } = params;
 
   const queryParams = {
-    code: search,
+    search,
   };
 
   const response = await apiUtils.get(DINING_TABLE_ENDPOINT, { params: queryParams });

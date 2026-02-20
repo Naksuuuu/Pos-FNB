@@ -5,9 +5,8 @@ import { toast } from "sonner";
 import useCreateDiningTable from "@/Hooks/Dashboard/DiningTable/useCreateDiningTable";
 import { CreateDiningTableSchema } from "@/Schema/DiningTable/DiningTableSchema";
 
-import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/Components/Elements/Shadcn/field";
-import { Input } from "@/Components/Elements/Shadcn/input";
 import DashboardModalForm from "@/Components/Fragments/Dashboard/Common/Modal/DashboardModalForm";
+import DiningTableForm from "@/Components/Fragments/Dashboard/DiningTable/Form/DiningTableForm";
 
 const DiningTableModalCreate = ({ isOpen, onOpenModal }) => {
   const { create, loading } = useCreateDiningTable();
@@ -16,6 +15,7 @@ const DiningTableModalCreate = ({ isOpen, onOpenModal }) => {
     setError,
     formState: { errors },
     register,
+    control,
   } = useForm({
     resolver: zodResolver(CreateDiningTableSchema),
   });
@@ -39,15 +39,7 @@ const DiningTableModalCreate = ({ isOpen, onOpenModal }) => {
 
   return (
     <DashboardModalForm isOpen={isOpen} onOpenModal={onOpenModal} loading={loading} handleSubmit={handleSubmit} onSubmitForm={handleSubmitForm} title="Tambah Meja Makan">
-      <FieldSet>
-        <FieldGroup>
-          <Field>
-            <FieldLabel htmlFor="code">Code Meja</FieldLabel>
-            <Input id="code" name="code" autoComplete="off" {...register("code")} aria-invalid={errors.code ? "true" : "false"} />
-            {errors.code && <FieldError>{errors.code.message}</FieldError>}
-          </Field>
-        </FieldGroup>
-      </FieldSet>
+      <DiningTableForm register={register} errors={errors} control={control} />
     </DashboardModalForm>
   );
 };

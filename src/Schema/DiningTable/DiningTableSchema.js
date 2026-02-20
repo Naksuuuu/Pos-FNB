@@ -8,9 +8,11 @@ const status = z.enum(["available", "occupied"], {
 
 const CreateDiningTableSchema = z.object({
   code,
+  status,
 });
 
 const editDiningTableSchema = z.object({
+  code,
   status,
 });
 

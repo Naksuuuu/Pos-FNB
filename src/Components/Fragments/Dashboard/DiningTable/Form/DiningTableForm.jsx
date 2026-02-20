@@ -1,0 +1,52 @@
+import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/Components/Elements/Shadcn/field";
+import { Input } from "@/Components/Elements/Shadcn/input";
+import DashboardSelectFilter from "@/Components/Fragments/Dashboard/Common/DashboardSelectFilter";
+import { memo, useMemo } from "react";
+import { Controller } from "react-hook-form";
+
+const DiningTableForm = memo(({ register, errors, control }) => {
+  const statusOptions = useMemo(
+    () => [
+      { value: "available", label: "Tersedia" },
+      { value: "occupied", label: "Ditempati" },
+    ],
+    [],
+  );
+
+  return (
+    <FieldSet>
+      <FieldGroup className="grid grid-cols-1 md:grid-cols-2">
+        <Field>
+          <FieldLabel htmlFor="code">
+            Code Meja <span className="text-destructive">*</span>
+          </FieldLabel>
+          <Input id="code" name="code" autoComplete="off" {...register("code")} aria-invalid={errors.code ? "true" : "false"} />
+          {errors.code && <FieldError>{errors.code.message}</FieldError>}
+        </Field>
+        <Field>
+          <FieldLabel htmlFor="status">
+            Status <span className="text-destructive">*</span>
+          </FieldLabel>
+          <Controller
+            name="status"
+            control={control}
+            render={({ field }) => (
+              <DashboardSelectFilter
+                items={statusOptions}
+                label="Status"
+                id="status"
+                name="status"
+                placeholder="Pilih status"
+                value={field.value || ""}
+                onValueChange={(val) => field.onChange(val)}
+                aria-invalid={errors.status ? "true" : "false"}
+              />
+            )}
+          />
+          {errors.status && <FieldError>{errors.status.message}</FieldError>}
+        </Field>
+      </FieldGroup>
+    </FieldSet>
+  );
+});
+export default DiningTableForm;

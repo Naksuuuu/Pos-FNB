@@ -9,7 +9,7 @@ const useDeleteDiningTable = () => {
   const deleteDiningTableById = useCallback(
     async (diningTableId) => {
       const response = await dispatch(deleteDiningTable(diningTableId)).unwrap();
-      dispatch(fetchDiningTables());
+      dispatch(fetchDiningTables({ search: "" }));
       return response;
     },
     [dispatch],

@@ -5,21 +5,44 @@ import { Button } from "@/Components/Elements/Shadcn/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/Elements/Shadcn/table";
 import DashboardTableError from "@/Components/Fragments/Dashboard/Common/Table/DashboardTableError";
 import DashboardTableLoading from "@/Components/Fragments/Dashboard/Common/Table/DashboardTableLoading";
+import { useMemo } from "react";
 
 const DiningTableTable = ({ diningTables, loading, errorMessage, onOpenEditModal, onOpenDeleteModal }) => {
+  const columns = useMemo(() => {
+    return [
+      {
+        header: "No",
+        width: "w-[50px]",
+      },
+      {
+        header: "Kode Nama",
+        width: "w-[150px]",
+      },
+      {
+        header: "Status",
+        width: "w-[100px]",
+      },
+      {
+        header: "Aksi",
+        width: "w-[100px]",
+      },
+    ];
+  }, []);
+
   return (
-    <div className="overflow-hidden border rounded-lg">
-      <Table>
+    <div className="overflow-hidden shadow-lg px-2 rounded-lg">
+      <Table className="min-w-full">
         <TableHeader>
           <TableRow>
-            <TableHead>No</TableHead>
-            <TableHead>Kode Nama</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Aksi</TableHead>
+            {columns.map((column) => (
+              <TableHead key={column.header} className={column.width}>
+                {column.header}
+              </TableHead>
+            ))}
           </TableRow>
         </TableHeader>
         <TableBody>
-          {loading && !errorMessage && <DashboardTableLoading />}
+          {loading && !errorMessage && <DashboardTableLoading rows={15} columns={columns.length} />}
           {errorMessage && !loading && <DashboardTableError message={errorMessage} />}
           {!loading &&
             !errorMessage &&

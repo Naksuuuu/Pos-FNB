@@ -10,7 +10,7 @@ const useCreateDiningTable = () => {
   const create = useCallback(
     async (tableData) => {
       const response = await dispatch(createDiningTable(tableData)).unwrap();
-      dispatch(fetchDiningTables());
+      dispatch(fetchDiningTables({ search: "" }));
       return response;
     },
     [dispatch],
