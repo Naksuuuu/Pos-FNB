@@ -1,15 +1,14 @@
 import { Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/Components/Elements/Shadcn/field";
 import { Input } from "@/Components/Elements/Shadcn/input";
 import DashboardSelectFilter from "@/Components/Fragments/Dashboard/Common/DashboardSelectFilter";
-// import { Input } from "@/Components/Elements/Shadcn/input";
-import { memo, useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import { Controller } from "react-hook-form";
 import { Upload } from "lucide-react";
 import { Textarea } from "@/Components/Elements/Shadcn/textarea";
 import { Switch } from "@/Components/Elements/Shadcn/switch";
 import { ImageWithFallback } from "@/Components/Elements/Images/ImageWithFallback";
 
-const MenuForm = memo(({ errors, control, register, categoryOptions, type = "create", selectedMenu = null }) => {
+const MenuForm = ({ errors, control, register, categoryOptions, type = "create", selectedMenu = null }) => {
   const [imagePreview, setImagePreview] = useState(null);
 
   const onFileChange = useCallback((e) => {
@@ -150,5 +149,5 @@ const MenuForm = memo(({ errors, control, register, categoryOptions, type = "cre
       </FieldGroup>
     </FieldSet>
   );
-});
+};
 export default MenuForm;

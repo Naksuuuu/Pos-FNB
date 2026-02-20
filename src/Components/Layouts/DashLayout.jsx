@@ -5,16 +5,16 @@ import DashboardSidebar from "@/Components/Fragments/Dashboard/Common/Navigation
 const DashLayout = ({ children }) => {
   return (
     <DashboardSidebar>
-      <main className="relative w-screen">
+      <main className="relative w-screen bg-dashboard">
         <DashboardNavbar />
 
-        <div className="px-4 mt-2">{children}</div>
+        <div className="mx-4 my-4 space-y-4">{children}</div>
         <Toaster
           toastOptions={{
             classNames: {
               toast: "!bg-background !text-foreground !border-border",
-              success: "!bg-emerald-500 ",
-              error: "!bg-destructive ",
+              success: "!bg-emerald-100 text-emerald-900! !border-emerald-300",
+              error: "!bg-red-100 text-red-900! !border-red-300",
             },
           }}
         />

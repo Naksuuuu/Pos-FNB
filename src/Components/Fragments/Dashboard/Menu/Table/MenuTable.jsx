@@ -8,8 +8,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import DashboardTableError from "@/Components/Fragments/Dashboard/Common/Table/DashboardTableError";
 import DashboardTableLoading from "@/Components/Fragments/Dashboard/Common/Table/DashboardTableLoading";
 import { Badge } from "@/Components/Elements/Shadcn/badge";
+import DashboardPagination from "@/Components/Fragments/Dashboard/Common/DashboardPagination";
 
-const MenuTable = memo(({ loading, errorMessage, menus = [], pagination, onOpenDeleteModal, onOpenEditModal }) => {
+const MenuTable = memo(({ loading, errorMessage, menus = [], pagination, onOpenDeleteModal, onOpenEditModal, handlePageChange }) => {
   const columns = useMemo(
     () => [
       { header: "No", width: "w-[50px]" },
@@ -23,7 +24,7 @@ const MenuTable = memo(({ loading, errorMessage, menus = [], pagination, onOpenD
   );
 
   return (
-    <div className="overflow-hidden border rounded-lg">
+    <>
       <Table className="min-w-full ">
         <TableHeader>
           <TableRow>
@@ -68,7 +69,9 @@ const MenuTable = memo(({ loading, errorMessage, menus = [], pagination, onOpenD
             ))}
         </TableBody>
       </Table>
-    </div>
+
+      <DashboardPagination pagination={pagination} onPageChange={handlePageChange} />
+    </>
   );
 });
 

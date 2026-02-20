@@ -16,7 +16,7 @@ const CategoryTable = memo(({ loading, errorMessage, categories = [], onOpenDele
   }, []);
 
   return (
-    <div className="overflow-hidden border rounded-lg">
+    <>
       <Table>
         <TableHeader>
           <TableRow>
@@ -50,7 +50,7 @@ const CategoryTable = memo(({ loading, errorMessage, categories = [], onOpenDele
             ))}
         </TableBody>
       </Table>
-    </div>
+    </>
   );
 });
 

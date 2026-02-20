@@ -10,6 +10,7 @@ import CategoryModalEdit from "@/Components/Fragments/Dashboard/Category/Modal/C
 import CategoryModalCreate from "@/Components/Fragments/Dashboard/Category/Modal/CategoryModalCreate";
 import CategoryModalDelete from "@/Components/Fragments/Dashboard/Category/Modal/CategoryModalDelete";
 import { DashboardResetFilter } from "@/Components/Fragments/Dashboard/Common/DashboardSelectFilter";
+import { Card } from "@/Components/Elements/Cards/Card";
 
 const CategoryPage = () => {
   const { categories, loading, errorMessage, loadCategories } = useAllCategory();
@@ -61,27 +62,31 @@ const CategoryPage = () => {
   }, []);
 
   return (
-    <div className="space-y-4">
-      <div className="flex justify-between w-full gap-4">
-        <DashboardInputSearch onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari menu..." />
-        <Button onClick={handleOpenCreateModal}>Tambah Menu</Button>
-      </div>
+    <>
+      <Card>
+        <div className="flex justify-between w-full gap-4">
+          <DashboardInputSearch onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari menu..." />
+          <Button onClick={handleOpenCreateModal}>Tambah Menu</Button>
+        </div>
+      </Card>
 
       <DashboardResetFilter onResetFilter={handleResetFilter} condition={search} />
 
-      <CategoryTable
-        loading={loading}
-        categories={categories}
-        errorMessage={errorMessage}
-        loadCategories={loadCategories}
-        onOpenEditModal={handleOpenEditModal}
-        onOpenDeleteModal={handleOpenDeleteModal}
-      />
+      <Card>
+        <CategoryTable
+          loading={loading}
+          categories={categories}
+          errorMessage={errorMessage}
+          loadCategories={loadCategories}
+          onOpenEditModal={handleOpenEditModal}
+          onOpenDeleteModal={handleOpenDeleteModal}
+        />
+      </Card>
 
       {selectedEditCategory && <CategoryModalEdit selectedCategory={selectedEditCategory} onOpenModal={handleOpenEditModal} />}
       {selectedCreateCategory && <CategoryModalCreate isOpen={selectedCreateCategory} onOpenModal={handleOpenCreateModal} />}
       {selectedDeleteCategory && <CategoryModalDelete selectedCategory={selectedDeleteCategory} onOpenModal={handleOpenDeleteModal} />}
-    </div>
+    </>
   );
 };
 export default CategoryPage;

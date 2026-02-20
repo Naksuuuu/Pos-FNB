@@ -30,7 +30,7 @@ const DiningTableTable = ({ diningTables, loading, errorMessage, onOpenEditModal
   }, []);
 
   return (
-    <div className="overflow-hidden shadow-lg px-2 rounded-lg">
+    <>
       <Table className="min-w-full">
         <TableHeader>
           <TableRow>
@@ -67,7 +67,7 @@ const DiningTableTable = ({ diningTables, loading, errorMessage, onOpenEditModal
             ))}
         </TableBody>
       </Table>
-    </div>
+    </>
   );
 };
 export default DiningTableTable;

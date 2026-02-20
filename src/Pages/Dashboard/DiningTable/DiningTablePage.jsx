@@ -9,6 +9,7 @@ import DiningTableModalCreate from "@/Components/Fragments/Dashboard/DiningTable
 import DiningTableModalEdit from "@/Components/Fragments/Dashboard/DiningTable/Modal/DiningTableModalEdit";
 import DiningTableModalDelete from "@/Components/Fragments/Dashboard/DiningTable/Modal/DiningTableModalDelete";
 import DashboardInputSearch from "@/Components/Fragments/Dashboard/Common/DashboardInputSearch";
+import { Card } from "@/Components/Elements/Cards/Card";
 
 const DiningTablePage = () => {
   const { filters, updateFilters } = useFilterParams();
@@ -53,18 +54,22 @@ const DiningTablePage = () => {
   );
 
   return (
-    <div className="space-y-4">
-      <div className="flex justify-between w-full gap-4">
-        <DashboardInputSearch onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari Meja" />
-        <Button onClick={handleOpenCreateModal}>Tambah Meja</Button>
-      </div>
+    <>
+      <Card>
+        <div className="flex justify-between w-full gap-4">
+          <DashboardInputSearch onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari Meja" />
+          <Button onClick={handleOpenCreateModal}>Tambah Meja</Button>
+        </div>
+      </Card>
 
-      <DiningTableTable diningTables={diningTables} loading={loading} errorMessage={errorMessage} onOpenEditModal={handleOpenEditModal} onOpenDeleteModal={handleOpenDeleteModal} />
+      <Card>
+        <DiningTableTable diningTables={diningTables} loading={loading} errorMessage={errorMessage} onOpenEditModal={handleOpenEditModal} onOpenDeleteModal={handleOpenDeleteModal} />
+      </Card>
 
       {selectedCreateTable && <DiningTableModalCreate isOpen={!!selectedCreateTable} onOpenModal={handleOpenCreateModal} />}
       {selectedEditTable && <DiningTableModalEdit selectedDiningTable={selectedEditTable} onOpenModal={handleOpenEditModal} />}
       {selectedDeleteTable && <DiningTableModalDelete selectedDiningTable={selectedDeleteTable} onOpenModal={handleOpenDeleteModal} />}
-    </div>
+    </>
   );
 };
 export default DiningTablePage;

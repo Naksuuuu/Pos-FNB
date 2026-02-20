@@ -1,17 +1,14 @@
-import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/Components/Elements/Shadcn/field";
-import { Input } from "@/Components/Elements/Shadcn/input";
-import DashboardSelectFilter from "@/Components/Fragments/Dashboard/Common/DashboardSelectFilter";
-import { memo, useMemo } from "react";
+import { useMemo } from "react";
 import { Controller } from "react-hook-form";
 
-const DiningTableForm = memo(({ register, errors, control }) => {
-  const statusOptions = useMemo(
-    () => [
-      { value: "available", label: "Tersedia" },
-      { value: "occupied", label: "Ditempati" },
-    ],
-    [],
-  );
+import { STATUS_OPTIONS } from "@/Constants/Dashboard/DiningTable/DiningTableConstant";
+
+import { Input } from "@/Components/Elements/Shadcn/input";
+import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/Components/Elements/Shadcn/field";
+import DashboardSelectFilter from "@/Components/Fragments/Dashboard/Common/DashboardSelectFilter";
+
+const DiningTableForm = ({ register, errors, control }) => {
+  const statusOptions = useMemo(() => STATUS_OPTIONS, []);
 
   return (
     <FieldSet>
@@ -48,5 +45,5 @@ const DiningTableForm = memo(({ register, errors, control }) => {
       </FieldGroup>
     </FieldSet>
   );
-});
+};
 export default DiningTableForm;

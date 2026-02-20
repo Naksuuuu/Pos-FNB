@@ -1,8 +1,7 @@
 import { Field, FieldGroup, FieldLabel, FieldSet } from "@/Components/Elements/Shadcn/field";
 import { Input } from "@/Components/Elements/Shadcn/input";
-import { memo } from "react";
 
-const CategoryForm = memo(({ register, errors }) => {
+const CategoryForm = ({ register, errors }) => {
   return (
     <FieldSet>
       <FieldGroup>
@@ -16,5 +15,5 @@ const CategoryForm = memo(({ register, errors }) => {
       </FieldGroup>
     </FieldSet>
   );
-});
+};
 export default CategoryForm;
