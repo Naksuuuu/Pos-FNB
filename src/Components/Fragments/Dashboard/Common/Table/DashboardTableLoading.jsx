@@ -1,19 +1,23 @@
 import { memo } from "react";
 
 import { Skeleton } from "@/Components/Elements/Shadcn/skeleton";
-import { Spinner } from "@/Components/Elements/Shadcn/spinner";
 import { TableCell, TableRow } from "@/Components/Elements/Shadcn/table";
 
-const DashboardTableLoading = memo(() => {
+const DashboardTableLoading = memo(({ rows, columns }) => {
   return (
-    <TableRow>
-      <TableCell colSpan={99}>
-        <div className="relative flex items-center justify-center">
-          <Skeleton className="w-full h-125" />
-          <Spinner className="absolute size-8" />
-        </div>
-      </TableCell>
-    </TableRow>
+    <>
+      {Array.from({ length: rows }).map((_, r) => {
+        return (
+          <TableRow key={`skeleton-row-${r}`}>
+            {Array.from({ length: columns }).map((_, c) => (
+              <TableCell key={`skeleton-cell-${r}-${c}`}>
+                <Skeleton className="w-full h-[36.8px]" />
+              </TableCell>
+            ))}
+          </TableRow>
+        );
+      })}
+    </>
   );
 });
 

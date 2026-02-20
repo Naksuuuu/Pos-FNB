@@ -1,6 +1,6 @@
 import { apiUtils } from "@/Services/Common/Base";
 
-const MENU_ENDPOINT = "/menus";
+const MENU_ENDPOINT = "/dashboard/menus";
 
 export const getAllMenu = async (params = {}) => {
   const { page = 1, search, sort_by, sort_direction, is_available, category_id } = params;
@@ -8,6 +8,7 @@ export const getAllMenu = async (params = {}) => {
   const queryParams = {
     page,
     search,
+    per_page: 15,
     sort_by,
     sort_direction,
     is_available,

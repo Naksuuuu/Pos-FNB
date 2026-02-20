@@ -1,6 +1,6 @@
 import { apiUtils } from "@/Services/Common/Base";
 
-const DINING_TABLE_ENDPOINT = "/tables";
+const DINING_TABLE_ENDPOINT = "/dashboard/tables";
 
 export const getAllDiningTables = async (params) => {
   const { search } = params;

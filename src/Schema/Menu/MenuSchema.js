@@ -8,12 +8,6 @@ const price = z
   .refine((v) => !Number.isNaN(Number(v)), "Harga harus berupa angka!")
   .transform((v) => Number(v))
   .refine((v) => v >= 0, "Minimal harga 0 Rupiah!");
-const stock = z
-  .string()
-  .min(1, "Stok Wajib diisi!")
-  .refine((v) => !Number.isNaN(Number(v)), "Stok harus berupa angka!")
-  .transform((v) => Number(v))
-  .refine((v) => v >= 0, "Minimal stok 0");
 
 const category_id = z.string("Kategori wajib diisi!").min(1, "Kategori wajib diisi!");
 
@@ -27,7 +21,6 @@ const is_available = z
 const CreateMenuSchema = z.object({
   name,
   price,
-  stock,
   category_id,
   description,
   image: z
@@ -41,7 +34,6 @@ const CreateMenuSchema = z.object({
 const EditMenuSchema = z.object({
   name,
   price,
-  stock,
   category_id,
   description,
   image: z

@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import { Pen, Trash } from "lucide-react";
 
 import { rupiah } from "@/Utils/rupiahHelper";
@@ -10,37 +10,46 @@ import DashboardTableLoading from "@/Components/Fragments/Dashboard/Common/Table
 import { Badge } from "@/Components/Elements/Shadcn/badge";
 
 const MenuTable = memo(({ loading, errorMessage, menus = [], pagination, onOpenDeleteModal, onOpenEditModal }) => {
+  const columns = useMemo(
+    () => [
+      { header: "No", width: "w-[50px]" },
+      { header: "Nama", width: "min-w-[300px] max-w-full" },
+      { header: "Kategori", width: "w-[300px]" },
+      { header: "Harga", width: "w-[200px]" },
+      { header: "Status", width: "w-[200px]" },
+      { header: "Aksi", width: "w-[200px]" },
+    ],
+    [],
+  );
+
   return (
     <div className="overflow-hidden border rounded-lg">
-      <Table>
+      <Table className="min-w-full ">
         <TableHeader>
           <TableRow>
-            <TableHead>No</TableHead>
-            <TableHead>Nama</TableHead>
-            <TableHead>Kategori</TableHead>
-            <TableHead>Harga</TableHead>
-            <TableHead>Stok</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Aksi</TableHead>
+            {columns.map((col) => (
+              <TableHead key={col.header} className={`${col.width}`}>
+                {col.header}
+              </TableHead>
+            ))}
           </TableRow>
         </TableHeader>
         <TableBody>
-          {loading && !errorMessage && <DashboardTableLoading />}
+          {loading && !errorMessage && <DashboardTableLoading rows="15" columns={columns.length} />}
           {errorMessage && !loading && <DashboardTableError message={errorMessage} />}
           {!loading &&
             !errorMessage &&
             menus.map((menu, index) => (
               <TableRow key={menu.id}>
                 <TableCell>{pagination.from + index}</TableCell>
-                <TableCell>{menu.name}</TableCell>
+                <TableCell className="truncate">{menu.name}</TableCell>
                 <TableCell>{menu.category?.name ?? "Tidak ada Kategorgi"}</TableCell>
                 <TableCell>{rupiah(menu.price)}</TableCell>
-                <TableCell>{menu.stock}</TableCell>
                 <TableCell>
                   {menu.is_available ? (
-                    <Badge className="py-1 px-2 bg-emerald-100 text-emerald-600">Tersedia</Badge>
+                    <Badge className="px-2 py-1 bg-emerald-100 text-emerald-600">Tersedia</Badge>
                   ) : (
-                    <Badge variant="destructive" className="py-1 px-2 ">
+                    <Badge variant="destructive" className="px-2 py-1 ">
                       Tidak Tersedia
                     </Badge>
                   )}
@@ -50,7 +59,7 @@ const MenuTable = memo(({ loading, errorMessage, menus = [], pagination, onOpenD
                     <Trash />
                     <span className="sr-only">Hapus</span>
                   </Button>
-                  <Button size="icon" variant="ghost" className="rounded-full  text-emerald-500 hover:bg-emerald-200 hover:text-emerald-600" onClick={() => onOpenEditModal(menu)}>
+                  <Button size="icon" variant="ghost" className="rounded-full text-emerald-500 hover:bg-emerald-200 hover:text-emerald-600" onClick={() => onOpenEditModal(menu)}>
                     <Pen />
                     <span className="sr-only">Edit</span>
                   </Button>

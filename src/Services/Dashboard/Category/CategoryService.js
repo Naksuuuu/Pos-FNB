@@ -1,6 +1,6 @@
 import { apiUtils } from "@/Services/Common/Base";
 
-const CATEGORY_ENDPOINT = "/categories";
+const CATEGORY_ENDPOINT = "/dashboard/categories";
 
 export const getAllCategories = async (params) => {
   const { search } = params;

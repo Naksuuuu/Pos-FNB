@@ -1,6 +1,6 @@
 import { apiUtils } from "@/Services/Common/Base";
 
-const CATALOG_ENDPOINT = "/menus";
+const CATALOG_ENDPOINT = "/dashboard/menus";
 
 export const getAllCatalog = async () => {
   const defaultParams = {
