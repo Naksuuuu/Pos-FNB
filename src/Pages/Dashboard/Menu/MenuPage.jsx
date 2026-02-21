@@ -1,5 +1,7 @@
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 
+import { IS_AVAILABLE_OPTIONS, SORT_DIRECTION_OPTIONS, SORY_BY_OPTIONS } from "@/Constants/Dashboard/Menu/MenuConstant";
+
 import useAllMenu from "@/Hooks/Dashboard/Menu/useAllMenu";
 import useFilterParams from "@/Hooks/Common/useFilterParams";
 
@@ -14,7 +16,7 @@ import DashboardSelectFilter, { DashboardResetFilter } from "@/Components/Fragme
 
 const MenuPage = memo(() => {
   const { filters, updateFilters, resetFilters } = useFilterParams();
-  const { menus, loadMenus, loading, errorMessage, pagination, isAvailableOptions, sortByOptions, sortDirectionOptions, categoryOptions } = useAllMenu();
+  const { menus, loadMenus, loading, errorMessage, pagination, categoryOptions } = useAllMenu();
   const [selectedEditMenu, setSelectedEditMenu] = useState(null);
   const [selectedDeleteMenu, setSelectedDeleteMenu] = useState(null);
   const [selectedAddMenu, setSelectedAddMenu] = useState(false);
@@ -102,9 +104,9 @@ const MenuPage = memo(() => {
     <>
       <Card>
         <div className="grid grid-cols-2  gap-4 xl:grid-cols-4">
-          <DashboardSelectFilter items={sortByOptions} onValueChange={handleSortByChange} value={filters.sort_by || null} label="Cari Berdasarkan" placeholder="Pilih opsi" />
-          <DashboardSelectFilter items={sortDirectionOptions} onValueChange={handleSortDirectionChange} value={filters.sort_direction || null} label="Urutan" placeholder="Pilih urutan" />
-          <DashboardSelectFilter items={isAvailableOptions} onValueChange={handleIsAvailableChange} value={filters.is_available || null} label="Ketersediaan" placeholder="Pilih ketersediaan" />
+          <DashboardSelectFilter items={SORY_BY_OPTIONS} onValueChange={handleSortByChange} value={filters.sort_by || null} label="Cari Berdasarkan" placeholder="Pilih opsi" />
+          <DashboardSelectFilter items={SORT_DIRECTION_OPTIONS} onValueChange={handleSortDirectionChange} value={filters.sort_direction || null} label="Urutan" placeholder="Pilih urutan" />
+          <DashboardSelectFilter items={IS_AVAILABLE_OPTIONS} onValueChange={handleIsAvailableChange} value={filters.is_available || null} label="Ketersediaan" placeholder="Pilih ketersediaan" />
           <DashboardSelectFilter items={categoryOptions} onValueChange={handleCategoryIdChange} value={filters.category_id || null} label="Kategori" placeholder="Pilih kategori" />
           <div className="col-span-full flex justify-between w-full gap-4 bg-background">
             <DashboardInputSearch onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari menu..." />

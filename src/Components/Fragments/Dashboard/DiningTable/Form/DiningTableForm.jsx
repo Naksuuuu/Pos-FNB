@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { Controller } from "react-hook-form";
 
 import { STATUS_OPTIONS } from "@/Constants/Dashboard/DiningTable/DiningTableConstant";
@@ -8,8 +7,6 @@ import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/Component
 import DashboardSelectFilter from "@/Components/Fragments/Dashboard/Common/DashboardSelectFilter";
 
 const DiningTableForm = ({ register, errors, control }) => {
-  const statusOptions = useMemo(() => STATUS_OPTIONS, []);
-
   return (
     <FieldSet>
       <FieldGroup className="grid grid-cols-1 md:grid-cols-2">
@@ -29,7 +26,7 @@ const DiningTableForm = ({ register, errors, control }) => {
             control={control}
             render={({ field }) => (
               <DashboardSelectFilter
-                items={statusOptions}
+                items={STATUS_OPTIONS}
                 label="Status"
                 id="status"
                 name="status"

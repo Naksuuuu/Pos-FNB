@@ -1,34 +1,23 @@
-import { memo, useMemo } from "react";
+import { memo } from "react";
 import { Pen, Trash } from "lucide-react";
 
+import { TABLE_MENU_HEAD_COLUMNS } from "@/Constants/Dashboard/Menu/MenuConstant";
 import { rupiah } from "@/Utils/rupiahHelper";
 
+import { Badge } from "@/Components/Elements/Shadcn/badge";
 import { Button } from "@/Components/Elements/Shadcn/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/Elements/Shadcn/table";
 import DashboardTableError from "@/Components/Fragments/Dashboard/Common/Table/DashboardTableError";
 import DashboardTableLoading from "@/Components/Fragments/Dashboard/Common/Table/DashboardTableLoading";
-import { Badge } from "@/Components/Elements/Shadcn/badge";
 import DashboardPagination from "@/Components/Fragments/Dashboard/Common/DashboardPagination";
 
 const MenuTable = memo(({ loading, errorMessage, menus = [], pagination, onOpenDeleteModal, onOpenEditModal, handlePageChange }) => {
-  const columns = useMemo(
-    () => [
-      { header: "No", width: "w-[50px]" },
-      { header: "Nama", width: "min-w-[300px] max-w-full" },
-      { header: "Kategori", width: "w-[300px]" },
-      { header: "Harga", width: "w-[200px]" },
-      { header: "Status", width: "w-[200px]" },
-      { header: "Aksi", width: "w-[200px]" },
-    ],
-    [],
-  );
-
   return (
     <>
       <Table className="min-w-full ">
         <TableHeader>
           <TableRow>
-            {columns.map((col) => (
+            {TABLE_MENU_HEAD_COLUMNS.map((col) => (
               <TableHead key={col.header} className={`${col.width}`}>
                 {col.header}
               </TableHead>
@@ -36,7 +25,7 @@ const MenuTable = memo(({ loading, errorMessage, menus = [], pagination, onOpenD
           </TableRow>
         </TableHeader>
         <TableBody>
-          {loading && !errorMessage && <DashboardTableLoading rows="15" columns={columns.length} />}
+          {loading && !errorMessage && <DashboardTableLoading rows="15" columns={TABLE_MENU_HEAD_COLUMNS.length} />}
           {errorMessage && !loading && <DashboardTableError message={errorMessage} />}
           {!loading &&
             !errorMessage &&
