@@ -10,7 +10,7 @@ const useEditDiningTable = () => {
   const edit = useCallback(
     async (tableId, tableData) => {
       const response = await dispatch(editDiningTable([tableId, tableData])).unwrap();
-      dispatch(fetchDiningTables({ search: "" }));
+      dispatch(fetchDiningTables());
       return response;
     },
     [dispatch],

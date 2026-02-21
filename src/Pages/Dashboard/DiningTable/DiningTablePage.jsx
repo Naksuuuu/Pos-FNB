@@ -10,10 +10,12 @@ import DiningTableModalEdit from "@/Components/Fragments/Dashboard/DiningTable/M
 import DiningTableModalDelete from "@/Components/Fragments/Dashboard/DiningTable/Modal/DiningTableModalDelete";
 import DashboardInputSearch from "@/Components/Fragments/Dashboard/Common/DashboardInputSearch";
 import { Card } from "@/Components/Elements/Cards/Card";
+import { SORT_DIRECTION_OPTIONS, STATUS_OPTIONS } from "@/Constants/Dashboard/DiningTable/DiningTableConstant";
+import DashboardSelectFilter from "@/Components/Fragments/Dashboard/Common/DashboardSelectFilter";
 
 const DiningTablePage = () => {
   const { filters, updateFilters } = useFilterParams();
-  const { diningTables, loadDiningTables, loading, errorMessage } = useAllDiningTable();
+  const { diningTables, loadDiningTables, loading, errorMessage, pagination } = useAllDiningTable();
 
   const [selectedCreateTable, setSelectedCreateTable] = useState(null);
   const [selectedEditTable, setSelectedEditTable] = useState(null);
@@ -26,17 +28,26 @@ const DiningTablePage = () => {
     loadDiningTables(filters);
   }, [filters, loadDiningTables]);
 
-  const handleOpenCreateModal = useCallback((state) => {
-    setSelectedCreateTable(state);
-  }, []);
+  const handleSortDirectionChange = useCallback(
+    (e) => {
+      updateFilters({ sort_direction: e });
+    },
+    [updateFilters],
+  );
 
-  const handleOpenEditModal = useCallback((state) => {
-    setSelectedEditTable(state);
-  }, []);
+  const handleStatusChange = useCallback(
+    (e) => {
+      updateFilters({ status: e });
+    },
+    [updateFilters],
+  );
 
-  const handleOpenDeleteModal = useCallback((state) => {
-    setSelectedDeleteTable(state);
-  }, []);
+  const handlePageChange = useCallback(
+    (newPage) => {
+      updateFilters({ page: newPage });
+    },
+    [updateFilters],
+  );
 
   const timerRef = useRef(null);
   const handleSearchChange = useCallback(
@@ -53,17 +64,39 @@ const DiningTablePage = () => {
     [updateFilters],
   );
 
+  const handleOpenCreateModal = useCallback((state) => {
+    setSelectedCreateTable(state);
+  }, []);
+
+  const handleOpenEditModal = useCallback((state) => {
+    setSelectedEditTable(state);
+  }, []);
+
+  const handleOpenDeleteModal = useCallback((state) => {
+    setSelectedDeleteTable(state);
+  }, []);
+
   return (
     <>
       <Card>
-        <div className="flex justify-between w-full gap-4">
+        <div className="grid grid-cols-4 gap-4">
+          <DashboardSelectFilter items={STATUS_OPTIONS} onValueChange={handleStatusChange} value={filters.status || null} label="Cari Berdasarkan Status" placeholder="Pilih opsi" />
+          <DashboardSelectFilter items={SORT_DIRECTION_OPTIONS} onValueChange={handleSortDirectionChange} value={filters.sort_direction || null} label="Urutan" placeholder="Pilih urutan" />
           <DashboardInputSearch onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari Meja" />
           <Button onClick={handleOpenCreateModal}>Tambah Meja</Button>
         </div>
       </Card>
 
       <Card>
-        <DiningTableTable diningTables={diningTables} loading={loading} errorMessage={errorMessage} onOpenEditModal={handleOpenEditModal} onOpenDeleteModal={handleOpenDeleteModal} />
+        <DiningTableTable
+          diningTables={diningTables}
+          loading={loading}
+          errorMessage={errorMessage}
+          onOpenEditModal={handleOpenEditModal}
+          onOpenDeleteModal={handleOpenDeleteModal}
+          pagination={pagination}
+          handlePageChange={handlePageChange}
+        />
       </Card>
 
       {selectedCreateTable && <DiningTableModalCreate isOpen={!!selectedCreateTable} onOpenModal={handleOpenCreateModal} />}

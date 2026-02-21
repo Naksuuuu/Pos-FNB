@@ -1,8 +1,8 @@
 import { z } from "zod";
-import { STATUS_OPTIONS } from "@/Constants/Dashboard/DiningTable/DiningTableConstant";
+import { STATUS_OPTIONS_SCHEMA } from "@/Constants/Dashboard/DiningTable/DiningTableConstant";
 
-const statusOptions = STATUS_OPTIONS.map((option) => option.value);
-const statusLabels = STATUS_OPTIONS.map((option) => option.label);
+const statusOptions = STATUS_OPTIONS_SCHEMA.map((option) => option.value);
+const statusLabels = STATUS_OPTIONS_SCHEMA.map((option) => option.label);
 
 const code = z.string().min(1, "kode nama wajib diisi!");
 

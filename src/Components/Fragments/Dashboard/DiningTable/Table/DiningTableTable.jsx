@@ -6,8 +6,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import DashboardTableError from "@/Components/Fragments/Dashboard/Common/Table/DashboardTableError";
 import DashboardTableLoading from "@/Components/Fragments/Dashboard/Common/Table/DashboardTableLoading";
 import { useMemo } from "react";
+import DashboardPagination from "@/Components/Fragments/Dashboard/Common/DashboardPagination";
 
-const DiningTableTable = ({ diningTables, loading, errorMessage, onOpenEditModal, onOpenDeleteModal }) => {
+const DiningTableTable = ({ diningTables, loading, errorMessage, onOpenEditModal, onOpenDeleteModal, pagination, handlePageChange }) => {
   const columns = useMemo(() => {
     return [
       {
@@ -67,6 +68,8 @@ const DiningTableTable = ({ diningTables, loading, errorMessage, onOpenEditModal
             ))}
         </TableBody>
       </Table>
+
+      <DashboardPagination pagination={pagination} onPageChange={handlePageChange} />
     </>
   );
 };

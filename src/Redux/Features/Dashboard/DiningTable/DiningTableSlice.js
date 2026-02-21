@@ -8,9 +8,25 @@ const initialState = {
   loadingCreate: false,
   loadingEdit: false,
   loadingDelete: false,
+  pagination: {
+    current_page: 0,
+    last_page: 0,
+    per_page: 0,
+    total: 0,
+    from: 0,
+    to: 0,
+    prev_page: null,
+    next_page: null,
+  },
+  filters: {
+    search: null,
+    status: null,
+    sort_by: "created_at",
+    sort_direction: "desc",
+  },
 };
 
-export const fetchDiningTables = createAsyncThunk("diningTable/fetchDiningTables", async (params, { rejectWithValue }) => {
+export const fetchDiningTables = createAsyncThunk("diningTable/fetchDiningTables", async (params = {}, { rejectWithValue }) => {
   try {
     const response = await DiningTableService.getAllDiningTables(params);
     if (!response.success) {
@@ -96,6 +112,16 @@ const diningTableSlice = createSlice({
       .addCase(fetchDiningTables.fulfilled, (state, action) => {
         state.loading = false;
         state.diningTables = action.payload.tables;
+        state.pagination = {
+          ...action.payload.pagination,
+          current_page: parseInt(action.payload.pagination.current_page),
+          per_page: parseInt(action.payload.pagination.per_page),
+          last_page: parseInt(action.payload.pagination.last_page),
+          total: parseInt(action.payload.pagination.total),
+          next_page: action.payload.pagination.next_page ? parseInt(action.payload.pagination.next_page) : null,
+          prev_page: action.payload.pagination.prev_page ? parseInt(action.payload.pagination.prev_page) : null,
+        };
+        state.filters = action.payload.filters;
       })
       .addCase(fetchDiningTables.rejected, (state, action) => {
         state.loading = false;
