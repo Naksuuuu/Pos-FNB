@@ -16,6 +16,11 @@ const initialState = {
     sort_direction: "desc",
     per_page: 10,
   },
+  statistic: {
+    total_menu: 0,
+    available_count: 0,
+    not_available_count: 0,
+  },
   pagination: {
     current_page: 1,
     from: 1,
@@ -124,6 +129,11 @@ const menuSlice = createSlice({
       .addCase(fetchMenus.fulfilled, (state, action) => {
         state.loading = false;
         state.menus = action.payload.menus;
+        state.statistic = {
+          total_menu: parseInt(action.payload.statistic.total_menu),
+          available_count: parseInt(action.payload.statistic.available_count),
+          not_available_count: parseInt(action.payload.statistic.not_available_count),
+        };
         state.pagination = {
           ...action.payload.pagination,
           current_page: parseInt(action.payload.pagination.current_page),

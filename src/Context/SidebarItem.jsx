@@ -17,18 +17,6 @@ export const SidebarItem = [
         icon: LayoutDashboard,
         children: null,
       },
-      {
-        title: "Kategori",
-        path: "/dashboard/category",
-        icon: LayoutDashboard,
-        children: null,
-      },
-      {
-        title: "Meja",
-        path: "/dashboard/table",
-        icon: LayoutDashboard,
-        children: null,
-      },
     ],
   },
   {

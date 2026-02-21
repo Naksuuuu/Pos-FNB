@@ -1,7 +1,7 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { selectAllMenus, selectMenuError, selectMenuLoading, selectMenuPagination } from "@/Redux/Features/Dashboard/Menu/MenuSelector";
+import { selectAllMenus, selectMenuError, selectMenuLoading, selectMenuPagination, selectMenuStatistic } from "@/Redux/Features/Dashboard/Menu/MenuSelector";
 import { fetchMenus } from "@/Redux/Features/Dashboard/Menu/MenuSlice";
 import { selectAllCategories } from "@/Redux/Features/Dashboard/Category/CategorySelector";
 import { fetchCategories } from "@/Redux/Features/Dashboard/Category/CategorySlice";
@@ -14,8 +14,15 @@ const useAllMenu = () => {
   const errorMessage = useSelector(selectMenuError);
   const pagination = useSelector(selectMenuPagination);
   const categories = useSelector(selectAllCategories);
+  const statistic = useSelector(selectMenuStatistic);
 
   const categoryOptions = useMemo(() => [...CATEGORY_ID_OPTIONS, ...categories.map((category) => ({ label: category.name, value: category.id }))], [categories]);
+
+  useEffect(() => {
+    if (categories.length === 0) {
+      dispatch(fetchCategories({}));
+    }
+  }, [dispatch, categories.length]);
 
   const loadMenus = useCallback(
     async (params = {}) => {
@@ -26,12 +33,11 @@ const useAllMenu = () => {
         ...otherParams,
       };
       await dispatch(fetchMenus(safeParams));
-      dispatch(fetchCategories({}));
     },
     [dispatch],
   );
 
-  return { menus, loadMenus, loading, errorMessage, pagination, categoryOptions };
+  return { menus, loadMenus, loading, errorMessage, pagination, categoryOptions, statistic };
 };
 
 export default useAllMenu;

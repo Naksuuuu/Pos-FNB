@@ -1,13 +1,17 @@
 import { Button } from "@/Components/Elements/Shadcn/button";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/Components/Elements/Shadcn/dialog";
 import { Spinner } from "@/Components/Elements/Shadcn/spinner";
+import { SquareX } from "lucide-react";
 
-const ModalConfirmation = ({ isOpen, title, description, onOpenModal, loading, handleDelete, id }) => {
+const ModalConfirmation = ({ isOpen, title, description, onOpenModal, loading, handleDelete, id, icon: Icon }) => {
   return (
     <Dialog open={isOpen} onOpenChange={() => onOpenModal(null)}>
       <DialogContent showCloseButton={false}>
         <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
+          <DialogTitle className="flex items-center gap-2">
+            <div className="p-2 bg-red-100 rounded-md text-red-900">{Icon ? <Icon className="size-4" /> : <SquareX className="size-4" />}</div>
+            <span className="font-semibold text-lg">{title}</span>
+          </DialogTitle>
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
         <DialogFooter>

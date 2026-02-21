@@ -3,7 +3,6 @@ const SORY_BY_OPTIONS = [
   { label: "Tanggal Dibuat", value: "created_at" },
   { label: "Nama ", value: "name" },
   { label: "Harga ", value: "price" },
-  { label: "Stok ", value: "stock" },
 ];
 
 const SORT_DIRECTION_OPTIONS = [

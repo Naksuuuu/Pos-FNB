@@ -8,7 +8,7 @@ const DashLayout = ({ children }) => {
       <main className="relative w-screen bg-dashboard">
         <DashboardNavbar />
 
-        <div className="mx-4 my-4 space-y-4">{children}</div>
+        <div className="mx-2 md:mx-4 my-2 md:my-4 space-y-4">{children}</div>
         <Toaster
           toastOptions={{
             classNames: {

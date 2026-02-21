@@ -14,7 +14,7 @@ import DashboardPagination from "@/Components/Fragments/Dashboard/Common/Dashboa
 const MenuTable = memo(({ loading, errorMessage, menus = [], pagination, onOpenDeleteModal, onOpenEditModal, handlePageChange }) => {
   return (
     <>
-      <Table className="min-w-full ">
+      <Table className="min-w-full border-b">
         <TableHeader>
           <TableRow>
             {TABLE_MENU_HEAD_COLUMNS.map((col) => (
