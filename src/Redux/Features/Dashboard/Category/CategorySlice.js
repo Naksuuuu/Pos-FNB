@@ -10,6 +10,11 @@ const initialState = {
   loadingDelete: false,
   filters: {
     search: null,
+    sort_by: null,
+    sort_direction: null,
+  },
+  statistic: {
+    total_category: 0,
   },
 };
 
@@ -98,6 +103,7 @@ const categorySlice = createSlice({
         state.loading = false;
         state.categories = action.payload.categories;
         state.filters = action.payload.filters;
+        state.statistic = action.payload.statistic;
       })
       .addCase(fetchCategories.rejected, (state, action) => {
         state.loading = false;

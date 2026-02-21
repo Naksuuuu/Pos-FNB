@@ -1,5 +1,7 @@
-import { memo, useMemo } from "react";
+import { memo } from "react";
 import { Pen, Trash } from "lucide-react";
+
+import { TABLE_CATEGORY_HEAD_COLUMNS } from "@/Constants/Dashboard/Category/CategoryConstant";
 
 import { Button } from "@/Components/Elements/Shadcn/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/Elements/Shadcn/table";
@@ -7,20 +9,12 @@ import DashboardTableError from "@/Components/Fragments/Dashboard/Common/Table/D
 import DashboardTableLoading from "@/Components/Fragments/Dashboard/Common/Table/DashboardTableLoading";
 
 const CategoryTable = memo(({ loading, errorMessage, categories = [], onOpenDeleteModal, onOpenEditModal }) => {
-  const columns = useMemo(() => {
-    return [
-      { header: "No", width: "w-[50px]" },
-      { header: "Nama", width: "min-w-[300px] max-w-full" },
-      { header: "Aksi", width: "w-[200px]" },
-    ];
-  }, []);
-
   return (
     <>
       <Table>
         <TableHeader>
           <TableRow>
-            {columns.map((col) => (
+            {TABLE_CATEGORY_HEAD_COLUMNS.map((col) => (
               <TableHead key={col.header} className={`${col.width}`}>
                 {col.header}
               </TableHead>
@@ -28,7 +22,7 @@ const CategoryTable = memo(({ loading, errorMessage, categories = [], onOpenDele
           </TableRow>
         </TableHeader>
         <TableBody>
-          {loading && !errorMessage && <DashboardTableLoading rows="15" columns={columns.length} />}
+          {loading && !errorMessage && <DashboardTableLoading rows="15" columns={TABLE_CATEGORY_HEAD_COLUMNS.length} />}
           {errorMessage && !loading && <DashboardTableError message={errorMessage} />}
           {!loading &&
             !errorMessage &&
@@ -36,6 +30,7 @@ const CategoryTable = memo(({ loading, errorMessage, categories = [], onOpenDele
               <TableRow key={category.id}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{category.name}</TableCell>
+                <TableCell>{category.menu_count}</TableCell>
                 <TableCell>
                   <Button size="icon" variant="ghost" className="text-red-500 rounded-full hover:bg-red-200 hover:text-red-600" onClick={() => onOpenDeleteModal(category)}>
                     <Trash />

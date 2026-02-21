@@ -3,10 +3,12 @@ import { apiUtils } from "@/Services/Common/Base";
 const CATEGORY_ENDPOINT = "/dashboard/categories";
 
 export const getAllCategories = async (params) => {
-  const { search } = params;
+  const { search, sort_by, sort_direction } = params;
 
   const queryParams = {
     search,
+    sort_by,
+    sort_direction,
   };
 
   const response = await apiUtils.get(CATEGORY_ENDPOINT, { params: queryParams });
