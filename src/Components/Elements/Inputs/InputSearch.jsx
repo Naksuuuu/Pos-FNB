@@ -7,7 +7,7 @@ import { Badge } from "@/Components/Elements/Shadcn/badge";
 
 const INPUT_SHORTCUT = "k";
 
-const DashInputSearch = memo(({ onSearchChange, placeholder = "Search...", ...props }) => {
+const InputSearch = memo(({ onSearchChange, placeholder = "Search...", ...props }) => {
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key.toLowerCase() === INPUT_SHORTCUT && (e.metaKey || e.ctrlKey)) {
@@ -27,13 +27,23 @@ const DashInputSearch = memo(({ onSearchChange, placeholder = "Search...", ...pr
 
   return (
     <InputGroup className="">
-      <InputGroupInput id="dashboard-search-input" placeholder={placeholder} onChange={(e) => onSearchChange(e)} {...props} />
+      <InputGroupInput
+        id="dashboard-search-input"
+        placeholder={placeholder}
+        onChange={(e) => onSearchChange(e)}
+        {...props}
+      />
       <InputGroupAddon>
         <Search />
       </InputGroupAddon>
       {props?.value ? (
         <InputGroupAddon align="inline-end">
-          <Button variant="ghost" size="xs" className="mr-1 text-red-600 hover:text-red-900 hover:bg-red-100!" onClick={() => onSearchChange({ target: { value: "" } })}>
+          <Button
+            variant="ghost"
+            size="xs"
+            className="mr-1 text-red-600 hover:text-red-900 hover:bg-red-100!"
+            onClick={() => onSearchChange({ target: { value: "" } })}
+          >
             <X />
           </Button>
         </InputGroupAddon>
@@ -48,4 +58,4 @@ const DashInputSearch = memo(({ onSearchChange, placeholder = "Search...", ...pr
   );
 });
 
-export default DashInputSearch;
+export { InputSearch };

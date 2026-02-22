@@ -1,9 +1,17 @@
 import { memo } from "react";
-import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/Components/Elements/Shadcn/pagination";
+import {
+  Pagination as PaginationMain,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/Components/Elements/Shadcn/pagination";
 
-const DashPagination = memo(({ pagination, onPageChange }) => {
+const Pagination = memo(({ pagination, onPageChange }) => {
   return (
-    <Pagination className="">
+    <PaginationMain className="">
       <PaginationContent className="bg-background">
         {pagination.prev_page ? (
           <PaginationItem>
@@ -54,7 +62,7 @@ const DashPagination = memo(({ pagination, onPageChange }) => {
           </PaginationItem>
         )}
       </PaginationContent>
-    </Pagination>
+    </PaginationMain>
   );
 });
-export default DashPagination;
+export { Pagination };

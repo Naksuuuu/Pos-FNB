@@ -4,7 +4,7 @@ import { STATUS_OPTIONS } from "@/Constants/Dashboard/DiningTable/DiningTableCon
 
 import { Input } from "@/Components/Elements/Shadcn/input";
 import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/Components/Elements/Shadcn/field";
-import DashSelectFilter from "@/Components/Fragments/Dashboard/Common/DashSelectFilter";
+import { Select } from "@/Components/Elements/Inputs/Select";
 
 const DiningTableForm = ({ register, errors, control }) => {
   return (
@@ -14,7 +14,13 @@ const DiningTableForm = ({ register, errors, control }) => {
           <FieldLabel htmlFor="code">
             Code Meja <span className="text-destructive">*</span>
           </FieldLabel>
-          <Input id="code" name="code" autoComplete="off" {...register("code")} aria-invalid={errors.code ? "true" : "false"} />
+          <Input
+            id="code"
+            name="code"
+            autoComplete="off"
+            {...register("code")}
+            aria-invalid={errors.code ? "true" : "false"}
+          />
           {errors.code && <FieldError>{errors.code.message}</FieldError>}
         </Field>
         <Field>
@@ -25,7 +31,7 @@ const DiningTableForm = ({ register, errors, control }) => {
             name="status"
             control={control}
             render={({ field }) => (
-              <DashSelectFilter
+              <Select
                 items={STATUS_OPTIONS}
                 label="Status"
                 id="status"

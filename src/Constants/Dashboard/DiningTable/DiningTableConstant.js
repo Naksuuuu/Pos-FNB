@@ -12,4 +12,23 @@ const SORT_DIRECTION_OPTIONS = [
 
 const STATUS_OPTIONS_SCHEMA = STATUS_OPTIONS.filter((option) => option.value !== "");
 
-export { STATUS_OPTIONS, SORT_DIRECTION_OPTIONS, STATUS_OPTIONS_SCHEMA };
+const TABLE_DINING_TABLE_HEAD_COLUMNS = [
+  {
+    header: "No",
+    width: "w-[50px]",
+  },
+  {
+    header: "Kode Nama",
+    width: "w-[150px]",
+  },
+  {
+    header: "Status",
+    width: "w-[100px]",
+  },
+  {
+    header: "Aksi",
+    width: "w-[100px]",
+  },
+];
+
+export { STATUS_OPTIONS, SORT_DIRECTION_OPTIONS, STATUS_OPTIONS_SCHEMA, TABLE_DINING_TABLE_HEAD_COLUMNS };

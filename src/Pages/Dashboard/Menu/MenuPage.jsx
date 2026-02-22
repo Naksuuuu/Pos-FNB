@@ -9,12 +9,13 @@ import useFilterParams from "@/Hooks/Common/useFilterParams";
 import { Button } from "@/Components/Elements/Shadcn/button";
 import { Card } from "@/Components/Elements/Cards/Card";
 import { DropDown } from "@/Components/Elements/Buttons/DropDown";
+import { ButtonResetFilter } from "@/Components/Elements/Buttons/ButtonResetFilter";
+import { Select } from "@/Components/Elements/Inputs/Select";
+import { InputSearch } from "@/Components/Elements/Inputs/InputSearch";
 import MenuModalCreate from "@/Components/Fragments/Dashboard/Menu/Modal/MenuModalCreate";
 import MenuModalEdit from "@/Components/Fragments/Dashboard/Menu/Modal/MenuModalEdit";
 import MenuModalDelete from "@/Components/Fragments/Dashboard/Menu/Modal/MenuModalDelete";
 import MenuTable from "@/Components/Fragments/Dashboard/Menu/Table/MenuTable";
-import DashInputSearch from "@/Components/Fragments/Dashboard/Common/DashInputSearch";
-import DashSelectFilter, { DashResetFilter } from "@/Components/Fragments/Dashboard/Common/DashSelectFilter";
 import CategoryModalCreate from "@/Components/Fragments/Dashboard/Category/Modal/CategoryModalCreate";
 import DiningTableModalCreate from "@/Components/Fragments/Dashboard/DiningTable/Modal/DiningTableModalCreate";
 import MenuStatistic from "@/Components/Fragments/Dashboard/Menu/Statistic/MenuStatistic";
@@ -32,7 +33,13 @@ const MenuPage = memo(() => {
     setOptimisticSearch(search);
   }, [search]);
 
-  const showReset = !!(filters.sort_by || filters.sort_direction || filters.is_available || filters.category_id || search);
+  const showReset = !!(
+    filters.sort_by ||
+    filters.sort_direction ||
+    filters.is_available ||
+    filters.category_id ||
+    search
+  );
 
   useEffect(() => {
     loadMenus(filters);
@@ -137,28 +144,64 @@ const MenuPage = memo(() => {
 
       <Card>
         <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
-          <DashInputSearch onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari menu..." />
+          <InputSearch onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari menu..." />
 
           <Button onClick={handleOpenCreateModal}>
             <Plus />
             Tambah Menu
           </Button>
 
-          <DropDown triggerLabel="Kelola Kategori" triggerIcon={Settings} items={categoryItems} buttonProps={{ variant: "default", size: "default" }} contentAlign="start" />
+          <DropDown
+            triggerLabel="Kelola Kategori"
+            triggerIcon={Settings}
+            items={categoryItems}
+            buttonProps={{ variant: "default", size: "default" }}
+            contentAlign="start"
+          />
 
-          <DropDown triggerLabel="Kelola Meja" triggerIcon={Settings} items={tableItems} buttonProps={{ variant: "default", size: "default" }} contentAlign="start" />
+          <DropDown
+            triggerLabel="Kelola Meja"
+            triggerIcon={Settings}
+            items={tableItems}
+            buttonProps={{ variant: "default", size: "default" }}
+            contentAlign="start"
+          />
 
-          <DashSelectFilter items={SORY_BY_OPTIONS} onValueChange={handleSortByChange} value={filters.sort_by || null} label="Cari Berdasarkan" placeholder="Pilih opsi" />
+          <Select
+            items={SORY_BY_OPTIONS}
+            onValueChange={handleSortByChange}
+            value={filters.sort_by || null}
+            label="Cari Berdasarkan"
+            placeholder="Pilih opsi"
+          />
 
-          <DashSelectFilter items={SORT_DIRECTION_OPTIONS} onValueChange={handleSortDirectionChange} value={filters.sort_direction || null} label="Urutan" placeholder="Pilih urutan" />
+          <Select
+            items={SORT_DIRECTION_OPTIONS}
+            onValueChange={handleSortDirectionChange}
+            value={filters.sort_direction || null}
+            label="Urutan"
+            placeholder="Pilih urutan"
+          />
 
-          <DashSelectFilter items={IS_AVAILABLE_OPTIONS} onValueChange={handleIsAvailableChange} value={filters.is_available || null} label="Ketersediaan" placeholder="Pilih ketersediaan" />
+          <Select
+            items={IS_AVAILABLE_OPTIONS}
+            onValueChange={handleIsAvailableChange}
+            value={filters.is_available || null}
+            label="Ketersediaan"
+            placeholder="Pilih ketersediaan"
+          />
 
-          <DashSelectFilter items={categoryOptions} onValueChange={handleCategoryIdChange} value={filters.category_id || null} label="Kategori" placeholder="Pilih kategori" />
+          <Select
+            items={categoryOptions}
+            onValueChange={handleCategoryIdChange}
+            value={filters.category_id || null}
+            label="Kategori"
+            placeholder="Pilih kategori"
+          />
         </div>
       </Card>
 
-      <DashResetFilter onResetFilter={handleResetFilter} condition={showReset} />
+      <ButtonResetFilter onResetFilter={handleResetFilter} condition={showReset} />
 
       <Card className="overflow-hidden space-y-2">
         <MenuTable
@@ -175,8 +218,12 @@ const MenuPage = memo(() => {
       {selectedDeleteMenu && <MenuModalDelete selectedMenu={selectedDeleteMenu} onOpenModal={handleOpenDeleteModal} />}
       {selectedEditMenu && <MenuModalEdit selectedMenu={selectedEditMenu} onOpenModal={handleOpenEditModal} />}
       {selectedAddMenu && <MenuModalCreate isOpen={selectedAddMenu} onOpenModal={handleOpenCreateModal} />}
-      {categoryModalOpen && <CategoryModalCreate isOpen={categoryModalOpen} onOpenModal={handleOpenCreateCategoryModal} />}
-      {diningTableModalOpen && <DiningTableModalCreate isOpen={diningTableModalOpen} onOpenModal={handleOpenCreateDiningTableModal} />}
+      {categoryModalOpen && (
+        <CategoryModalCreate isOpen={categoryModalOpen} onOpenModal={handleOpenCreateCategoryModal} />
+      )}
+      {diningTableModalOpen && (
+        <DiningTableModalCreate isOpen={diningTableModalOpen} onOpenModal={handleOpenCreateDiningTableModal} />
+      )}
     </>
   );
 });

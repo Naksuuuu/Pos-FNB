@@ -8,15 +8,16 @@ import useFilterParams from "@/Hooks/Common/useFilterParams";
 
 import { Button } from "@/Components/Elements/Shadcn/button";
 import { Card } from "@/Components/Elements/Cards/Card";
+import { InputSearch } from "@/Components/Elements/Inputs/InputSearch";
+import { Select } from "@/Components/Elements/Inputs/Select";
 import DiningTableTable from "@/Components/Fragments/Dashboard/DiningTable/Table/DiningTableTable";
 import DiningTableModalCreate from "@/Components/Fragments/Dashboard/DiningTable/Modal/DiningTableModalCreate";
 import DiningTableModalEdit from "@/Components/Fragments/Dashboard/DiningTable/Modal/DiningTableModalEdit";
 import DiningTableModalDelete from "@/Components/Fragments/Dashboard/DiningTable/Modal/DiningTableModalDelete";
-import DashInputSearch from "@/Components/Fragments/Dashboard/Common/DashInputSearch";
-import DashSelectFilter from "@/Components/Fragments/Dashboard/Common/DashSelectFilter";
+import { ButtonResetFilter } from "@/Components/Elements/Buttons/ButtonResetFilter";
 
 const DiningTablePage = () => {
-  const { filters, updateFilters } = useFilterParams();
+  const { filters, updateFilters, resetFilters } = useFilterParams();
   const { diningTables, loadDiningTables, loading, errorMessage, pagination } = useAllDiningTable();
 
   const [selectedCreateTable, setSelectedCreateTable] = useState(null);
@@ -25,6 +26,8 @@ const DiningTablePage = () => {
 
   const search = filters.search || "";
   const [optimisticSearch, setOptimisticSearch] = useState(search);
+
+  const showReset = !!(filters.sort_direction || filters.status || search);
 
   useEffect(() => {
     loadDiningTables(filters);
@@ -66,6 +69,10 @@ const DiningTablePage = () => {
     [updateFilters],
   );
 
+  const handleResetFilter = useCallback(() => {
+    resetFilters();
+  }, [resetFilters]);
+
   const handleOpenCreateModal = useCallback((state) => {
     setSelectedCreateTable(state);
   }, []);
@@ -82,15 +89,29 @@ const DiningTablePage = () => {
     <>
       <Card>
         <div className="grid grid-cols-4 gap-4">
-          <DashSelectFilter items={STATUS_OPTIONS} onValueChange={handleStatusChange} value={filters.status || null} label="Cari Berdasarkan Status" placeholder="Pilih opsi" />
-          <DashSelectFilter items={SORT_DIRECTION_OPTIONS} onValueChange={handleSortDirectionChange} value={filters.sort_direction || null} label="Urutan" placeholder="Pilih urutan" />
-          <DashInputSearch onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari Meja" />
+          <Select
+            items={STATUS_OPTIONS}
+            onValueChange={handleStatusChange}
+            value={filters.status || null}
+            label="Cari Berdasarkan Status"
+            placeholder="Pilih opsi"
+          />
+          <Select
+            items={SORT_DIRECTION_OPTIONS}
+            onValueChange={handleSortDirectionChange}
+            value={filters.sort_direction || null}
+            label="Urutan"
+            placeholder="Pilih urutan"
+          />
+          <InputSearch onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari Meja" />
           <Button onClick={handleOpenCreateModal}>
             {" "}
             <Plus /> Tambah Meja
           </Button>
         </div>
       </Card>
+
+      <ButtonResetFilter showReset={showReset} onResetFilter={handleResetFilter} />
 
       <Card>
         <DiningTableTable
@@ -104,9 +125,15 @@ const DiningTablePage = () => {
         />
       </Card>
 
-      {selectedCreateTable && <DiningTableModalCreate isOpen={!!selectedCreateTable} onOpenModal={handleOpenCreateModal} />}
-      {selectedEditTable && <DiningTableModalEdit selectedDiningTable={selectedEditTable} onOpenModal={handleOpenEditModal} />}
-      {selectedDeleteTable && <DiningTableModalDelete selectedDiningTable={selectedDeleteTable} onOpenModal={handleOpenDeleteModal} />}
+      {selectedCreateTable && (
+        <DiningTableModalCreate isOpen={!!selectedCreateTable} onOpenModal={handleOpenCreateModal} />
+      )}
+      {selectedEditTable && (
+        <DiningTableModalEdit selectedDiningTable={selectedEditTable} onOpenModal={handleOpenEditModal} />
+      )}
+      {selectedDeleteTable && (
+        <DiningTableModalDelete selectedDiningTable={selectedDeleteTable} onOpenModal={handleOpenDeleteModal} />
+      )}
     </>
   );
 };

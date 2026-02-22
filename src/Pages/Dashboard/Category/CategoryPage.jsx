@@ -9,12 +9,13 @@ import useFilterParams from "@/Hooks/Common/useFilterParams";
 
 import { Card } from "@/Components/Elements/Cards/Card";
 import { Button } from "@/Components/Elements/Shadcn/button";
+import { Select } from "@/Components/Elements/Inputs/Select";
+import { InputSearch } from "@/Components/Elements/Inputs/InputSearch";
+import { ButtonResetFilter } from "@/Components/Elements/Buttons/ButtonResetFilter";
 import CategoryTable from "@/Components/Fragments/Dashboard/Category/Table/CategoryTable";
-import DashInputSearch from "@/Components/Fragments/Dashboard/Common/DashInputSearch";
 import CategoryModalEdit from "@/Components/Fragments/Dashboard/Category/Modal/CategoryModalEdit";
 import CategoryModalCreate from "@/Components/Fragments/Dashboard/Category/Modal/CategoryModalCreate";
 import CategoryModalDelete from "@/Components/Fragments/Dashboard/Category/Modal/CategoryModalDelete";
-import DashSelectFilter, { DashResetFilter } from "@/Components/Fragments/Dashboard/Common/DashSelectFilter";
 import DashStatisticCard from "@/Components/Fragments/Dashboard/Common/Card/DashStatisticCard";
 
 const CategoryPage = () => {
@@ -92,7 +93,12 @@ const CategoryPage = () => {
           </Link>
         </Button>
         <Card>
-          <DashStatisticCard title="Total Kategori" statistic={statistic?.total_category || 0} descriptions="Semua Kategori Terdaftar" icon={Package} />
+          <DashStatisticCard
+            title="Total Kategori"
+            statistic={statistic?.total_category || 0}
+            descriptions="Semua Kategori Terdaftar"
+            icon={Package}
+          />
         </Card>
         <Button onClick={handleOpenCreateModal} className="w-full">
           <PlusCircle /> Tambah Kategori
@@ -102,15 +108,27 @@ const CategoryPage = () => {
             <h2 className="font-semibold ">Cari dan Filter</h2>
           </div>
           <div className="space-y-4">
-            <DashInputSearch onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari kategori..." />
+            <InputSearch onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari kategori..." />
           </div>
           <div className="w-full flex justify-between gap-4">
-            <DashSelectFilter items={SORT_BY_OPTIONS} onValueChange={handleSortByChange} value={filters.sort_by || null} label="Urutkan Berdasarkan" placeholder="Pilih opsi" />
-            <DashSelectFilter items={SORT_DIRECTION_OPTIONS} onValueChange={handleSortDirectionChange} value={filters.sort_direction || null} label="Urutan" placeholder="Pilih urutan" />
+            <Select
+              items={SORT_BY_OPTIONS}
+              onValueChange={handleSortByChange}
+              value={filters.sort_by || null}
+              label="Urutkan Berdasarkan"
+              placeholder="Pilih opsi"
+            />
+            <Select
+              items={SORT_DIRECTION_OPTIONS}
+              onValueChange={handleSortDirectionChange}
+              value={filters.sort_direction || null}
+              label="Urutan"
+              placeholder="Pilih urutan"
+            />
           </div>
         </Card>
 
-        <DashResetFilter onResetFilter={handleResetFilter} condition={showReset} />
+        <ButtonResetFilter onResetFilter={handleResetFilter} condition={showReset} />
       </div>
       <div className="col-span-2 space-y-4">
         <Card>
@@ -125,9 +143,15 @@ const CategoryPage = () => {
         </Card>
       </div>
 
-      {selectedEditCategory && <CategoryModalEdit selectedCategory={selectedEditCategory} onOpenModal={handleOpenEditModal} />}
-      {selectedCreateCategory && <CategoryModalCreate isOpen={selectedCreateCategory} onOpenModal={handleOpenCreateModal} />}
-      {selectedDeleteCategory && <CategoryModalDelete selectedCategory={selectedDeleteCategory} onOpenModal={handleOpenDeleteModal} />}
+      {selectedEditCategory && (
+        <CategoryModalEdit selectedCategory={selectedEditCategory} onOpenModal={handleOpenEditModal} />
+      )}
+      {selectedCreateCategory && (
+        <CategoryModalCreate isOpen={selectedCreateCategory} onOpenModal={handleOpenCreateModal} />
+      )}
+      {selectedDeleteCategory && (
+        <CategoryModalDelete selectedCategory={selectedDeleteCategory} onOpenModal={handleOpenDeleteModal} />
+      )}
     </div>
   );
 };
