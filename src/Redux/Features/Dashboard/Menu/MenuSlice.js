@@ -23,13 +23,13 @@ const initialState = {
   },
   pagination: {
     current_page: 1,
-    from: 1,
     last_page: 1,
+    per_page: 15,
+    total: 0,
+    from: 1,
+    to: 1,
     next_page: null,
     prev_page: null,
-    per_page: 10,
-    total: 0,
-    total_pages: 0,
   },
 };
 
@@ -135,11 +135,12 @@ const menuSlice = createSlice({
           not_available_count: parseInt(action.payload.statistic.not_available_count),
         };
         state.pagination = {
-          ...action.payload.pagination,
           current_page: parseInt(action.payload.pagination.current_page),
-          per_page: parseInt(action.payload.pagination.per_page),
           last_page: parseInt(action.payload.pagination.last_page),
+          per_page: parseInt(action.payload.pagination.per_page),
           total: parseInt(action.payload.pagination.total),
+          from: parseInt(action.payload.pagination.from),
+          to: parseInt(action.payload.pagination.to),
           next_page: action.payload.pagination.next_page ? parseInt(action.payload.pagination.next_page) : null,
           prev_page: action.payload.pagination.prev_page ? parseInt(action.payload.pagination.prev_page) : null,
         };

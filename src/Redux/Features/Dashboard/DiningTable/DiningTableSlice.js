@@ -9,12 +9,12 @@ const initialState = {
   loadingEdit: false,
   loadingDelete: false,
   pagination: {
-    current_page: 0,
-    last_page: 0,
-    per_page: 0,
+    current_page: 1,
+    last_page: 1,
+    per_page: 15,
     total: 0,
-    from: 0,
-    to: 0,
+    from: 1,
+    to: 1,
     prev_page: null,
     next_page: null,
   },
@@ -123,11 +123,12 @@ const diningTableSlice = createSlice({
           total_table: parseInt(action.payload.statistic.total_table),
         };
         state.pagination = {
-          ...action.payload.pagination,
           current_page: parseInt(action.payload.pagination.current_page),
-          per_page: parseInt(action.payload.pagination.per_page),
           last_page: parseInt(action.payload.pagination.last_page),
+          per_page: parseInt(action.payload.pagination.per_page),
           total: parseInt(action.payload.pagination.total),
+          from: parseInt(action.payload.pagination.from),
+          to: parseInt(action.payload.pagination.to),
           next_page: action.payload.pagination.next_page ? parseInt(action.payload.pagination.next_page) : null,
           prev_page: action.payload.pagination.prev_page ? parseInt(action.payload.pagination.prev_page) : null,
         };

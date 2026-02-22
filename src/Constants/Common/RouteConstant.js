@@ -14,5 +14,6 @@ export const ROUTES = {
       MENU_CATEGORY: "/dashboard/inventory/menu/category",
       TABLE: "/dashboard/inventory/table",
     },
+    ORDER: "/dashboard/order",
   },
 };
