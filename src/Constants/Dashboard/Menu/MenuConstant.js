@@ -25,7 +25,7 @@ const TABLE_MENU_HEAD_COLUMNS = [
   { header: "Kategori", width: "w-[300px]" },
   { header: "Harga", width: "w-[200px]" },
   { header: "Status", width: "w-[200px]" },
-  { header: "Aksi", width: "w-[200px]" },
+  { header: "Aksi", width: "w-[50px] text-right" },
 ];
 
 export { SORY_BY_OPTIONS, SORT_DIRECTION_OPTIONS, IS_AVAILABLE_OPTIONS, CATEGORY_ID_OPTIONS, TABLE_MENU_HEAD_COLUMNS };

@@ -29,15 +29,15 @@ const DashboardRoute = [
     element: createProtectedRoute(<PanelCashier />),
   },
   {
-    path: "/dashboard/menu",
+    path: "/dashboard/inventory/menu",
     element: createProtectedRoute(<MenuPage />),
   },
   {
-    path: "/dashboard/category",
+    path: "/dashboard/inventory/menu/category",
     element: createProtectedRoute(<CategoryPage />),
   },
   {
-    path: "/dashboard/table",
+    path: "/dashboard/inventory/table",
     element: createProtectedRoute(<DiningTablePage />),
   },
 ];

@@ -1,12 +1,12 @@
 import { memo } from "react";
-import { Pen, Trash } from "lucide-react";
+import { Ellipsis } from "lucide-react";
 
 import { TABLE_MENU_HEAD_COLUMNS } from "@/Constants/Dashboard/Menu/MenuConstant";
 import { rupiah } from "@/Utils/rupiahHelper";
 
 import { Badge } from "@/Components/Elements/Shadcn/badge";
-import { Button } from "@/Components/Elements/Shadcn/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/Elements/Shadcn/table";
+import { DropDown } from "@/Components/Elements/Buttons/DropDown";
 import DashboardTableError from "@/Components/Fragments/Dashboard/Common/Table/DashboardTableError";
 import DashboardTableLoading from "@/Components/Fragments/Dashboard/Common/Table/DashboardTableLoading";
 import DashboardPagination from "@/Components/Fragments/Dashboard/Common/DashboardPagination";
@@ -44,15 +44,15 @@ const MenuTable = memo(({ loading, errorMessage, menus = [], pagination, onOpenD
                     </Badge>
                   )}
                 </TableCell>
-                <TableCell>
-                  <Button size="icon" variant="ghost" className="text-red-500 rounded-full hover:bg-red-200 hover:text-red-600" onClick={() => onOpenDeleteModal(menu)}>
-                    <Trash />
-                    <span className="sr-only">Hapus</span>
-                  </Button>
-                  <Button size="icon" variant="ghost" className="rounded-full text-emerald-500 hover:bg-emerald-200 hover:text-emerald-600" onClick={() => onOpenEditModal(menu)}>
-                    <Pen />
-                    <span className="sr-only">Edit</span>
-                  </Button>
+                <TableCell className="text-right">
+                  <DropDown
+                    triggerIcon={Ellipsis}
+                    buttonProps={{ variant: "ghost", size: "icon" }}
+                    items={[
+                      { key: "edit", label: "Edit", onClick: () => onOpenEditModal(menu) },
+                      { key: "delete", label: "Hapus", onClick: () => onOpenDeleteModal(menu), className: "text-red-600 hover:text-red-700! hover:bg-red-100! " },
+                    ]}
+                  />
                 </TableCell>
               </TableRow>
             ))}

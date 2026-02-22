@@ -10,7 +10,7 @@ const ModalForm = ({ isOpen, onOpenModal, title, loading, handleSubmit, onSubmit
         <form onSubmit={handleSubmit(onSubmitForm)} className="flex flex-col gap-4">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <div className="p-2 bg-emerald-100 rounded-md text-emerald-900">{Icon ? <Icon className="size-4" /> : <SquarePlus className="size-4" />}</div>
+              <div className="p-2 bg-emerald-100 rounded-md text-emerald-900">{Icon ? <Icon className="size-6" /> : <SquarePlus className="size-6" />}</div>
               <span className="font-semibold text-lg">{title}</span>
             </DialogTitle>
           </DialogHeader>

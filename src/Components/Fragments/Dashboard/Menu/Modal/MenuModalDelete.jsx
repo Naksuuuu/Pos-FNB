@@ -1,5 +1,7 @@
-import useDeleteMenu from "@/Hooks/Dashboard/Menu/useDeleteMenu";
 import { toast } from "sonner";
+import { PackageMinus } from "lucide-react";
+
+import useDeleteMenu from "@/Hooks/Dashboard/Menu/useDeleteMenu";
 
 import DashboardModalConfirmation from "@/Components/Fragments/Dashboard/Common/Modal/DashboardModalConfirmation";
 
@@ -25,6 +27,7 @@ const MenuModalDelete = ({ selectedMenu, onOpenModal }) => {
       loading={loading}
       handleDelete={handleDelete}
       id={selectedMenu?.id}
+      icon={PackageMinus}
     />
   );
 };

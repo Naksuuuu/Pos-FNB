@@ -1,6 +1,5 @@
-import { memo, useCallback, useEffect, useRef, useState } from "react";
-import { Link } from "react-router";
-import { PlusCircle, Settings } from "lucide-react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Plus, Settings } from "lucide-react";
 
 import { IS_AVAILABLE_OPTIONS, SORT_DIRECTION_OPTIONS, SORY_BY_OPTIONS } from "@/Constants/Dashboard/Menu/MenuConstant";
 
@@ -9,7 +8,7 @@ import useFilterParams from "@/Hooks/Common/useFilterParams";
 
 import { Button } from "@/Components/Elements/Shadcn/button";
 import { Card } from "@/Components/Elements/Cards/Card";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from "@/Components/Elements/Shadcn/dropdown-menu";
+import { DropDown } from "@/Components/Elements/Buttons/DropDown";
 import MenuModalCreate from "@/Components/Fragments/Dashboard/Menu/Modal/MenuModalCreate";
 import MenuModalEdit from "@/Components/Fragments/Dashboard/Menu/Modal/MenuModalEdit";
 import MenuModalDelete from "@/Components/Fragments/Dashboard/Menu/Modal/MenuModalDelete";
@@ -116,59 +115,45 @@ const MenuPage = memo(() => {
     setDiningTableModalOpen(state);
   }, []);
 
+  const categoryItems = useMemo(
+    () => [
+      { key: "list-cat", label: "Lihat Semua Kategori", to: "/dashboard/inventory/menu/category" },
+      { key: "add-cat", label: "Tambah Kategori", onClick: () => handleOpenCreateCategoryModal(true) },
+    ],
+    [handleOpenCreateCategoryModal],
+  );
+
+  const tableItems = useMemo(
+    () => [
+      { key: "list-table", label: "Lihat Semua Meja", to: "/dashboard/inventory/table" },
+      { key: "add-table", label: "Tambah Meja", onClick: () => handleOpenCreateDiningTableModal(true) },
+    ],
+    [handleOpenCreateDiningTableModal],
+  );
+
   return (
     <>
       <MenuStatistic statistic={statistic} />
 
       <Card>
         <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
-          <div className="grid grid-cols-2 gap-4 col-span-full xl:col-span-2">
-            <DashboardInputSearch onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari menu..." />
-            <Button onClick={handleOpenCreateModal}>
-              <PlusCircle />
-              Tambah Menu
-            </Button>
-          </div>
-          <div className="grid col-span-full xl:col-span-2 grid-cols-2   w-full gap-4 bg-background">
-            <DropdownMenu>
-              <DropdownMenuTrigger render={<Button />}>
-                <Settings /> Kelola Kategori
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuGroup>
-                  <DropdownMenuItem render={<Button variant="ghost" size="sm" className="w-full cursor-pointer" />}>
-                    <Link to="/dashboard/category" className="w-full h-full text-start">
-                      Lihat Semua Kategori
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem render={<Button variant="ghost" size="sm" className="w-full justify-start cursor-pointer!" />} onClick={() => handleOpenCreateCategoryModal(true)}>
-                    Tambah Kategori
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
+          <DashboardInputSearch onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari menu..." />
 
-            <DropdownMenu>
-              <DropdownMenuTrigger render={<Button />}>
-                <Settings /> Kelola Meja
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuGroup>
-                  <DropdownMenuItem render={<Button variant="ghost" size="sm" className="w-full cursor-pointer" />}>
-                    <Link to="/dashboard/table" className="w-full h-full text-start">
-                      Lihat Semua Meja
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem render={<Button variant="ghost" size="sm" className="w-full justify-start cursor-pointer!" />} onClick={() => handleOpenCreateDiningTableModal(true)}>
-                    Tambah Meja
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+          <Button onClick={handleOpenCreateModal}>
+            <Plus />
+            Tambah Menu
+          </Button>
+
+          <DropDown triggerLabel="Kelola Kategori" triggerIcon={Settings} items={categoryItems} buttonProps={{ variant: "default", size: "default" }} contentAlign="start" />
+
+          <DropDown triggerLabel="Kelola Meja" triggerIcon={Settings} items={tableItems} buttonProps={{ variant: "default", size: "default" }} contentAlign="start" />
+
           <DashboardSelectFilter items={SORY_BY_OPTIONS} onValueChange={handleSortByChange} value={filters.sort_by || null} label="Cari Berdasarkan" placeholder="Pilih opsi" />
+
           <DashboardSelectFilter items={SORT_DIRECTION_OPTIONS} onValueChange={handleSortDirectionChange} value={filters.sort_direction || null} label="Urutan" placeholder="Pilih urutan" />
+
           <DashboardSelectFilter items={IS_AVAILABLE_OPTIONS} onValueChange={handleIsAvailableChange} value={filters.is_available || null} label="Ketersediaan" placeholder="Pilih ketersediaan" />
+
           <DashboardSelectFilter items={categoryOptions} onValueChange={handleCategoryIdChange} value={filters.category_id || null} label="Kategori" placeholder="Pilih kategori" />
         </div>
       </Card>
@@ -183,7 +168,7 @@ const MenuPage = memo(() => {
           pagination={pagination}
           onOpenDeleteModal={handleOpenDeleteModal}
           onOpenEditModal={handleOpenEditModal}
-          onPageChange={handlePageChange}
+          handlePageChange={handlePageChange}
         />
       </Card>
 

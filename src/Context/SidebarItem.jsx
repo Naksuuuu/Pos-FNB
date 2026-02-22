@@ -13,7 +13,13 @@ export const SidebarItem = [
     children: [
       {
         title: "Menu",
-        path: "/dashboard/menu",
+        path: "/dashboard/inventory/menu",
+        icon: LayoutDashboard,
+        children: null,
+      },
+      {
+        title: "Meja",
+        path: "/dashboard/inventory/table",
         icon: LayoutDashboard,
         children: null,
       },

@@ -1,16 +1,18 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Plus } from "lucide-react";
+
+import { SORT_DIRECTION_OPTIONS, STATUS_OPTIONS } from "@/Constants/Dashboard/DiningTable/DiningTableConstant";
 
 import useAllDiningTable from "@/Hooks/Dashboard/DiningTable/useAllDiningTable";
 import useFilterParams from "@/Hooks/Common/useFilterParams";
 
 import { Button } from "@/Components/Elements/Shadcn/button";
+import { Card } from "@/Components/Elements/Cards/Card";
 import DiningTableTable from "@/Components/Fragments/Dashboard/DiningTable/Table/DiningTableTable";
 import DiningTableModalCreate from "@/Components/Fragments/Dashboard/DiningTable/Modal/DiningTableModalCreate";
 import DiningTableModalEdit from "@/Components/Fragments/Dashboard/DiningTable/Modal/DiningTableModalEdit";
 import DiningTableModalDelete from "@/Components/Fragments/Dashboard/DiningTable/Modal/DiningTableModalDelete";
 import DashboardInputSearch from "@/Components/Fragments/Dashboard/Common/DashboardInputSearch";
-import { Card } from "@/Components/Elements/Cards/Card";
-import { SORT_DIRECTION_OPTIONS, STATUS_OPTIONS } from "@/Constants/Dashboard/DiningTable/DiningTableConstant";
 import DashboardSelectFilter from "@/Components/Fragments/Dashboard/Common/DashboardSelectFilter";
 
 const DiningTablePage = () => {
@@ -83,7 +85,10 @@ const DiningTablePage = () => {
           <DashboardSelectFilter items={STATUS_OPTIONS} onValueChange={handleStatusChange} value={filters.status || null} label="Cari Berdasarkan Status" placeholder="Pilih opsi" />
           <DashboardSelectFilter items={SORT_DIRECTION_OPTIONS} onValueChange={handleSortDirectionChange} value={filters.sort_direction || null} label="Urutan" placeholder="Pilih urutan" />
           <DashboardInputSearch onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari Meja" />
-          <Button onClick={handleOpenCreateModal}>Tambah Meja</Button>
+          <Button onClick={handleOpenCreateModal}>
+            {" "}
+            <Plus /> Tambah Meja
+          </Button>
         </div>
       </Card>
 

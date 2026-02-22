@@ -7,7 +7,7 @@ import useEditMenu from "@/Hooks/Dashboard/Menu/useEditMenu";
 
 import DashboardModalForm from "@/Components/Fragments/Dashboard/Common/Modal/DashboardModalForm";
 import MenuForm from "@/Components/Fragments/Dashboard/Menu/Form/MenuForm";
-import { SquarePen } from "lucide-react";
+import { PackageSearch } from "lucide-react";
 
 const MenuModalEdit = ({ selectedMenu, onOpenModal }) => {
   const { edit, loading, categoryOptions } = useEditMenu();
@@ -47,7 +47,7 @@ const MenuModalEdit = ({ selectedMenu, onOpenModal }) => {
   };
 
   return (
-    <DashboardModalForm isOpen={!!selectedMenu} onOpenModal={onOpenModal} loading={loading} handleSubmit={handleSubmit} onSubmitForm={handleSubmitForm} title="Edit Menu" icon={SquarePen}>
+    <DashboardModalForm isOpen={!!selectedMenu} onOpenModal={onOpenModal} loading={loading} handleSubmit={handleSubmit} onSubmitForm={handleSubmitForm} title="Edit Menu" icon={PackageSearch}>
       <MenuForm register={register} control={control} errors={errors} categoryOptions={categoryOptions} type="edit" selectedMenu={selectedMenu} />
     </DashboardModalForm>
   );

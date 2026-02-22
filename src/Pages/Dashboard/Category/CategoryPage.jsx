@@ -86,9 +86,9 @@ const CategoryPage = () => {
     <div className="bg-dashboard grid grid-cols-3 gap-4">
       <div className="space-y-4">
         <Button className="w-full">
-          <Link to="/dashboard/menu" className="flex items-center gap-2">
+          <Link to="/dashboard/inventory/menu" className="flex items-center gap-2">
             <ArrowLeft className="size-4" />
-            Kembali Ke Invetaris
+            Kembali Ke Managemen Menu
           </Link>
         </Button>
         <Card>

@@ -17,7 +17,6 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-  SidebarProvider,
 } from "@/Components/Elements/Shadcn/sidebar";
 
 const CreateSidebar = memo(({ pathname }) => {
@@ -116,7 +115,7 @@ const CollapsibleSidebarMenuItem = memo(({ item, activePath }) => {
                           <span>{subItem.title}</span>
                         </Link>
                       )}
-                      className={activePath === subItem.path ? "bg-primary! text-background!" : ""}
+                      className={activePath?.startsWith(subItem.path) ? "bg-primary! text-background!" : ""}
                     ></SidebarMenuSubButton>
                   </SidebarMenuSubItem>
                 ))}

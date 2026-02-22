@@ -7,6 +7,7 @@ import useCreateMenu from "@/Hooks/Dashboard/Menu/useCreateMenu";
 
 import DashboardModalForm from "@/Components/Fragments/Dashboard/Common/Modal/DashboardModalForm";
 import MenuForm from "@/Components/Fragments/Dashboard/Menu/Form/MenuForm";
+import { PackagePlus } from "lucide-react";
 
 const MenuModalCreate = ({ isOpen, onOpenModal }) => {
   const { create, loading, categoryOptions } = useCreateMenu();
@@ -39,7 +40,7 @@ const MenuModalCreate = ({ isOpen, onOpenModal }) => {
   };
 
   return (
-    <DashboardModalForm isOpen={isOpen} onOpenModal={onOpenModal} loading={loading} handleSubmit={handleSubmit} onSubmitForm={handleSubmitForm} title="Tambah Menu">
+    <DashboardModalForm isOpen={isOpen} onOpenModal={onOpenModal} loading={loading} handleSubmit={handleSubmit} onSubmitForm={handleSubmitForm} title="Tambah Menu" icon={PackagePlus}>
       <MenuForm register={register} control={control} errors={errors} categoryOptions={categoryOptions} type="create" />
     </DashboardModalForm>
   );
