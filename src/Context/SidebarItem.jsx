@@ -1,9 +1,10 @@
 import { Computer, LayoutDashboard, Database } from "lucide-react";
+import { ROUTES } from "@/Constants/Common/RouteConstant";
 
 export const SidebarItem = [
   {
     title: "Dashboard",
-    path: "/dashboard",
+    path: ROUTES.DASHBOARD.HOME,
     icon: LayoutDashboard,
     children: null,
   },
@@ -13,13 +14,13 @@ export const SidebarItem = [
     children: [
       {
         title: "Menu",
-        path: "/dashboard/inventory/menu",
+        path: ROUTES.DASHBOARD.INVENTORY.MENU,
         icon: LayoutDashboard,
         children: null,
       },
       {
         title: "Meja",
-        path: "/dashboard/inventory/table",
+        path: ROUTES.DASHBOARD.INVENTORY.TABLE,
         icon: LayoutDashboard,
         children: null,
       },
@@ -27,7 +28,7 @@ export const SidebarItem = [
   },
   {
     title: "Kasir",
-    path: "/dashboard/cashier",
+    path: ROUTES.DASHBOARD.CASHIER,
     icon: Computer,
     children: null,
   },

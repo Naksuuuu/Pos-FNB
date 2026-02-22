@@ -1,5 +1,7 @@
 import { lazy, Suspense } from "react";
 
+import { ROUTES } from "@/Constants/Common/RouteConstant";
+
 import LoadingApp from "@/Pages/Common/LoadingApp";
 const DashLayout = lazy(() => import("@/Components/Layouts/DashLayout"));
 const Dashboard = lazy(() => import("@/Pages/Dashboard/Dashboard"));
@@ -8,7 +10,9 @@ const MenuPage = lazy(() => import("@/Pages/Dashboard/Menu/MenuPage"));
 const CategoryPage = lazy(() => import("@/Pages/Dashboard/Category/CategoryPage"));
 const DiningTablePage = lazy(() => import("@/Pages/Dashboard/DiningTable/DiningTablePage"));
 
-const SidebarProvider = lazy(() => import("@/Components/Elements/Shadcn/sidebar").then((m) => ({ default: m.SidebarProvider })));
+const SidebarProvider = lazy(() =>
+  import("@/Components/Elements/Shadcn/sidebar").then((m) => ({ default: m.SidebarProvider })),
+);
 const createProtectedRoute = (component) => {
   return (
     <Suspense fallback={<LoadingApp />}>
@@ -21,23 +25,23 @@ const createProtectedRoute = (component) => {
 
 const DashboardRoute = [
   {
-    path: "/dashboard",
+    path: ROUTES.DASHBOARD.HOME,
     element: createProtectedRoute(<Dashboard />),
   },
   {
-    path: "/dashboard/cashier",
+    path: ROUTES.DASHBOARD.CASHIER,
     element: createProtectedRoute(<PanelCashier />),
   },
   {
-    path: "/dashboard/inventory/menu",
+    path: ROUTES.DASHBOARD.INVENTORY.MENU,
     element: createProtectedRoute(<MenuPage />),
   },
   {
-    path: "/dashboard/inventory/menu/category",
+    path: ROUTES.DASHBOARD.INVENTORY.MENU_CATEGORY,
     element: createProtectedRoute(<CategoryPage />),
   },
   {
-    path: "/dashboard/inventory/table",
+    path: ROUTES.DASHBOARD.INVENTORY.TABLE,
     element: createProtectedRoute(<DiningTablePage />),
   },
 ];

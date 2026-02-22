@@ -2,8 +2,11 @@ import { useCallback, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router";
 import { ShoppingBasket } from "lucide-react";
 
-import { rupiah } from "@/Utils/rupiahHelper";
+import { ROUTES } from "@/Constants/Common/RouteConstant";
+
 import useAllCatalog from "@/Hooks/Customer/Catalog/useAllCatalog";
+
+import { rupiah } from "@/Utils/rupiahHelper";
 
 import { Badge } from "@/Components/Elements/Shadcn/badge";
 import CatalogCard from "@/Components/Fragments/Customer/Catalog/Card/CatalogCard";
@@ -22,7 +25,7 @@ const ListCatalog = () => {
   }, [catalogs]);
 
   const handleCheckout = useCallback(() => {
-    navigate("/order");
+    navigate(ROUTES.PUBLIC.ORDER);
   }, [navigate]);
 
   return (

@@ -2,6 +2,8 @@ import { useEffect, useMemo } from "react";
 import { useNavigate } from "react-router";
 import { CheckCircle2 } from "lucide-react";
 
+import { ROUTES } from "@/Constants/Common/RouteConstant";
+
 import { rupiah } from "@/Utils/rupiahHelper";
 
 import ActionCard from "@/Components/Fragments/Customer/Common/Card/ActionCard";
@@ -21,7 +23,7 @@ const PaymentPage = () => {
 
   useEffect(() => {
     if (!order) {
-      navigate("/catalog");
+      navigate(ROUTES.PUBLIC.CATALOG);
     }
   }, [navigate, order]);
 
@@ -29,7 +31,7 @@ const PaymentPage = () => {
 
   return (
     <>
-      <CustomerNavbar navbarTitle="Pembayaran" backLink="/catalog" />
+      <CustomerNavbar navbarTitle="Pembayaran" backLink={ROUTES.PUBLIC.CATALOG} />
 
       <div className="flex flex-col flex-1 gap-4 px-2">
         <Card className="py-4">
@@ -41,7 +43,9 @@ const PaymentPage = () => {
             <p className="mt-1 text-sm text-muted-foreground">Nomor Order: {order.order_no || "-"}</p>
             <p className="text-sm text-muted-foreground">Meja: {order.table?.code || "VIP2"}</p>
             <p className="font-semibold">Konfirmasi Pembayaran</p>
-            <p className="text-sm text-muted-foreground">Silahkan konfirmasi pembayaran di kasir. Agar pesanan kamu diproses dengan benar.</p>
+            <p className="text-sm text-muted-foreground">
+              Silahkan konfirmasi pembayaran di kasir. Agar pesanan kamu diproses dengan benar.
+            </p>
           </CardContent>
         </Card>
 
@@ -69,7 +73,7 @@ const PaymentPage = () => {
         </Card>
       </div>
 
-      <ActionCard onActionClick={() => navigate("/catalog")} actionTitle="Selesai" />
+      <ActionCard onActionClick={() => navigate(ROUTES.PUBLIC.CATALOG)} actionTitle="Selesai" />
     </>
   );
 };

@@ -2,7 +2,10 @@ import { useCallback, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { Minus, Plus, X } from "lucide-react";
 
+import { ROUTES } from "@/Constants/Common/RouteConstant";
+
 import useDetailCatalog from "@/Hooks/Customer/Catalog/useDetailCatalog";
+
 import { rupiah } from "@/Utils/rupiahHelper";
 
 import { Button } from "@/Components/Elements/Shadcn/button";
@@ -52,7 +55,7 @@ const CatalogDetailPage = () => {
       }
 
       sessionStorage.setItem("orderItems", JSON.stringify(storedOrders));
-      navigate(isFromOrder ? "/order" : "/catalog");
+      navigate(isFromOrder ? ROUTES.PUBLIC.ORDER : ROUTES.PUBLIC.CATALOG);
     },
     [isFromOrder, navigate],
   );
@@ -60,7 +63,13 @@ const CatalogDetailPage = () => {
   return (
     <main className="relative flex flex-col w-full h-screen ">
       <div className="absolute top-4 right-4">
-        <Button variant="outline" size="icon" className="rounded-full" nativeButton={false} render={(props) => <Link {...props} to={isFromOrder ? "/order" : "/catalog"} />}>
+        <Button
+          variant="outline"
+          size="icon"
+          className="rounded-full"
+          nativeButton={false}
+          render={(props) => <Link {...props} to={isFromOrder ? ROUTES.PUBLIC.ORDER : ROUTES.PUBLIC.CATALOG} />}
+        >
           <X />
         </Button>
       </div>
@@ -74,7 +83,11 @@ const CatalogDetailPage = () => {
       {catalog && !loading && (
         <>
           <div className="h-1/3">
-            <ImageWithFallback src={catalog.image_url} alt={catalog.name} className="object-cover object-center w-full h-full aspect-video" />
+            <ImageWithFallback
+              src={catalog.image_url}
+              alt={catalog.name}
+              className="object-cover object-center w-full h-full aspect-video"
+            />
           </div>
           <div className="relative min-h-2/3">
             <div className="absolute w-full h-4 -top-3 bg-background rounded-t-2xl"></div>
@@ -85,14 +98,27 @@ const CatalogDetailPage = () => {
               <p className="mt-2 mb-4 text-xs text-muted-foreground">{catalog.description}</p>
             </div>
 
-            <ActionCard onActionClick={() => handleOrder(catalog, quantity)} actionTitle={isFromOrder ? "Update Order" : "Tambah Order"}>
+            <ActionCard
+              onActionClick={() => handleOrder(catalog, quantity)}
+              actionTitle={isFromOrder ? "Update Order" : "Tambah Order"}
+            >
               <p>Total Items</p>
               <div className="flex items-center gap-4">
-                <Button size="icon" className="rounded-full size-6" variant="outline" onClick={() => decrentQuantity(1)}>
+                <Button
+                  size="icon"
+                  className="rounded-full size-6"
+                  variant="outline"
+                  onClick={() => decrentQuantity(1)}
+                >
                   <Minus />
                 </Button>
                 {quantity}
-                <Button size="icon" className="rounded-full size-6" variant="outline" onClick={() => incrementQuantity(1)}>
+                <Button
+                  size="icon"
+                  className="rounded-full size-6"
+                  variant="outline"
+                  onClick={() => incrementQuantity(1)}
+                >
                   <Plus />
                 </Button>
               </div>

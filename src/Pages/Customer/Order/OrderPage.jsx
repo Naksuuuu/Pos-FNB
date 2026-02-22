@@ -3,8 +3,11 @@ import { Link, useNavigate } from "react-router";
 import { Pen, Plus, Trash } from "lucide-react";
 import { useForm } from "react-hook-form";
 
-import { rupiah } from "@/Utils/rupiahHelper";
+import { ROUTES } from "@/Constants/Common/RouteConstant";
+
 import useAllOrder from "@/Hooks/Customer/Order/useAllOrder";
+
+import { rupiah } from "@/Utils/rupiahHelper";
 
 import { Button } from "@/Components/Elements/Shadcn/button";
 import { Input } from "@/Components/Elements/Shadcn/input";
@@ -40,7 +43,7 @@ const OrderPage = () => {
 
       try {
         await checkout({ customerName: values.customer_name, items: orderItems, code: values.code });
-        navigate("/payment");
+        navigate(ROUTES.PUBLIC.PAYMENT);
       } catch (error) {
         if (error?.validationErrors) {
           Object.entries(error.validationErrors).forEach(([field, message]) => {
@@ -55,7 +58,7 @@ const OrderPage = () => {
 
   return (
     <>
-      <CustomerNavbar navbarTitle="Pesanan" backLink="/catalog" />
+      <CustomerNavbar navbarTitle="Pesanan" backLink={ROUTES.PUBLIC.CATALOG} />
 
       <div className="flex-1 w-full px-3 space-y-4">
         <section className="md:px-4">
@@ -70,7 +73,7 @@ const OrderPage = () => {
                   variant="outline"
                   nativeButton={false}
                   render={(props) => (
-                    <Link {...props} to="/catalog">
+                    <Link {...props} to={ROUTES.PUBLIC.CATALOG}>
                       <div className="flex items-center gap-2">
                         <Plus className="size-4" />
                         <span className="text-sm font-semibold">Tambah Lagi</span>
@@ -98,7 +101,11 @@ const OrderPage = () => {
                           size="sm"
                           nativeButton={false}
                           render={(props) => (
-                            <Link {...props} to={`/catalog/${item.menu_id}`} state={{ fromOrder: true, quantity: item.qty }}>
+                            <Link
+                              {...props}
+                              to={ROUTES.PUBLIC.CATALOG_DETAIL.replace(":catalogId", item.menu_id)}
+                              state={{ fromOrder: true, quantity: item.qty }}
+                            >
                               <div className="flex items-center gap-1">
                                 <Pen className="size-3" />
                                 <span className="text-sm font-semibold">Edit</span>
@@ -132,7 +139,13 @@ const OrderPage = () => {
 
                   <Badge variant="secondary">{code}</Badge>
                 </div>
-                <Input id="code" type="hidden" {...register("code", { required: "Nomor meja wajib diisi" })} disabled={true} className="hidden" />
+                <Input
+                  id="code"
+                  type="hidden"
+                  {...register("code", { required: "Nomor meja wajib diisi" })}
+                  disabled={true}
+                  className="hidden"
+                />
                 {errors.code?.message && <FieldError>{errors.code.message}</FieldError>}
               </div>
 
@@ -152,7 +165,10 @@ const OrderPage = () => {
         </section>
       </div>
 
-      <ActionCard onActionClick={handleSubmit(handleCheckout)} actionTitle={isSubmitting ? "Memproses..." : "Lanjut ke Pembayaran"}>
+      <ActionCard
+        onActionClick={handleSubmit(handleCheckout)}
+        actionTitle={isSubmitting ? "Memproses..." : "Lanjut ke Pembayaran"}
+      >
         <p>Total Pembayaran</p>
         <div className="flex items-center gap-4">
           <h4 className="font-semibold text-md">{rupiah(totalPrice)}</h4>

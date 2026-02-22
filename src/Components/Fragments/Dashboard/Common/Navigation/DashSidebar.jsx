@@ -2,6 +2,7 @@ import { memo, useMemo } from "react";
 import { Link, useLocation } from "react-router";
 import { ChevronRight, LogOut } from "lucide-react";
 
+import { ROUTES } from "@/Constants/Common/RouteConstant";
 import { SidebarItem } from "@/Context/SidebarItem";
 
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/Components/Elements/Shadcn/collapsible";
@@ -30,8 +31,14 @@ const CreateSidebar = memo(({ pathname }) => {
             <SidebarMenuButton
               className="py-6"
               render={
-                <Link to="/">
-                  <img src={"https://avatars.githubusercontent.com/u/144807673?v=4"} alt="Logo" width={35} height={35} className="rounded-full select-none" />
+                <Link to={ROUTES.PUBLIC.HOME}>
+                  <img
+                    src={"https://avatars.githubusercontent.com/u/144807673?v=4"}
+                    alt="Logo"
+                    width={35}
+                    height={35}
+                    className="rounded-full select-none"
+                  />
                   <span className="select-none">Ariel</span>
                 </Link>
               }
@@ -56,7 +63,10 @@ const CreateSidebar = memo(({ pathname }) => {
             <SidebarMenuItem>
               <SidebarMenuButton
                 render={
-                  <Link to={"/dashboard"} className="flex justify-between border border-red-500 text-red-500 hover:bg-red-500! hover:text-white! font-semibold">
+                  <Link
+                    to={ROUTES.DASHBOARD.HOME}
+                    className="flex justify-between border border-red-500 text-red-500 hover:bg-red-500! hover:text-white! font-semibold"
+                  >
                     <span>Logout</span>
                     <LogOut />
                   </Link>

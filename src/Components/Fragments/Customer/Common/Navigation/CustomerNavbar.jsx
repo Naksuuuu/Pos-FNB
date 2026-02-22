@@ -2,6 +2,8 @@ import { memo } from "react";
 import { Link } from "react-router";
 import { ArrowLeft } from "lucide-react";
 
+import { ROUTES } from "@/Constants/Common/RouteConstant";
+
 import { Button } from "@/Components/Elements/Shadcn/button";
 
 const CustomerNavbar = memo(({ navbarTitle, backLink }) => {
@@ -14,7 +16,7 @@ const CustomerNavbar = memo(({ navbarTitle, backLink }) => {
           className="border rounded-full border-slate-200"
           nativeButton={false}
           render={(props) => (
-            <Link {...props} to={backLink || "/catalog"}>
+            <Link {...props} to={backLink || ROUTES.PUBLIC.CATALOG}>
               <ArrowLeft />
             </Link>
           )}

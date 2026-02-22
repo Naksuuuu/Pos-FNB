@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import { ArrowLeft, Package, PlusCircle } from "lucide-react";
 
+import { ROUTES } from "@/Constants/Common/RouteConstant";
 import { SORT_BY_OPTIONS, SORT_DIRECTION_OPTIONS } from "@/Constants/Dashboard/Category/CategoryConstant";
 
 import useAllCategory from "@/Hooks/Dashboard/Category/useAllCategory";
@@ -87,7 +88,7 @@ const CategoryPage = () => {
     <div className="bg-dashboard grid grid-cols-3 gap-4">
       <div className="space-y-4">
         <Button className="w-full">
-          <Link to="/dashboard/inventory/menu" className="flex items-center gap-2">
+          <Link to={ROUTES.DASHBOARD.INVENTORY.MENU} className="flex items-center gap-2">
             <ArrowLeft className="size-4" />
             Kembali Ke Managemen Menu
           </Link>
