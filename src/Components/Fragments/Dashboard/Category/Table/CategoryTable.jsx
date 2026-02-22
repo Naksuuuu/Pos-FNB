@@ -1,9 +1,9 @@
 import { memo } from "react";
-import { Pen, Trash } from "lucide-react";
+import { Ellipsis } from "lucide-react";
 
 import { TABLE_CATEGORY_HEAD_COLUMNS } from "@/Constants/Dashboard/Category/CategoryConstant";
 
-import { Button } from "@/Components/Elements/Shadcn/button";
+import { DropDown } from "@/Components/Elements/Buttons/DropDown";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/Elements/Shadcn/table";
 import DashTableError from "@/Components/Fragments/Dashboard/Common/Table/DashTableError";
 import DashTableLoading from "@/Components/Fragments/Dashboard/Common/Table/DashTableLoading";
@@ -31,15 +31,20 @@ const CategoryTable = memo(({ loading, errorMessage, categories = [], onOpenDele
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{category.name}</TableCell>
                 <TableCell>{category.menu_count}</TableCell>
-                <TableCell>
-                  <Button size="icon" variant="ghost" className="text-red-500 rounded-full hover:bg-red-200 hover:text-red-600" onClick={() => onOpenDeleteModal(category)}>
-                    <Trash />
-                    <span className="sr-only">Hapus</span>
-                  </Button>
-                  <Button size="icon" variant="ghost" className="rounded-full  text-emerald-500 hover:bg-emerald-200 hover:text-emerald-600" onClick={() => onOpenEditModal(category)}>
-                    <Pen />
-                    <span className="sr-only">Edit</span>
-                  </Button>
+                <TableCell className="text-right">
+                  <DropDown
+                    triggerIcon={Ellipsis}
+                    buttonProps={{ variant: "ghost", size: "icon" }}
+                    items={[
+                      { key: "edit", label: "Edit", onClick: () => onOpenEditModal(category) },
+                      {
+                        key: "delete",
+                        label: "Hapus",
+                        onClick: () => onOpenDeleteModal(category),
+                        className: "text-red-600 hover:text-red-700! hover:bg-red-100! ",
+                      },
+                    ]}
+                  />
                 </TableCell>
               </TableRow>
             ))}

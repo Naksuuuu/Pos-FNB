@@ -111,9 +111,9 @@ const DiningTablePage = () => {
         </div>
       </Card>
 
-      <ButtonResetFilter showReset={showReset} onResetFilter={handleResetFilter} />
+      <ButtonResetFilter condition={showReset} onResetFilter={handleResetFilter} />
 
-      <Card>
+      <Card className="overflow-hidden space-y-2">
         <DiningTableTable
           diningTables={diningTables}
           loading={loading}

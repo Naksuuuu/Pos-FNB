@@ -15,7 +15,7 @@ const TABLE_CATEGORY_HEAD_COLUMNS = [
   { header: "No", width: "w-[50px]" },
   { header: "Nama", width: "min-w-[300px] max-w-full" },
   { header: "Total Menu", width: "w-[150px]" },
-  { header: "Aksi", width: "w-[200px]" },
+  { header: "Aksi", width: "w-[50px] text-right" },
 ];
 
 export { TABLE_CATEGORY_HEAD_COLUMNS, SORT_BY_OPTIONS, SORT_DIRECTION_OPTIONS };

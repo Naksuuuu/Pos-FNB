@@ -19,15 +19,15 @@ const TABLE_DINING_TABLE_HEAD_COLUMNS = [
   },
   {
     header: "Kode Nama",
-    width: "w-[150px]",
+    width: "min-w-[150px] max-w-full",
   },
   {
     header: "Status",
-    width: "w-[100px]",
+    width: "min-w-[100px] max-w-[400px]",
   },
   {
     header: "Aksi",
-    width: "w-[100px]",
+    width: "w-[50px] text-right",
   },
 ];
 

@@ -1,10 +1,10 @@
 import { memo } from "react";
-import { Pen, Trash } from "lucide-react";
+import { Ellipsis } from "lucide-react";
 
 import { TABLE_DINING_TABLE_HEAD_COLUMNS } from "@/Constants/Dashboard/DiningTable/DiningTableConstant";
 
 import { Badge } from "@/Components/Elements/Shadcn/badge";
-import { Button } from "@/Components/Elements/Shadcn/button";
+import { DropDown } from "@/Components/Elements/Buttons/DropDown";
 import { Pagination } from "@/Components/Elements/Paginations/Pagination";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/Elements/Shadcn/table";
 import DashTableError from "@/Components/Fragments/Dashboard/Common/Table/DashTableError";
@@ -14,7 +14,7 @@ const DiningTableTable = memo(
   ({ diningTables, loading, errorMessage, onOpenEditModal, onOpenDeleteModal, pagination, handlePageChange }) => {
     return (
       <>
-        <Table className="min-w-full">
+        <Table className="min-w-full border-b">
           <TableHeader>
             <TableRow>
               {TABLE_DINING_TABLE_HEAD_COLUMNS.map((column) => (
@@ -42,25 +42,20 @@ const DiningTableTable = memo(
                       <Badge className="py-1 px-2 bg-red-100 text-red-600">Dipakai</Badge>
                     )}
                   </TableCell>
-                  <TableCell>
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      className="text-red-500 rounded-full hover:bg-red-200 hover:text-red-600"
-                      onClick={() => onOpenDeleteModal(table)}
-                    >
-                      <Trash />
-                      <span className="sr-only">Hapus</span>
-                    </Button>
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      className="rounded-full  text-emerald-500 hover:bg-emerald-200 hover:text-emerald-600"
-                      onClick={() => onOpenEditModal(table)}
-                    >
-                      <Pen />
-                      <span className="sr-only">Edit</span>
-                    </Button>
+                  <TableCell className="text-right">
+                    <DropDown
+                      triggerIcon={Ellipsis}
+                      buttonProps={{ variant: "ghost", size: "icon" }}
+                      items={[
+                        { key: "edit", label: "Edit", onClick: () => onOpenEditModal(table) },
+                        {
+                          key: "delete",
+                          label: "Hapus",
+                          onClick: () => onOpenDeleteModal(table),
+                          className: "text-red-600 hover:text-red-700! hover:bg-red-100! ",
+                        },
+                      ]}
+                    />
                   </TableCell>
                 </TableRow>
               ))}
