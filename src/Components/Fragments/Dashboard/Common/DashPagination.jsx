@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/Components/Elements/Shadcn/pagination";
 
-const DashboardPagination = memo(({ pagination, onPageChange }) => {
+const DashPagination = memo(({ pagination, onPageChange }) => {
   return (
     <Pagination className="">
       <PaginationContent className="bg-background">
@@ -57,4 +57,4 @@ const DashboardPagination = memo(({ pagination, onPageChange }) => {
     </Pagination>
   );
 });
-export default DashboardPagination;
+export default DashPagination;

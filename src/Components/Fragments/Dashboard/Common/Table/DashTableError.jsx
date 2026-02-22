@@ -4,7 +4,7 @@ import { TableCell, TableRow } from "@/Components/Elements/Shadcn/table";
 import { Button } from "@/Components/Elements/Shadcn/button";
 import useFilterParams from "@/Hooks/Common/useFilterParams";
 
-const DashboardTableError = memo(({ message = "Cannot connect to the server" }) => {
+const DashTableError = memo(({ message = "Cannot connect to the server" }) => {
   const { resetFilters } = useFilterParams();
 
   return (
@@ -21,4 +21,4 @@ const DashboardTableError = memo(({ message = "Cannot connect to the server" }) 
   );
 });
 
-export default DashboardTableError;
+export default DashTableError;

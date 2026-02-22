@@ -4,7 +4,7 @@ import { STATUS_OPTIONS } from "@/Constants/Dashboard/DiningTable/DiningTableCon
 
 import { Input } from "@/Components/Elements/Shadcn/input";
 import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/Components/Elements/Shadcn/field";
-import DashboardSelectFilter from "@/Components/Fragments/Dashboard/Common/DashboardSelectFilter";
+import DashSelectFilter from "@/Components/Fragments/Dashboard/Common/DashSelectFilter";
 
 const DiningTableForm = ({ register, errors, control }) => {
   return (
@@ -25,7 +25,7 @@ const DiningTableForm = ({ register, errors, control }) => {
             name="status"
             control={control}
             render={({ field }) => (
-              <DashboardSelectFilter
+              <DashSelectFilter
                 items={STATUS_OPTIONS}
                 label="Status"
                 id="status"

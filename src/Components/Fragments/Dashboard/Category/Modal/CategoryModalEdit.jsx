@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { EditCategorySchema } from "@/Schema/Category/CategorySchema";
 import useEditCategory from "@/Hooks/Dashboard/Category/useEditCategory";
 
-import DashboardModalForm from "@/Components/Fragments/Dashboard/Common/Modal/DashboardModalForm";
+import DashModalForm from "@/Components/Fragments/Dashboard/Common/Modal/DashModalForm";
 import CategoryForm from "@/Components/Fragments/Dashboard/Category/Form/CategoryForm";
 
 const CategoryModalEdit = ({ selectedCategory, onOpenModal }) => {
@@ -41,7 +41,7 @@ const CategoryModalEdit = ({ selectedCategory, onOpenModal }) => {
   };
 
   return (
-    <DashboardModalForm
+    <DashModalForm
       isOpen={!!selectedCategory}
       onOpenModal={onOpenModal}
       loading={loading}
@@ -50,7 +50,7 @@ const CategoryModalEdit = ({ selectedCategory, onOpenModal }) => {
       title={`Edit Kategori ${selectedCategory?.name}`}
     >
       <CategoryForm register={register} errors={errors} />
-    </DashboardModalForm>
+    </DashModalForm>
   );
 };
 export default CategoryModalEdit;

@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import useCreateDiningTable from "@/Hooks/Dashboard/DiningTable/useCreateDiningTable";
 import { CreateDiningTableSchema } from "@/Schema/DiningTable/DiningTableSchema";
 
-import DashboardModalForm from "@/Components/Fragments/Dashboard/Common/Modal/DashboardModalForm";
+import DashModalForm from "@/Components/Fragments/Dashboard/Common/Modal/DashModalForm";
 import DiningTableForm from "@/Components/Fragments/Dashboard/DiningTable/Form/DiningTableForm";
 
 const DiningTableModalCreate = ({ isOpen, onOpenModal }) => {
@@ -38,9 +38,9 @@ const DiningTableModalCreate = ({ isOpen, onOpenModal }) => {
   };
 
   return (
-    <DashboardModalForm isOpen={isOpen} onOpenModal={onOpenModal} loading={loading} handleSubmit={handleSubmit} onSubmitForm={handleSubmitForm} title="Tambah Meja Makan">
+    <DashModalForm isOpen={isOpen} onOpenModal={onOpenModal} loading={loading} handleSubmit={handleSubmit} onSubmitForm={handleSubmitForm} title="Tambah Meja Makan">
       <DiningTableForm register={register} errors={errors} control={control} />
-    </DashboardModalForm>
+    </DashModalForm>
   );
 };
 export default DiningTableModalCreate;

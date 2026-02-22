@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { EditMenuSchema } from "@/Schema/Menu/MenuSchema";
 import useEditMenu from "@/Hooks/Dashboard/Menu/useEditMenu";
 
-import DashboardModalForm from "@/Components/Fragments/Dashboard/Common/Modal/DashboardModalForm";
+import DashModalForm from "@/Components/Fragments/Dashboard/Common/Modal/DashModalForm";
 import MenuForm from "@/Components/Fragments/Dashboard/Menu/Form/MenuForm";
 import { PackageSearch } from "lucide-react";
 
@@ -47,9 +47,9 @@ const MenuModalEdit = ({ selectedMenu, onOpenModal }) => {
   };
 
   return (
-    <DashboardModalForm isOpen={!!selectedMenu} onOpenModal={onOpenModal} loading={loading} handleSubmit={handleSubmit} onSubmitForm={handleSubmitForm} title="Edit Menu" icon={PackageSearch}>
+    <DashModalForm isOpen={!!selectedMenu} onOpenModal={onOpenModal} loading={loading} handleSubmit={handleSubmit} onSubmitForm={handleSubmitForm} title="Edit Menu" icon={PackageSearch}>
       <MenuForm register={register} control={control} errors={errors} categoryOptions={categoryOptions} type="edit" selectedMenu={selectedMenu} />
-    </DashboardModalForm>
+    </DashModalForm>
   );
 };
 

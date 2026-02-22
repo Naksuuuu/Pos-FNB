@@ -1,12 +1,12 @@
 import { Toaster } from "sonner";
-import DashboardNavbar from "@/Components/Fragments/Dashboard/Common/Navigation/DashboardNavbar";
-import DashboardSidebar from "@/Components/Fragments/Dashboard/Common/Navigation/DashboardSidebar";
+import DashNavbar from "@/Components/Fragments/Dashboard/Common/Navigation/DashNavbar";
+import DashSidebar from "@/Components/Fragments/Dashboard/Common/Navigation/DashSidebar";
 
 const DashLayout = ({ children }) => {
   return (
-    <DashboardSidebar>
+    <DashSidebar>
       <main className="relative w-screen bg-dashboard">
-        <DashboardNavbar />
+        <DashNavbar />
 
         <div className="mx-2 md:mx-4 my-2 md:my-4 space-y-4">{children}</div>
         <Toaster
@@ -19,7 +19,7 @@ const DashLayout = ({ children }) => {
           }}
         />
       </main>
-    </DashboardSidebar>
+    </DashSidebar>
   );
 };
 

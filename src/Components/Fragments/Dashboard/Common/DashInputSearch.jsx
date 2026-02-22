@@ -7,7 +7,7 @@ import { Badge } from "@/Components/Elements/Shadcn/badge";
 
 const INPUT_SHORTCUT = "k";
 
-const DashboardInputSearch = memo(({ onSearchChange, placeholder = "Search...", ...props }) => {
+const DashInputSearch = memo(({ onSearchChange, placeholder = "Search...", ...props }) => {
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key.toLowerCase() === INPUT_SHORTCUT && (e.metaKey || e.ctrlKey)) {
@@ -48,4 +48,4 @@ const DashboardInputSearch = memo(({ onSearchChange, placeholder = "Search...", 
   );
 });
 
-export default DashboardInputSearch;
+export default DashInputSearch;

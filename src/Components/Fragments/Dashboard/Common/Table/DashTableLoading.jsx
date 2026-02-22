@@ -3,7 +3,7 @@ import { memo } from "react";
 import { Skeleton } from "@/Components/Elements/Shadcn/skeleton";
 import { TableCell, TableRow } from "@/Components/Elements/Shadcn/table";
 
-const DashboardTableLoading = memo(({ rows, columns }) => {
+const DashTableLoading = memo(({ rows, columns }) => {
   return (
     <>
       {Array.from({ length: rows }).map((_, r) => {
@@ -21,4 +21,4 @@ const DashboardTableLoading = memo(({ rows, columns }) => {
   );
 });
 
-export default DashboardTableLoading;
+export default DashTableLoading;

@@ -1,7 +1,7 @@
 import useDeleteCategory from "@/Hooks/Dashboard/Category/useDeleteCategory";
 import { toast } from "sonner";
 
-import DashboardModalConfirmation from "@/Components/Fragments/Dashboard/Common/Modal/DashboardModalConfirmation";
+import DashModalConfirmation from "@/Components/Fragments/Dashboard/Common/Modal/DashModalConfirmation";
 
 const CategoryModalDelete = ({ selectedCategory, onOpenModal }) => {
   const { deleteCategoryById, loading } = useDeleteCategory();
@@ -17,7 +17,7 @@ const CategoryModalDelete = ({ selectedCategory, onOpenModal }) => {
   };
 
   return (
-    <DashboardModalConfirmation
+    <DashModalConfirmation
       isOpen={!!selectedCategory}
       title={`Hapus ${selectedCategory?.name}?`}
       description="Aksi ini tidak dapat dibatalkan, kategori akan dihapus secara permanen."

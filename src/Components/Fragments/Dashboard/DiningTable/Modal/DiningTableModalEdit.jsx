@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import useEditDiningTable from "@/Hooks/Dashboard/DiningTable/useEditDiningTable";
 import { editDiningTableSchema } from "@/Schema/DiningTable/DiningTableSchema";
 
-import DashboardModalForm from "@/Components/Fragments/Dashboard/Common/Modal/DashboardModalForm";
+import DashModalForm from "@/Components/Fragments/Dashboard/Common/Modal/DashModalForm";
 import DiningTableForm from "@/Components/Fragments/Dashboard/DiningTable/Form/DiningTableForm";
 
 const DiningTableModalEdit = ({ selectedDiningTable, onOpenModal }) => {
@@ -42,7 +42,7 @@ const DiningTableModalEdit = ({ selectedDiningTable, onOpenModal }) => {
   };
 
   return (
-    <DashboardModalForm
+    <DashModalForm
       isOpen={!!selectedDiningTable}
       onOpenModal={onOpenModal}
       loading={loading}
@@ -51,7 +51,7 @@ const DiningTableModalEdit = ({ selectedDiningTable, onOpenModal }) => {
       title={`Edit Meja ${selectedDiningTable?.code}`}
     >
       <DiningTableForm register={register} errors={errors} control={control} />
-    </DashboardModalForm>
+    </DashModalForm>
   );
 };
 export default DiningTableModalEdit;

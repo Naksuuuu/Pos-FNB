@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import useCreateCategory from "@/Hooks/Dashboard/Category/useCreateCategory";
 
 import { CreateCategorySchema } from "@/Schema/Category/CategorySchema";
-import DashboardModalForm from "@/Components/Fragments/Dashboard/Common/Modal/DashboardModalForm";
+import DashModalForm from "@/Components/Fragments/Dashboard/Common/Modal/DashModalForm";
 import CategoryForm from "@/Components/Fragments/Dashboard/Category/Form/CategoryForm";
 
 const CategoryModalCreate = ({ isOpen, onOpenModal }) => {
@@ -37,9 +37,9 @@ const CategoryModalCreate = ({ isOpen, onOpenModal }) => {
   };
 
   return (
-    <DashboardModalForm isOpen={isOpen} onOpenModal={onOpenModal} loading={loading} handleSubmit={handleSubmit} onSubmitForm={handleSubmitForm} title="Tambah Kategori">
+    <DashModalForm isOpen={isOpen} onOpenModal={onOpenModal} loading={loading} handleSubmit={handleSubmit} onSubmitForm={handleSubmitForm} title="Tambah Kategori">
       <CategoryForm register={register} errors={errors} />
-    </DashboardModalForm>
+    </DashModalForm>
   );
 };
 export default CategoryModalCreate;

@@ -5,8 +5,8 @@ import { TABLE_CATEGORY_HEAD_COLUMNS } from "@/Constants/Dashboard/Category/Cate
 
 import { Button } from "@/Components/Elements/Shadcn/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/Elements/Shadcn/table";
-import DashboardTableError from "@/Components/Fragments/Dashboard/Common/Table/DashboardTableError";
-import DashboardTableLoading from "@/Components/Fragments/Dashboard/Common/Table/DashboardTableLoading";
+import DashTableError from "@/Components/Fragments/Dashboard/Common/Table/DashTableError";
+import DashTableLoading from "@/Components/Fragments/Dashboard/Common/Table/DashTableLoading";
 
 const CategoryTable = memo(({ loading, errorMessage, categories = [], onOpenDeleteModal, onOpenEditModal }) => {
   return (
@@ -22,8 +22,8 @@ const CategoryTable = memo(({ loading, errorMessage, categories = [], onOpenDele
           </TableRow>
         </TableHeader>
         <TableBody>
-          {loading && !errorMessage && <DashboardTableLoading rows="15" columns={TABLE_CATEGORY_HEAD_COLUMNS.length} />}
-          {errorMessage && !loading && <DashboardTableError message={errorMessage} />}
+          {loading && !errorMessage && <DashTableLoading rows="15" columns={TABLE_CATEGORY_HEAD_COLUMNS.length} />}
+          {errorMessage && !loading && <DashTableError message={errorMessage} />}
           {!loading &&
             !errorMessage &&
             categories.map((category, index) => (

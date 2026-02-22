@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { CreateMenuSchema } from "@/Schema/Menu/MenuSchema";
 import useCreateMenu from "@/Hooks/Dashboard/Menu/useCreateMenu";
 
-import DashboardModalForm from "@/Components/Fragments/Dashboard/Common/Modal/DashboardModalForm";
+import DashModalForm from "@/Components/Fragments/Dashboard/Common/Modal/DashModalForm";
 import MenuForm from "@/Components/Fragments/Dashboard/Menu/Form/MenuForm";
 import { PackagePlus } from "lucide-react";
 
@@ -40,9 +40,9 @@ const MenuModalCreate = ({ isOpen, onOpenModal }) => {
   };
 
   return (
-    <DashboardModalForm isOpen={isOpen} onOpenModal={onOpenModal} loading={loading} handleSubmit={handleSubmit} onSubmitForm={handleSubmitForm} title="Tambah Menu" icon={PackagePlus}>
+    <DashModalForm isOpen={isOpen} onOpenModal={onOpenModal} loading={loading} handleSubmit={handleSubmit} onSubmitForm={handleSubmitForm} title="Tambah Menu" icon={PackagePlus}>
       <MenuForm register={register} control={control} errors={errors} categoryOptions={categoryOptions} type="create" />
-    </DashboardModalForm>
+    </DashModalForm>
   );
 };
 export default MenuModalCreate;

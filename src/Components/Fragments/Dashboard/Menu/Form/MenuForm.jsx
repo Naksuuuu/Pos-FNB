@@ -1,6 +1,6 @@
 import { Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/Components/Elements/Shadcn/field";
 import { Input } from "@/Components/Elements/Shadcn/input";
-import DashboardSelectFilter from "@/Components/Fragments/Dashboard/Common/DashboardSelectFilter";
+import DashSelectFilter from "@/Components/Fragments/Dashboard/Common/DashSelectFilter";
 import { useCallback, useState } from "react";
 import { Controller } from "react-hook-form";
 import { Upload } from "lucide-react";
@@ -113,7 +113,7 @@ const MenuForm = ({ errors, control, register, categoryOptions, type = "create",
             name="category_id"
             control={control}
             render={({ field }) => (
-              <DashboardSelectFilter
+              <DashSelectFilter
                 items={categoryOptions}
                 label="Kategori"
                 id="category_id"

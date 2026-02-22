@@ -10,12 +10,12 @@ import useFilterParams from "@/Hooks/Common/useFilterParams";
 import { Card } from "@/Components/Elements/Cards/Card";
 import { Button } from "@/Components/Elements/Shadcn/button";
 import CategoryTable from "@/Components/Fragments/Dashboard/Category/Table/CategoryTable";
-import DashboardInputSearch from "@/Components/Fragments/Dashboard/Common/DashboardInputSearch";
+import DashInputSearch from "@/Components/Fragments/Dashboard/Common/DashInputSearch";
 import CategoryModalEdit from "@/Components/Fragments/Dashboard/Category/Modal/CategoryModalEdit";
 import CategoryModalCreate from "@/Components/Fragments/Dashboard/Category/Modal/CategoryModalCreate";
 import CategoryModalDelete from "@/Components/Fragments/Dashboard/Category/Modal/CategoryModalDelete";
-import DashboardSelectFilter, { DashboardResetFilter } from "@/Components/Fragments/Dashboard/Common/DashboardSelectFilter";
-import DashboardStatisticCard from "@/Components/Fragments/Dashboard/Common/Card/DashboardStatisticCard";
+import DashSelectFilter, { DashResetFilter } from "@/Components/Fragments/Dashboard/Common/DashSelectFilter";
+import DashStatisticCard from "@/Components/Fragments/Dashboard/Common/Card/DashStatisticCard";
 
 const CategoryPage = () => {
   const { categories, loading, errorMessage, loadCategories, statistic } = useAllCategory();
@@ -92,7 +92,7 @@ const CategoryPage = () => {
           </Link>
         </Button>
         <Card>
-          <DashboardStatisticCard title="Total Kategori" statistic={statistic?.total_category || 0} descriptions="Semua Kategori Terdaftar" icon={Package} />
+          <DashStatisticCard title="Total Kategori" statistic={statistic?.total_category || 0} descriptions="Semua Kategori Terdaftar" icon={Package} />
         </Card>
         <Button onClick={handleOpenCreateModal} className="w-full">
           <PlusCircle /> Tambah Kategori
@@ -102,15 +102,15 @@ const CategoryPage = () => {
             <h2 className="font-semibold ">Cari dan Filter</h2>
           </div>
           <div className="space-y-4">
-            <DashboardInputSearch onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari kategori..." />
+            <DashInputSearch onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari kategori..." />
           </div>
           <div className="w-full flex justify-between gap-4">
-            <DashboardSelectFilter items={SORT_BY_OPTIONS} onValueChange={handleSortByChange} value={filters.sort_by || null} label="Urutkan Berdasarkan" placeholder="Pilih opsi" />
-            <DashboardSelectFilter items={SORT_DIRECTION_OPTIONS} onValueChange={handleSortDirectionChange} value={filters.sort_direction || null} label="Urutan" placeholder="Pilih urutan" />
+            <DashSelectFilter items={SORT_BY_OPTIONS} onValueChange={handleSortByChange} value={filters.sort_by || null} label="Urutkan Berdasarkan" placeholder="Pilih opsi" />
+            <DashSelectFilter items={SORT_DIRECTION_OPTIONS} onValueChange={handleSortDirectionChange} value={filters.sort_direction || null} label="Urutan" placeholder="Pilih urutan" />
           </div>
         </Card>
 
-        <DashboardResetFilter onResetFilter={handleResetFilter} condition={showReset} />
+        <DashResetFilter onResetFilter={handleResetFilter} condition={showReset} />
       </div>
       <div className="col-span-2 space-y-4">
         <Card>

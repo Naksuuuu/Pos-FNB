@@ -12,8 +12,8 @@ import DiningTableTable from "@/Components/Fragments/Dashboard/DiningTable/Table
 import DiningTableModalCreate from "@/Components/Fragments/Dashboard/DiningTable/Modal/DiningTableModalCreate";
 import DiningTableModalEdit from "@/Components/Fragments/Dashboard/DiningTable/Modal/DiningTableModalEdit";
 import DiningTableModalDelete from "@/Components/Fragments/Dashboard/DiningTable/Modal/DiningTableModalDelete";
-import DashboardInputSearch from "@/Components/Fragments/Dashboard/Common/DashboardInputSearch";
-import DashboardSelectFilter from "@/Components/Fragments/Dashboard/Common/DashboardSelectFilter";
+import DashInputSearch from "@/Components/Fragments/Dashboard/Common/DashInputSearch";
+import DashSelectFilter from "@/Components/Fragments/Dashboard/Common/DashSelectFilter";
 
 const DiningTablePage = () => {
   const { filters, updateFilters } = useFilterParams();
@@ -82,9 +82,9 @@ const DiningTablePage = () => {
     <>
       <Card>
         <div className="grid grid-cols-4 gap-4">
-          <DashboardSelectFilter items={STATUS_OPTIONS} onValueChange={handleStatusChange} value={filters.status || null} label="Cari Berdasarkan Status" placeholder="Pilih opsi" />
-          <DashboardSelectFilter items={SORT_DIRECTION_OPTIONS} onValueChange={handleSortDirectionChange} value={filters.sort_direction || null} label="Urutan" placeholder="Pilih urutan" />
-          <DashboardInputSearch onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari Meja" />
+          <DashSelectFilter items={STATUS_OPTIONS} onValueChange={handleStatusChange} value={filters.status || null} label="Cari Berdasarkan Status" placeholder="Pilih opsi" />
+          <DashSelectFilter items={SORT_DIRECTION_OPTIONS} onValueChange={handleSortDirectionChange} value={filters.sort_direction || null} label="Urutan" placeholder="Pilih urutan" />
+          <DashInputSearch onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari Meja" />
           <Button onClick={handleOpenCreateModal}>
             {" "}
             <Plus /> Tambah Meja

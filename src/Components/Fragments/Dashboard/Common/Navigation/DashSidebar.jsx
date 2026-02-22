@@ -128,7 +128,7 @@ const CollapsibleSidebarMenuItem = memo(({ item, activePath }) => {
   );
 });
 
-const DashboardSidebar = memo(({ children }) => {
+const DashSidebar = memo(({ children }) => {
   const { pathname } = useLocation();
 
   return (
@@ -139,4 +139,4 @@ const DashboardSidebar = memo(({ children }) => {
   );
 });
 
-export default DashboardSidebar;
+export default DashSidebar;

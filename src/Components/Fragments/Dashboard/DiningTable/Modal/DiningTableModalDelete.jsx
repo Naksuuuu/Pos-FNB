@@ -2,7 +2,7 @@ import { toast } from "sonner";
 
 import useDeleteDiningTable from "@/Hooks/Dashboard/DiningTable/useDeleteDiningTable";
 
-import DashboardModalConfirmation from "@/Components/Fragments/Dashboard/Common/Modal/DashboardModalConfirmation";
+import DashModalConfirmation from "@/Components/Fragments/Dashboard/Common/Modal/DashModalConfirmation";
 
 const DiningTableModalDelete = ({ selectedDiningTable, onOpenModal }) => {
   const { deleteDiningTableById, loading } = useDeleteDiningTable();
@@ -18,7 +18,7 @@ const DiningTableModalDelete = ({ selectedDiningTable, onOpenModal }) => {
   };
 
   return (
-    <DashboardModalConfirmation
+    <DashModalConfirmation
       isOpen={!!selectedDiningTable}
       title={`Hapus ${selectedDiningTable?.code}?`}
       description="Aksi ini tidak dapat dibatalkan, meja makan akan dihapus secara permanen."

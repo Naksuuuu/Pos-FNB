@@ -13,8 +13,8 @@ import MenuModalCreate from "@/Components/Fragments/Dashboard/Menu/Modal/MenuMod
 import MenuModalEdit from "@/Components/Fragments/Dashboard/Menu/Modal/MenuModalEdit";
 import MenuModalDelete from "@/Components/Fragments/Dashboard/Menu/Modal/MenuModalDelete";
 import MenuTable from "@/Components/Fragments/Dashboard/Menu/Table/MenuTable";
-import DashboardInputSearch from "@/Components/Fragments/Dashboard/Common/DashboardInputSearch";
-import DashboardSelectFilter, { DashboardResetFilter } from "@/Components/Fragments/Dashboard/Common/DashboardSelectFilter";
+import DashInputSearch from "@/Components/Fragments/Dashboard/Common/DashInputSearch";
+import DashSelectFilter, { DashResetFilter } from "@/Components/Fragments/Dashboard/Common/DashSelectFilter";
 import CategoryModalCreate from "@/Components/Fragments/Dashboard/Category/Modal/CategoryModalCreate";
 import DiningTableModalCreate from "@/Components/Fragments/Dashboard/DiningTable/Modal/DiningTableModalCreate";
 import MenuStatistic from "@/Components/Fragments/Dashboard/Menu/Statistic/MenuStatistic";
@@ -137,7 +137,7 @@ const MenuPage = memo(() => {
 
       <Card>
         <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
-          <DashboardInputSearch onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari menu..." />
+          <DashInputSearch onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari menu..." />
 
           <Button onClick={handleOpenCreateModal}>
             <Plus />
@@ -148,17 +148,17 @@ const MenuPage = memo(() => {
 
           <DropDown triggerLabel="Kelola Meja" triggerIcon={Settings} items={tableItems} buttonProps={{ variant: "default", size: "default" }} contentAlign="start" />
 
-          <DashboardSelectFilter items={SORY_BY_OPTIONS} onValueChange={handleSortByChange} value={filters.sort_by || null} label="Cari Berdasarkan" placeholder="Pilih opsi" />
+          <DashSelectFilter items={SORY_BY_OPTIONS} onValueChange={handleSortByChange} value={filters.sort_by || null} label="Cari Berdasarkan" placeholder="Pilih opsi" />
 
-          <DashboardSelectFilter items={SORT_DIRECTION_OPTIONS} onValueChange={handleSortDirectionChange} value={filters.sort_direction || null} label="Urutan" placeholder="Pilih urutan" />
+          <DashSelectFilter items={SORT_DIRECTION_OPTIONS} onValueChange={handleSortDirectionChange} value={filters.sort_direction || null} label="Urutan" placeholder="Pilih urutan" />
 
-          <DashboardSelectFilter items={IS_AVAILABLE_OPTIONS} onValueChange={handleIsAvailableChange} value={filters.is_available || null} label="Ketersediaan" placeholder="Pilih ketersediaan" />
+          <DashSelectFilter items={IS_AVAILABLE_OPTIONS} onValueChange={handleIsAvailableChange} value={filters.is_available || null} label="Ketersediaan" placeholder="Pilih ketersediaan" />
 
-          <DashboardSelectFilter items={categoryOptions} onValueChange={handleCategoryIdChange} value={filters.category_id || null} label="Kategori" placeholder="Pilih kategori" />
+          <DashSelectFilter items={categoryOptions} onValueChange={handleCategoryIdChange} value={filters.category_id || null} label="Kategori" placeholder="Pilih kategori" />
         </div>
       </Card>
 
-      <DashboardResetFilter onResetFilter={handleResetFilter} condition={showReset} />
+      <DashResetFilter onResetFilter={handleResetFilter} condition={showReset} />
 
       <Card className="overflow-hidden space-y-2">
         <MenuTable

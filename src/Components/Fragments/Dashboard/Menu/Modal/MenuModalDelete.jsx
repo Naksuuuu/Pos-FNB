@@ -3,7 +3,7 @@ import { PackageMinus } from "lucide-react";
 
 import useDeleteMenu from "@/Hooks/Dashboard/Menu/useDeleteMenu";
 
-import DashboardModalConfirmation from "@/Components/Fragments/Dashboard/Common/Modal/DashboardModalConfirmation";
+import DashModalConfirmation from "@/Components/Fragments/Dashboard/Common/Modal/DashModalConfirmation";
 
 const MenuModalDelete = ({ selectedMenu, onOpenModal }) => {
   const { deleteMenuById, loading } = useDeleteMenu();
@@ -19,7 +19,7 @@ const MenuModalDelete = ({ selectedMenu, onOpenModal }) => {
   };
 
   return (
-    <DashboardModalConfirmation
+    <DashModalConfirmation
       isOpen={!!selectedMenu}
       title={`Hapus ${selectedMenu?.name}?`}
       description="Aksi ini tidak dapat dibatalkan, menu akan dihapus secara permanen."

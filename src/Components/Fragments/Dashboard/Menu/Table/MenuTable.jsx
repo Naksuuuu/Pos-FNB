@@ -7,9 +7,9 @@ import { rupiah } from "@/Utils/rupiahHelper";
 import { Badge } from "@/Components/Elements/Shadcn/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/Elements/Shadcn/table";
 import { DropDown } from "@/Components/Elements/Buttons/DropDown";
-import DashboardTableError from "@/Components/Fragments/Dashboard/Common/Table/DashboardTableError";
-import DashboardTableLoading from "@/Components/Fragments/Dashboard/Common/Table/DashboardTableLoading";
-import DashboardPagination from "@/Components/Fragments/Dashboard/Common/DashboardPagination";
+import DashTableError from "@/Components/Fragments/Dashboard/Common/Table/DashTableError";
+import DashTableLoading from "@/Components/Fragments/Dashboard/Common/Table/DashTableLoading";
+import DashPagination from "@/Components/Fragments/Dashboard/Common/DashPagination";
 
 const MenuTable = memo(({ loading, errorMessage, menus = [], pagination, onOpenDeleteModal, onOpenEditModal, handlePageChange }) => {
   return (
@@ -25,8 +25,8 @@ const MenuTable = memo(({ loading, errorMessage, menus = [], pagination, onOpenD
           </TableRow>
         </TableHeader>
         <TableBody>
-          {loading && !errorMessage && <DashboardTableLoading rows="15" columns={TABLE_MENU_HEAD_COLUMNS.length} />}
-          {errorMessage && !loading && <DashboardTableError message={errorMessage} />}
+          {loading && !errorMessage && <DashTableLoading rows="15" columns={TABLE_MENU_HEAD_COLUMNS.length} />}
+          {errorMessage && !loading && <DashTableError message={errorMessage} />}
           {!loading &&
             !errorMessage &&
             menus.map((menu, index) => (
@@ -59,7 +59,7 @@ const MenuTable = memo(({ loading, errorMessage, menus = [], pagination, onOpenD
         </TableBody>
       </Table>
 
-      <DashboardPagination pagination={pagination} onPageChange={handlePageChange} />
+      <DashPagination pagination={pagination} onPageChange={handlePageChange} />
     </>
   );
 });
