@@ -6,7 +6,7 @@ import DashStatisticCardHeader from "@/Components/Fragments/Dashboard/Common/Car
 
 const MenuStatistic = memo(({ statistic }) => {
   return (
-    <DashStatisticCardHeader title="Statistik Menu" description="Ringkasan Data Menu">
+    <DashStatisticCardHeader title="Statistik Manajemen Menu" description="Ringkasan Data Menu">
       <DashStatisticCard title="Total Menu" statistic={statistic?.total_menu || 0} descriptions="Semua Menu Terdaftar" icon={Package} />
       <DashStatisticCard title="Menu Aktif" statistic={statistic?.available_count || 0} descriptions="Menu dengan status tersedia" icon={PackageCheck} />
       <DashStatisticCard

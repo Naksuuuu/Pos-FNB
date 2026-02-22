@@ -10,15 +10,16 @@ import { Button } from "@/Components/Elements/Shadcn/button";
 import { Card } from "@/Components/Elements/Cards/Card";
 import { InputSearch } from "@/Components/Elements/Inputs/InputSearch";
 import { Select } from "@/Components/Elements/Inputs/Select";
+import { ButtonResetFilter } from "@/Components/Elements/Buttons/ButtonResetFilter";
 import DiningTableTable from "@/Components/Fragments/Dashboard/DiningTable/Table/DiningTableTable";
 import DiningTableModalCreate from "@/Components/Fragments/Dashboard/DiningTable/Modal/DiningTableModalCreate";
 import DiningTableModalEdit from "@/Components/Fragments/Dashboard/DiningTable/Modal/DiningTableModalEdit";
 import DiningTableModalDelete from "@/Components/Fragments/Dashboard/DiningTable/Modal/DiningTableModalDelete";
-import { ButtonResetFilter } from "@/Components/Elements/Buttons/ButtonResetFilter";
+import DiningTableStatistic from "@/Components/Fragments/Dashboard/DiningTable/Statistic/DiningTableStatistic";
 
 const DiningTablePage = () => {
   const { filters, updateFilters, resetFilters } = useFilterParams();
-  const { diningTables, loadDiningTables, loading, errorMessage, pagination } = useAllDiningTable();
+  const { diningTables, loadDiningTables, loading, errorMessage, pagination, statistic } = useAllDiningTable();
 
   const [selectedCreateTable, setSelectedCreateTable] = useState(null);
   const [selectedEditTable, setSelectedEditTable] = useState(null);
@@ -87,22 +88,12 @@ const DiningTablePage = () => {
 
   return (
     <>
+      <DiningTableStatistic statistic={statistic} />
+
       <Card>
         <div className="grid grid-cols-4 gap-4">
-          <Select
-            items={STATUS_OPTIONS}
-            onValueChange={handleStatusChange}
-            value={filters.status || null}
-            label="Cari Berdasarkan Status"
-            placeholder="Pilih opsi"
-          />
-          <Select
-            items={SORT_DIRECTION_OPTIONS}
-            onValueChange={handleSortDirectionChange}
-            value={filters.sort_direction || null}
-            label="Urutan"
-            placeholder="Pilih urutan"
-          />
+          <Select items={STATUS_OPTIONS} onValueChange={handleStatusChange} value={filters.status || null} label="Cari Berdasarkan Status" placeholder="Pilih opsi" />
+          <Select items={SORT_DIRECTION_OPTIONS} onValueChange={handleSortDirectionChange} value={filters.sort_direction || null} label="Urutan" placeholder="Pilih urutan" />
           <InputSearch onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari Meja" />
           <Button onClick={handleOpenCreateModal}>
             {" "}
@@ -125,15 +116,9 @@ const DiningTablePage = () => {
         />
       </Card>
 
-      {selectedCreateTable && (
-        <DiningTableModalCreate isOpen={!!selectedCreateTable} onOpenModal={handleOpenCreateModal} />
-      )}
-      {selectedEditTable && (
-        <DiningTableModalEdit selectedDiningTable={selectedEditTable} onOpenModal={handleOpenEditModal} />
-      )}
-      {selectedDeleteTable && (
-        <DiningTableModalDelete selectedDiningTable={selectedDeleteTable} onOpenModal={handleOpenDeleteModal} />
-      )}
+      {selectedCreateTable && <DiningTableModalCreate isOpen={!!selectedCreateTable} onOpenModal={handleOpenCreateModal} />}
+      {selectedEditTable && <DiningTableModalEdit selectedDiningTable={selectedEditTable} onOpenModal={handleOpenEditModal} />}
+      {selectedDeleteTable && <DiningTableModalDelete selectedDiningTable={selectedDeleteTable} onOpenModal={handleOpenDeleteModal} />}
     </>
   );
 };

@@ -18,6 +18,11 @@ const initialState = {
     prev_page: null,
     next_page: null,
   },
+  statistic: {
+    available_count: 0,
+    occupied_count: 0,
+    total_table: 0,
+  },
   filters: {
     search: null,
     status: null,
@@ -112,6 +117,11 @@ const diningTableSlice = createSlice({
       .addCase(fetchDiningTables.fulfilled, (state, action) => {
         state.loading = false;
         state.diningTables = action.payload.tables;
+        state.statistic = {
+          available_count: parseInt(action.payload.statistic.available_count),
+          occupied_count: parseInt(action.payload.statistic.occupied_count),
+          total_table: parseInt(action.payload.statistic.total_table),
+        };
         state.pagination = {
           ...action.payload.pagination,
           current_page: parseInt(action.payload.pagination.current_page),

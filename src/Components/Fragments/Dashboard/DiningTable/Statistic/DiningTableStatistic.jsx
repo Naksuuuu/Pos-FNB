@@ -1,0 +1,22 @@
+import { memo } from "react";
+import { Package, PackageCheck, PackageX } from "lucide-react";
+
+import DashStatisticCardHeader from "@/Components/Fragments/Dashboard/Common/Card/DashStatisticCardHeader";
+import DashStatisticCard from "@/Components/Fragments/Dashboard/Common/Card/DashStatisticCard";
+
+const DiningTableStatistic = memo(({ statistic }) => {
+  return (
+    <DashStatisticCardHeader title="Statistik Manajemen Meja" description="Ringkasan Data Meja">
+      <DashStatisticCard title="Total Meja" statistic={statistic?.total_table || 0} descriptions="Semua Meja Terdaftar" icon={Package} />
+      <DashStatisticCard title="Meja Tersedia" statistic={statistic?.available_count || 0} descriptions="Meja dengan status tersedia" icon={PackageCheck} />
+      <DashStatisticCard
+        title="Meja Sedang Dipakai"
+        statistic={statistic?.occupied_count || 0}
+        descriptions="Meja dengan status sedang dipakai"
+        icon={PackageX}
+        iconClassName="bg-red-100 text-red-700!"
+      />
+    </DashStatisticCardHeader>
+  );
+});
+export default DiningTableStatistic;
