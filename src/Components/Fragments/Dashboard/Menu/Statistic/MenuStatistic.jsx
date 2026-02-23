@@ -9,13 +9,7 @@ const MenuStatistic = memo(({ statistic }) => {
     <DashStatisticCardHeader title="Statistik Menu" description="Ringkasan Data Menu">
       <DashStatisticCard title="Total Menu" statistic={statistic?.total_menu || 0} descriptions="Semua Menu Terdaftar" icon={Package} />
       <DashStatisticCard title="Menu Aktif" statistic={statistic?.available_count || 0} descriptions="Menu dengan status tersedia" icon={PackageCheck} />
-      <DashStatisticCard
-        title="Menu Tidak Aktif"
-        statistic={statistic?.not_available_count || 0}
-        descriptions="Menu dengan status tidak tersedia"
-        icon={PackageX}
-        iconClassName="bg-destructive/10 text-destructive"
-      />
+      <DashStatisticCard title="Menu Tidak Aktif" statistic={statistic?.not_available_count || 0} descriptions="Menu dengan status tidak tersedia" icon={PackageX} variant={"destructive"} />
     </DashStatisticCardHeader>
   );
 });

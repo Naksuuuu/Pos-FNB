@@ -17,4 +17,4 @@ const BADGE_VARIANTS = {
   warning: cn(BASE_CUSTOM_VARIANTS.warning, "[a]:hover:bg-warning/20"),
 };
 
-export { BADGE_VARIANTS };
+export { BADGE_VARIANTS, BASE_CUSTOM_VARIANTS };
