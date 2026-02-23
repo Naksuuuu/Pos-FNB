@@ -34,7 +34,7 @@ const OrderTable = memo(({ loading, errorMessage, orders = [], pagination, onOpe
                 <TableCell className="truncate">{order.customer_name}</TableCell>
                 <TableCell>
                   <Badge variant={order.status === "completed" ? "success" : order.status === "pending" ? "warning" : "destructive"} className="capitalize">
-                    {order.status}
+                    {order.status === "completed" ? "Selesai" : order.status === "pending" ? "Pending" : "Dibatalkan"}
                   </Badge>
                 </TableCell>
                 <TableCell>{order.table?.code}</TableCell>

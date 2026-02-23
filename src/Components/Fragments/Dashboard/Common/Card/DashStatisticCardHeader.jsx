@@ -3,8 +3,8 @@ import { memo, useState } from "react";
 import { ChartColumn, ChevronDown } from "lucide-react";
 import { Button } from "@/Components/Elements/Shadcn/button";
 
-const DashStatisticCardHeader = memo(({ children, icon: Icon, title, description }) => {
-  const [showStatistic, setShowStatistic] = useState(false);
+const DashStatisticCardHeader = memo(({ children, icon: Icon, title, description, gridCols }) => {
+  const [showStatistic, setShowStatistic] = useState(true);
 
   return (
     <Card className="p-0 md:p-0">
@@ -26,7 +26,7 @@ const DashStatisticCardHeader = memo(({ children, icon: Icon, title, description
 
       <div className={`grid transition-all duration-300 ease-out ${showStatistic ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}>
         <div className="overflow-hidden">
-          <div className="grid w-full grid-cols-1 gap-4 p-2 md:p-4 md:grid-cols-3">{children}</div>
+          <div className={`grid w-full grid-cols-1 gap-4 p-2 md:p-4 ${gridCols || "md:grid-cols-3"}`}>{children}</div>
         </div>
       </div>
     </Card>

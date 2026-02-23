@@ -1,4 +1,4 @@
-import { selectAllOrders, selectOrderError, selectOrderLoading, selectOrderPagination } from "@/Redux/Features/Dashboard/Order/OrderSelector";
+import { selectAllOrders, selectOrderError, selectOrderLoading, selectOrderPagination, selectOrderStatistic } from "@/Redux/Features/Dashboard/Order/OrderSelector";
 import { fetchOrders } from "@/Redux/Features/Dashboard/Order/OrderSlice";
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,6 +9,7 @@ const useAllOrder = () => {
   const loading = useSelector(selectOrderLoading);
   const errorMessage = useSelector(selectOrderError);
   const pagination = useSelector(selectOrderPagination);
+  const statistic = useSelector(selectOrderStatistic);
 
   const loadOrders = useCallback(
     (params = {}) => {
@@ -23,7 +24,7 @@ const useAllOrder = () => {
     [dispatch],
   );
 
-  return { orders, loading, errorMessage, pagination, loadOrders };
+  return { orders, loading, errorMessage, pagination, loadOrders, statistic };
 };
 
 export default useAllOrder;

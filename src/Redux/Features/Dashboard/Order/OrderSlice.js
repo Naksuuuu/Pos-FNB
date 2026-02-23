@@ -15,6 +15,12 @@ const initialState = {
     tanggal: "string",
     per_page: 0,
   },
+  statistic: {
+    total_order: 0,
+    pending: 0,
+    completed: 0,
+    canceled: 0,
+  },
   pagination: {
     current_page: 1,
     last_page: 1,
@@ -55,6 +61,12 @@ const orderSlice = createSlice({
       .addCase(fetchOrders.fulfilled, (state, action) => {
         state.loading = false;
         state.orders = action.payload.orders;
+        state.statistic = {
+          total_order: parseInt(action.payload.statistic.total_order),
+          pending: parseInt(action.payload.statistic.pending),
+          completed: parseInt(action.payload.statistic.completed),
+          canceled: parseInt(action.payload.statistic.canceled),
+        };
         state.pagination = {
           current_page: parseInt(action.payload.pagination.current_page),
           last_page: parseInt(action.payload.pagination.last_page),
@@ -65,6 +77,7 @@ const orderSlice = createSlice({
           next_page: action.payload.pagination.next_page ? parseInt(action.payload.pagination.next_page) : null,
           prev_page: action.payload.pagination.prev_page ? parseInt(action.payload.pagination.prev_page) : null,
         };
+        state.filters = action.payload.filters;
       })
       .addCase(fetchOrders.rejected, (state, action) => {
         state.loading = false;

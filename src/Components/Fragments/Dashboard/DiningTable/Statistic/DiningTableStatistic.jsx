@@ -6,19 +6,9 @@ import DashStatisticCard from "@/Components/Fragments/Dashboard/Common/Card/Dash
 
 const DiningTableStatistic = memo(({ statistic }) => {
   return (
-    <DashStatisticCardHeader title="Statistik Manajemen Meja" description="Ringkasan Data Meja">
-      <DashStatisticCard
-        title="Total Meja"
-        statistic={statistic?.total_table || 0}
-        descriptions="Semua Meja Terdaftar"
-        icon={Package}
-      />
-      <DashStatisticCard
-        title="Meja Tersedia"
-        statistic={statistic?.available_count || 0}
-        descriptions="Meja dengan status tersedia"
-        icon={PackageCheck}
-      />
+    <DashStatisticCardHeader title="Statistik Meja" description="Ringkasan Data Meja">
+      <DashStatisticCard title="Total Meja" statistic={statistic?.total_table || 0} descriptions="Semua Meja Terdaftar" icon={Package} />
+      <DashStatisticCard title="Meja Tersedia" statistic={statistic?.available_count || 0} descriptions="Meja dengan status tersedia" icon={PackageCheck} />
       <DashStatisticCard
         title="Meja Sedang Dipakai"
         statistic={statistic?.occupied_count || 0}

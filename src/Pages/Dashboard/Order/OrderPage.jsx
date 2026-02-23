@@ -11,10 +11,11 @@ import { InputSearch } from "@/Components/Elements/Inputs/InputSearch";
 import { SelectDate } from "@/Components/Elements/Inputs/SelectDate";
 
 import OrderTable from "@/Components/Fragments/Dashboard/Order/Table/OrderTable";
+import OrderStatistic from "@/Components/Fragments/Dashboard/Order/Statistic/OrderStatistic";
 
 const OrderPage = () => {
   const { filters, updateFilters, resetFilters } = useFilterParams();
-  const { orders, loadOrders, errorMessage, loading, pagination } = useAllOrder();
+  const { orders, loadOrders, errorMessage, loading, pagination, statistic } = useAllOrder();
 
   const search = filters.search || "";
   const tanggal = filters.tanggal || null;
@@ -82,6 +83,8 @@ const OrderPage = () => {
 
   return (
     <>
+      <OrderStatistic statistic={statistic} />
+
       <Card className="grid grid-cols-2 gap-4">
         <div className="col-span-full">
           <InputSearch placeholder="Cari berdasarkan nama pelanggan, order ID atau nomor meja" value={optimisticSearch} onSearchChange={handleSearchChange} />
