@@ -64,7 +64,7 @@ const DiningTablePage = () => {
       }
 
       timerRef.current = setTimeout(() => {
-        updateFilters({ search: e.target.value });
+        updateFilters({ search: e.target.value, page: 1 });
       }, 300);
     },
     [updateFilters],

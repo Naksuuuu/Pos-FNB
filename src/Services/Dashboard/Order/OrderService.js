@@ -3,7 +3,7 @@ import { apiUtils } from "@/Services/Common/Base";
 const ORDER_ENDPOINT = "/dashboard/orders";
 
 export const getAllOrders = async (params) => {
-  const { page, search, tanggal, status } = params;
+  const { page = 1, search, tanggal, status } = params;
   const queryParams = {
     page,
     search,

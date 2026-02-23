@@ -57,7 +57,7 @@ const OrderPage = () => {
         clearTimeout(timerRef.current);
       }
       timerRef.current = setTimeout(() => {
-        updateFilters({ search: e.target.value });
+        updateFilters({ search: e.target.value, page: 1 });
       }, 500);
     },
     [updateFilters],

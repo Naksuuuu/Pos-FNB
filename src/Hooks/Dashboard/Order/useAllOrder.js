@@ -11,8 +11,14 @@ const useAllOrder = () => {
   const pagination = useSelector(selectOrderPagination);
 
   const loadOrders = useCallback(
-    (params) => {
-      dispatch(fetchOrders(params));
+    (params = {}) => {
+      const { page, ...otherParams } = params;
+
+      const safeParams = {
+        page: parseInt(page) || 1,
+        ...otherParams,
+      };
+      dispatch(fetchOrders(safeParams));
     },
     [dispatch],
   );
