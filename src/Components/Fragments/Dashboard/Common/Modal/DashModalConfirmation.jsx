@@ -9,7 +9,7 @@ const ModalConfirmation = ({ isOpen, title, description, onOpenModal, loading, h
       <DialogContent showCloseButton={false} className="gap-4">
         <DialogHeader className="gap-4">
           <DialogTitle className="flex items-center gap-2">
-            <div className="p-2 bg-red-100 rounded-md text-red-900">{Icon ? <Icon className="size-6" /> : <Trash className="size-6" />}</div>
+            <div className="p-2 rounded-md bg-destructive/10 text-destructive">{Icon ? <Icon className="size-6" /> : <Trash className="size-6" />}</div>
             <span className="font-semibold text-lg">{title}</span>
           </DialogTitle>
           <DialogDescription>{description}</DialogDescription>

@@ -1,5 +1,12 @@
 import { Button } from "@/Components/Elements/Shadcn/button";
-import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/Components/Elements/Shadcn/dialog";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/Components/Elements/Shadcn/dialog";
 import { Spinner } from "@/Components/Elements/Shadcn/spinner";
 import { SquarePlus } from "lucide-react";
 
@@ -10,7 +17,9 @@ const ModalForm = ({ isOpen, onOpenModal, title, loading, handleSubmit, onSubmit
         <form onSubmit={handleSubmit(onSubmitForm)} className="flex flex-col gap-4">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <div className="p-2 bg-emerald-100 rounded-md text-emerald-900">{Icon ? <Icon className="size-6" /> : <SquarePlus className="size-6" />}</div>
+              <div className="p-2 rounded-md bg-success/10 text-success">
+                {Icon ? <Icon className="size-6" /> : <SquarePlus className="size-6" />}
+              </div>
               <span className="font-semibold text-lg">{title}</span>
             </DialogTitle>
           </DialogHeader>
@@ -18,7 +27,9 @@ const ModalForm = ({ isOpen, onOpenModal, title, loading, handleSubmit, onSubmit
           <div className="no-scrollbar max-h-[50vh] overflow-y-auto overflow-x-hidden">{children}</div>
 
           <DialogFooter>
-            <DialogClose render={(props) => <Button {...props} variant="outline" className="cursor-pointer" />}>Batal</DialogClose>
+            <DialogClose render={(props) => <Button {...props} variant="outline" className="cursor-pointer" />}>
+              Batal
+            </DialogClose>
             <Button type="submit" disabled={loading} className="relative cursor-pointer" size="default">
               <span className={loading ? "invisible" : "visible"}>Simpan</span>
               {loading && (

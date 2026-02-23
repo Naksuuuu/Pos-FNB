@@ -10,11 +10,9 @@ const DashStatisticCard = memo(({ title, statistic, descriptions, icon: Icon, ic
       <div className="flex items-center justify-between space-y-1 md:space-y-2">
         <div>
           <p>{title}</p>
-          <p className="text-xl md:text-2xl font-extrabold">{statistic}</p>
+          <p className="text-xl font-extrabold md:text-2xl">{statistic}</p>
         </div>
-        <div className={cn("p-2 rounded-md bg-emerald-100 text-emerald-700", iconClassName)}>
-          {Icon && <Icon className="size-6" />}
-        </div>
+        <div className={cn("p-2 rounded-md bg-success/10 text-success", iconClassName)}>{Icon && <Icon className="size-6" />}</div>
       </div>
       <p className="text-xs">{descriptions}</p>
     </Card>

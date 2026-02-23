@@ -14,7 +14,7 @@ const MenuStatistic = memo(({ statistic }) => {
         statistic={statistic?.not_available_count || 0}
         descriptions="Menu dengan status tidak tersedia"
         icon={PackageX}
-        iconClassName="bg-red-100 text-red-700!"
+        iconClassName="bg-destructive/10 text-destructive"
       />
     </DashStatisticCardHeader>
   );

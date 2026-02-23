@@ -37,9 +37,9 @@ const DiningTableTable = memo(
                   <TableCell>{table.code}</TableCell>
                   <TableCell>
                     {table.status == "available" ? (
-                      <Badge className="py-1 px-2 bg-emerald-100 text-emerald-600">Tersedia</Badge>
+                      <Badge className="py-1 px-2 bg-success/10 text-success">Tersedia</Badge>
                     ) : (
-                      <Badge className="py-1 px-2 bg-red-100 text-red-600">Dipakai</Badge>
+                      <Badge className="py-1 px-2 bg-destructive/10 text-destructive">Dipakai</Badge>
                     )}
                   </TableCell>
                   <TableCell className="text-right">
@@ -52,7 +52,7 @@ const DiningTableTable = memo(
                           key: "delete",
                           label: "Hapus",
                           onClick: () => onOpenDeleteModal(table),
-                          className: "text-red-600 hover:text-red-700! hover:bg-red-100! ",
+                          className: "text-destructive hover:text-destructive! hover:bg-destructive/10! ",
                         },
                       ]}
                     />

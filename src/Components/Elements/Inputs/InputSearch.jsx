@@ -41,7 +41,7 @@ const InputSearch = memo(({ onSearchChange, placeholder = "Search...", ...props 
           <Button
             variant="ghost"
             size="xs"
-            className="mr-1 text-red-600 hover:text-red-900 hover:bg-red-100!"
+            className="mr-1 text-destructive hover:text-destructive! hover:bg-destructive/10!"
             onClick={() => onSearchChange({ target: { value: "" } })}
           >
             <X />

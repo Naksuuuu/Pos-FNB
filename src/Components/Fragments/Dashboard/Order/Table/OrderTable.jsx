@@ -33,7 +33,7 @@ const OrderTable = memo(({ loading, errorMessage, orders = [], pagination, onOpe
                 <TableCell>{order.order_no}</TableCell>
                 <TableCell className="truncate">{order.customer_name}</TableCell>
                 <TableCell>
-                  <Badge variant={order.status === "pending" ? "default" : "destructive"} className={`capitalize ${order.status === "completed" ? "bg-emerald-100 text-emerald-600" : ""}`}>
+                  <Badge variant={order.status === "completed" ? "success" : order.status === "pending" ? "warning" : "destructive"} className="capitalize">
                     {order.status}
                   </Badge>
                 </TableCell>
@@ -49,7 +49,7 @@ const OrderTable = memo(({ loading, errorMessage, orders = [], pagination, onOpe
                         key: "delete",
                         label: "Hapus",
                         onClick: () => onOpenDeleteModal(order),
-                        className: "text-red-600 hover:text-red-700! hover:bg-red-100! ",
+                        className: "text-destructive hover:text-destructive! hover:bg-destructive/10! ",
                       },
                     ]}
                   />

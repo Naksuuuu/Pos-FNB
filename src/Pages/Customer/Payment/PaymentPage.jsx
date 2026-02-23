@@ -36,7 +36,7 @@ const PaymentPage = () => {
       <div className="flex flex-col flex-1 gap-4 px-2">
         <Card className="py-4">
           <CardContent className="px-4">
-            <div className="flex flex-col items-center justify-center w-full text-emerald-700">
+            <div className="flex flex-col items-center justify-center w-full text-success">
               <CheckCircle2 className="size-20" />
               <p className="font-semibold">Pesanan berhasil dibuat</p>
             </div>

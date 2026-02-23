@@ -65,7 +65,8 @@ const CreateSidebar = memo(({ pathname }) => {
                 render={
                   <Link
                     to={ROUTES.DASHBOARD.HOME}
-                    className="flex justify-between border border-red-500 text-red-500 hover:bg-red-500! hover:text-white! font-semibold"
+                    className="flex justify-between border border-destructive/50 text-destructive hover:bg-destructive! 
+                    hover:text-background! font-semibold transition-colors duration-300"
                   >
                     <span>Logout</span>
                     <LogOut />

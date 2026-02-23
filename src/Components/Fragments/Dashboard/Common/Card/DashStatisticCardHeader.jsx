@@ -3,14 +3,14 @@ import { memo, useState } from "react";
 import { ChartColumn, ChevronDown } from "lucide-react";
 import { Button } from "@/Components/Elements/Shadcn/button";
 
-const DashStatisticCardHeader = memo(({ children, icon, title, description }) => {
+const DashStatisticCardHeader = memo(({ children, icon: Icon, title, description }) => {
   const [showStatistic, setShowStatistic] = useState(false);
 
   return (
     <Card className="p-0 md:p-0">
-      <div className="relative flex items-center justify-between p-2 md:p-4 z-1 bg-primary text-background">
+      <div className="relative flex items-center justify-between p-2 md:p-4 z-1 bg-primary text-primary-foreground">
         <div className="flex items-center gap-2 ">
-          <div className="p-2 rounded-md bg-background/10">{icon || <ChartColumn />}</div>
+          <div className="p-2 rounded-md bg-background/10">{Icon ? <Icon className="size-6" /> : <ChartColumn className="size-6" />}</div>
           <div className="">
             <h2 className="text-lg font-semibold tracking-wide">{title}</h2>
             <p className="text-xs">{description}</p>
