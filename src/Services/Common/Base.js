@@ -1,5 +1,6 @@
 import axios from "axios";
 import { parseValidationErrors } from "../../Utils/errorHandler";
+import { getAuthToken } from "@/Utils/sessionUtils";
 // import { clearAuthToken, getAuthToken } from "../../Utils/cookieUtils";
 
 const BASE_URL = import.meta.env.VITE_BASE_API_URL;
@@ -17,8 +18,7 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    // const token = getAuthToken();
-    const token = 123;
+    const token = getAuthToken();
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -42,8 +42,8 @@ api.interceptors.response.use(
 
       if (status === 401) {
         // clearAuthToken();
-        if (typeof window !== "undefined" && !window.location.pathname.includes("/login")) {
-          window.location.href = "/login";
+        if (typeof window !== "undefined" && !window.location.pathname.includes("/auth/login")) {
+          window.location.href = "/auth/login";
         }
       }
 

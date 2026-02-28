@@ -3,6 +3,7 @@ import { lazy, Suspense } from "react";
 import { ROUTES } from "@/Constants/Common/RouteConstant";
 
 import LoadingApp from "@/Pages/Common/LoadingApp";
+import ProtectedRoute from "./ProtectedRoute";
 const OrderPage = lazy(() => import("@/Pages/Dashboard/Order/OrderPage"));
 const DashLayout = lazy(() => import("@/Components/Layouts/DashLayout"));
 const Dashboard = lazy(() => import("@/Pages/Dashboard/Dashboard"));
@@ -18,9 +19,11 @@ const SidebarProvider = lazy(() =>
 const createProtectedRoute = (component) => {
   return (
     <Suspense fallback={<LoadingApp />}>
-      <SidebarProvider>
-        <DashLayout>{component}</DashLayout>
-      </SidebarProvider>
+      <ProtectedRoute>
+        <SidebarProvider>
+          <DashLayout>{component}</DashLayout>
+        </SidebarProvider>
+      </ProtectedRoute>
     </Suspense>
   );
 };
