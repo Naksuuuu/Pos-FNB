@@ -1,4 +1,4 @@
-import { Computer, LayoutDashboard, Database, ConciergeBell } from "lucide-react";
+import { Computer, LayoutDashboard, Database, ConciergeBell, User } from "lucide-react";
 import { ROUTES } from "@/Constants/Common/RouteConstant";
 
 export const SidebarItem = [
@@ -6,6 +6,12 @@ export const SidebarItem = [
     title: "Dashboard",
     path: ROUTES.DASHBOARD.HOME,
     icon: LayoutDashboard,
+    children: null,
+  },
+  {
+    title: "User",
+    path: ROUTES.DASHBOARD.USER,
+    icon: User,
     children: null,
   },
   {

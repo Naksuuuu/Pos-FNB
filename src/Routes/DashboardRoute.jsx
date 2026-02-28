@@ -10,8 +10,11 @@ const PanelCashier = lazy(() => import("@/Pages/Dashboard/Cashier/PanelCashier")
 const MenuPage = lazy(() => import("@/Pages/Dashboard/Menu/MenuPage"));
 const CategoryPage = lazy(() => import("@/Pages/Dashboard/Category/CategoryPage"));
 const DiningTablePage = lazy(() => import("@/Pages/Dashboard/DiningTable/DiningTablePage"));
+const UserPage = lazy(() => import("@/Pages/Dashboard/User/UserPage"));
 
-const SidebarProvider = lazy(() => import("@/Components/Elements/Shadcn/sidebar").then((m) => ({ default: m.SidebarProvider })));
+const SidebarProvider = lazy(() =>
+  import("@/Components/Elements/Shadcn/sidebar").then((m) => ({ default: m.SidebarProvider })),
+);
 const createProtectedRoute = (component) => {
   return (
     <Suspense fallback={<LoadingApp />}>
@@ -26,6 +29,10 @@ const DashboardRoute = [
   {
     path: ROUTES.DASHBOARD.HOME,
     element: createProtectedRoute(<Dashboard />),
+  },
+  {
+    path: ROUTES.DASHBOARD.USER,
+    element: createProtectedRoute(<UserPage />),
   },
   {
     path: ROUTES.DASHBOARD.CASHIER,

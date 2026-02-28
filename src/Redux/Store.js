@@ -6,12 +6,14 @@ import diningTableReducer from "./Features/Dashboard/DiningTable/DiningTableSlic
 import catalogReducer from "./Features/Customer/Catalog/CatalogSlice";
 import orderReducer from "./Features/Customer/Order/OrderSlice";
 import DashboardOrderReducer from "./Features/Dashboard/Order/OrderSlice";
+import userReducer from "./Features/Dashboard/User/UserSlice";
 
 const dashboardReducer = combineReducers({
   menu: menuReducer,
   category: categoryReducer,
   diningTable: diningTableReducer,
   order: DashboardOrderReducer,
+  user: userReducer,
 });
 
 const customerReducer = combineReducers({

@@ -8,6 +8,7 @@ export const ROUTES = {
   },
   DASHBOARD: {
     HOME: "/dashboard",
+    USER: "/dashboard/user",
     CASHIER: "/dashboard/cashier",
     INVENTORY: {
       MENU: "/dashboard/inventory/menu",

@@ -27,23 +27,13 @@ const InputSearch = memo(({ onSearchChange, placeholder = "Search...", ...props 
 
   return (
     <InputGroup className="">
-      <InputGroupInput
-        id="dashboard-search-input"
-        placeholder={placeholder}
-        onChange={(e) => onSearchChange(e)}
-        {...props}
-      />
+      <InputGroupInput id="dashboard-search-input" placeholder={placeholder} onChange={(e) => onSearchChange(e)} {...props} />
       <InputGroupAddon>
         <Search />
       </InputGroupAddon>
       {props?.value ? (
         <InputGroupAddon align="inline-end">
-          <Button
-            variant="ghost"
-            size="xs"
-            className="mr-1 text-destructive hover:text-destructive! hover:bg-destructive/10!"
-            onClick={() => onSearchChange({ target: { value: "" } })}
-          >
+          <Button variant="ghost" size="xs" className="mr-1 text-destructive hover:text-destructive! hover:bg-destructive/10!" onClick={() => onSearchChange({ target: { value: "" } })}>
             <X />
           </Button>
         </InputGroupAddon>
