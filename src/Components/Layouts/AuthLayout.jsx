@@ -1,5 +1,5 @@
 import { Toaster } from "sonner";
-import { Card } from "../Elements/Cards/Card";
+import { Card } from "@/Components/Elements/Cards/Card";
 
 const AuthLayout = ({ children, title = "halo", subtitle = "subtitle" }) => {
   return (

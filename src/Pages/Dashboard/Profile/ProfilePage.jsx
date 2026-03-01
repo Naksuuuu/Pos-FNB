@@ -1,7 +1,9 @@
-import { Card } from "@/Components/Elements/Cards/Card";
-import useProfile from "@/Hooks/Dashboard/Profile/useProfile";
 import { useCallback, useEffect, useState } from "react";
 import { User, Shield, AtSign } from "lucide-react";
+
+import useProfile from "@/Hooks/Dashboard/Profile/useProfile";
+
+import { Card } from "@/Components/Elements/Cards/Card";
 import { Button } from "@/Components/Elements/Shadcn/button";
 import ProfileModalChangePassword from "@/Components/Fragments/Dashboard/Profile/Modal/ProfileModalChangePassword";
 import ProfileModalEdit from "@/Components/Fragments/Dashboard/Profile/Modal/ProfileModalEdit";

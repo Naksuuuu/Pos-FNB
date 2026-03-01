@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import * as MenuService from "@/Services/Dashboard/Menu/MenuService";
+
+import MenuService from "@/Services/Dashboard/Menu/MenuService";
 
 const initialState = {
   menus: [],
@@ -33,9 +34,9 @@ const initialState = {
   },
 };
 
-export const fetchMenus = createAsyncThunk("menu/fetchMenus", async (params, { rejectWithValue }) => {
+export const fetchMenus = createAsyncThunk("dashboard/menu/fetchMenus", async (params, { rejectWithValue }) => {
   try {
-    const response = await MenuService.getAllMenu(params);
+    const response = await MenuService.menus(params);
 
     if (!response.success) {
       return rejectWithValue(response.message || "Failed to fetch menus");
@@ -49,9 +50,9 @@ export const fetchMenus = createAsyncThunk("menu/fetchMenus", async (params, { r
   }
 });
 
-export const createMenu = createAsyncThunk("menu/createMenu", async (menuData, { rejectWithValue }) => {
+export const createMenu = createAsyncThunk("dashboard/menu/createMenu", async (menuData, { rejectWithValue }) => {
   try {
-    const response = await MenuService.createMenu(menuData);
+    const response = await MenuService.create(menuData);
     if (response.success && (response.status === 200 || response.status === 201)) {
       return response;
     }
@@ -73,9 +74,9 @@ export const createMenu = createAsyncThunk("menu/createMenu", async (menuData, {
   }
 });
 
-export const deleteMenu = createAsyncThunk("menu/deleteMenu", async (menuId, { rejectWithValue }) => {
+export const deleteMenu = createAsyncThunk("dashboard/menu/deleteMenu", async (menuId, { rejectWithValue }) => {
   try {
-    const response = await MenuService.deleteMenu(menuId);
+    const response = await MenuService.delete(menuId);
     if (response.success && (response.status === 200 || response.status === 201)) {
       return response;
     }
@@ -88,14 +89,14 @@ export const deleteMenu = createAsyncThunk("menu/deleteMenu", async (menuId, { r
   }
 });
 
-export const editMenu = createAsyncThunk("menu/editMenu", async ([menuId, menuData], { rejectWithValue }) => {
+export const editMenu = createAsyncThunk("dashboard/menu/editMenu", async ([menuId, menuData], { rejectWithValue }) => {
   try {
     const { image, ...menuDataWithoutImage } = menuData;
     if (image && image[0]) {
-      await MenuService.uploadImageMenu(menuId, image);
+      await MenuService.uploadImage(menuId, image);
     }
 
-    const response = await MenuService.editMenu(menuId, menuDataWithoutImage);
+    const response = await MenuService.edit(menuId, menuDataWithoutImage);
     if (response.success && (response.status === 200 || response.status === 201)) {
       return response;
     }

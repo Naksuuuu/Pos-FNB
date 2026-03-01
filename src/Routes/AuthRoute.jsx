@@ -1,9 +1,10 @@
-import LoadingApp from "@/Pages/Common/LoadingApp";
-import { selectIsAuthenticated } from "@/Redux/Features/Auth/Login/LoginSelector";
 import { lazy, Suspense } from "react";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router";
 
+import { selectIsAuthenticated } from "@/Redux/Features/Auth/Login/LoginSelector";
+
+import LoadingApp from "@/Pages/Common/LoadingApp";
 const LoginPage = lazy(() => import("@/Pages/Auth/Login/LoginPage"));
 
 const ProtectAuthRoute = ({ children }) => {

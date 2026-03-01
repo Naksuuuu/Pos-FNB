@@ -1,7 +1,9 @@
-import { ROUTES } from "@/Constants/Common/RouteConstant";
-import { selectIsAuthenticated } from "@/Redux/Features/Auth/Login/LoginSelector";
-import { useSelector } from "react-redux";
 import { Navigate } from "react-router";
+import { useSelector } from "react-redux";
+
+import { selectIsAuthenticated } from "@/Redux/Features/Auth/Login/LoginSelector";
+
+import { ROUTES } from "@/Constants/Common/RouteConstant";
 
 const ProtectedRoute = ({ children }) => {
   const isAuthenticated = useSelector(selectIsAuthenticated);

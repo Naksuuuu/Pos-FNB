@@ -1,7 +1,8 @@
-import { selectAuthLoading } from "@/Redux/Features/Auth/Login/LoginSelector";
-import { LoginUser, LogoutUser } from "@/Redux/Features/Auth/Login/LoginSlice";
 import { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
+import { selectAuthLoading } from "@/Redux/Features/Auth/Login/LoginSelector";
+import { LoginUser } from "@/Redux/Features/Auth/Login/LoginSlice";
 
 const useLogin = () => {
   const dispatch = useDispatch();

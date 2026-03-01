@@ -1,7 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { changePassword, profile, profileEdit } from "@/Services/Dashboard/Profile/ProfileService";
+
+import ProfileService from "@/Services/Dashboard/Profile/ProfileService";
+import LoginService from "@/Services/Auth/Login/LoginService";
+
+import { LoginUser, LogoutUser } from "@/Redux/Features/Auth/Login/LoginSlice";
+
 import { getUserData, setUserData } from "@/Utils/sessionUtils";
-import { me } from "@/Services/Auth/Login/LoginService";
 
 const initialState = {
   profile: getUserData(),
@@ -11,15 +15,14 @@ const initialState = {
   loadingEditProfile: false,
 };
 
-export const getProfile = createAsyncThunk("profile/getProfile", async (_, { rejectWithValue, getState }) => {
+export const getProfile = createAsyncThunk("dashboard/profile/getProfile", async (_, { rejectWithValue, getState }) => {
   try {
     if (getState().dashboard.profile.profile) {
       return {
         data: getState().dashboard.profile.profile,
       };
     }
-    const response = await profile();
-    console.log("load data dari server");
+    const response = await ProfileService.get();
 
     return response;
   } catch (error) {
@@ -27,10 +30,10 @@ export const getProfile = createAsyncThunk("profile/getProfile", async (_, { rej
   }
 });
 
-export const editProfile = createAsyncThunk("profile/editProfile", async (data, { rejectWithValue }) => {
+export const editProfile = createAsyncThunk("dashboard/profile/editProfile", async (data, { rejectWithValue }) => {
   try {
-    await profileEdit(data);
-    const meResponse = await me();
+    await ProfileService.edit(data);
+    const meResponse = await LoginService.me();
 
     if (meResponse.status === 200) {
       setUserData(meResponse.data.user);
@@ -43,14 +46,17 @@ export const editProfile = createAsyncThunk("profile/editProfile", async (data, 
   }
 });
 
-export const changeUserPassword = createAsyncThunk("profile/changeUserPassword", async (data, { rejectWithValue }) => {
-  try {
-    const response = await changePassword(data);
-    return response;
-  } catch (error) {
-    return rejectWithValue(error);
-  }
-});
+export const changeUserPassword = createAsyncThunk(
+  "dashboard/profile/changeUserPassword",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await ProfileService.changePassword(data);
+      return response;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  },
+);
 
 const profileSlice = createSlice({
   name: "profile",
@@ -87,6 +93,12 @@ const profileSlice = createSlice({
       })
       .addCase(editProfile.rejected, (state) => {
         state.loadingEditProfile = false;
+      })
+      .addCase(LoginUser.fulfilled, (state, action) => {
+        state.profile = action.payload.user;
+      })
+      .addCase(LogoutUser.fulfilled, (state) => {
+        state.profile = null;
       });
   },
 });

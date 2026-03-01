@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import * as UserService from "@/Services/Dashboard/User/UserService";
+import UserService from "@/Services/Dashboard/User/UserService";
 
 const initialState = {
   users: [],
@@ -21,9 +21,9 @@ const initialState = {
   pagination: null,
 };
 
-export const fetchUsers = createAsyncThunk("user/fetchUsers", async (params = {}, { rejectWithValue }) => {
+export const fetchUsers = createAsyncThunk("dashboard/user/fetchUsers", async (params = {}, { rejectWithValue }) => {
   try {
-    const response = await UserService.getAllUsers(params);
+    const response = await UserService.users(params);
     if (!response.success) {
       return rejectWithValue(response.message || "Failed to fetch users");
     }
@@ -36,9 +36,9 @@ export const fetchUsers = createAsyncThunk("user/fetchUsers", async (params = {}
   }
 });
 
-export const createUser = createAsyncThunk("user/createUser", async (userData, { rejectWithValue }) => {
+export const createUser = createAsyncThunk("dashboard/user/createUser", async (userData, { rejectWithValue }) => {
   try {
-    const response = await UserService.createUser(userData);
+    const response = await UserService.create(userData);
     if (response.success && (response.status === 200 || response.status === 201)) {
       return response;
     }
@@ -57,9 +57,9 @@ export const createUser = createAsyncThunk("user/createUser", async (userData, {
   }
 });
 
-export const editUser = createAsyncThunk("user/editUser", async ([userId, userData], { rejectWithValue }) => {
+export const editUser = createAsyncThunk("dashboard/user/editUser", async ([userId, userData], { rejectWithValue }) => {
   try {
-    const response = await UserService.editUser(userId, userData);
+    const response = await UserService.edit(userId, userData);
     if (response.success && response.status === 200) {
       return response;
     }
@@ -78,9 +78,9 @@ export const editUser = createAsyncThunk("user/editUser", async ([userId, userDa
   }
 });
 
-export const deleteUser = createAsyncThunk("user/deleteUser", async (userId, { rejectWithValue }) => {
+export const deleteUser = createAsyncThunk("dashboard/user/deleteUser", async (userId, { rejectWithValue }) => {
   try {
-    const response = await UserService.deleteUser(userId);
+    const response = await UserService.delete(userId);
     if (response.success && response.status === 200) {
       return response;
     }
@@ -107,7 +107,16 @@ const userSlice = createSlice({
         state.users = action.payload.users;
         state.filters = action.payload.filters;
         state.statistic = action.payload.statistic;
-        state.pagination = action.payload.pagination;
+        state.pagination = {
+          current_page: parseInt(action.payload.pagination.current_page),
+          last_page: parseInt(action.payload.pagination.last_page),
+          per_page: parseInt(action.payload.pagination.per_page),
+          total: parseInt(action.payload.pagination.total),
+          from: parseInt(action.payload.pagination.from),
+          to: parseInt(action.payload.pagination.to),
+          next_page: action.payload.pagination.next_page ? parseInt(action.payload.pagination.next_page) : null,
+          prev_page: action.payload.pagination.prev_page ? parseInt(action.payload.pagination.prev_page) : null,
+        };
       })
       .addCase(fetchUsers.rejected, (state, action) => {
         state.loading = false;

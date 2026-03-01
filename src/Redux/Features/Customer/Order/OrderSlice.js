@@ -1,5 +1,6 @@
-import { createOrder } from "@/Services/Customer/Order/OrderService";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+
+import OrderService from "@/Services/Customer/Order/OrderService";
 
 const initialState = {
   order: {},
@@ -10,7 +11,7 @@ const initialState = {
 
 export const createOrders = createAsyncThunk("order/createOrder", async (orderData, { rejectWithValue }) => {
   try {
-    const response = await createOrder(orderData);
+    const response = await OrderService.create(orderData);
     if (response.status === 201) {
       return response.data;
     }

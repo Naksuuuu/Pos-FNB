@@ -1,6 +1,8 @@
-import { Login, Logout, me } from "@/Services/Auth/Login/LoginService";
-import { getUserData, getAuthToken, setAuthToken, setUserData, clearAllAuthData } from "@/Utils/sessionUtils";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+
+import LoginService from "@/Services/Auth/Login/LoginService";
+
+import { getUserData, getAuthToken, setAuthToken, setUserData, clearAllAuthData } from "@/Utils/sessionUtils";
 
 const initialState = {
   user: getUserData(),
@@ -11,12 +13,12 @@ const initialState = {
 
 export const LoginUser = createAsyncThunk("login/loginUser", async (data, { rejectWithValue }) => {
   try {
-    const response = await Login(data);
+    const response = await LoginService.login(data);
     if (response.success) {
-      const meResponse = await me();
+      setAuthToken(response.data.auth.token);
 
+      const meResponse = await LoginService.me();
       if (meResponse.status === 200) {
-        setAuthToken(response.data.auth.token);
         setUserData(meResponse.data.user);
         return {
           user: meResponse.data.user,
@@ -37,7 +39,7 @@ export const LogoutUser = createAsyncThunk("login/logoutUser", async (_, { rejec
   try {
     const token = getAuthToken();
     clearAllAuthData();
-    const response = await Logout(token);
+    const response = await LoginService.logout(token);
     return response;
   } catch (error) {
     return rejectWithValue({

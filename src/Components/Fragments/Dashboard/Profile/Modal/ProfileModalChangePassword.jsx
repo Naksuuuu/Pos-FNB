@@ -1,13 +1,15 @@
-import { ChangePasswordSchema } from "@/Schema/Profile/ProfileSchema";
+import { LockOpen } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import DashModalForm from "@/Components/Fragments/Dashboard/Common/Modal/DashModalForm";
-import useChangePassword from "@/Hooks/Dashboard/Profile/useChangePassword";
 import { toast } from "sonner";
+
+import useChangePassword from "@/Hooks/Dashboard/Profile/useChangePassword";
+import { ChangePasswordSchema } from "@/Schema/Profile/ProfileSchema";
+
 import { Field, FieldError, FieldGroup, FieldSet } from "@/Components/Elements/Shadcn/field";
 import { Label } from "@/Components/Elements/Shadcn/label";
 import { Input } from "@/Components/Elements/Inputs/Input";
-import { Lock, LockOpen } from "lucide-react";
+import DashModalForm from "@/Components/Fragments/Dashboard/Common/Modal/DashModalForm";
 
 const ProfileModalChangePassword = ({ isOpen, onOpenModal }) => {
   const { change, loading } = useChangePassword();

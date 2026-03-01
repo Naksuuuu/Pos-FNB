@@ -1,13 +1,15 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { Edit, User } from "lucide-react";
 import { toast } from "sonner";
+import { Edit } from "lucide-react";
+import { useForm } from "react-hook-form";
+
+import useEditProfile from "@/Hooks/Dashboard/Profile/useEditProfile";
+import { UpdateProfileSchema } from "@/Schema/Profile/ProfileSchema";
+
 import { Field, FieldError, FieldGroup, FieldSet } from "@/Components/Elements/Shadcn/field";
 import { Label } from "@/Components/Elements/Shadcn/label";
 import { Input } from "@/Components/Elements/Inputs/Input";
 import DashModalForm from "@/Components/Fragments/Dashboard/Common/Modal/DashModalForm";
-import useEditProfile from "@/Hooks/Dashboard/Profile/useEditProfile";
-import { UpdateProfileSchema } from "@/Schema/Profile/ProfileSchema";
 
 const ProfileModalEdit = ({ isOpen, onOpenModal, profile }) => {
   const { edit, loading } = useEditProfile();

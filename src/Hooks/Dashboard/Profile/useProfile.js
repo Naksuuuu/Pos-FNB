@@ -1,7 +1,8 @@
+import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import { selectProfile, selectProfileLoading } from "@/Redux/Features/Dashboard/Profile/ProfileSelector";
 import { getProfile } from "@/Redux/Features/Dashboard/Profile/ProfileSlice";
-import { useCallback } from "react";
 
 const useProfile = () => {
   const dispatch = useDispatch();

@@ -1,13 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import * as OrderService from "@/Services/Dashboard/Order/OrderService";
+
+import OrderService from "@/Services/Dashboard/Order/OrderService";
 
 const initialState = {
   orders: [],
   loading: false,
   error: null,
-  // loadingCreate: false,
-  // loadingEdit: false,
-  // loadingDelete: false,
   filters: {
     search: "string",
     status: "string",
@@ -33,20 +31,23 @@ const initialState = {
   },
 };
 
-export const fetchOrders = createAsyncThunk("dashboard/order/fetchOrders", async (params = {}, { rejectedWithValue }) => {
-  try {
-    const response = await OrderService.getAllOrders(params);
-    if (!response.success) {
-      return rejectedWithValue(response.message || "Failed to fetch orders");
-    }
+export const fetchOrders = createAsyncThunk(
+  "dashboard/order/fetchOrders",
+  async (params = {}, { rejectedWithValue }) => {
+    try {
+      const response = await OrderService.orders(params);
+      if (!response.success) {
+        return rejectedWithValue(response.message || "Failed to fetch orders");
+      }
 
-    return response.data;
-  } catch (error) {
-    return rejectedWithValue({
-      message: error?.message || "Failed to fetch orders",
-    });
-  }
-});
+      return response.data;
+    } catch (error) {
+      return rejectedWithValue({
+        message: error?.message || "Failed to fetch orders",
+      });
+    }
+  },
+);
 
 const orderSlice = createSlice({
   name: "order",

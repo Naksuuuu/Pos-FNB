@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import * as CatalogService from "@/Services/Customer/Catalog/CatalogService";
+
+import CatalogService from "@/Services/Customer/Catalog/CatalogService";
 
 const initialState = {
   catalogs: [],
@@ -12,7 +13,7 @@ const initialState = {
 
 export const fetchCatalogs = createAsyncThunk("catalog/fetchCatalogs", async (params, { rejectWithValue }) => {
   try {
-    const response = await CatalogService.getAllCatalog(params);
+    const response = await CatalogService.catalogs(params);
 
     if (!response.success) {
       return rejectWithValue(response.message || "Failed to fetch catalogs");
