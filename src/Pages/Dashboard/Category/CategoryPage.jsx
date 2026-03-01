@@ -93,8 +93,16 @@ const CategoryPage = () => {
             Kembali Ke Managemen Menu
           </Link>
         </Button>
-        <Card>
-          <DashStatisticCard title="Total Kategori" statistic={statistic?.total_category || 0} descriptions="Semua Kategori Terdaftar" icon={Package} />
+        <Card className="space-y-4">
+          <div>
+            <h2 className="font-semibold ">Statistik Kategori</h2>
+          </div>
+          <DashStatisticCard
+            title="Total Kategori"
+            statistic={statistic?.total_category || 0}
+            descriptions="Semua Kategori Terdaftar"
+            icon={Package}
+          />
         </Card>
         <Button onClick={handleOpenCreateModal} className="w-full">
           <Plus /> Tambah Kategori
@@ -107,8 +115,20 @@ const CategoryPage = () => {
             <InputSearch onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari kategori..." />
           </div>
           <div className="w-full flex justify-between gap-4">
-            <Select items={SORT_BY_OPTIONS} onValueChange={handleSortByChange} value={filters.sort_by || null} label="Urutkan Berdasarkan" placeholder="Pilih opsi" />
-            <Select items={SORT_DIRECTION_OPTIONS} onValueChange={handleSortDirectionChange} value={filters.sort_direction || null} label="Urutan" placeholder="Pilih urutan" />
+            <Select
+              items={SORT_BY_OPTIONS}
+              onValueChange={handleSortByChange}
+              value={filters.sort_by || null}
+              label="Urutkan Berdasarkan"
+              placeholder="Pilih opsi"
+            />
+            <Select
+              items={SORT_DIRECTION_OPTIONS}
+              onValueChange={handleSortDirectionChange}
+              value={filters.sort_direction || null}
+              label="Urutan"
+              placeholder="Pilih urutan"
+            />
           </div>
         </Card>
 
@@ -127,9 +147,15 @@ const CategoryPage = () => {
         </Card>
       </div>
 
-      {selectedEditCategory && <CategoryModalEdit selectedCategory={selectedEditCategory} onOpenModal={handleOpenEditModal} />}
-      {selectedCreateCategory && <CategoryModalCreate isOpen={selectedCreateCategory} onOpenModal={handleOpenCreateModal} />}
-      {selectedDeleteCategory && <CategoryModalDelete selectedCategory={selectedDeleteCategory} onOpenModal={handleOpenDeleteModal} />}
+      {selectedEditCategory && (
+        <CategoryModalEdit selectedCategory={selectedEditCategory} onOpenModal={handleOpenEditModal} />
+      )}
+      {selectedCreateCategory && (
+        <CategoryModalCreate isOpen={selectedCreateCategory} onOpenModal={handleOpenCreateModal} />
+      )}
+      {selectedDeleteCategory && (
+        <CategoryModalDelete selectedCategory={selectedDeleteCategory} onOpenModal={handleOpenDeleteModal} />
+      )}
     </div>
   );
 };

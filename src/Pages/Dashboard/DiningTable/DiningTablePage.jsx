@@ -1,10 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Plus } from "lucide-react";
+import { ArrowLeft, Plus } from "lucide-react";
+import { Link } from "react-router";
 
 import { SORT_DIRECTION_OPTIONS, STATUS_OPTIONS } from "@/Constants/Dashboard/DiningTable/DiningTableConstant";
 
 import useAllDiningTable from "@/Hooks/Dashboard/DiningTable/useAllDiningTable";
 import useFilterParams from "@/Hooks/Common/useFilterParams";
+
+import { ROUTES } from "@/Constants/Common/RouteConstant";
 
 import { Button } from "@/Components/Elements/Shadcn/button";
 import { Card } from "@/Components/Elements/Cards/Card";
@@ -87,39 +90,71 @@ const DiningTablePage = () => {
   }, []);
 
   return (
-    <>
-      <DiningTableStatistic statistic={statistic} />
+    <div className="bg-dashboard grid grid-cols-1 xl:grid-cols-3 gap-4">
+      <div className="space-y-4">
+        <Button className="w-full">
+          <Link to={ROUTES.DASHBOARD.INVENTORY.MENU} className="flex items-center gap-2">
+            <ArrowLeft className="size-4" />
+            Kembali Ke Managemen Menu
+          </Link>
+        </Button>
 
-      <Card>
-        <div className="grid grid-cols-4 gap-4">
-          <Select items={STATUS_OPTIONS} onValueChange={handleStatusChange} value={filters.status || null} label="Cari Berdasarkan Status" placeholder="Pilih opsi" />
-          <Select items={SORT_DIRECTION_OPTIONS} onValueChange={handleSortDirectionChange} value={filters.sort_direction || null} label="Urutan" placeholder="Pilih urutan" />
+        <DiningTableStatistic statistic={statistic} />
+
+        <Button onClick={handleOpenCreateModal} className="w-full">
+          <Plus /> Tambah Meja
+        </Button>
+
+        <Card className="space-y-4">
+          <div>
+            <h2 className="font-semibold ">Cari dan Filter</h2>
+          </div>
           <InputSearch onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari Meja" />
-          <Button onClick={handleOpenCreateModal}>
-            {" "}
-            <Plus /> Tambah Meja
-          </Button>
-        </div>
-      </Card>
+          <div className="flex gap-4">
+            <Select
+              items={STATUS_OPTIONS}
+              onValueChange={handleStatusChange}
+              value={filters.status || null}
+              label="Cari Berdasarkan Status"
+              placeholder="Pilih opsi"
+            />
+            <Select
+              items={SORT_DIRECTION_OPTIONS}
+              onValueChange={handleSortDirectionChange}
+              value={filters.sort_direction || null}
+              label="Urutan"
+              placeholder="Pilih urutan"
+            />
+          </div>
+        </Card>
 
-      <ButtonResetFilter condition={showReset} onResetFilter={handleResetFilter} />
+        <ButtonResetFilter condition={showReset} onResetFilter={handleResetFilter} />
+      </div>
 
-      <Card className="overflow-hidden space-y-2">
-        <DiningTableTable
-          diningTables={diningTables}
-          loading={loading}
-          errorMessage={errorMessage}
-          onOpenEditModal={handleOpenEditModal}
-          onOpenDeleteModal={handleOpenDeleteModal}
-          pagination={pagination}
-          handlePageChange={handlePageChange}
-        />
-      </Card>
+      <div className="xl:col-span-2">
+        <Card className="overflow-hidden space-y-2">
+          <DiningTableTable
+            diningTables={diningTables}
+            loading={loading}
+            errorMessage={errorMessage}
+            onOpenEditModal={handleOpenEditModal}
+            onOpenDeleteModal={handleOpenDeleteModal}
+            pagination={pagination}
+            handlePageChange={handlePageChange}
+          />
+        </Card>
+      </div>
 
-      {selectedCreateTable && <DiningTableModalCreate isOpen={!!selectedCreateTable} onOpenModal={handleOpenCreateModal} />}
-      {selectedEditTable && <DiningTableModalEdit selectedDiningTable={selectedEditTable} onOpenModal={handleOpenEditModal} />}
-      {selectedDeleteTable && <DiningTableModalDelete selectedDiningTable={selectedDeleteTable} onOpenModal={handleOpenDeleteModal} />}
-    </>
+      {selectedCreateTable && (
+        <DiningTableModalCreate isOpen={!!selectedCreateTable} onOpenModal={handleOpenCreateModal} />
+      )}
+      {selectedEditTable && (
+        <DiningTableModalEdit selectedDiningTable={selectedEditTable} onOpenModal={handleOpenEditModal} />
+      )}
+      {selectedDeleteTable && (
+        <DiningTableModalDelete selectedDiningTable={selectedDeleteTable} onOpenModal={handleOpenDeleteModal} />
+      )}
+    </div>
   );
 };
 export default DiningTablePage;
