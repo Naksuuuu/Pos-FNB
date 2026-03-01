@@ -9,7 +9,7 @@ import DashModalForm from "@/Components/Fragments/Dashboard/Common/Modal/DashMod
 import UserForm from "@/Components/Fragments/Dashboard/User/Form/UserForm";
 
 const UserModalCreate = ({ isOpen, onOpenModal }) => {
-  const { create, loading, visiblePassword, handleVisiblePassword } = useCreateUser();
+  const { create, loading } = useCreateUser();
 
   const {
     handleSubmit,
@@ -47,14 +47,7 @@ const UserModalCreate = ({ isOpen, onOpenModal }) => {
       onSubmitForm={handleSubmitForm}
       title="Tambah User Baru"
     >
-      <UserForm
-        register={register}
-        errors={errors}
-        control={control}
-        type="create"
-        visiblePassword={visiblePassword}
-        handleVisiblePassword={handleVisiblePassword}
-      />
+      <UserForm register={register} errors={errors} control={control} type="create" />
     </DashModalForm>
   );
 };

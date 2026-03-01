@@ -8,12 +8,12 @@ import { LoginSchema } from "@/Schema/Auth/AuthSchema";
 
 import { Button } from "@/Components/Elements/Shadcn/button";
 import { Field, FieldError, FieldGroup, FieldSet } from "@/Components/Elements/Shadcn/field";
-import { Input } from "@/Components/Elements/Inputs/Input";
+import { Input, InputPassword } from "@/Components/Elements/Inputs/Input";
 import { Label } from "@/Components/Elements/Shadcn/label";
 import { Spinner } from "@/Components/Elements/Shadcn/spinner";
 
 const LoginForm = () => {
-  const { Login, loading, visiblePassword, handleTogglePassword } = useLogin();
+  const { Login, loading } = useLogin();
 
   const {
     register,
@@ -62,24 +62,12 @@ const LoginForm = () => {
             <Label htmlFor="password">
               Password<span className="text-destructive">*</span>
             </Label>
-            <Input
-              type={visiblePassword ? "text" : "password"}
+            <InputPassword
               id="password"
               name="password"
               {...register("password")}
               aria-invalid={!!errors.password}
               firstAddon={<Lock />}
-              lastAddon={
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  className="hover:bg-transparent ring-0 focus-visible:ring-0 border-0 focus-visible:ring-offset-0 focus-visible:border-none"
-                  onClick={handleTogglePassword}
-                >
-                  {visiblePassword ? <Eye /> : <EyeOff />}
-                </Button>
-              }
             />
             {errors.password && <FieldError>{errors.password.message}</FieldError>}
           </Field>

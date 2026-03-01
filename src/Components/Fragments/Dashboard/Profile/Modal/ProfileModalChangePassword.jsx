@@ -1,4 +1,4 @@
-import { Eye, EyeOff, LockOpen } from "lucide-react";
+import { LockOpen } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -8,12 +8,11 @@ import { ChangePasswordSchema } from "@/Schema/Profile/ProfileSchema";
 
 import { Field, FieldError, FieldGroup, FieldSet } from "@/Components/Elements/Shadcn/field";
 import { Label } from "@/Components/Elements/Shadcn/label";
-import { Input } from "@/Components/Elements/Inputs/Input";
-import { Button } from "@/Components/Elements/Shadcn/button";
+import { InputPassword } from "@/Components/Elements/Inputs/Input";
 import DashModalForm from "@/Components/Fragments/Dashboard/Common/Modal/DashModalForm";
 
 const ProfileModalChangePassword = ({ isOpen, onOpenModal }) => {
-  const { change, loading, visiblePassword, handleVisiblePassword } = useChangePassword();
+  const { change, loading } = useChangePassword();
 
   const {
     handleSubmit,
@@ -56,21 +55,7 @@ const ProfileModalChangePassword = ({ isOpen, onOpenModal }) => {
             <Label>
               Password Sekarang <span className="text-destructive">*</span>
             </Label>
-            <Input
-              type={visiblePassword.current_password ? "text" : "password"}
-              {...register("current_password")}
-              lastAddon={
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  className="hover:bg-transparent ring-0 focus-visible:ring-0 border-0 focus-visible:ring-offset-0 focus-visible:border-none"
-                  onClick={() => handleVisiblePassword("current_password")}
-                >
-                  {visiblePassword.current_password ? <Eye /> : <EyeOff />}
-                </Button>
-              }
-            />
+            <InputPassword {...register("current_password")} aria-invalid={!!errors.current_password} />
             {errors.current_password && <FieldError>{errors.current_password.message}</FieldError>}
           </Field>
         </FieldGroup>
@@ -79,21 +64,7 @@ const ProfileModalChangePassword = ({ isOpen, onOpenModal }) => {
             <Label>
               Password Baru <span className="text-destructive">*</span>
             </Label>
-            <Input
-              type={visiblePassword.password ? "text" : "password"}
-              {...register("password")}
-              lastAddon={
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  className="hover:bg-transparent ring-0 focus-visible:ring-0 border-0 focus-visible:ring-offset-0 focus-visible:border-none"
-                  onClick={() => handleVisiblePassword("password")}
-                >
-                  {visiblePassword.password ? <Eye /> : <EyeOff />}
-                </Button>
-              }
-            />
+            <InputPassword {...register("password")} aria-invalid={!!errors.password} />
             {errors.password && <FieldError>{errors.password.message}</FieldError>}
           </Field>
 
@@ -101,21 +72,7 @@ const ProfileModalChangePassword = ({ isOpen, onOpenModal }) => {
             <Label>
               Konfirmasi Password Baru <span className="text-destructive">*</span>
             </Label>
-            <Input
-              type={visiblePassword.password_confirmation ? "text" : "password"}
-              {...register("password_confirmation")}
-              lastAddon={
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  className="hover:bg-transparent ring-0 focus-visible:ring-0 border-0 focus-visible:ring-offset-0 focus-visible:border-none"
-                  onClick={() => handleVisiblePassword("password_confirmation")}
-                >
-                  {visiblePassword.password_confirmation ? <Eye /> : <EyeOff />}
-                </Button>
-              }
-            />
+            <InputPassword {...register("password_confirmation")} aria-invalid={!!errors.password_confirmation} />
             {errors.password_confirmation && <FieldError>{errors.password_confirmation.message}</FieldError>}
           </Field>
         </FieldGroup>

@@ -59,14 +59,14 @@ const ProfileModalEdit = ({ isOpen, onOpenModal, profile }) => {
             <Label>
               Nama <span className="text-destructive">*</span>
             </Label>
-            <Input {...register("name")} />
+            <Input {...register("name")} aria-invalid={!!errors.name} />
             {errors.name && <FieldError>{errors.name.message}</FieldError>}
           </Field>
           <Field>
             <Label>
               Username <span className="text-destructive">*</span>
             </Label>
-            <Input {...register("username")} />
+            <Input {...register("username")} aria-invalid={!!errors.username} />
             {errors.username && <FieldError>{errors.username.message}</FieldError>}
           </Field>
         </FieldGroup>
