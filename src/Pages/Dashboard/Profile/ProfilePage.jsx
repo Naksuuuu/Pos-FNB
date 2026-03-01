@@ -4,10 +4,12 @@ import { useCallback, useEffect, useState } from "react";
 import { User, Shield, AtSign } from "lucide-react";
 import { Button } from "@/Components/Elements/Shadcn/button";
 import ProfileModalChangePassword from "@/Components/Fragments/Dashboard/Profile/Modal/ProfileModalChangePassword";
+import ProfileModalEdit from "@/Components/Fragments/Dashboard/Profile/Modal/ProfileModalEdit";
 
 const ProfilePage = () => {
   const { profile, loadProfile } = useProfile();
   const [openModalChangePassword, setOpenModalChangePassword] = useState(false);
+  const [openModalEdit, setOpenModalEdit] = useState(false);
 
   useEffect(() => {
     loadProfile();
@@ -15,6 +17,10 @@ const ProfilePage = () => {
 
   const handleOpenModalChangePassword = useCallback((state) => {
     setOpenModalChangePassword(state);
+  }, []);
+
+  const handleOpenModalEdit = useCallback((state) => {
+    setOpenModalEdit(state);
   }, []);
 
   return (
@@ -59,7 +65,7 @@ const ProfilePage = () => {
               </div>
             </div>
             <div className="flex justify-end gap-4">
-              <Button>Edit Profile</Button>
+              <Button onClick={() => handleOpenModalEdit(true)}>Edit Profile</Button>
               <Button onClick={() => handleOpenModalChangePassword(true)}>Ubah Password</Button>
             </div>
           </div>
@@ -69,6 +75,7 @@ const ProfilePage = () => {
       {openModalChangePassword && (
         <ProfileModalChangePassword isOpen={openModalChangePassword} onOpenModal={handleOpenModalChangePassword} />
       )}
+      {openModalEdit && <ProfileModalEdit isOpen={openModalEdit} onOpenModal={handleOpenModalEdit} profile={profile} />}
     </div>
   );
 };

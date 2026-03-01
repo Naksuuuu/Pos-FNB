@@ -29,7 +29,6 @@ const LoginForm = () => {
       const response = await Login(data);
       toast.success(response.message || "Login berhasil");
     } catch (error) {
-      console.log(error);
       if (error?.validationErrors) {
         Object.entries(error.validationErrors).forEach(([field, message]) => {
           setError(field, { type: "server", message });

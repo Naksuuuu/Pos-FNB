@@ -10,3 +10,8 @@ export const ChangePasswordSchema = z
     message: "Password tidak cocok!",
     path: ["password_confirmation"],
   });
+
+export const UpdateProfileSchema = z.object({
+  name: z.string().min(1, "Nama Wajib Diisi!").max(255, "Nama maksimal 255 karakter"),
+  username: z.string().min(1, "Username Wajib Diisi!").max(255, "Username maksimal 255 karakter"),
+});

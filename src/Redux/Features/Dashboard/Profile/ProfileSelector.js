@@ -9,3 +9,4 @@ export const selectProfileLoadingChangePassword = createSelector(
   selectProfileState,
   (state) => state.loadingChangePassword,
 );
+export const selectLoadingEditProfile = createSelector(selectProfileState, (state) => state.loadingEditProfile);

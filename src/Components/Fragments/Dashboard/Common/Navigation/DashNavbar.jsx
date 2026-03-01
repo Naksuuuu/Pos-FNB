@@ -1,13 +1,13 @@
 import { DropDown } from "@/Components/Elements/Buttons/DropDown";
 import { SidebarTrigger } from "@/Components/Elements/Shadcn/sidebar";
-import { selectAuthUser } from "@/Redux/Features/Auth/Login/LoginSelector";
 import { LogoutUser } from "@/Redux/Features/Auth/Login/LoginSlice";
+import { selectProfile } from "@/Redux/Features/Dashboard/Profile/ProfileSelector";
 import { ChevronDown } from "lucide-react";
 import { useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const DashNavbar = () => {
-  const user = useSelector(selectAuthUser);
+  const user = useSelector(selectProfile);
   const dispatch = useDispatch();
 
   const handleLogout = useCallback(async () => {

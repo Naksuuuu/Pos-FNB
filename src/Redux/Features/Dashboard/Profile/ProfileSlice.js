@@ -1,21 +1,43 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { changePassword, profile } from "@/Services/Dashboard/Profile/ProfileService";
+import { changePassword, profile, profileEdit } from "@/Services/Dashboard/Profile/ProfileService";
+import { getUserData, setUserData } from "@/Utils/sessionUtils";
+import { me } from "@/Services/Auth/Login/LoginService";
 
 const initialState = {
-  profile: {
-    name: null,
-    role: null,
-    username: null,
-  },
+  profile: getUserData(),
   loading: false,
   error: null,
   loadingChangePassword: false,
+  loadingEditProfile: false,
 };
 
-export const getProfile = createAsyncThunk("profile/getProfile", async (_, { rejectWithValue }) => {
+export const getProfile = createAsyncThunk("profile/getProfile", async (_, { rejectWithValue, getState }) => {
   try {
+    if (getState().dashboard.profile.profile) {
+      return {
+        data: getState().dashboard.profile.profile,
+      };
+    }
     const response = await profile();
+    console.log("load data dari server");
+
     return response;
+  } catch (error) {
+    return rejectWithValue(error);
+  }
+});
+
+export const editProfile = createAsyncThunk("profile/editProfile", async (data, { rejectWithValue }) => {
+  try {
+    await profileEdit(data);
+    const meResponse = await me();
+
+    if (meResponse.status === 200) {
+      setUserData(meResponse.data.user);
+      return {
+        profile: meResponse.data.user,
+      };
+    }
   } catch (error) {
     return rejectWithValue(error);
   }
@@ -55,6 +77,16 @@ const profileSlice = createSlice({
       })
       .addCase(changeUserPassword.rejected, (state) => {
         state.loadingChangePassword = false;
+      })
+      .addCase(editProfile.pending, (state) => {
+        state.loadingEditProfile = true;
+      })
+      .addCase(editProfile.fulfilled, (state, action) => {
+        state.loadingEditProfile = false;
+        state.profile = action.payload.profile;
+      })
+      .addCase(editProfile.rejected, (state) => {
+        state.loadingEditProfile = false;
       });
   },
 });
