@@ -1,10 +1,12 @@
-import { DropDown } from "@/Components/Elements/Buttons/DropDown";
-import { SidebarTrigger } from "@/Components/Elements/Shadcn/sidebar";
-import { LogoutUser } from "@/Redux/Features/Auth/Login/LoginSlice";
-import { selectProfile } from "@/Redux/Features/Dashboard/Profile/ProfileSelector";
-import { ChevronDown } from "lucide-react";
 import { useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { ChevronDown, User } from "lucide-react";
+
+import { selectProfile } from "@/Redux/Features/Dashboard/Profile/ProfileSelector";
+import { LogoutUser } from "@/Redux/Features/Auth/Login/LoginSlice";
+
+import { DropDown } from "@/Components/Elements/Buttons/DropDown";
+import { SidebarTrigger } from "@/Components/Elements/Shadcn/sidebar";
 
 const DashNavbar = () => {
   const user = useSelector(selectProfile);
@@ -38,9 +40,14 @@ const DashNavbar = () => {
           buttonProps={{ variant: "ghost", size: "lg", className: "text-start" }}
           triggerLabel={
             <div className="flex items-center gap-10">
-              <div className="flex flex-col">
-                <h3 className="font-semibold leading-none">{user?.name}</h3>
-                <p className="text-sm text-muted-foreground leading-none">{user?.role}</p>
+              <div className="flex items-center gap-2">
+                <div className="p-2 rounded-full bg-primary/20 text-primary">
+                  <User />
+                </div>
+                <div className="flex flex-col">
+                  <h3 className="font-semibold leading-none">{user?.username}</h3>
+                  <p className="text-sm text-muted-foreground leading-none">{user?.role}</p>
+                </div>
               </div>
               <ChevronDown className="in-data-popup-open:rotate-180 transition-all duration-300" />
             </div>

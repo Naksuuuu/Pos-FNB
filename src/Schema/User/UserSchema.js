@@ -7,25 +7,22 @@ const role = z.enum(["admin", "cashier"], {
 });
 
 const passwordRequired = z.string().min(6, "Password minimal 6 karakter!");
-const passwordOptional = z
-  .string()
-  .optional()
-  .refine((val) => !val || val.length >= 6, {
-    message: "Password minimal 6 karakter jika ingin diubah!",
+
+const CreateUserSchema = z
+  .object({
+    name,
+    username,
+    role,
+    password: passwordRequired,
+    password_confirmation: passwordRequired,
+  })
+  .refine((data) => data.password === data.password_confirmation, {
+    message: "Password tidak cocok!",
+    path: ["password_confirmation"],
   });
 
-const CreateUserSchema = z.object({
-  name,
-  username,
-  role,
-  password: passwordRequired,
-});
-
 const EditUserSchema = z.object({
-  name,
-  username,
   role,
-  password: passwordOptional,
 });
 
 export { CreateUserSchema, EditUserSchema };

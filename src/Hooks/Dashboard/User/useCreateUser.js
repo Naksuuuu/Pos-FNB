@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { createUser, fetchUsers } from "@/Redux/Features/Dashboard/User/UserSlice";
@@ -8,6 +8,10 @@ const useCreateUser = () => {
   const dispatch = useDispatch();
   const loading = useSelector(selectUserCreateLoading);
   const pagination = useSelector(selectUserPagination);
+  const [visiblePassword, setVisiblePassword] = useState({
+    password: false,
+    password_confirmation: false,
+  });
 
   const create = useCallback(
     async (userData) => {
@@ -23,7 +27,14 @@ const useCreateUser = () => {
     [dispatch, pagination],
   );
 
-  return { create, loading };
+  const handleVisiblePassword = useCallback((field) => {
+    setVisiblePassword((prev) => ({
+      ...prev,
+      [field]: !prev[field],
+    }));
+  }, []);
+
+  return { create, loading, visiblePassword, handleVisiblePassword };
 };
 
 export default useCreateUser;

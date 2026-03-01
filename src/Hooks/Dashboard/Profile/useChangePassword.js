@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useSelector } from "react-redux";
 
 import { changeUserPassword } from "@/Redux/Features/Dashboard/Profile/ProfileSlice";
@@ -8,6 +8,11 @@ import { selectProfileLoadingChangePassword } from "@/Redux/Features/Dashboard/P
 const useChangePassword = () => {
   const dispatch = useDispatch();
   const loading = useSelector(selectProfileLoadingChangePassword);
+  const [visiblePassword, setVisiblePassword] = useState({
+    current_password: false,
+    password: false,
+    password_confirmation: false,
+  });
 
   const change = useCallback(
     async (data) => {
@@ -17,7 +22,14 @@ const useChangePassword = () => {
     [dispatch],
   );
 
-  return { change, loading };
+  const handleVisiblePassword = useCallback((field) => {
+    setVisiblePassword((prev) => ({
+      ...prev,
+      [field]: !prev[field],
+    }));
+  }, []);
+
+  return { change, loading, visiblePassword, handleVisiblePassword };
 };
 
 export default useChangePassword;

@@ -30,8 +30,8 @@ const ProfilePage = () => {
       <div className="w-full max-w-3xl">
         <Card className="w-full shadow-sm" outerClassName="border border-border rounded-2xl">
           <div className="flex flex-col gap-6 p-6">
-            <div className="flex flex-col gap-2 border-b pb-4">
-              <h3 className="font-semibold text-2xl tracking-tight">Profile Information</h3>
+            <div className="flex flex-col border-b pb-4">
+              <h3 className="font-semibold text-2xl tracking-tight">Management Profile</h3>
               <p className="text-sm text-muted-foreground">Detail informasi akun Anda saat ini.</p>
             </div>
 
