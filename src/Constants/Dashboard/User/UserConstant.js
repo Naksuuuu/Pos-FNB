@@ -11,10 +11,10 @@ const SORT_BY_OPTIONS = [
 ];
 
 const TABLE_USER_HEAD_COLUMNS = [
-  { header: "No", width: "w-[50px]" },
-  { header: "Nama", width: "w-[250px]" },
-  { header: "Username", width: "min-w-[150px] max-w-full" },
-  { header: "Role", width: "w-[220px]" },
+  { header: "No", width: "w-[50px]!" },
+  { header: "Nama", width: "min-w-[200px] max-w-full" },
+  { header: "Username", width: "min-w-[100px] max-w-[400px]!" },
+  { header: "Role", width: "w-[200px]!" },
   { header: "Aksi", width: "w-[50px] text-right" },
 ];
 

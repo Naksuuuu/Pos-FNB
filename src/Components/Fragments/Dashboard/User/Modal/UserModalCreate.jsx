@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import { UserPlus } from "lucide-react";
 
 import { CreateUserSchema } from "@/Schema/User/UserSchema";
 import useCreateUser from "@/Hooks/Dashboard/User/useCreateUser";
@@ -46,6 +47,7 @@ const UserModalCreate = ({ isOpen, onOpenModal }) => {
       handleSubmit={handleSubmit}
       onSubmitForm={handleSubmitForm}
       title="Tambah User Baru"
+      icon={UserPlus}
     >
       <UserForm register={register} errors={errors} control={control} type="create" />
     </DashModalForm>

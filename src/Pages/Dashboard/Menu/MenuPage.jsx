@@ -33,7 +33,13 @@ const MenuPage = memo(() => {
     setOptimisticSearch(search);
   }, [search]);
 
-  const showReset = !!(filters.sort_by || filters.sort_direction || filters.is_available || filters.category_id || search);
+  const showReset = !!(
+    filters.sort_by ||
+    filters.sort_direction ||
+    filters.is_available ||
+    filters.category_id ||
+    search
+  );
 
   useEffect(() => {
     loadMenus(filters);
@@ -118,7 +124,7 @@ const MenuPage = memo(() => {
 
   const categoryItems = useMemo(
     () => [
-      { key: "list-cat", label: "Lihat Semua Kategori", to: "/dashboard/inventory/menu/category" },
+      { key: "list-cat", label: "Lihat Semua Kategori", to: "/dashboard/inventory/category" },
       { key: "add-cat", label: "Tambah Kategori", onClick: () => handleOpenCreateCategoryModal(true) },
     ],
     [handleOpenCreateCategoryModal],
@@ -145,17 +151,53 @@ const MenuPage = memo(() => {
             Tambah Menu
           </Button>
 
-          <DropDown triggerLabel="Kelola Kategori" triggerIcon={Settings} items={categoryItems} buttonProps={{ variant: "default", size: "default" }} contentAlign="start" />
+          <DropDown
+            triggerLabel="Kelola Kategori"
+            triggerIcon={Settings}
+            items={categoryItems}
+            buttonProps={{ variant: "default", size: "default" }}
+            contentAlign="start"
+          />
 
-          <DropDown triggerLabel="Kelola Meja" triggerIcon={Settings} items={tableItems} buttonProps={{ variant: "default", size: "default" }} contentAlign="start" />
+          <DropDown
+            triggerLabel="Kelola Meja"
+            triggerIcon={Settings}
+            items={tableItems}
+            buttonProps={{ variant: "default", size: "default" }}
+            contentAlign="start"
+          />
 
-          <Select items={SORY_BY_OPTIONS} onValueChange={handleSortByChange} value={filters.sort_by || null} label="Cari Berdasarkan" placeholder="Pilih opsi" />
+          <Select
+            items={SORY_BY_OPTIONS}
+            onValueChange={handleSortByChange}
+            value={filters.sort_by || null}
+            label="Cari Berdasarkan"
+            placeholder="Pilih opsi"
+          />
 
-          <Select items={SORT_DIRECTION_OPTIONS} onValueChange={handleSortDirectionChange} value={filters.sort_direction || null} label="Urutan" placeholder="Pilih urutan" />
+          <Select
+            items={SORT_DIRECTION_OPTIONS}
+            onValueChange={handleSortDirectionChange}
+            value={filters.sort_direction || null}
+            label="Urutan"
+            placeholder="Pilih urutan"
+          />
 
-          <Select items={IS_AVAILABLE_OPTIONS} onValueChange={handleIsAvailableChange} value={filters.is_available || null} label="Ketersediaan" placeholder="Pilih ketersediaan" />
+          <Select
+            items={IS_AVAILABLE_OPTIONS}
+            onValueChange={handleIsAvailableChange}
+            value={filters.is_available || null}
+            label="Ketersediaan"
+            placeholder="Pilih ketersediaan"
+          />
 
-          <Select items={categoryOptions} onValueChange={handleCategoryIdChange} value={filters.category_id || null} label="Kategori" placeholder="Pilih kategori" />
+          <Select
+            items={categoryOptions}
+            onValueChange={handleCategoryIdChange}
+            value={filters.category_id || null}
+            label="Kategori"
+            placeholder="Pilih kategori"
+          />
         </div>
       </Card>
 
@@ -176,8 +218,12 @@ const MenuPage = memo(() => {
       {selectedDeleteMenu && <MenuModalDelete selectedMenu={selectedDeleteMenu} onOpenModal={handleOpenDeleteModal} />}
       {selectedEditMenu && <MenuModalEdit selectedMenu={selectedEditMenu} onOpenModal={handleOpenEditModal} />}
       {selectedAddMenu && <MenuModalCreate isOpen={selectedAddMenu} onOpenModal={handleOpenCreateModal} />}
-      {categoryModalOpen && <CategoryModalCreate isOpen={categoryModalOpen} onOpenModal={handleOpenCreateCategoryModal} />}
-      {diningTableModalOpen && <DiningTableModalCreate isOpen={diningTableModalOpen} onOpenModal={handleOpenCreateDiningTableModal} />}
+      {categoryModalOpen && (
+        <CategoryModalCreate isOpen={categoryModalOpen} onOpenModal={handleOpenCreateCategoryModal} />
+      )}
+      {diningTableModalOpen && (
+        <DiningTableModalCreate isOpen={diningTableModalOpen} onOpenModal={handleOpenCreateDiningTableModal} />
+      )}
     </>
   );
 });

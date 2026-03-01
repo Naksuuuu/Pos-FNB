@@ -48,7 +48,7 @@ const DashboardRoute = [
     element: createProtectedRoute(<MenuPage />),
   },
   {
-    path: ROUTES.DASHBOARD.INVENTORY.MENU_CATEGORY,
+    path: ROUTES.DASHBOARD.INVENTORY.CATEGORY,
     element: createProtectedRoute(<CategoryPage />),
   },
   {

@@ -23,6 +23,7 @@ const UserStatistic = memo(({ statistic }) => {
         statistic={statistic?.cashier_count || 0}
         descriptions="Total user dengan role Kasir"
         icon={UserCheck}
+        variant="warning"
       />
     </DashStatisticCardHeader>
   );

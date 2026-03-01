@@ -14,8 +14,8 @@ export const ROUTES = {
     USER: "/dashboard/user",
     CASHIER: "/dashboard/cashier",
     INVENTORY: {
-      MENU: "/dashboard/inventory/menu",
-      MENU_CATEGORY: "/dashboard/inventory/menu/category",
+      MENU: "/dashboard/inventory",
+      CATEGORY: "/dashboard/inventory/category",
       TABLE: "/dashboard/inventory/table",
     },
     ORDER: "/dashboard/order",

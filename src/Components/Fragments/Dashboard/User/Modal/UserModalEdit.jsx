@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import { UserPen } from "lucide-react";
 
 import { EditUserSchema } from "@/Schema/User/UserSchema";
 import useEditUser from "@/Hooks/Dashboard/User/useEditUser";
@@ -75,6 +76,7 @@ const UserModalEdit = ({ selectedUser, onOpenModal }) => {
       handleSubmit={handleSubmit}
       onSubmitForm={handleSubmitForm}
       title="Edit User"
+      icon={UserPen}
     >
       <UserForm register={register} errors={errors} control={control} type="edit" />
     </DashModalForm>

@@ -98,11 +98,6 @@ const UserPage = memo(() => {
         <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
           <InputSearch onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari user..." />
 
-          <Button onClick={() => handleOpenCreateModal(true)}>
-            <Plus />
-            Tambah User
-          </Button>
-
           <Select
             items={SORT_BY_OPTIONS}
             onValueChange={handleSortByChange}
@@ -118,6 +113,10 @@ const UserPage = memo(() => {
             label="Urutan"
             placeholder="Pilih urutan"
           />
+          <Button onClick={() => handleOpenCreateModal(true)}>
+            <Plus />
+            Tambah User
+          </Button>
         </div>
       </Card>
 

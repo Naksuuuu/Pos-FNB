@@ -38,17 +38,12 @@ const CreateSidebar = memo(({ pathname }) => {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
-              className="py-6"
+              className="py-6 w-full text-center"
               render={
                 <Link to={ROUTES.PUBLIC.HOME}>
-                  <img
-                    src={"https://avatars.githubusercontent.com/u/144807673?v=4"}
-                    alt="Logo"
-                    width={35}
-                    height={35}
-                    className="rounded-full select-none"
-                  />
-                  <span className="select-none">Ariel</span>
+                  <h1 className="text-2xl font-extrabold tracking-tight">
+                    POS <span className="text-primary/90">App</span>
+                  </h1>
                 </Link>
               }
             ></SidebarMenuButton>
@@ -92,6 +87,7 @@ const CreateSidebar = memo(({ pathname }) => {
 });
 
 const StaticSidebarMenuItem = memo(({ item, activePath }) => {
+  const isActive = item.path === "/dashboard" ? activePath === item.path : activePath?.startsWith(item.path);
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -102,7 +98,7 @@ const StaticSidebarMenuItem = memo(({ item, activePath }) => {
               <span>{item.title}</span>
             </Link>
           )}
-          className={activePath === item.path ? "bg-primary! text-background!" : ""}
+          className={isActive ? "bg-primary! text-background!" : ""}
         />
       </SidebarMenuItem>
     </SidebarMenu>
