@@ -1,8 +1,10 @@
 import { Controller } from "react-hook-form";
-import { Input } from "@/Components/Elements/Shadcn/input";
+
+import { ROLE_OPTIONS } from "@/Constants/Dashboard/User/UserConstant";
+
+import { Input } from "@/Components/Elements/Inputs/Input";
 import { Select } from "@/Components/Elements/Inputs/Select";
 import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/Components/Elements/Shadcn/field";
-import { ROLE_OPTIONS } from "@/Constants/Dashboard/User/UserConstant";
 
 const UserForm = ({ errors, control, register, type = "create" }) => {
   return (

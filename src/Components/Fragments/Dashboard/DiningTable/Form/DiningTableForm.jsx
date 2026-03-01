@@ -1,8 +1,8 @@
 import { Controller } from "react-hook-form";
 
-import { STATUS_OPTIONS } from "@/Constants/Dashboard/DiningTable/DiningTableConstant";
+import { STATUS_OPTIONS_SCHEMA } from "@/Constants/Dashboard/DiningTable/DiningTableConstant";
 
-import { Input } from "@/Components/Elements/Shadcn/input";
+import { Input } from "@/Components/Elements/Inputs/Input";
 import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/Components/Elements/Shadcn/field";
 import { Select } from "@/Components/Elements/Inputs/Select";
 
@@ -14,13 +14,7 @@ const DiningTableForm = ({ register, errors, control }) => {
           <FieldLabel htmlFor="code">
             Code Meja <span className="text-destructive">*</span>
           </FieldLabel>
-          <Input
-            id="code"
-            name="code"
-            autoComplete="off"
-            {...register("code")}
-            aria-invalid={errors.code ? "true" : "false"}
-          />
+          <Input id="code" name="code" autoComplete="off" {...register("code")} aria-invalid={!!errors.code} />
           {errors.code && <FieldError>{errors.code.message}</FieldError>}
         </Field>
         <Field>
@@ -32,14 +26,14 @@ const DiningTableForm = ({ register, errors, control }) => {
             control={control}
             render={({ field }) => (
               <Select
-                items={STATUS_OPTIONS}
+                items={STATUS_OPTIONS_SCHEMA}
                 label="Status"
                 id="status"
                 name="status"
                 placeholder="Pilih status"
                 value={field.value || ""}
                 onValueChange={(val) => field.onChange(val)}
-                aria-invalid={errors.status ? "true" : "false"}
+                aria-invalid={!!errors.status}
               />
             )}
           />

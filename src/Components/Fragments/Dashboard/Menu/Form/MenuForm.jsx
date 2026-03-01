@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { Controller } from "react-hook-form";
 import { Upload } from "lucide-react";
 
-import { Input } from "@/Components/Elements/Shadcn/input";
+import { Input } from "@/Components/Elements/Inputs/Input";
 import { Select } from "@/Components/Elements/Inputs/Select";
 import { Textarea } from "@/Components/Elements/Shadcn/textarea";
 import { Switch } from "@/Components/Elements/Shadcn/switch";

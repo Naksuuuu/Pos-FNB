@@ -1,9 +1,11 @@
-import { LoginUser } from "@/Redux/Features/Auth/Login/LoginSlice";
+import { selectAuthLoading } from "@/Redux/Features/Auth/Login/LoginSelector";
+import { LoginUser, LogoutUser } from "@/Redux/Features/Auth/Login/LoginSlice";
 import { useCallback, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const useLogin = () => {
   const dispatch = useDispatch();
+  const loading = useSelector(selectAuthLoading);
   const [visiblePassword, setVisiblePassword] = useState(false);
 
   const handleTogglePassword = useCallback(() => {
@@ -20,6 +22,7 @@ const useLogin = () => {
 
   return {
     Login,
+    loading,
     visiblePassword,
     handleTogglePassword,
   };

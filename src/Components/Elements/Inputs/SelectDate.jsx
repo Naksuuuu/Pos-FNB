@@ -14,7 +14,7 @@ const SelectDate = memo(({ date, onSelect }) => {
           <Button
             variant="outline"
             data-empty={!date}
-            className="data-[empty=true]:text-muted-foreground justify-between text-left font-normal"
+            className="data-[empty=true]:text-muted-foreground justify-between text-left font-normal bg-input/30"
           />
         }
       >

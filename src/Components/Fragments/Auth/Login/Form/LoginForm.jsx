@@ -1,16 +1,19 @@
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Eye, EyeOff, Lock, User } from "lucide-react";
+
+import useLogin from "@/Hooks/Auth/Login/useLogin";
+import { LoginSchema } from "@/Schema/Auth/AuthSchema";
+
 import { Button } from "@/Components/Elements/Shadcn/button";
 import { Field, FieldError, FieldGroup, FieldSet } from "@/Components/Elements/Shadcn/field";
 import { Input } from "@/Components/Elements/Inputs/Input";
 import { Label } from "@/Components/Elements/Shadcn/label";
-import useLogin from "@/Hooks/Auth/Login/useLogin";
-import { LoginSchema } from "@/Schema/Auth/AuthSchema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { Eye, EyeOff, Lock, User } from "lucide-react";
+import { Spinner } from "@/Components/Elements/Shadcn/spinner";
 
 const LoginForm = () => {
-  const { Login, visiblePassword, handleTogglePassword } = useLogin();
+  const { Login, loading, visiblePassword, handleTogglePassword } = useLogin();
 
   const {
     register,
@@ -26,6 +29,7 @@ const LoginForm = () => {
       const response = await Login(data);
       toast.success(response.message || "Login berhasil");
     } catch (error) {
+      console.log(error);
       if (error?.validationErrors) {
         Object.entries(error.validationErrors).forEach(([field, message]) => {
           setError(field, { type: "server", message });
@@ -33,7 +37,7 @@ const LoginForm = () => {
         return;
       }
 
-      toast.error(error?.message || "Gagal login");
+      toast.success(error?.message || "Gagal login");
     }
   };
 
@@ -74,14 +78,16 @@ const LoginForm = () => {
                   className="hover:bg-transparent ring-0 focus-visible:ring-0 border-0 focus-visible:ring-offset-0 focus-visible:border-none"
                   onClick={handleTogglePassword}
                 >
-                  {visiblePassword ? <EyeOff /> : <Eye />}
+                  {visiblePassword ? <Eye /> : <EyeOff />}
                 </Button>
               }
             />
             {errors.password && <FieldError>{errors.password.message}</FieldError>}
           </Field>
           <Field>
-            <Button type="submit">Masuk</Button>
+            <Button type="submit" disabled={loading}>
+              {loading ? <Spinner /> : "Masuk"}
+            </Button>
           </Field>
         </FieldGroup>
       </FieldSet>

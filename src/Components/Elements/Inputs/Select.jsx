@@ -14,7 +14,7 @@ const Select = memo(({ items, label, placeholder, ...props }) => {
 
   return (
     <SelectMain items={items} {...props}>
-      <SelectTrigger className="w-full " aria-invalid={ariaInvalid}>
+      <SelectTrigger className="w-full bg-input/30" aria-invalid={ariaInvalid}>
         <SelectValue placeholder={placeholder || "Pilih opsi"} />
       </SelectTrigger>
       <SelectContent alignItemWithTrigger={false}>

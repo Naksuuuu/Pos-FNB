@@ -9,7 +9,7 @@ import RootErrorBoundary from "@/Pages/Common/RootErrorBoundary";
 import DashboardRoute from "./DashboardRoute";
 import PublicRoute from "./PublicRoute";
 import NotFound from "@/Pages/Common/NotFound";
-import LoginPage from "@/Pages/Auth/Login/LoginPage";
+import AuthRoute from "./AuthRoute";
 
 export const Routes = createBrowserRouter([
   {
@@ -17,10 +17,7 @@ export const Routes = createBrowserRouter([
     children: [
       ...PublicRoute,
       ...DashboardRoute,
-      {
-        path: "auth/login",
-        element: <LoginPage />,
-      },
+      ...AuthRoute,
       {
         path: "*",
         element: <NotFound />,

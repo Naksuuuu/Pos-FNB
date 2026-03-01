@@ -1,9 +1,12 @@
-import { memo, useMemo } from "react";
+import { memo, useCallback, useMemo } from "react";
 import { Link, useLocation } from "react-router";
+import { useDispatch } from "react-redux";
+
 import { ChevronRight, LogOut } from "lucide-react";
 
 import { ROUTES } from "@/Constants/Common/RouteConstant";
 import { SidebarItem } from "@/Context/SidebarItem";
+import { LogoutUser } from "@/Redux/Features/Auth/Login/LoginSlice";
 
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/Components/Elements/Shadcn/collapsible";
 import {
@@ -19,9 +22,15 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/Components/Elements/Shadcn/sidebar";
+import { Button } from "@/Components/Elements/Shadcn/button";
 
 const CreateSidebar = memo(({ pathname }) => {
   const SIDEBAR_ITEMS = useMemo(() => SidebarItem, []);
+  const dispatch = useDispatch();
+
+  const handleLogout = useCallback(async () => {
+    await dispatch(LogoutUser()).unwrap();
+  }, [dispatch]);
 
   return (
     <Sidebar>
@@ -63,14 +72,15 @@ const CreateSidebar = memo(({ pathname }) => {
             <SidebarMenuItem>
               <SidebarMenuButton
                 render={
-                  <Link
-                    to={ROUTES.DASHBOARD.HOME}
-                    className="flex justify-between border border-destructive/50 text-destructive hover:bg-destructive! 
+                  <Button
+                    onClick={handleLogout}
+                    variant="ghost"
+                    className=" flex justify-between border border-destructive/50 text-destructive hover:bg-destructive! 
                     hover:text-background! font-semibold transition-colors duration-300"
                   >
                     <span>Logout</span>
                     <LogOut />
-                  </Link>
+                  </Button>
                 }
               ></SidebarMenuButton>
             </SidebarMenuItem>
