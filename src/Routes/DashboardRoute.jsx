@@ -12,6 +12,7 @@ const MenuPage = lazy(() => import("@/Pages/Dashboard/Menu/MenuPage"));
 const CategoryPage = lazy(() => import("@/Pages/Dashboard/Category/CategoryPage"));
 const DiningTablePage = lazy(() => import("@/Pages/Dashboard/DiningTable/DiningTablePage"));
 const UserPage = lazy(() => import("@/Pages/Dashboard/User/UserPage"));
+const ProfilePage = lazy(() => import("@/Pages/Dashboard/Profile/ProfilePage"));
 
 const SidebarProvider = lazy(() =>
   import("@/Components/Elements/Shadcn/sidebar").then((m) => ({ default: m.SidebarProvider })),
@@ -56,6 +57,10 @@ const DashboardRoute = [
   {
     path: ROUTES.DASHBOARD.ORDER,
     element: createProtectedRoute(<OrderPage />),
+  },
+  {
+    path: ROUTES.DASHBOARD.PROFILE,
+    element: createProtectedRoute(<ProfilePage />),
   },
 ];
 

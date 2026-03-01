@@ -8,6 +8,7 @@ import orderReducer from "./Features/Customer/Order/OrderSlice";
 import DashboardOrderReducer from "./Features/Dashboard/Order/OrderSlice";
 import userReducer from "./Features/Dashboard/User/UserSlice";
 import authSlice from "./Features/Auth/Login/LoginSlice";
+import profileReducer from "./Features/Dashboard/Profile/ProfileSlice";
 
 const dashboardReducer = combineReducers({
   menu: menuReducer,
@@ -15,6 +16,7 @@ const dashboardReducer = combineReducers({
   diningTable: diningTableReducer,
   order: DashboardOrderReducer,
   user: userReducer,
+  profile: profileReducer,
 });
 
 const authReducer = combineReducers({

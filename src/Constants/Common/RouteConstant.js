@@ -19,5 +19,6 @@ export const ROUTES = {
       TABLE: "/dashboard/inventory/table",
     },
     ORDER: "/dashboard/order",
+    PROFILE: "/dashboard/profile",
   },
 };

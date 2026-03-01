@@ -5,7 +5,7 @@ import DashSidebar from "@/Components/Fragments/Dashboard/Common/Navigation/Dash
 const DashLayout = ({ children }) => {
   return (
     <DashSidebar>
-      <main className="relative w-screen bg-dashboard">
+      <main className="relative w-full bg-dashboard">
         <DashNavbar />
 
         <div className="mx-2 md:mx-4 my-2 md:my-4 space-y-4">{children}</div>

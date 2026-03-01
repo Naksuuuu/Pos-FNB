@@ -37,7 +37,7 @@ const LoginForm = () => {
         return;
       }
 
-      toast.success(error?.message || "Gagal login");
+      toast.error(error?.message || "Gagal login");
     }
   };
 
