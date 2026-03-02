@@ -18,10 +18,10 @@ const SidebarProvider = lazy(() =>
   import("@/Components/Elements/Shadcn/sidebar").then((m) => ({ default: m.SidebarProvider })),
 );
 
-const createProtectedRoute = (component) => {
+const createProtectedRoute = (component, allowedRoles) => {
   return (
     <Suspense fallback={<LoadingApp />}>
-      <ProtectedRoute>
+      <ProtectedRoute allowedRoles={allowedRoles}>
         <SidebarProvider>
           <DashLayout>{component}</DashLayout>
         </SidebarProvider>
@@ -33,35 +33,35 @@ const createProtectedRoute = (component) => {
 const DashboardRoute = [
   {
     path: ROUTES.DASHBOARD.HOME,
-    element: createProtectedRoute(<Dashboard />),
+    element: createProtectedRoute(<Dashboard />, ["admin", "cashier"]),
   },
   {
     path: ROUTES.DASHBOARD.USER,
-    element: createProtectedRoute(<UserPage />),
+    element: createProtectedRoute(<UserPage />, ["admin"]),
   },
   {
     path: ROUTES.DASHBOARD.CASHIER,
-    element: createProtectedRoute(<PanelCashier />),
+    element: createProtectedRoute(<PanelCashier />, ["admin", "cashier"]),
   },
   {
     path: ROUTES.DASHBOARD.INVENTORY.MENU,
-    element: createProtectedRoute(<MenuPage />),
+    element: createProtectedRoute(<MenuPage />, ["admin", "cashier"]),
   },
   {
     path: ROUTES.DASHBOARD.INVENTORY.CATEGORY,
-    element: createProtectedRoute(<CategoryPage />),
+    element: createProtectedRoute(<CategoryPage />, ["admin", "cashier"]),
   },
   {
     path: ROUTES.DASHBOARD.INVENTORY.TABLE,
-    element: createProtectedRoute(<DiningTablePage />),
+    element: createProtectedRoute(<DiningTablePage />, ["admin", "cashier"]),
   },
   {
     path: ROUTES.DASHBOARD.ORDER,
-    element: createProtectedRoute(<OrderPage />),
+    element: createProtectedRoute(<OrderPage />, ["admin", "cashier"]),
   },
   {
     path: ROUTES.DASHBOARD.PROFILE,
-    element: createProtectedRoute(<ProfilePage />),
+    element: createProtectedRoute(<ProfilePage />, ["admin", "cashier"]),
   },
 ];
 

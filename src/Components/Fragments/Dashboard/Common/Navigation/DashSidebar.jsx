@@ -1,6 +1,6 @@
 import { memo, useCallback, useMemo } from "react";
 import { Link, useLocation } from "react-router";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { ChevronRight, LogOut } from "lucide-react";
 
@@ -23,9 +23,14 @@ import {
   SidebarMenuSubItem,
 } from "@/Components/Elements/Shadcn/sidebar";
 import { Button } from "@/Components/Elements/Shadcn/button";
+import { selectAuthRole } from "@/Redux/Features/Auth/Login/LoginSelector";
 
 const CreateSidebar = memo(({ pathname }) => {
-  const SIDEBAR_ITEMS = useMemo(() => SidebarItem, []);
+  const currentRole = useSelector(selectAuthRole);
+  const SIDEBAR_ITEMS = useMemo(
+    () => SidebarItem.filter((item) => item.allowed_roles.includes(currentRole)),
+    [currentRole],
+  );
   const dispatch = useDispatch();
 
   const handleLogout = useCallback(async () => {
