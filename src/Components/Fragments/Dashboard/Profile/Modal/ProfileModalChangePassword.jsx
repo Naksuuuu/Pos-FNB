@@ -40,39 +40,37 @@ const ProfileModalChangePassword = ({ isOpen, onOpenModal }) => {
   };
 
   return (
-    <DashModalForm
-      isOpen={isOpen}
-      onOpenModal={onOpenModal}
-      loading={loading}
-      handleSubmit={handleSubmit}
-      onSubmitForm={handleSubmitForm}
-      title="Ganti Password"
-      icon={LockOpen}
-    >
+    <DashModalForm isOpen={isOpen} onOpenModal={onOpenModal} loading={loading} handleSubmit={handleSubmit} onSubmitForm={handleSubmitForm} title="Ganti Password" icon={LockOpen}>
       <FieldSet>
         <FieldGroup>
           <Field>
-            <Label>
+            <Label htmlFor="current_password">
               Password Sekarang <span className="text-destructive">*</span>
             </Label>
-            <InputPassword {...register("current_password")} aria-invalid={!!errors.current_password} />
+            <InputPassword id="current_password" name="current_password" placeholder="Password Sekarang" {...register("current_password")} aria-invalid={!!errors.current_password} />
             {errors.current_password && <FieldError>{errors.current_password.message}</FieldError>}
           </Field>
         </FieldGroup>
         <FieldGroup className="grid grid-cols-2 gap-4">
           <Field>
-            <Label>
+            <Label htmlFor="password">
               Password Baru <span className="text-destructive">*</span>
             </Label>
-            <InputPassword {...register("password")} aria-invalid={!!errors.password} />
+            <InputPassword id="password" name="password" placeholder="Password Baru" {...register("password")} aria-invalid={!!errors.password} />
             {errors.password && <FieldError>{errors.password.message}</FieldError>}
           </Field>
 
           <Field>
-            <Label>
+            <Label htmlFor="password_confirmation">
               Konfirmasi Password Baru <span className="text-destructive">*</span>
             </Label>
-            <InputPassword {...register("password_confirmation")} aria-invalid={!!errors.password_confirmation} />
+            <InputPassword
+              id="password_confirmation"
+              name="password_confirmation"
+              placeholder="Konfirmasi Password Baru"
+              {...register("password_confirmation")}
+              aria-invalid={!!errors.password_confirmation}
+            />
             {errors.password_confirmation && <FieldError>{errors.password_confirmation.message}</FieldError>}
           </Field>
         </FieldGroup>

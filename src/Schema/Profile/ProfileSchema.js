@@ -14,4 +14,13 @@ export const ChangePasswordSchema = z
 export const UpdateProfileSchema = z.object({
   name: z.string().min(1, "Nama Wajib Diisi!").max(255, "Nama maksimal 255 karakter"),
   username: z.string().min(1, "Username Wajib Diisi!").max(255, "Username maksimal 255 karakter"),
+  email: z.preprocess((val) => {
+    if (val === "") return null;
+    return val;
+  }, z.email("Format email tidak valid!").nullable()),
+
+  phone: z.preprocess((val) => {
+    if (val === "") return null;
+    return val;
+  }, z.string().min(8, "No Handphone minimal 8 karakter!").max(17, "No Handphone maksimal 17 karakter!").nullable()),
 });
