@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import ProfileService from "@/Services/Dashboard/Profile/ProfileService";
-import LoginService from "@/Services/Auth/Login/LoginService";
 
 import { LoginUser, LogoutUser } from "@/Redux/Features/Auth/Login/LoginSlice";
 
@@ -32,13 +31,12 @@ export const getProfile = createAsyncThunk("dashboard/profile/getProfile", async
 
 export const editProfile = createAsyncThunk("dashboard/profile/editProfile", async (data, { rejectWithValue }) => {
   try {
-    await ProfileService.edit(data);
-    const meResponse = await LoginService.me();
+    const response = await ProfileService.edit(data);
 
-    if (meResponse.status === 200) {
-      setUserData(meResponse.data.user);
+    if (response.status === 200) {
+      setUserData(response.data);
       return {
-        profile: meResponse.data.user,
+        profile: response.data,
       };
     }
   } catch (error) {
@@ -46,17 +44,14 @@ export const editProfile = createAsyncThunk("dashboard/profile/editProfile", asy
   }
 });
 
-export const changeUserPassword = createAsyncThunk(
-  "dashboard/profile/changeUserPassword",
-  async (data, { rejectWithValue }) => {
-    try {
-      const response = await ProfileService.changePassword(data);
-      return response;
-    } catch (error) {
-      return rejectWithValue(error);
-    }
-  },
-);
+export const changeUserPassword = createAsyncThunk("dashboard/profile/changeUserPassword", async (data, { rejectWithValue }) => {
+  try {
+    const response = await ProfileService.changePassword(data);
+    return response;
+  } catch (error) {
+    return rejectWithValue(error);
+  }
+});
 
 const profileSlice = createSlice({
   name: "profile",

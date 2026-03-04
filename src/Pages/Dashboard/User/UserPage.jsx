@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { Plus } from "lucide-react";
 
-import { SORT_BY_OPTIONS, SORT_DIRECTION_OPTIONS } from "@/Constants/Dashboard/User/UserConstant";
+import { SORT_BY_OPTIONS, SORT_DIRECTION_OPTIONS, SORT_ROLE_OPTIONS } from "@/Constants/Dashboard/User/UserConstant";
 
 import useAllUser from "@/Hooks/Dashboard/User/useAllUser";
 import useFilterParams from "@/Hooks/Common/useFilterParams";
@@ -11,6 +11,9 @@ import { Button } from "@/Components/Elements/Shadcn/button";
 import { Select } from "@/Components/Elements/Inputs/Select";
 import { InputSearch } from "@/Components/Elements/Inputs/InputSearch";
 import { ButtonResetFilter } from "@/Components/Elements/Buttons/ButtonResetFilter";
+import { Field } from "@/Components/Elements/Shadcn/field";
+import { Label } from "@/Components/Elements/Shadcn/label";
+
 import UserTable from "@/Components/Fragments/Dashboard/User/Table/UserTable";
 import UserModalEdit from "@/Components/Fragments/Dashboard/User/Modal/UserModalEdit";
 import UserModalCreate from "@/Components/Fragments/Dashboard/User/Modal/UserModalCreate";
@@ -32,7 +35,7 @@ const UserPage = memo(() => {
     setOptimisticSearch(search);
   }, [search]);
 
-  const showReset = !!(filters.sort_by || filters.sort_direction || search);
+  const showReset = !!(filters.sort_by || filters.sort_direction || search || filters.role);
 
   useEffect(() => {
     loadUsers(filters);
@@ -62,14 +65,20 @@ const UserPage = memo(() => {
 
   const handleSortByChange = useCallback(
     (e) => {
-      updateFilters({ sort_by: e });
+      updateFilters({ sort_by: e, page: 1 });
     },
     [updateFilters],
   );
 
   const handleSortDirectionChange = useCallback(
     (e) => {
-      updateFilters({ sort_direction: e });
+      updateFilters({ sort_direction: e, page: 1 });
+    },
+    [updateFilters],
+  );
+  const handleSortRoleChange = useCallback(
+    (e) => {
+      updateFilters({ role: e, page: 1 });
     },
     [updateFilters],
   );
@@ -95,28 +104,41 @@ const UserPage = memo(() => {
       <UserStatistic statistic={statistic} />
 
       <Card>
-        <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
-          <InputSearch onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari user..." />
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+          <div className="col-span-full grid grid-cols-2 md:grid-cols-3 gap-4 items-end">
+            <div className="md:col-span-2">
+              <Field>
+                <Label htmlFor="search">Cari User</Label>
+                <InputSearch id="search" onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari user..." />
+              </Field>
+            </div>
+            <Button onClick={() => handleOpenCreateModal(true)}>
+              <Plus />
+              Tambah User
+            </Button>
+          </div>
 
-          <Select
-            items={SORT_BY_OPTIONS}
-            onValueChange={handleSortByChange}
-            value={filters.sort_by || null}
-            label="Urutkan Berdasarkan"
-            placeholder="Pilih opsi"
-          />
+          <Field>
+            <Label htmlFor="sort_by">Pilih Berdasarkan</Label>
+            <Select id="sort_by" items={SORT_BY_OPTIONS} onValueChange={handleSortByChange} value={filters.sort_by || null} label="Pilih Berdasarkan" placeholder="Pilih Berdasarkan" />
+          </Field>
 
-          <Select
-            items={SORT_DIRECTION_OPTIONS}
-            onValueChange={handleSortDirectionChange}
-            value={filters.sort_direction || null}
-            label="Urutan"
-            placeholder="Pilih urutan"
-          />
-          <Button onClick={() => handleOpenCreateModal(true)}>
-            <Plus />
-            Tambah User
-          </Button>
+          <Field>
+            <Label htmlFor="role">Pilih Role</Label>
+            <Select id="role" items={SORT_ROLE_OPTIONS} onValueChange={handleSortRoleChange} value={filters.role || null} label="Pilih Role" placeholder="Pilih role" />
+          </Field>
+
+          <Field>
+            <Label htmlFor="sort_direction">Pilih Urutan</Label>
+            <Select
+              id="sort_direction"
+              items={SORT_DIRECTION_OPTIONS}
+              onValueChange={handleSortDirectionChange}
+              value={filters.sort_direction || null}
+              label="Pilih Urutan"
+              placeholder="Pilih urutan"
+            />
+          </Field>
         </div>
       </Card>
 

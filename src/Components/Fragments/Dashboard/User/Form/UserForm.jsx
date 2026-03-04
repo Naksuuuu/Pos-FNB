@@ -10,59 +10,52 @@ const UserForm = ({ errors, control, register, type = "create" }) => {
   return (
     <FieldSet>
       <FieldGroup className="grid grid-cols-1 md:grid-cols-2">
-        {type === "create" && (
-          <>
-            <Field>
-              <FieldLabel htmlFor="name">
-                Nama User <span className="text-destructive">*</span>
-              </FieldLabel>
-              <Input id="name" name="name" autoComplete="off" {...register("name")} aria-invalid={!!errors.name} />
-              {errors.name && <FieldError>{errors.name.message}</FieldError>}
-            </Field>
+        <Field>
+          <FieldLabel htmlFor="name">
+            Nama User <span className="text-destructive">*</span>
+          </FieldLabel>
+          <Input id="name" name="name" autoComplete="off" placeholder="Nama" {...register("name")} aria-invalid={!!errors.name} />
+          {errors.name && <FieldError>{errors.name.message}</FieldError>}
+        </Field>
 
-            <Field>
-              <FieldLabel htmlFor="username">
-                Username <span className="text-destructive">*</span>
-              </FieldLabel>
-              <Input
-                id="username"
-                name="username"
-                autoComplete="off"
-                {...register("username")}
-                aria-invalid={!!errors.username}
-              />
-              {errors.username && <FieldError>{errors.username.message}</FieldError>}
-            </Field>
+        <Field>
+          <FieldLabel htmlFor="username">
+            Username <span className="text-destructive">*</span>
+          </FieldLabel>
+          <Input id="username" name="username" autoComplete="off" placeholder="Username" {...register("username")} aria-invalid={!!errors.username} />
+          {errors.username && <FieldError>{errors.username.message}</FieldError>}
+        </Field>
+        <Field>
+          <FieldLabel htmlFor="email">Email</FieldLabel>
+          <Input id="email" name="email" autoComplete="off" placeholder="Email" {...register("email")} aria-invalid={!!errors.email} />
+          {errors.email && <FieldError>{errors.email.message}</FieldError>}
+        </Field>
+        <Field>
+          <FieldLabel htmlFor="phone">No Handphone</FieldLabel>
+          <Input id="phone" name="phone" autoComplete="off" placeholder="No Handphone" {...register("phone")} aria-invalid={!!errors.phone} />
+          {errors.phone && <FieldError>{errors.phone.message}</FieldError>}
+        </Field>
 
-            <Field>
-              <FieldLabel htmlFor="password">
-                Password {type === "create" ? <span className="text-destructive">*</span> : "(Opsional)"}
-              </FieldLabel>
-              <InputPassword
-                id="password"
-                name="password"
-                autoComplete="off"
-                {...register("password")}
-                aria-invalid={!!errors.password}
-              />
-              {errors.password && <FieldError>{errors.password.message}</FieldError>}
-            </Field>
+        <Field>
+          <FieldLabel htmlFor="password">Password {type === "create" && <span className="text-destructive">*</span>}</FieldLabel>
+          <InputPassword id="password" name="password" autoComplete="off" placeholder="Password" {...register("password")} aria-invalid={!!errors.password} />
+          {errors.password && <FieldError>{errors.password.message}</FieldError>}
+        </Field>
 
-            <Field>
-              <FieldLabel htmlFor="password_confirmation">
-                Konfirmasi Password <span className="text-destructive">*</span>
-              </FieldLabel>
-              <InputPassword
-                id="password_confirmation"
-                name="password_confirmation"
-                autoComplete="off"
-                {...register("password_confirmation")}
-                aria-invalid={!!errors.password_confirmation}
-              />
-              {errors.password_confirmation && <FieldError>{errors.password_confirmation.message}</FieldError>}
-            </Field>
-          </>
-        )}
+        <Field>
+          <FieldLabel htmlFor="password_confirmation">
+            Konfirmasi Password <span className="text-destructive">*</span>
+          </FieldLabel>
+          <InputPassword
+            id="password_confirmation"
+            name="password_confirmation"
+            autoComplete="off"
+            placeholder="Konfirmasi Password"
+            {...register("password_confirmation")}
+            aria-invalid={!!errors.password_confirmation}
+          />
+          {errors.password_confirmation && <FieldError>{errors.password_confirmation.message}</FieldError>}
+        </Field>
 
         <Field className="md:col-span-2">
           <FieldLabel htmlFor="role">

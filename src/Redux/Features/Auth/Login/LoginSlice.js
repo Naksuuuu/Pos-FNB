@@ -16,15 +16,12 @@ export const LoginUser = createAsyncThunk("login/loginUser", async (data, { reje
     const response = await LoginService.login(data);
     if (response.success) {
       setAuthToken(response.data.auth.token);
+      setUserData(response.data.user);
 
-      const meResponse = await LoginService.me();
-      if (meResponse.status === 200) {
-        setUserData(meResponse.data.user);
-        return {
-          user: meResponse.data.user,
-          token: response.data.auth.token,
-        };
-      }
+      return {
+        user: response.data.user,
+        token: response.data.auth.token,
+      };
     }
     return rejectWithValue(response.message || "Failed to login");
   } catch (error) {

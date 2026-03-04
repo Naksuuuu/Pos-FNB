@@ -1,6 +1,6 @@
 import axios from "axios";
 import { parseValidationErrors } from "../../Utils/errorHandler";
-import { getAuthToken } from "@/Utils/sessionUtils";
+import { clearAuthToken, getAuthToken } from "@/Utils/sessionUtils";
 // import { clearAuthToken, getAuthToken } from "../../Utils/cookieUtils";
 
 const BASE_URL = import.meta.env.VITE_BASE_API_URL;
@@ -41,7 +41,7 @@ api.interceptors.response.use(
       const { status, data } = error.response;
 
       if (status === 401) {
-        // clearAuthToken();
+        clearAuthToken();
         if (typeof window !== "undefined" && !window.location.pathname.includes("/auth/login")) {
           window.location.href = "/auth/login";
         }

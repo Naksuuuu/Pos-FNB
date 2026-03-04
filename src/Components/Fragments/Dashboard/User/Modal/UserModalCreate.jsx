@@ -40,15 +40,7 @@ const UserModalCreate = ({ isOpen, onOpenModal }) => {
   };
 
   return (
-    <DashModalForm
-      isOpen={isOpen}
-      onOpenModal={onOpenModal}
-      loading={loading}
-      handleSubmit={handleSubmit}
-      onSubmitForm={handleSubmitForm}
-      title="Tambah User Baru"
-      icon={UserPlus}
-    >
+    <DashModalForm isOpen={isOpen} onOpenModal={onOpenModal} loading={loading} handleSubmit={handleSubmit} onSubmitForm={handleSubmitForm} title="Tambah User Baru" icon={UserPlus}>
       <UserForm register={register} errors={errors} control={control} type="create" />
     </DashModalForm>
   );

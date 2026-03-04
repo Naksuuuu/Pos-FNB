@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -19,41 +18,21 @@ const UserModalEdit = ({ selectedUser, onOpenModal }) => {
     formState: { errors },
     register,
     control,
-    reset,
   } = useForm({
     resolver: zodResolver(EditUserSchema),
     defaultValues: {
       name: selectedUser?.name || "",
       username: selectedUser?.username || "",
-      role: selectedUser?.role || "",
       password: "",
+      email: selectedUser?.email || "",
+      phone: selectedUser?.phone || "",
+      role: selectedUser?.role || "",
     },
   });
 
-  useEffect(() => {
-    if (selectedUser) {
-      reset({
-        name: selectedUser.name || "",
-        username: selectedUser.username || "",
-        role: selectedUser.role || "",
-        password: "",
-      });
-    }
-  }, [selectedUser, reset]);
-
   const handleSubmitForm = async (data) => {
     try {
-      const payload = {
-        name: data.name,
-        username: data.username,
-        role: data.role,
-      };
-
-      if (data.password && data.password.trim() !== "") {
-        payload.password = data.password;
-      }
-
-      const response = await edit(selectedUser.id, payload);
+      const response = await edit(selectedUser.id, data);
       onOpenModal(null);
       toast.success(response.message || "User berhasil diubah");
     } catch (error) {
@@ -69,15 +48,7 @@ const UserModalEdit = ({ selectedUser, onOpenModal }) => {
   };
 
   return (
-    <DashModalForm
-      isOpen={!!selectedUser}
-      onOpenModal={() => onOpenModal(null)}
-      loading={loading}
-      handleSubmit={handleSubmit}
-      onSubmitForm={handleSubmitForm}
-      title="Edit User"
-      icon={UserPen}
-    >
+    <DashModalForm isOpen={!!selectedUser} onOpenModal={() => onOpenModal(null)} loading={loading} handleSubmit={handleSubmit} onSubmitForm={handleSubmitForm} title="Edit User" icon={UserPen}>
       <UserForm register={register} errors={errors} control={control} type="edit" />
     </DashModalForm>
   );

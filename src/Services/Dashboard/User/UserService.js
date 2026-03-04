@@ -4,12 +4,13 @@ const USER_ENDPOINT = "/dashboard/users";
 
 const UserService = {
   users: async (params) => {
-    const { search, sort_by, sort_direction, page } = params;
+    const { search, sort_by, sort_direction, role, page } = params;
 
     const queryParams = {
       search,
       sort_by,
       sort_direction,
+      role,
       page,
     };
 

@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { Ellipsis } from "lucide-react";
+import { Ellipsis, Pen, Trash } from "lucide-react";
 
 import { TABLE_MENU_HEAD_COLUMNS } from "@/Constants/Dashboard/Menu/MenuConstant";
 import { rupiah } from "@/Utils/rupiahHelper";
@@ -35,25 +35,14 @@ const MenuTable = memo(({ loading, errorMessage, menus = [], pagination, onOpenD
                 <TableCell className="truncate">{menu.name}</TableCell>
                 <TableCell>{menu.category?.name ?? "Tidak ada Kategorgi"}</TableCell>
                 <TableCell>{rupiah(menu.price)}</TableCell>
-                <TableCell>
+                <TableCell className="text-center">
                   <Badge variant={menu.is_available ? "success" : "destructive"} className="capitalize">
                     {menu.is_available ? "Tersedia" : "Tidak Tersedia"}
                   </Badge>
                 </TableCell>
-                <TableCell className="text-right">
-                  <DropDown
-                    triggerIcon={Ellipsis}
-                    buttonProps={{ variant: "ghost", size: "icon" }}
-                    items={[
-                      { key: "edit", label: "Edit", onClick: () => onOpenEditModal(menu) },
-                      {
-                        key: "delete",
-                        label: "Hapus",
-                        onClick: () => onOpenDeleteModal(menu),
-                        className: "text-destructive hover:text-destructive/90! hover:bg-destructive/10!",
-                      },
-                    ]}
-                  />
+                <TableCell className="flex gap-2 text-center justify-center">
+                  <Pen className="size-4 text-success" onClick={() => onOpenEditModal(menu)} />
+                  <Trash className="size-4 text-destructive" onClick={() => onOpenDeleteModal(menu)} />
                 </TableCell>
               </TableRow>
             ))}
