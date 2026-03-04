@@ -48,27 +48,14 @@ const LoginForm = () => {
             <Label htmlFor="username">
               Username<span className="text-destructive">*</span>
             </Label>
-            <Input
-              type="text"
-              id="username"
-              name="username"
-              {...register("username")}
-              aria-invalid={!!errors.username}
-              firstAddon={<User />}
-            />
+            <Input type="text" id="username" name="username" placeholder="Username" {...register("username")} aria-invalid={!!errors.username} firstAddon={<User />} />
             {errors.username && <FieldError>{errors.username.message}</FieldError>}
           </Field>
           <Field>
             <Label htmlFor="password">
               Password<span className="text-destructive">*</span>
             </Label>
-            <InputPassword
-              id="password"
-              name="password"
-              {...register("password")}
-              aria-invalid={!!errors.password}
-              firstAddon={<Lock />}
-            />
+            <InputPassword id="password" name="password" placeholder="Password" {...register("password")} aria-invalid={!!errors.password} firstAddon={<Lock />} />
             {errors.password && <FieldError>{errors.password.message}</FieldError>}
           </Field>
           <Field>
