@@ -6,12 +6,15 @@ import { IS_AVAILABLE_OPTIONS, SORT_DIRECTION_OPTIONS, SORY_BY_OPTIONS } from "@
 import useAllMenu from "@/Hooks/Dashboard/Menu/useAllMenu";
 import useFilterParams from "@/Hooks/Common/useFilterParams";
 
-import { Button } from "@/Components/Elements/Shadcn/button";
 import { Card } from "@/Components/Elements/Cards/Card";
 import { DropDown } from "@/Components/Elements/Buttons/DropDown";
 import { ButtonResetFilter } from "@/Components/Elements/Buttons/ButtonResetFilter";
 import { Select } from "@/Components/Elements/Inputs/Select";
 import { InputSearch } from "@/Components/Elements/Inputs/InputSearch";
+import { Field } from "@/Components/Elements/Shadcn/field";
+import { Label } from "@/Components/Elements/Shadcn/label";
+import { Button } from "@/Components/Elements/Shadcn/button";
+
 import MenuModalCreate from "@/Components/Fragments/Dashboard/Menu/Modal/MenuModalCreate";
 import MenuModalEdit from "@/Components/Fragments/Dashboard/Menu/Modal/MenuModalEdit";
 import MenuModalDelete from "@/Components/Fragments/Dashboard/Menu/Modal/MenuModalDelete";
@@ -33,13 +36,7 @@ const MenuPage = memo(() => {
     setOptimisticSearch(search);
   }, [search]);
 
-  const showReset = !!(
-    filters.sort_by ||
-    filters.sort_direction ||
-    filters.is_available ||
-    filters.category_id ||
-    search
-  );
+  const showReset = !!(filters.sort_by || filters.sort_direction || filters.is_available || filters.category_id || search);
 
   useEffect(() => {
     loadMenus(filters);
@@ -144,60 +141,41 @@ const MenuPage = memo(() => {
 
       <Card>
         <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
-          <InputSearch onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari menu..." />
+          <div className="col-span-full grid grid-cols-2 xl:grid-cols-4 gap-4 items-end">
+            <Field>
+              <Label htmlFor="search">Cari Menu</Label>
+              <InputSearch id="search" onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari menu..." />
+            </Field>
 
-          <Button onClick={handleOpenCreateModal}>
-            <Plus />
-            Tambah Menu
-          </Button>
+            <Button onClick={handleOpenCreateModal}>
+              <Plus />
+              Tambah Menu
+            </Button>
 
-          <DropDown
-            triggerLabel="Kelola Kategori"
-            triggerIcon={Settings}
-            items={categoryItems}
-            buttonProps={{ variant: "default", size: "default" }}
-            contentAlign="start"
-          />
+            <DropDown triggerLabel="Kelola Kategori" triggerIcon={Settings} items={categoryItems} buttonProps={{ variant: "default", size: "default" }} contentAlign="start" />
 
-          <DropDown
-            triggerLabel="Kelola Meja"
-            triggerIcon={Settings}
-            items={tableItems}
-            buttonProps={{ variant: "default", size: "default" }}
-            contentAlign="start"
-          />
+            <DropDown triggerLabel="Kelola Meja" triggerIcon={Settings} items={tableItems} buttonProps={{ variant: "default", size: "default" }} contentAlign="start" />
+          </div>
 
-          <Select
-            items={SORY_BY_OPTIONS}
-            onValueChange={handleSortByChange}
-            value={filters.sort_by || null}
-            label="Cari Berdasarkan"
-            placeholder="Pilih opsi"
-          />
+          <Field>
+            <Label htmlFor="sort_by">Berdasarkan</Label>
+            <Select id="sort_by" items={SORY_BY_OPTIONS} onValueChange={handleSortByChange} value={filters.sort_by || null} label="Berdasarkan" placeholder="Pilih Berdasarkan" />
+          </Field>
 
-          <Select
-            items={SORT_DIRECTION_OPTIONS}
-            onValueChange={handleSortDirectionChange}
-            value={filters.sort_direction || null}
-            label="Urutan"
-            placeholder="Pilih urutan"
-          />
+          <Field>
+            <Label htmlFor="sort_direction">Urutan</Label>
+            <Select id="sort_direction" items={SORT_DIRECTION_OPTIONS} onValueChange={handleSortDirectionChange} value={filters.sort_direction || null} label="Urutan" placeholder="Pilih urutan" />
+          </Field>
 
-          <Select
-            items={IS_AVAILABLE_OPTIONS}
-            onValueChange={handleIsAvailableChange}
-            value={filters.is_available || null}
-            label="Ketersediaan"
-            placeholder="Pilih ketersediaan"
-          />
+          <Field>
+            <Label htmlFor="is_available">Ketersediaan</Label>
+            <Select id="is_available" items={IS_AVAILABLE_OPTIONS} onValueChange={handleIsAvailableChange} value={filters.is_available || null} label="Ketersediaan" placeholder="Pilih ketersediaan" />
+          </Field>
 
-          <Select
-            items={categoryOptions}
-            onValueChange={handleCategoryIdChange}
-            value={filters.category_id || null}
-            label="Kategori"
-            placeholder="Pilih kategori"
-          />
+          <Field>
+            <Label htmlFor="category_id">Kategori</Label>
+            <Select id="category_id" items={categoryOptions} onValueChange={handleCategoryIdChange} value={filters.category_id || null} label="Kategori" placeholder="Pilih kategori" />
+          </Field>
         </div>
       </Card>
 
@@ -218,12 +196,8 @@ const MenuPage = memo(() => {
       {selectedDeleteMenu && <MenuModalDelete selectedMenu={selectedDeleteMenu} onOpenModal={handleOpenDeleteModal} />}
       {selectedEditMenu && <MenuModalEdit selectedMenu={selectedEditMenu} onOpenModal={handleOpenEditModal} />}
       {selectedAddMenu && <MenuModalCreate isOpen={selectedAddMenu} onOpenModal={handleOpenCreateModal} />}
-      {categoryModalOpen && (
-        <CategoryModalCreate isOpen={categoryModalOpen} onOpenModal={handleOpenCreateCategoryModal} />
-      )}
-      {diningTableModalOpen && (
-        <DiningTableModalCreate isOpen={diningTableModalOpen} onOpenModal={handleOpenCreateDiningTableModal} />
-      )}
+      {categoryModalOpen && <CategoryModalCreate isOpen={categoryModalOpen} onOpenModal={handleOpenCreateCategoryModal} />}
+      {diningTableModalOpen && <DiningTableModalCreate isOpen={diningTableModalOpen} onOpenModal={handleOpenCreateDiningTableModal} />}
     </>
   );
 });

@@ -7,8 +7,8 @@ const SORY_BY_OPTIONS = [
 
 const SORT_DIRECTION_OPTIONS = [
   { label: "Default", value: "" },
-  { label: "A-Z", value: "asc" },
-  { label: "Z-A", value: "desc" },
+  { label: "Terlama / Terkecil", value: "asc" },
+  { label: "Terbaru / Terbesar", value: "desc" },
 ];
 
 const IS_AVAILABLE_OPTIONS = [

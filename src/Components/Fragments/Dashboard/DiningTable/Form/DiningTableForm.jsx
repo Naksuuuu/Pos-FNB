@@ -3,8 +3,9 @@ import { Controller } from "react-hook-form";
 import { STATUS_OPTIONS_SCHEMA } from "@/Constants/Dashboard/DiningTable/DiningTableConstant";
 
 import { Input } from "@/Components/Elements/Inputs/Input";
-import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/Components/Elements/Shadcn/field";
 import { Select } from "@/Components/Elements/Inputs/Select";
+
+import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/Components/Elements/Shadcn/field";
 
 const DiningTableForm = ({ register, errors, control }) => {
   return (
@@ -12,9 +13,9 @@ const DiningTableForm = ({ register, errors, control }) => {
       <FieldGroup className="grid grid-cols-1 md:grid-cols-2">
         <Field>
           <FieldLabel htmlFor="code">
-            Code Meja <span className="text-destructive">*</span>
+            Kode Meja <span className="text-destructive">*</span>
           </FieldLabel>
-          <Input id="code" name="code" autoComplete="off" {...register("code")} aria-invalid={!!errors.code} />
+          <Input id="code" name="code" autoComplete="off" placeholder="Kode Meja" {...register("code")} aria-invalid={!!errors.code} />
           {errors.code && <FieldError>{errors.code.message}</FieldError>}
         </Field>
         <Field>

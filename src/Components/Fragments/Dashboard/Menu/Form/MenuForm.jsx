@@ -4,10 +4,10 @@ import { Upload } from "lucide-react";
 
 import { Input } from "@/Components/Elements/Inputs/Input";
 import { Select } from "@/Components/Elements/Inputs/Select";
+import { ImageWithFallback } from "@/Components/Elements/Images/ImageWithFallback";
 import { Textarea } from "@/Components/Elements/Shadcn/textarea";
 import { Switch } from "@/Components/Elements/Shadcn/switch";
 import { Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/Components/Elements/Shadcn/field";
-import { ImageWithFallback } from "@/Components/Elements/Images/ImageWithFallback";
 
 const MenuForm = ({ errors, control, register, categoryOptions, type = "create", selectedMenu = null }) => {
   const [imagePreview, setImagePreview] = useState(null);
@@ -34,7 +34,7 @@ const MenuForm = ({ errors, control, register, categoryOptions, type = "create",
               </div>
             )}
 
-            <label htmlFor="image" className="block p-2 text-center border border-dashed rounded-md cursor-pointer hover:bg-primary/5">
+            <label htmlFor="image" className="block bg-input/30! p-2 text-center border border-dashed rounded-md cursor-pointer hover:bg-input/80!">
               <div className="flex items-center justify-center gap-2 text-sm font-medium">
                 <Upload className="size-4" /> Pilih gambar
               </div>
@@ -67,7 +67,7 @@ const MenuForm = ({ errors, control, register, categoryOptions, type = "create",
               </div>
             )}
 
-            <label htmlFor="image" className="block p-2 text-center border border-dashed rounded-md cursor-pointer hover:bg-primary/5">
+            <label htmlFor="image" className="block p-2 bg-input/30! text-center border border-dashed rounded-md cursor-pointer hover:bg-input/80!">
               <div className="flex items-center justify-center gap-2 text-sm font-medium">
                 <Upload className="size-4" /> Pilih gambar
               </div>
@@ -98,6 +98,7 @@ const MenuForm = ({ errors, control, register, categoryOptions, type = "create",
           <Input id="name" name="name" autoComplete="off" placeholder="Nama Menu" {...register("name")} aria-invalid={errors.name ? "true" : "false"} />
           {errors.name && <FieldError>{errors.name.message}</FieldError>}
         </Field>
+
         <Field>
           <FieldLabel htmlFor="price">
             Harga <span className="text-destructive">*</span>
@@ -105,8 +106,9 @@ const MenuForm = ({ errors, control, register, categoryOptions, type = "create",
           <Input id="price" name="price" autoComplete="off" placeholder="Harga" {...register("price")} aria-invalid={errors.price ? "true" : "false"} />
           {errors.price && <FieldError>{errors.price.message}</FieldError>}
         </Field>
+
         <Field>
-          <FieldLabel htmlFor="category_id">
+          <FieldLabel htmlFor="category_id_select">
             Kategori <span className="text-destructive">*</span>
           </FieldLabel>
 
@@ -117,7 +119,7 @@ const MenuForm = ({ errors, control, register, categoryOptions, type = "create",
               <Select
                 items={categoryOptions}
                 label="Kategori"
-                id="category_id"
+                id="category_id_select"
                 name="category_id"
                 placeholder="Pilih kategori"
                 value={field.value || ""}
@@ -135,6 +137,7 @@ const MenuForm = ({ errors, control, register, categoryOptions, type = "create",
             {errors.is_available && <FieldError>{errors.is_available.message}</FieldError>}
           </FieldContent>
           <Controller
+            id="is_available"
             name="is_available"
             control={control}
             render={({ field }) => {

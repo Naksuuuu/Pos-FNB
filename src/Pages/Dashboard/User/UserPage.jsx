@@ -119,25 +119,18 @@ const UserPage = memo(() => {
           </div>
 
           <Field>
-            <Label htmlFor="sort_by">Pilih Berdasarkan</Label>
-            <Select id="sort_by" items={SORT_BY_OPTIONS} onValueChange={handleSortByChange} value={filters.sort_by || null} label="Pilih Berdasarkan" placeholder="Pilih Berdasarkan" />
+            <Label htmlFor="sort_by">Berdasarkan</Label>
+            <Select id="sort_by" items={SORT_BY_OPTIONS} onValueChange={handleSortByChange} value={filters.sort_by || null} label="Berdasarkan" placeholder="Pilih Berdasarkan" />
           </Field>
 
           <Field>
-            <Label htmlFor="role">Pilih Role</Label>
-            <Select id="role" items={SORT_ROLE_OPTIONS} onValueChange={handleSortRoleChange} value={filters.role || null} label="Pilih Role" placeholder="Pilih role" />
+            <Label htmlFor="role">Role</Label>
+            <Select id="role" items={SORT_ROLE_OPTIONS} onValueChange={handleSortRoleChange} value={filters.role || null} label="Role" placeholder="Pilih role" />
           </Field>
 
           <Field>
-            <Label htmlFor="sort_direction">Pilih Urutan</Label>
-            <Select
-              id="sort_direction"
-              items={SORT_DIRECTION_OPTIONS}
-              onValueChange={handleSortDirectionChange}
-              value={filters.sort_direction || null}
-              label="Pilih Urutan"
-              placeholder="Pilih urutan"
-            />
+            <Label htmlFor="sort_direction">Urutan</Label>
+            <Select id="sort_direction" items={SORT_DIRECTION_OPTIONS} onValueChange={handleSortDirectionChange} value={filters.sort_direction || null} label="Urutan" placeholder="Pilih urutan" />
           </Field>
         </div>
       </Card>

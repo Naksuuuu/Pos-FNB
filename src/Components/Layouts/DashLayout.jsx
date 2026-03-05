@@ -13,8 +13,8 @@ const DashLayout = ({ children }) => {
           toastOptions={{
             classNames: {
               toast: "!bg-background !text-foreground !border-border",
-              success: "!bg-success/10 !text-success !border-success/30",
-              error: "!bg-destructive/10 !text-destructive !border-destructive/30",
+              success: "!bg-success/80 !text-background !border-success/30",
+              error: "!bg-destructive/80 !text-background !border-destructive/30",
             },
           }}
         />

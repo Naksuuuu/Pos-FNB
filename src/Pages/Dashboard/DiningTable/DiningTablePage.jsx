@@ -14,6 +14,9 @@ import { Card } from "@/Components/Elements/Cards/Card";
 import { InputSearch } from "@/Components/Elements/Inputs/InputSearch";
 import { Select } from "@/Components/Elements/Inputs/Select";
 import { ButtonResetFilter } from "@/Components/Elements/Buttons/ButtonResetFilter";
+import { Field } from "@/Components/Elements/Shadcn/field";
+import { Label } from "@/Components/Elements/Shadcn/label";
+
 import DiningTableTable from "@/Components/Fragments/Dashboard/DiningTable/Table/DiningTableTable";
 import DiningTableModalCreate from "@/Components/Fragments/Dashboard/DiningTable/Modal/DiningTableModalCreate";
 import DiningTableModalEdit from "@/Components/Fragments/Dashboard/DiningTable/Modal/DiningTableModalEdit";
@@ -109,22 +112,19 @@ const DiningTablePage = () => {
           <div>
             <h2 className="font-semibold ">Cari dan Filter</h2>
           </div>
-          <InputSearch onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari Meja" />
+          <Field>
+            <Label htmlFor="search">Cari Meja</Label>
+            <InputSearch id="search" onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari Meja" />
+          </Field>
           <div className="flex gap-4">
-            <Select
-              items={STATUS_OPTIONS}
-              onValueChange={handleStatusChange}
-              value={filters.status || null}
-              label="Cari Berdasarkan Status"
-              placeholder="Pilih opsi"
-            />
-            <Select
-              items={SORT_DIRECTION_OPTIONS}
-              onValueChange={handleSortDirectionChange}
-              value={filters.sort_direction || null}
-              label="Urutan"
-              placeholder="Pilih urutan"
-            />
+            <Field>
+              <Label htmlFor="sort_staus">Status</Label>
+              <Select id="sort_status" items={STATUS_OPTIONS} onValueChange={handleStatusChange} value={filters.status || null} label="Status" placeholder="Pilih Status" />
+            </Field>
+            <Field>
+              <Label htmlFor="sort_direction">Urutan</Label>
+              <Select id="sort_direction" items={SORT_DIRECTION_OPTIONS} onValueChange={handleSortDirectionChange} value={filters.sort_direction || null} label="Urutan" placeholder="Pilih urutan" />
+            </Field>
           </div>
         </Card>
 
@@ -145,15 +145,9 @@ const DiningTablePage = () => {
         </Card>
       </div>
 
-      {selectedCreateTable && (
-        <DiningTableModalCreate isOpen={!!selectedCreateTable} onOpenModal={handleOpenCreateModal} />
-      )}
-      {selectedEditTable && (
-        <DiningTableModalEdit selectedDiningTable={selectedEditTable} onOpenModal={handleOpenEditModal} />
-      )}
-      {selectedDeleteTable && (
-        <DiningTableModalDelete selectedDiningTable={selectedDeleteTable} onOpenModal={handleOpenDeleteModal} />
-      )}
+      {selectedCreateTable && <DiningTableModalCreate isOpen={!!selectedCreateTable} onOpenModal={handleOpenCreateModal} />}
+      {selectedEditTable && <DiningTableModalEdit selectedDiningTable={selectedEditTable} onOpenModal={handleOpenEditModal} />}
+      {selectedDeleteTable && <DiningTableModalDelete selectedDiningTable={selectedDeleteTable} onOpenModal={handleOpenDeleteModal} />}
     </div>
   );
 };

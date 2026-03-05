@@ -1,10 +1,10 @@
 import { memo } from "react";
-import { Ellipsis } from "lucide-react";
+import { Pen, Trash } from "lucide-react";
 
 import { TABLE_CATEGORY_HEAD_COLUMNS } from "@/Constants/Dashboard/Category/CategoryConstant";
 
-import { DropDown } from "@/Components/Elements/Buttons/DropDown";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/Elements/Shadcn/table";
+
 import DashTableError from "@/Components/Fragments/Dashboard/Common/Table/DashTableError";
 import DashTableLoading from "@/Components/Fragments/Dashboard/Common/Table/DashTableLoading";
 
@@ -30,21 +30,10 @@ const CategoryTable = memo(({ loading, errorMessage, categories = [], onOpenDele
               <TableRow key={category.id}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{category.name}</TableCell>
-                <TableCell>{category.menu_count}</TableCell>
-                <TableCell className="text-right">
-                  <DropDown
-                    triggerIcon={Ellipsis}
-                    buttonProps={{ variant: "ghost", size: "icon" }}
-                    items={[
-                      { key: "edit", label: "Edit", onClick: () => onOpenEditModal(category) },
-                      {
-                        key: "delete",
-                        label: "Hapus",
-                        onClick: () => onOpenDeleteModal(category),
-                        className: "text-destructive hover:text-destructive! hover:bg-destructive/10! ",
-                      },
-                    ]}
-                  />
+                <TableCell className="text-center">{category.menu_count}</TableCell>
+                <TableCell className="flex gap-2 text-center justify-center">
+                  <Pen className="size-4 text-success" onClick={() => onOpenEditModal(category)} />
+                  <Trash className="size-4 text-destructive" onClick={() => onOpenDeleteModal(category)} />
                 </TableCell>
               </TableRow>
             ))}

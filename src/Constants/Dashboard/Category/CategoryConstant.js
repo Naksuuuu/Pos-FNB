@@ -1,7 +1,7 @@
 const SORT_DIRECTION_OPTIONS = [
   { label: "Default", value: "" },
-  { label: "A-Z", value: "asc" },
-  { label: "Z-A", value: "desc" },
+  { label: "Terlama / Terkecil", value: "asc" },
+  { label: "Terbaru / Terbesar", value: "desc" },
 ];
 
 const SORT_BY_OPTIONS = [
@@ -14,8 +14,8 @@ const SORT_BY_OPTIONS = [
 const TABLE_CATEGORY_HEAD_COLUMNS = [
   { header: "No", width: "w-[50px]" },
   { header: "Nama", width: "min-w-[300px] max-w-full" },
-  { header: "Total Menu", width: "w-[150px]" },
-  { header: "Aksi", width: "w-[50px] text-right" },
+  { header: "Total Menu", width: "w-[150px] text-center" },
+  { header: "Aksi", width: "w-[150px] text-center" },
 ];
 
 export { TABLE_CATEGORY_HEAD_COLUMNS, SORT_BY_OPTIONS, SORT_DIRECTION_OPTIONS };

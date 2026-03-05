@@ -6,8 +6,8 @@ const STATUS_OPTIONS = [
 
 const SORT_DIRECTION_OPTIONS = [
   { label: "Default", value: "" },
-  { label: "A-Z", value: "asc" },
-  { label: "Z-A", value: "desc" },
+  { label: "Terlama / Terkecil", value: "asc" },
+  { label: "Terbaru / Terbesar", value: "desc" },
 ];
 
 const STATUS_OPTIONS_SCHEMA = STATUS_OPTIONS.filter((option) => option.value !== "");
@@ -23,11 +23,11 @@ const TABLE_DINING_TABLE_HEAD_COLUMNS = [
   },
   {
     header: "Status",
-    width: "min-w-[100px] max-w-[400px]",
+    width: "min-w-[100px] max-w-[400px] text-center",
   },
   {
     header: "Aksi",
-    width: "w-[50px] text-right",
+    width: "w-[150px] text-center",
   },
 ];
 
