@@ -9,7 +9,9 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const currentRole = useSelector(selectAuthRole);
 
-  if (!isAuthenticated) return <Navigate to={ROUTES.AUTH.LOGIN} replace />;
+  const url = new URL(window.location.href);
+  const newUrl = `${ROUTES.AUTH.LOGIN}?callbackUrl=${url.pathname}${url.search}`;
+  if (!isAuthenticated) return <Navigate to={newUrl} replace />;
   if (!allowedRoles.includes(currentRole)) return <Navigate to={ROUTES.DASHBOARD.HOME} replace />;
 
   return children;

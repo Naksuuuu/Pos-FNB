@@ -1,14 +1,14 @@
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff, Lock, User } from "lucide-react";
+import { Lock, User } from "lucide-react";
 
 import useLogin from "@/Hooks/Auth/Login/useLogin";
 import { LoginSchema } from "@/Schema/Auth/AuthSchema";
 
+import { Input, InputPassword } from "@/Components/Elements/Inputs/Input";
 import { Button } from "@/Components/Elements/Shadcn/button";
 import { Field, FieldError, FieldGroup, FieldSet } from "@/Components/Elements/Shadcn/field";
-import { Input, InputPassword } from "@/Components/Elements/Inputs/Input";
 import { Label } from "@/Components/Elements/Shadcn/label";
 import { Spinner } from "@/Components/Elements/Shadcn/spinner";
 
@@ -59,8 +59,13 @@ const LoginForm = () => {
             {errors.password && <FieldError>{errors.password.message}</FieldError>}
           </Field>
           <Field>
-            <Button type="submit" disabled={loading}>
-              {loading ? <Spinner /> : "Masuk"}
+            <Button type="submit" disabled={loading} className="relative cursor-pointer" size="default">
+              <span className={loading ? "invisible" : "visible"}>Masuk</span>
+              {loading && (
+                <div className="absolute ">
+                  <Spinner />
+                </div>
+              )}
             </Button>
           </Field>
         </FieldGroup>

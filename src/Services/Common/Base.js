@@ -1,6 +1,7 @@
 import axios from "axios";
 import { parseValidationErrors } from "../../Utils/errorHandler";
 import { clearAuthToken, getAuthToken } from "@/Utils/sessionUtils";
+import { ROUTES } from "@/Constants/Common/RouteConstant";
 // import { clearAuthToken, getAuthToken } from "../../Utils/cookieUtils";
 
 const BASE_URL = import.meta.env.VITE_BASE_API_URL;
@@ -34,6 +35,7 @@ api.interceptors.response.use(
   (response) => {
     const duration = new Date() - response.config.metadata?.startTime;
     response.duration = duration;
+
     return response;
   },
   (error) => {
@@ -42,8 +44,10 @@ api.interceptors.response.use(
 
       if (status === 401) {
         clearAuthToken();
+        const url = new URL(window.location.href);
         if (typeof window !== "undefined" && !window.location.pathname.includes("/auth/login")) {
-          window.location.href = "/auth/login";
+          const newUrl = `${ROUTES.AUTH.LOGIN}?callbackUrl=${url.pathname}${url.search}`;
+          window.location.href = newUrl;
         }
       }
 

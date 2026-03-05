@@ -11,7 +11,9 @@ const ProtectAuthRoute = ({ children }) => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
 
   if (isAuthenticated) {
-    return <Navigate to="/dashboard" replace />;
+    const url = new URL(window.location.href);
+    const newUrl = url.searchParams.get("callbackUrl") || "/dashboard";
+    return <Navigate to={newUrl} replace />;
   }
 
   return children;
