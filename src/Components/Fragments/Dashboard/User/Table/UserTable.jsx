@@ -33,8 +33,8 @@ const UserTable = memo(({ loading, errorMessage, users = [], pagination, onOpenD
                 <TableCell>{pagination?.from ? pagination.from + index : index + 1}</TableCell>
                 <TableCell>{user.name}</TableCell>
                 <TableCell>{user.username}</TableCell>
-                <TableCell>{user.email ?? <span className="text-destructive">Tidak dicantumkan</span>}</TableCell>
-                <TableCell>{user.phone ?? <span className="text-destructive">Tidak dicantumkan</span>}</TableCell>
+                <TableCell>{user.email ?? <span>-</span>}</TableCell>
+                <TableCell>{user.phone ?? <span>-</span>}</TableCell>
                 <TableCell className="text-center">
                   <Badge variant={user.role === "admin" ? "success" : "warning"} className="capitalize">
                     {user.role}

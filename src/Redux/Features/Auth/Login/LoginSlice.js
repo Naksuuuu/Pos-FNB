@@ -3,6 +3,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import LoginService from "@/Services/Auth/Login/LoginService";
 
 import { getUserData, getAuthToken, setAuthToken, setUserData, clearAllAuthData } from "@/Utils/sessionUtils";
+import { ROUTES } from "@/Constants/Common/RouteConstant";
 
 const initialState = {
   user: getUserData(),
@@ -35,7 +36,9 @@ export const LoginUser = createAsyncThunk("login/loginUser", async (data, { reje
 export const LogoutUser = createAsyncThunk("login/logoutUser", async (_, { rejectWithValue }) => {
   try {
     const token = getAuthToken();
+
     clearAllAuthData();
+    window.location.href = ROUTES.AUTH.LOGIN;
     const response = await LoginService.logout(token);
     return response;
   } catch (error) {

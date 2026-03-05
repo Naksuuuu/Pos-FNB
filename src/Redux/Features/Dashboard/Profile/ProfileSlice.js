@@ -94,6 +94,9 @@ const profileSlice = createSlice({
       })
       .addCase(LogoutUser.fulfilled, (state) => {
         state.profile = null;
+      })
+      .addCase(LogoutUser.rejected, (state) => {
+        state.profile = null;
       });
   },
 });
