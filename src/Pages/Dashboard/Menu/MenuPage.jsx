@@ -144,7 +144,7 @@ const MenuPage = memo(() => {
           <div className="col-span-full grid grid-cols-2 xl:grid-cols-4 gap-4 items-end">
             <Field>
               <Label htmlFor="search">Cari Menu</Label>
-              <InputSearch id="search" onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari menu..." />
+              <InputSearch id="search" name="search" onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari menu..." />
             </Field>
 
             <Button onClick={handleOpenCreateModal}>
@@ -159,22 +159,46 @@ const MenuPage = memo(() => {
 
           <Field>
             <Label htmlFor="sort_by">Berdasarkan</Label>
-            <Select id="sort_by" items={SORY_BY_OPTIONS} onValueChange={handleSortByChange} value={filters.sort_by || null} label="Berdasarkan" placeholder="Pilih Berdasarkan" />
+            <Select id="sort_by" name="sort_by" items={SORY_BY_OPTIONS} onValueChange={handleSortByChange} value={filters.sort_by || null} label="Berdasarkan" placeholder="Pilih Berdasarkan" />
           </Field>
 
           <Field>
             <Label htmlFor="sort_direction">Urutan</Label>
-            <Select id="sort_direction" items={SORT_DIRECTION_OPTIONS} onValueChange={handleSortDirectionChange} value={filters.sort_direction || null} label="Urutan" placeholder="Pilih urutan" />
+            <Select
+              id="sort_direction"
+              name="sort_direction"
+              items={SORT_DIRECTION_OPTIONS}
+              onValueChange={handleSortDirectionChange}
+              value={filters.sort_direction || null}
+              label="Urutan"
+              placeholder="Pilih urutan"
+            />
           </Field>
 
           <Field>
             <Label htmlFor="is_available">Ketersediaan</Label>
-            <Select id="is_available" items={IS_AVAILABLE_OPTIONS} onValueChange={handleIsAvailableChange} value={filters.is_available || null} label="Ketersediaan" placeholder="Pilih ketersediaan" />
+            <Select
+              id="is_available"
+              name="is_available"
+              items={IS_AVAILABLE_OPTIONS}
+              onValueChange={handleIsAvailableChange}
+              value={filters.is_available || null}
+              label="Ketersediaan"
+              placeholder="Pilih ketersediaan"
+            />
           </Field>
 
           <Field>
             <Label htmlFor="category_id">Kategori</Label>
-            <Select id="category_id" items={categoryOptions} onValueChange={handleCategoryIdChange} value={filters.category_id || null} label="Kategori" placeholder="Pilih kategori" />
+            <Select
+              id="category_id"
+              name="category_id"
+              items={categoryOptions}
+              onValueChange={handleCategoryIdChange}
+              value={filters.category_id || null}
+              label="Kategori"
+              placeholder="Pilih kategori"
+            />
           </Field>
         </div>
       </Card>

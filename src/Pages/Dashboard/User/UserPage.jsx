@@ -109,7 +109,7 @@ const UserPage = memo(() => {
             <div className="md:col-span-2">
               <Field>
                 <Label htmlFor="search">Cari User</Label>
-                <InputSearch id="search" onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari user..." />
+                <InputSearch id="search" name="search" onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari user..." />
               </Field>
             </div>
             <Button onClick={() => handleOpenCreateModal(true)}>
@@ -120,17 +120,25 @@ const UserPage = memo(() => {
 
           <Field>
             <Label htmlFor="sort_by">Berdasarkan</Label>
-            <Select id="sort_by" items={SORT_BY_OPTIONS} onValueChange={handleSortByChange} value={filters.sort_by || null} label="Berdasarkan" placeholder="Pilih Berdasarkan" />
+            <Select id="sort_by" name="sort_by" items={SORT_BY_OPTIONS} onValueChange={handleSortByChange} value={filters.sort_by || null} label="Berdasarkan" placeholder="Pilih Berdasarkan" />
           </Field>
 
           <Field>
             <Label htmlFor="role">Role</Label>
-            <Select id="role" items={SORT_ROLE_OPTIONS} onValueChange={handleSortRoleChange} value={filters.role || null} label="Role" placeholder="Pilih role" />
+            <Select id="role" name="role" items={SORT_ROLE_OPTIONS} onValueChange={handleSortRoleChange} value={filters.role || null} label="Role" placeholder="Pilih role" />
           </Field>
 
           <Field>
             <Label htmlFor="sort_direction">Urutan</Label>
-            <Select id="sort_direction" items={SORT_DIRECTION_OPTIONS} onValueChange={handleSortDirectionChange} value={filters.sort_direction || null} label="Urutan" placeholder="Pilih urutan" />
+            <Select
+              id="sort_direction"
+              name="sort_direction"
+              items={SORT_DIRECTION_OPTIONS}
+              onValueChange={handleSortDirectionChange}
+              value={filters.sort_direction || null}
+              label="Urutan"
+              placeholder="Pilih urutan"
+            />
           </Field>
         </div>
       </Card>

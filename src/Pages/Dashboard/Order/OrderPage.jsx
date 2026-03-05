@@ -12,6 +12,8 @@ import { SelectDate } from "@/Components/Elements/Inputs/SelectDate";
 
 import OrderTable from "@/Components/Fragments/Dashboard/Order/Table/OrderTable";
 import OrderStatistic from "@/Components/Fragments/Dashboard/Order/Statistic/OrderStatistic";
+import { Label } from "@/Components/Elements/Shadcn/label";
+import { Field } from "@/Components/Elements/Shadcn/field";
 
 const OrderPage = () => {
   const { filters, updateFilters, resetFilters } = useFilterParams();
@@ -86,11 +88,18 @@ const OrderPage = () => {
       <OrderStatistic statistic={statistic} />
 
       <Card className="grid grid-cols-2 gap-4">
-        <div className="col-span-full">
-          <InputSearch placeholder="Cari berdasarkan nama pelanggan, order ID atau nomor meja" value={optimisticSearch} onSearchChange={handleSearchChange} />
-        </div>
-        <Select items={STATUS_OPTIONS} label="Status" placeholder="pilih status" onValueChange={handleStatusChange} value={filters.status || ""} />
-        <SelectDate date={date} onSelect={handleDateChange} />
+        <Field className="col-span-full">
+          <Label htmlFor="search">Cari User</Label>
+          <InputSearch id="search" name="search" placeholder="Cari berdasarkan nama pelanggan, order ID atau nomor meja" value={optimisticSearch} onSearchChange={handleSearchChange} />
+        </Field>
+        <Field>
+          <Label htmlFor="status">Status</Label>
+          <Select id="status" name="status" items={STATUS_OPTIONS} label="Status" placeholder="Pilih Status" onValueChange={handleStatusChange} value={filters.status || ""} />
+        </Field>
+        <Field>
+          <Label htmlFor="date">Tanggal</Label>
+          <SelectDate id="date" name="date" date={date} onSelect={handleDateChange} />
+        </Field>
       </Card>
 
       <ButtonResetFilter condition={showReset} onResetFilter={handleResetFilter} />

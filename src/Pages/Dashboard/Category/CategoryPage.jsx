@@ -112,17 +112,25 @@ const CategoryPage = () => {
           <div className="space-y-4">
             <Field>
               <Label htmlFor="search">Cari Kategori</Label>
-              <InputSearch id="search" onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari kategori..." />
+              <InputSearch id="search" name="search" onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari kategori..." />
             </Field>
           </div>
           <div className="w-full flex justify-between gap-4">
             <Field>
               <Label htmlFor="sort-by">Berdasarkan</Label>
-              <Select id="sort-by" items={SORT_BY_OPTIONS} onValueChange={handleSortByChange} value={filters.sort_by || null} label="Berdasarkan" placeholder="Pilih Berdasarkan" />
+              <Select id="sort-by" name="sort-by" items={SORT_BY_OPTIONS} onValueChange={handleSortByChange} value={filters.sort_by || null} label="Berdasarkan" placeholder="Pilih Berdasarkan" />
             </Field>
             <Field>
               <Label htmlFor="sort-direction">Urutan</Label>
-              <Select id="sort-direction" items={SORT_DIRECTION_OPTIONS} onValueChange={handleSortDirectionChange} value={filters.sort_direction || null} label="Urutan" placeholder="Pilih Urutan" />
+              <Select
+                id="sort-direction"
+                name="sort-direction"
+                items={SORT_DIRECTION_OPTIONS}
+                onValueChange={handleSortDirectionChange}
+                value={filters.sort_direction || null}
+                label="Urutan"
+                placeholder="Pilih Urutan"
+              />
             </Field>
           </div>
         </Card>

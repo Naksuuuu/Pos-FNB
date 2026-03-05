@@ -1,13 +1,16 @@
-import { DropDown } from "@/Components/Elements/Buttons/DropDown";
+import { memo } from "react";
+import { Pen, Trash } from "lucide-react";
+
+import { rupiah } from "@/Utils/rupiahHelper";
+
+import { TABLE_ORDER_HEAD_COLUMNS } from "@/Constants/Dashboard/Order/OrderConstant";
+
 import { Pagination } from "@/Components/Elements/Paginations/Pagination";
 import { Badge } from "@/Components/Elements/Shadcn/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/Elements/Shadcn/table";
+
 import DashTableError from "@/Components/Fragments/Dashboard/Common/Table/DashTableError";
 import DashTableLoading from "@/Components/Fragments/Dashboard/Common/Table/DashTableLoading";
-import { TABLE_ORDER_HEAD_COLUMNS } from "@/Constants/Dashboard/Order/OrderConstant";
-import { rupiah } from "@/Utils/rupiahHelper";
-import { Ellipsis } from "lucide-react";
-import { memo } from "react";
 
 const OrderTable = memo(({ loading, errorMessage, orders = [], pagination, onOpenDeleteModal, onOpenEditModal, handlePageChange }) => {
   return (
@@ -39,20 +42,10 @@ const OrderTable = memo(({ loading, errorMessage, orders = [], pagination, onOpe
                 </TableCell>
                 <TableCell>{order.table?.code}</TableCell>
                 <TableCell>{rupiah(order.total_amount)}</TableCell>
-                <TableCell className="text-right">
-                  <DropDown
-                    triggerIcon={Ellipsis}
-                    buttonProps={{ variant: "ghost", size: "icon" }}
-                    items={[
-                      { key: "edit", label: "Edit", onClick: () => onOpenEditModal(order) },
-                      {
-                        key: "delete",
-                        label: "Hapus",
-                        onClick: () => onOpenDeleteModal(order),
-                        className: "text-destructive hover:text-destructive! hover:bg-destructive/10! ",
-                      },
-                    ]}
-                  />
+
+                <TableCell className="flex gap-2 text-center justify-center">
+                  <Pen className="size-4 text-success" onClick={() => onOpenEditModal(order)} />
+                  <Trash className="size-4 text-destructive" onClick={() => onOpenDeleteModal(order)} />
                 </TableCell>
               </TableRow>
             ))}

@@ -114,16 +114,24 @@ const DiningTablePage = () => {
           </div>
           <Field>
             <Label htmlFor="search">Cari Meja</Label>
-            <InputSearch id="search" onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari Meja" />
+            <InputSearch id="search" name="search" onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari Meja" />
           </Field>
           <div className="flex gap-4">
             <Field>
               <Label htmlFor="sort_staus">Status</Label>
-              <Select id="sort_status" items={STATUS_OPTIONS} onValueChange={handleStatusChange} value={filters.status || null} label="Status" placeholder="Pilih Status" />
+              <Select id="sort_status" name="sort_status" items={STATUS_OPTIONS} onValueChange={handleStatusChange} value={filters.status || null} label="Status" placeholder="Pilih Status" />
             </Field>
             <Field>
               <Label htmlFor="sort_direction">Urutan</Label>
-              <Select id="sort_direction" items={SORT_DIRECTION_OPTIONS} onValueChange={handleSortDirectionChange} value={filters.sort_direction || null} label="Urutan" placeholder="Pilih urutan" />
+              <Select
+                id="sort_direction"
+                name="sort_direction"
+                items={SORT_DIRECTION_OPTIONS}
+                onValueChange={handleSortDirectionChange}
+                value={filters.sort_direction || null}
+                label="Urutan"
+                placeholder="Pilih urutan"
+              />
             </Field>
           </div>
         </Card>
