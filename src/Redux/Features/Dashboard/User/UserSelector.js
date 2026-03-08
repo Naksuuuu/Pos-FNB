@@ -14,3 +14,5 @@ export const selectUserCreateLoading = createSelector([selectUserState], (userSt
 export const selectUserEditLoading = createSelector([selectUserState], (userState) => userState.loadingEdit);
 
 export const selectUserDeleteLoading = createSelector([selectUserState], (userState) => userState.loadingDelete);
+
+export const selectUserBulkDeleteLoading = createSelector([selectUserState], (userState) => userState.loadingBulkDelete);

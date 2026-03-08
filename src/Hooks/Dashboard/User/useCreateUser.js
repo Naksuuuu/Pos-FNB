@@ -1,26 +1,31 @@
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+import useFilterParams from "@/Hooks/Common/useFilterParams";
+
 import { createUser, fetchUsers } from "@/Redux/Features/Dashboard/User/UserSlice";
-import { selectUserCreateLoading, selectUserPagination } from "@/Redux/Features/Dashboard/User/UserSelector";
+import { selectUserCreateLoading } from "@/Redux/Features/Dashboard/User/UserSelector";
 
 const useCreateUser = () => {
+  const { setFilters } = useFilterParams();
   const dispatch = useDispatch();
   const loading = useSelector(selectUserCreateLoading);
-  const pagination = useSelector(selectUserPagination);
 
   const create = useCallback(
     async (userData) => {
       const response = await dispatch(createUser(userData)).unwrap();
+      setFilters({
+        page: 1,
+      });
+
       dispatch(
         fetchUsers({
           page: 1,
-          per_page: pagination?.per_page || 15,
         }),
       );
       return response;
     },
-    [dispatch, pagination],
+    [dispatch, setFilters],
   );
 
   return { create, loading };

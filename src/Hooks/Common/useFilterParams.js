@@ -52,6 +52,7 @@ const useFilterParams = () => {
     filters,
     updateFilters,
     resetFilters,
+    setFilters,
   };
 };
 

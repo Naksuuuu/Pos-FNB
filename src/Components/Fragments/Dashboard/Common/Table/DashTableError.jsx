@@ -1,18 +1,23 @@
-import { memo } from "react";
+import { memo, useCallback } from "react";
+
+import useFilterParams from "@/Hooks/Common/useFilterParams";
 
 import { TableCell, TableRow } from "@/Components/Elements/Shadcn/table";
 import { Button } from "@/Components/Elements/Shadcn/button";
-import useFilterParams from "@/Hooks/Common/useFilterParams";
 
 const DashTableError = memo(({ message = "Cannot connect to the server" }) => {
-  const { resetFilters } = useFilterParams();
+  const { filters, resetFilters } = useFilterParams();
+
+  const handleRetry = useCallback(() => {
+    Object.keys(filters).length === 0 || !navigator.onLine ? window.location.href() : resetFilters();
+  }, [resetFilters, filters]);
 
   return (
     <TableRow>
       <TableCell colSpan={99}>
         <div className="flex flex-col items-center justify-center gap-4 p-4 text-center text-destructive h-125">
           <p>{message}</p>
-          <Button className="ml-4" onClick={() => resetFilters()}>
+          <Button className="ml-4" onClick={() => handleRetry()}>
             Muat Ulang
           </Button>
         </div>

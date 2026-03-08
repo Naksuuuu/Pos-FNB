@@ -2,8 +2,6 @@ import { memo, useEffect } from "react";
 import { Search, X } from "lucide-react";
 
 import { Button } from "@/Components/Elements/Shadcn/button";
-import { InputGroup, InputGroupAddon, InputGroupInput } from "@/Components/Elements/Shadcn/input-group";
-import { Badge } from "@/Components/Elements/Shadcn/badge";
 import { Input } from "@/Components/Elements/Inputs/Input";
 
 const INPUT_SHORTCUT = "k";
@@ -13,7 +11,7 @@ const InputSearch = memo(({ onSearchChange, placeholder = "Search...", ...props 
     const handleKeyDown = (e) => {
       if (e.key.toLowerCase() === INPUT_SHORTCUT && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
-        const input = document.getElementById("dashboard-search-input");
+        const input = document.getElementById("search");
         if (input) {
           input.focus();
         }
@@ -35,22 +33,13 @@ const InputSearch = memo(({ onSearchChange, placeholder = "Search...", ...props 
       firstAddon={<Search />}
       lastAddon={
         props?.value ? (
-          <InputGroupAddon align="inline-end">
-            <Button
-              variant="ghost"
-              size="xs"
-              className=" text-destructive hover:text-destructive! hover:bg-destructive/10!"
-              onClick={() => onSearchChange({ target: { value: "" } })}
-            >
-              <X />
-            </Button>
-          </InputGroupAddon>
+          <Button variant="ghost" size="xs" className=" text-destructive hover:text-destructive! hover:bg-destructive/10!" onClick={() => onSearchChange({ target: { value: "" } })}>
+            <X />
+          </Button>
         ) : (
-          <InputGroupAddon align="inline-end">
-            <Button size="xs" className="bg-white!" variant="outline" disabled>
-              Ctrl + K
-            </Button>
-          </InputGroupAddon>
+          <Button size="xs" className="bg-white!" variant="outline" disabled>
+            Ctrl + K
+          </Button>
         )
       }
     />

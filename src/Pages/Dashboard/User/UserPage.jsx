@@ -1,10 +1,10 @@
-import { memo, useCallback, useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { Plus } from "lucide-react";
 
 import { SORT_BY_OPTIONS, SORT_DIRECTION_OPTIONS, SORT_ROLE_OPTIONS } from "@/Constants/Dashboard/User/UserConstant";
 
 import useAllUser from "@/Hooks/Dashboard/User/useAllUser";
-import useFilterParams from "@/Hooks/Common/useFilterParams";
+import useCheckboxUser from "@/Hooks/Dashboard/User/useCheckboxUser";
 
 import { Card } from "@/Components/Elements/Cards/Card";
 import { Button } from "@/Components/Elements/Shadcn/button";
@@ -19,73 +19,40 @@ import UserModalEdit from "@/Components/Fragments/Dashboard/User/Modal/UserModal
 import UserModalCreate from "@/Components/Fragments/Dashboard/User/Modal/UserModalCreate";
 import UserModalDelete from "@/Components/Fragments/Dashboard/User/Modal/UserModalDelete";
 import UserStatistic from "@/Components/Fragments/Dashboard/User/Statistic/UserStatistic";
+import UserModalBulkDelete from "@/Components/Fragments/Dashboard/User/Modal/UserModalBulkDelete";
 
 const UserPage = memo(() => {
-  const { filters, updateFilters, resetFilters } = useFilterParams();
-  const { users, loadUsers, loading, errorMessage, pagination, statistic } = useAllUser();
+  const {
+    users,
+    loadUsers,
+    loading,
+    errorMessage,
+    pagination,
+    statistic,
+    filters,
+    handlePageChange,
+    handleResetFilter,
+    handleSearchChange,
+    handleSortByChange,
+    handleSortDirectionChange,
+    handleSortRoleChange,
+    optimisticSearch,
+    showReset,
+  } = useAllUser();
 
-  const [selectedCreateUser, setSelectedCreateUser] = useState(null);
+  const { isChecked, setIsChecked, allItemsChecked, handleCheckboxChange, handleAllCheckboxChange } = useCheckboxUser();
+
+  // coupling reset checkbox ketika melakukan filter atau reset filter
+  useEffect(() => {
+    setIsChecked([]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filters]);
+
+  // state dan handler untuk modal
   const [selectedEditUser, setSelectedEditUser] = useState(null);
   const [selectedDeleteUser, setSelectedDeleteUser] = useState(null);
-
-  const search = filters.search || "";
-  const [optimisticSearch, setOptimisticSearch] = useState(search);
-
-  useEffect(() => {
-    setOptimisticSearch(search);
-  }, [search]);
-
-  const showReset = !!(filters.sort_by || filters.sort_direction || search || filters.role);
-
-  useEffect(() => {
-    loadUsers(filters);
-  }, [filters, loadUsers]);
-
-  const handlePageChange = useCallback(
-    (page) => {
-      updateFilters({ page });
-    },
-    [updateFilters],
-  );
-
-  const timerRef = useRef(null);
-  const handleSearchChange = useCallback(
-    (e) => {
-      setOptimisticSearch(e.target.value);
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-      }
-
-      timerRef.current = setTimeout(() => {
-        updateFilters({ search: e.target.value, page: 1 });
-      }, 300);
-    },
-    [updateFilters],
-  );
-
-  const handleSortByChange = useCallback(
-    (e) => {
-      updateFilters({ sort_by: e, page: 1 });
-    },
-    [updateFilters],
-  );
-
-  const handleSortDirectionChange = useCallback(
-    (e) => {
-      updateFilters({ sort_direction: e, page: 1 });
-    },
-    [updateFilters],
-  );
-  const handleSortRoleChange = useCallback(
-    (e) => {
-      updateFilters({ role: e, page: 1 });
-    },
-    [updateFilters],
-  );
-
-  const handleResetFilter = useCallback(() => {
-    resetFilters();
-  }, [resetFilters]);
+  const [selectedCreateUser, setSelectedCreateUser] = useState(false);
+  const [selectedBulkDeleteUser, setSelectedBulkDeleteUser] = useState(false);
 
   const handleOpenDeleteModal = useCallback((userSelected) => {
     setSelectedDeleteUser(userSelected);
@@ -99,25 +66,29 @@ const UserPage = memo(() => {
     setSelectedCreateUser(state);
   }, []);
 
+  const handleOpenBulkDelete = useCallback((state) => {
+    setSelectedBulkDeleteUser(state);
+  }, []);
+
   return (
     <>
       <UserStatistic statistic={statistic} />
 
-      <Card>
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-          <div className="col-span-full grid grid-cols-2 md:grid-cols-3 gap-4 items-end">
-            <div className="md:col-span-2">
-              <Field>
-                <Label htmlFor="search">Cari User</Label>
-                <InputSearch id="search" name="search" onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari user..." />
-              </Field>
-            </div>
-            <Button onClick={() => handleOpenCreateModal(true)}>
-              <Plus />
-              Tambah User
-            </Button>
+      <Card className="space-y-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 items-end">
+          <div className="md:col-span-2">
+            <Field>
+              <Label htmlFor="search">Cari User</Label>
+              <InputSearch id="search" name="search" onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari user..." />
+            </Field>
           </div>
+          <Button onClick={() => handleOpenCreateModal(true)}>
+            <Plus />
+            Tambah User
+          </Button>
+        </div>
 
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 items-end">
           <Field>
             <Label htmlFor="sort_by">Berdasarkan</Label>
             <Select id="sort_by" name="sort_by" items={SORT_BY_OPTIONS} onValueChange={handleSortByChange} value={filters.sort_by || null} label="Berdasarkan" placeholder="Pilih Berdasarkan" />
@@ -144,6 +115,16 @@ const UserPage = memo(() => {
       </Card>
 
       <ButtonResetFilter onResetFilter={handleResetFilter} condition={showReset} />
+      <div
+        className={`flex justify-end gap-4 transition-all overflow-hidden h-fit  duration-500 ease-out ${allItemsChecked.length > 0 ? "max-h-16 visible opacity-100 translate-y-0" : "max-h-0 invisible m-0 p-0 opacity-0 -translate-y-5 pointer-events-none"}`}
+      >
+        <Button variant="outline" onClick={() => setIsChecked([])}>
+          Batal Pilih
+        </Button>
+        <Button variant="destructive" onClick={() => handleOpenBulkDelete(true)}>
+          Hapus {allItemsChecked.length} Data Terpilih?
+        </Button>
+      </div>
 
       <Card className="overflow-hidden space-y-2">
         <UserTable
@@ -155,12 +136,16 @@ const UserPage = memo(() => {
           loadUsers={loadUsers}
           onOpenEditModal={handleOpenEditModal}
           onOpenDeleteModal={handleOpenDeleteModal}
+          isChecked={isChecked}
+          handleAllCheckboxChange={handleAllCheckboxChange}
+          handleCheckboxChange={handleCheckboxChange}
         />
       </Card>
 
       {selectedEditUser && <UserModalEdit selectedUser={selectedEditUser} onOpenModal={handleOpenEditModal} />}
-      {selectedCreateUser && <UserModalCreate isOpen={selectedCreateUser} onOpenModal={handleOpenCreateModal} />}
       {selectedDeleteUser && <UserModalDelete selectedUser={selectedDeleteUser} onOpenModal={handleOpenDeleteModal} />}
+      {selectedCreateUser && <UserModalCreate isOpen={selectedCreateUser} onOpenModal={handleOpenCreateModal} />}
+      {selectedBulkDeleteUser && <UserModalBulkDelete isOpen={selectedBulkDeleteUser} onOpenModal={handleOpenBulkDelete} items={allItemsChecked} setIsChecked={setIsChecked} />}
     </>
   );
 });

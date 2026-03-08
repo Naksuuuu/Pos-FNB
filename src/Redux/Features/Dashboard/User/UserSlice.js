@@ -8,6 +8,7 @@ const initialState = {
   loadingCreate: false,
   loadingEdit: false,
   loadingDelete: false,
+  loadingBulkDelete: false,
   filters: {
     search: null,
     sort_by: null,
@@ -18,7 +19,16 @@ const initialState = {
     admin_count: 0,
     cashier_count: 0,
   },
-  pagination: null,
+  pagination: {
+    current_page: 1,
+    last_page: 1,
+    per_page: 15,
+    total: 0,
+    from: 1,
+    to: 1,
+    next_page: null,
+    prev_page: null,
+  },
 };
 
 export const fetchUsers = createAsyncThunk("dashboard/user/fetchUsers", async (params = {}, { rejectWithValue }) => {
@@ -92,6 +102,19 @@ export const deleteUser = createAsyncThunk("dashboard/user/deleteUser", async (u
   }
 });
 
+export const bulkDeleteUsers = createAsyncThunk("dashboard/user/bulkDeleteUsers", async (userIds, { rejectWithValue }) => {
+  try {
+    const response = await UserService.bulkDelete(userIds);
+    if (response.success && response.status === 200) {
+      return response;
+    }
+  } catch (error) {
+    return rejectWithValue({
+      message: error?.message || "Failed to delete users",
+    });
+  }
+});
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -148,6 +171,15 @@ const userSlice = createSlice({
       })
       .addCase(deleteUser.rejected, (state) => {
         state.loadingDelete = false;
+      })
+      .addCase(bulkDeleteUsers.pending, (state) => {
+        state.loadingBulkDelete = true;
+      })
+      .addCase(bulkDeleteUsers.fulfilled, (state) => {
+        state.loadingBulkDelete = false;
+      })
+      .addCase(bulkDeleteUsers.rejected, (state) => {
+        state.loadingBulkDelete = false;
       });
   },
 });

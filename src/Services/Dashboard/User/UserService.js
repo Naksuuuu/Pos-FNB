@@ -32,6 +32,11 @@ const UserService = {
     const response = await apiUtils.delete(`${USER_ENDPOINT}/${userId}`);
     return response.data;
   },
+
+  bulkDelete: async (userIds) => {
+    const response = await apiUtils.delete(USER_ENDPOINT, { data: { ids: userIds } });
+    return response.data;
+  },
 };
 
 export default UserService;
