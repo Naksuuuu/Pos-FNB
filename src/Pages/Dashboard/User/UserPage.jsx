@@ -24,20 +24,19 @@ import UserModalBulkDelete from "@/Components/Fragments/Dashboard/User/Modal/Use
 const UserPage = memo(() => {
   const {
     users,
-    loadUsers,
     loading,
     errorMessage,
-    pagination,
     statistic,
+    pagination,
     filters,
     handlePageChange,
-    handleResetFilter,
+    optimisticSearch,
     handleSearchChange,
     handleSortByChange,
     handleSortDirectionChange,
     handleSortRoleChange,
-    optimisticSearch,
     showReset,
+    handleResetFilter,
   } = useAllUser();
 
   const { isChecked, setIsChecked, allItemsChecked, handleCheckboxChange, handleAllCheckboxChange } = useCheckboxUser();
@@ -66,7 +65,7 @@ const UserPage = memo(() => {
     setSelectedCreateUser(state);
   }, []);
 
-  const handleOpenBulkDelete = useCallback((state) => {
+  const handleOpenBulkDeleteModal = useCallback((state) => {
     setSelectedBulkDeleteUser(state);
   }, []);
 
@@ -75,7 +74,7 @@ const UserPage = memo(() => {
       <UserStatistic statistic={statistic} />
 
       <Card className="space-y-4">
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 items-end">
+        <div className="grid items-end grid-cols-2 gap-4 md:grid-cols-3">
           <div className="md:col-span-2">
             <Field>
               <Label htmlFor="search">Cari User</Label>
@@ -88,15 +87,10 @@ const UserPage = memo(() => {
           </Button>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 items-end">
+        <div className="grid items-end grid-cols-2 gap-4 md:grid-cols-3">
           <Field>
             <Label htmlFor="sort_by">Berdasarkan</Label>
             <Select id="sort_by" name="sort_by" items={SORT_BY_OPTIONS} onValueChange={handleSortByChange} value={filters.sort_by || null} label="Berdasarkan" placeholder="Pilih Berdasarkan" />
-          </Field>
-
-          <Field>
-            <Label htmlFor="role">Role</Label>
-            <Select id="role" name="role" items={SORT_ROLE_OPTIONS} onValueChange={handleSortRoleChange} value={filters.role || null} label="Role" placeholder="Pilih role" />
           </Field>
 
           <Field>
@@ -111,6 +105,11 @@ const UserPage = memo(() => {
               placeholder="Pilih urutan"
             />
           </Field>
+
+          <Field>
+            <Label htmlFor="role">Role</Label>
+            <Select id="role" name="role" items={SORT_ROLE_OPTIONS} onValueChange={handleSortRoleChange} value={filters.role || null} label="Role" placeholder="Pilih role" />
+          </Field>
         </div>
       </Card>
 
@@ -121,19 +120,18 @@ const UserPage = memo(() => {
         <Button variant="outline" onClick={() => setIsChecked([])}>
           Batal Pilih
         </Button>
-        <Button variant="destructive" onClick={() => handleOpenBulkDelete(true)}>
+        <Button variant="destructive" onClick={() => handleOpenBulkDeleteModal(true)}>
           Hapus {allItemsChecked.length} Data Terpilih?
         </Button>
       </div>
 
-      <Card className="overflow-hidden space-y-2">
+      <Card className="space-y-2 overflow-hidden">
         <UserTable
           loading={loading}
           users={users}
           pagination={pagination}
           handlePageChange={handlePageChange}
           errorMessage={errorMessage}
-          loadUsers={loadUsers}
           onOpenEditModal={handleOpenEditModal}
           onOpenDeleteModal={handleOpenDeleteModal}
           isChecked={isChecked}
@@ -145,7 +143,7 @@ const UserPage = memo(() => {
       {selectedEditUser && <UserModalEdit selectedUser={selectedEditUser} onOpenModal={handleOpenEditModal} />}
       {selectedDeleteUser && <UserModalDelete selectedUser={selectedDeleteUser} onOpenModal={handleOpenDeleteModal} />}
       {selectedCreateUser && <UserModalCreate isOpen={selectedCreateUser} onOpenModal={handleOpenCreateModal} />}
-      {selectedBulkDeleteUser && <UserModalBulkDelete isOpen={selectedBulkDeleteUser} onOpenModal={handleOpenBulkDelete} items={allItemsChecked} setIsChecked={setIsChecked} />}
+      {selectedBulkDeleteUser && <UserModalBulkDelete isOpen={selectedBulkDeleteUser} onOpenModal={handleOpenBulkDeleteModal} items={allItemsChecked} setIsChecked={setIsChecked} />}
     </>
   );
 });

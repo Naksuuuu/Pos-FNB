@@ -86,7 +86,6 @@ const useAllUser = () => {
     users,
     loading,
     errorMessage,
-    loadUsers,
     statistic,
     pagination,
     filters,

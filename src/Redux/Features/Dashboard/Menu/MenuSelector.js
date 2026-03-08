@@ -13,3 +13,4 @@ export const selectMenuCreateLoading = createSelector([selectMenuState], (menuSt
 export const selectMenuEditLoading = createSelector([selectMenuState], (menuState) => menuState.loadingEdit);
 
 export const selectMenuDeleteLoading = createSelector([selectMenuState], (menuState) => menuState.loadingDelete);
+export const selectMenuBulkDeleteLoading = createSelector([selectMenuState], (menuState) => menuState.loadingBulkDelete);

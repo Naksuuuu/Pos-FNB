@@ -1,13 +1,5 @@
 import { memo } from "react";
-import {
-  Pagination as PaginationMain,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/Components/Elements/Shadcn/pagination";
+import { Pagination as PaginationMain, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/Components/Elements/Shadcn/pagination";
 
 const Pagination = memo(({ pagination, onPageChange }) => {
   return (
@@ -19,7 +11,7 @@ const Pagination = memo(({ pagination, onPageChange }) => {
           </PaginationItem>
         ) : (
           <PaginationItem>
-            <PaginationPrevious className="text-muted-foreground cursor-not-allowed" text="Sebelumnya" />
+            <PaginationPrevious className="cursor-not-allowed text-muted-foreground" text="Sebelumnya" />
           </PaginationItem>
         )}
 
@@ -41,10 +33,10 @@ const Pagination = memo(({ pagination, onPageChange }) => {
           </PaginationItem>
         )}
 
-        {pagination.last_page !== pagination.current_page && pagination.last_page !== pagination.next_page && (
+        {pagination.last_page !== pagination.current_page && pagination.last_page !== pagination.next_page && pagination.next_page !== null && (
           <>
             <PaginationItem>
-              <PaginationEllipsis className="text-muted-foreground cursor-default" />
+              <PaginationEllipsis className="cursor-default text-muted-foreground" />
             </PaginationItem>
             <PaginationItem>
               <PaginationLink onClick={() => onPageChange(pagination.last_page)}>{pagination.last_page}</PaginationLink>
@@ -58,7 +50,7 @@ const Pagination = memo(({ pagination, onPageChange }) => {
           </PaginationItem>
         ) : (
           <PaginationItem>
-            <PaginationNext className="text-muted-foreground cursor-not-allowed" text="Selanjutnya" />
+            <PaginationNext className="cursor-not-allowed text-muted-foreground" text="Selanjutnya" />
           </PaginationItem>
         )}
       </PaginationContent>

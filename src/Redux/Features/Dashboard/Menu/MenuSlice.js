@@ -9,6 +9,7 @@ const initialState = {
   loadingCreate: false,
   loadingEdit: false,
   loadingDelete: false,
+  loadingBulkDelete: false,
   filters: {
     search: null,
     category_id: null,
@@ -117,6 +118,19 @@ export const editMenu = createAsyncThunk("dashboard/menu/editMenu", async ([menu
   }
 });
 
+export const bulkDeleteMenus = createAsyncThunk("dashboard/menu/bulkDeleteMenus", async (menuIds, { rejectWithValue }) => {
+  try {
+    const response = await MenuService.bulkDelete(menuIds);
+    if (response.success && response.status === 200) {
+      return response;
+    }
+  } catch (error) {
+    return rejectWithValue({
+      message: error?.message || "Failed to delete menus",
+    });
+  }
+});
+
 const menuSlice = createSlice({
   name: "menu",
   initialState,
@@ -177,6 +191,15 @@ const menuSlice = createSlice({
       })
       .addCase(deleteMenu.rejected, (state) => {
         state.loadingDelete = false;
+      })
+      .addCase(bulkDeleteMenus.pending, (state) => {
+        state.loadingBulkDelete = true;
+      })
+      .addCase(bulkDeleteMenus.fulfilled, (state) => {
+        state.loadingBulkDelete = false;
+      })
+      .addCase(bulkDeleteMenus.rejected, (state) => {
+        state.loadingBulkDelete = false;
       });
   },
 });

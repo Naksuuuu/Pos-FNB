@@ -54,6 +54,11 @@ const MenuService = {
     const response = await apiUtils.delete(`${MENU_ENDPOINT}/${menuId}`);
     return response.data;
   },
+
+  bulkDelete: async (menuIds) => {
+    const response = await apiUtils.delete(MENU_ENDPOINT, { data: { ids: menuIds } });
+    return response.data;
+  },
 };
 
 export default MenuService;
