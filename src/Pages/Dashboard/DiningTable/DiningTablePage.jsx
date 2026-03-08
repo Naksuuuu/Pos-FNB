@@ -44,10 +44,12 @@ const DiningTablePage = () => {
   const { allItemsChecked, handleAllCheckboxChange, handleCheckboxChange, isChecked, setIsChecked } = useCheckboxDiningTable();
 
   // coupling reset checkbox ketika melakukan filter atau reset filter
+  const { page: _page, ...filtersWithoutPage } = filters;
+  const filtersKey = JSON.stringify(filtersWithoutPage);
   useEffect(() => {
     setIsChecked([]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters]);
+  }, [filtersKey]);
 
   const [selectedCreateTable, setSelectedCreateTable] = useState(null);
   const [selectedEditTable, setSelectedEditTable] = useState(null);

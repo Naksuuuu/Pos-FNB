@@ -42,10 +42,12 @@ const UserPage = memo(() => {
   const { isChecked, setIsChecked, allItemsChecked, handleCheckboxChange, handleAllCheckboxChange } = useCheckboxUser();
 
   // coupling reset checkbox ketika melakukan filter atau reset filter
+  const { page: _page, ...filtersWithoutPage } = filters;
+  const filtersKey = JSON.stringify(filtersWithoutPage);
   useEffect(() => {
     setIsChecked([]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters]);
+  }, [filtersKey]);
 
   // state dan handler untuk modal
   const [selectedEditUser, setSelectedEditUser] = useState(null);

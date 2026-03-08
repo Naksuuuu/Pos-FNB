@@ -46,10 +46,13 @@ const MenuPage = memo(() => {
 
   const { allItemsChecked, handleAllCheckboxChange, handleCheckboxChange, isChecked, setIsChecked } = useCheckboxMenu();
 
+  // coupling reset checkbox ketika melakukan filter atau reset filter
+  const { page: _page, ...filtersWithoutPage } = filters;
+  const filtersKey = JSON.stringify(filtersWithoutPage);
   useEffect(() => {
     setIsChecked([]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filters]);
+  }, [filtersKey]);
 
   const [selectedEditMenu, setSelectedEditMenu] = useState(null);
   const [selectedDeleteMenu, setSelectedDeleteMenu] = useState(null);
