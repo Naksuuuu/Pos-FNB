@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ArrowLeft, Plus } from "lucide-react";
 import { Link } from "react-router";
 
 import { SORT_DIRECTION_OPTIONS, STATUS_OPTIONS } from "@/Constants/Dashboard/DiningTable/DiningTableConstant";
 
 import useAllDiningTable from "@/Hooks/Dashboard/DiningTable/useAllDiningTable";
-import useFilterParams from "@/Hooks/Common/useFilterParams";
+import useCheckboxDiningTable from "@/Hooks/Dashboard/DiningTable/useCheckboxDiningTable";
 
 import { ROUTES } from "@/Constants/Common/RouteConstant";
 
@@ -21,64 +21,38 @@ import DiningTableTable from "@/Components/Fragments/Dashboard/DiningTable/Table
 import DiningTableModalCreate from "@/Components/Fragments/Dashboard/DiningTable/Modal/DiningTableModalCreate";
 import DiningTableModalEdit from "@/Components/Fragments/Dashboard/DiningTable/Modal/DiningTableModalEdit";
 import DiningTableModalDelete from "@/Components/Fragments/Dashboard/DiningTable/Modal/DiningTableModalDelete";
+import DiningTableModalBulkDelete from "@/Components/Fragments/Dashboard/DiningTable/Modal/DiningTableModalBulkDelete";
 import DiningTableStatistic from "@/Components/Fragments/Dashboard/DiningTable/Statistic/DiningTableStatistic";
 
 const DiningTablePage = () => {
-  const { filters, updateFilters, resetFilters } = useFilterParams();
-  const { diningTables, loadDiningTables, loading, errorMessage, pagination, statistic } = useAllDiningTable();
+  const {
+    diningTables,
+    loading,
+    errorMessage,
+    pagination,
+    statistic,
+    filters,
+    showReset,
+    optimisticSearch,
+    handlePageChange,
+    handleSearchChange,
+    handleSortDirectionChange,
+    handleStatusChange,
+    handleResetFilter,
+  } = useAllDiningTable();
+
+  const { allItemsChecked, handleAllCheckboxChange, handleCheckboxChange, isChecked, setIsChecked } = useCheckboxDiningTable();
+
+  // coupling reset checkbox ketika melakukan filter atau reset filter
+  useEffect(() => {
+    setIsChecked([]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filters]);
 
   const [selectedCreateTable, setSelectedCreateTable] = useState(null);
   const [selectedEditTable, setSelectedEditTable] = useState(null);
   const [selectedDeleteTable, setSelectedDeleteTable] = useState(null);
-
-  const search = filters.search || "";
-  const [optimisticSearch, setOptimisticSearch] = useState(search);
-
-  const showReset = !!(filters.sort_direction || filters.status || search);
-
-  useEffect(() => {
-    loadDiningTables(filters);
-  }, [filters, loadDiningTables]);
-
-  const handleSortDirectionChange = useCallback(
-    (e) => {
-      updateFilters({ sort_direction: e });
-    },
-    [updateFilters],
-  );
-
-  const handleStatusChange = useCallback(
-    (e) => {
-      updateFilters({ status: e });
-    },
-    [updateFilters],
-  );
-
-  const handlePageChange = useCallback(
-    (newPage) => {
-      updateFilters({ page: newPage });
-    },
-    [updateFilters],
-  );
-
-  const timerRef = useRef(null);
-  const handleSearchChange = useCallback(
-    (e) => {
-      setOptimisticSearch(e.target.value);
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-      }
-
-      timerRef.current = setTimeout(() => {
-        updateFilters({ search: e.target.value, page: 1 });
-      }, 300);
-    },
-    [updateFilters],
-  );
-
-  const handleResetFilter = useCallback(() => {
-    resetFilters();
-  }, [resetFilters]);
+  const [selectedBulkDeleteTable, setSelectedBulkDeleteTable] = useState(false);
 
   const handleOpenCreateModal = useCallback((state) => {
     setSelectedCreateTable(state);
@@ -92,8 +66,12 @@ const DiningTablePage = () => {
     setSelectedDeleteTable(state);
   }, []);
 
+  const handleOpenBulkDeleteModal = useCallback((state) => {
+    setSelectedBulkDeleteTable(state);
+  }, []);
+
   return (
-    <div className="bg-dashboard grid grid-cols-1 xl:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 gap-4 bg-dashboard xl:grid-cols-3">
       <div className="space-y-4">
         <Button className="w-full">
           <Link to={ROUTES.DASHBOARD.INVENTORY.MENU} className="flex items-center gap-2">
@@ -139,8 +117,19 @@ const DiningTablePage = () => {
         <ButtonResetFilter condition={showReset} onResetFilter={handleResetFilter} />
       </div>
 
-      <div className="xl:col-span-2">
-        <Card className="overflow-hidden space-y-2">
+      <div className="space-y-4 xl:col-span-2">
+        <div
+          className={`flex justify-end gap-4 transition-all overflow-hidden h-fit duration-500 ease-out ${allItemsChecked.length > 0 ? "max-h-16 visible opacity-100 translate-y-0" : "max-h-0 invisible m-0 p-0 opacity-0 -translate-y-5 pointer-events-none"}`}
+        >
+          <Button variant="outline" onClick={() => setIsChecked([])}>
+            Batal Pilih
+          </Button>
+          <Button variant="destructive" onClick={() => handleOpenBulkDeleteModal(true)}>
+            Hapus {allItemsChecked.length} Data Terpilih?
+          </Button>
+        </div>
+
+        <Card className="space-y-2 overflow-hidden">
           <DiningTableTable
             diningTables={diningTables}
             loading={loading}
@@ -149,6 +138,9 @@ const DiningTablePage = () => {
             onOpenDeleteModal={handleOpenDeleteModal}
             pagination={pagination}
             handlePageChange={handlePageChange}
+            isChecked={isChecked}
+            handleAllCheckboxChange={handleAllCheckboxChange}
+            handleCheckboxChange={handleCheckboxChange}
           />
         </Card>
       </div>
@@ -156,6 +148,7 @@ const DiningTablePage = () => {
       {selectedCreateTable && <DiningTableModalCreate isOpen={!!selectedCreateTable} onOpenModal={handleOpenCreateModal} />}
       {selectedEditTable && <DiningTableModalEdit selectedDiningTable={selectedEditTable} onOpenModal={handleOpenEditModal} />}
       {selectedDeleteTable && <DiningTableModalDelete selectedDiningTable={selectedDeleteTable} onOpenModal={handleOpenDeleteModal} />}
+      {selectedBulkDeleteTable && <DiningTableModalBulkDelete isOpen={selectedBulkDeleteTable} onOpenModal={handleOpenBulkDeleteModal} items={allItemsChecked} setIsChecked={setIsChecked} />}
     </div>
   );
 };

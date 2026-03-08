@@ -11,3 +11,4 @@ export const selectDiningTableStatistic = createSelector([selectDiningTableState
 export const selectDiningTableCreateLoading = createSelector([selectDiningTableState], (diningTableState) => diningTableState.loadingCreate);
 export const selectDiningTableEditLoading = createSelector([selectDiningTableState], (diningTableState) => diningTableState.loadingEdit);
 export const selectDiningTableDeleteLoading = createSelector([selectDiningTableState], (diningTableState) => diningTableState.loadingDelete);
+export const selectDiningTableBulkDeleteLoading = createSelector([selectDiningTableState], (diningTableState) => diningTableState.loadingBulkDelete);

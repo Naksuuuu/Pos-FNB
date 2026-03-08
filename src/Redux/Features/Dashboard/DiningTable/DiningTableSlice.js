@@ -9,6 +9,7 @@ const initialState = {
   loadingCreate: false,
   loadingEdit: false,
   loadingDelete: false,
+  loadingBulkDelete: false,
   pagination: {
     current_page: 1,
     last_page: 1,
@@ -32,90 +33,91 @@ const initialState = {
   },
 };
 
-export const fetchDiningTables = createAsyncThunk(
-  "dashboard/diningTable/fetchDiningTables",
-  async (params = {}, { rejectWithValue }) => {
-    try {
-      const response = await DiningTableService.tables(params);
-      if (!response.success) {
-        return rejectWithValue(response.message || "Failed to fetch dining tables");
-      }
-
-      return response.data;
-    } catch (error) {
-      return rejectWithValue({
-        message: error?.message || "Failed to fetch dining tables",
-      });
+export const fetchDiningTables = createAsyncThunk("dashboard/diningTable/fetchDiningTables", async (params = {}, { rejectWithValue }) => {
+  try {
+    const response = await DiningTableService.tables(params);
+    if (!response.success) {
+      return rejectWithValue(response.message || "Failed to fetch dining tables");
     }
-  },
-);
 
-export const createDiningTable = createAsyncThunk(
-  "dashboard/diningTable/createDiningTable",
-  async (tableData, { rejectWithValue }) => {
-    try {
-      const response = await DiningTableService.create(tableData);
-      if (response.success && response.status === 201) {
-        return response;
-      }
-      return rejectWithValue(response.message || "Failed to create dining table");
-    } catch (error) {
-      if (error.isValidationError) {
-        return rejectWithValue({
-          message: error?.message || "Failed to create dining table",
-          validationErrors: error?.validationErrors,
-          allErrors: error?.allErrors || [],
-          status: error?.status || 400,
-        });
-      }
+    return response.data;
+  } catch (error) {
+    return rejectWithValue({
+      message: error?.message || "Failed to fetch dining tables",
+    });
+  }
+});
 
+export const createDiningTable = createAsyncThunk("dashboard/diningTable/createDiningTable", async (tableData, { rejectWithValue }) => {
+  try {
+    const response = await DiningTableService.create(tableData);
+    if (response.success && response.status === 201) {
+      return response;
+    }
+    return rejectWithValue(response.message || "Failed to create dining table");
+  } catch (error) {
+    if (error.isValidationError) {
       return rejectWithValue({
         message: error?.message || "Failed to create dining table",
+        validationErrors: error?.validationErrors,
+        allErrors: error?.allErrors || [],
+        status: error?.status || 400,
       });
     }
-  },
-);
 
-export const editDiningTable = createAsyncThunk(
-  "dashboard/diningTable/editDiningTable",
-  async ([tableId, tableData], { rejectWithValue }) => {
-    try {
-      const response = await DiningTableService.edit(tableId, tableData);
-      if (response.success && response.status === 200) {
-        return response;
-      }
-    } catch (error) {
-      if (error.isValidationError) {
-        return rejectWithValue({
-          message: error?.message || "Failed to edit dining table",
-          validationErrors: error?.validationErrors,
-          allErrors: error?.allErrors || [],
-          status: error?.status || 422,
-        });
-      }
+    return rejectWithValue({
+      message: error?.message || "Failed to create dining table",
+    });
+  }
+});
+
+export const editDiningTable = createAsyncThunk("dashboard/diningTable/editDiningTable", async ([tableId, tableData], { rejectWithValue }) => {
+  try {
+    const response = await DiningTableService.edit(tableId, tableData);
+    if (response.success && response.status === 200) {
+      return response;
+    }
+  } catch (error) {
+    if (error.isValidationError) {
       return rejectWithValue({
         message: error?.message || "Failed to edit dining table",
+        validationErrors: error?.validationErrors,
+        allErrors: error?.allErrors || [],
+        status: error?.status || 422,
       });
     }
-  },
-);
+    return rejectWithValue({
+      message: error?.message || "Failed to edit dining table",
+    });
+  }
+});
 
-export const deleteDiningTable = createAsyncThunk(
-  "dashboard/diningTable/deleteDiningTable",
-  async (tableId, { rejectWithValue }) => {
-    try {
-      const response = await DiningTableService.delete(tableId);
-      if (response.success && response.status === 200) {
-        return response;
-      }
-      return rejectWithValue(response.message || "Failed to delete dining table");
-    } catch (error) {
-      return rejectWithValue({
-        message: error?.message || "Failed to delete dining table",
-      });
+export const deleteDiningTable = createAsyncThunk("dashboard/diningTable/deleteDiningTable", async (tableId, { rejectWithValue }) => {
+  try {
+    const response = await DiningTableService.delete(tableId);
+    if (response.success && response.status === 200) {
+      return response;
     }
-  },
-);
+    return rejectWithValue(response.message || "Failed to delete dining table");
+  } catch (error) {
+    return rejectWithValue({
+      message: error?.message || "Failed to delete dining table",
+    });
+  }
+});
+
+export const bulkDeleteDiningTables = createAsyncThunk("dashboard/diningTable/bulkDeleteDiningTables", async (tableIds, { rejectWithValue }) => {
+  try {
+    const response = await DiningTableService.bulkDelete(tableIds);
+    if (response.success && response.status === 200) {
+      return response;
+    }
+  } catch (error) {
+    return rejectWithValue({
+      message: error?.message || "Failed to delete dining tables",
+    });
+  }
+});
 
 const diningTableSlice = createSlice({
   name: "diningTable",
@@ -159,6 +161,15 @@ const diningTableSlice = createSlice({
       })
       .addCase(createDiningTable.rejected, (state) => {
         state.loadingCreate = false;
+      })
+      .addCase(bulkDeleteDiningTables.pending, (state) => {
+        state.loadingBulkDelete = true;
+      })
+      .addCase(bulkDeleteDiningTables.fulfilled, (state) => {
+        state.loadingBulkDelete = false;
+      })
+      .addCase(bulkDeleteDiningTables.rejected, (state) => {
+        state.loadingBulkDelete = false;
       });
   },
 });

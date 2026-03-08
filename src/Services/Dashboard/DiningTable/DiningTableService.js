@@ -32,6 +32,11 @@ const DiningTableService = {
     const response = await apiUtils.delete(`${DINING_TABLE_ENDPOINT}/${tableId}`);
     return response.data;
   },
+
+  bulkDelete: async (tableIds) => {
+    const response = await apiUtils.delete(DINING_TABLE_ENDPOINT, { data: { ids: tableIds } });
+    return response.data;
+  },
 };
 
 export default DiningTableService;
