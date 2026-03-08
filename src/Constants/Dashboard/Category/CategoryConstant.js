@@ -7,7 +7,7 @@ const SORT_DIRECTION_OPTIONS = [
 const SORT_BY_OPTIONS = [
   { label: "Semua", value: "" },
   { label: "Nama", value: "name" },
-  { label: "Total Menu", value: "total_menu" },
+  { label: "Total Menu", value: "menu_count" },
   { label: "Tanggal Dibuat", value: "created_at" },
 ];
 

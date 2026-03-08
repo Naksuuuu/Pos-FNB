@@ -12,3 +12,4 @@ export const selectCategoryCreateLoading = createSelector([selectCategoryState],
 export const selectCategoryEditLoading = createSelector([selectCategoryState], (categoryState) => categoryState.loadingEdit);
 
 export const selectCategoryDeleteLoading = createSelector([selectCategoryState], (categoryState) => categoryState.loadingDelete);
+export const selectCategoryBulkDeleteLoading = createSelector([selectCategoryState], (categoryState) => categoryState.loadingBulkDelete);

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router";
 import { ArrowLeft, Package, Plus } from "lucide-react";
 
@@ -6,7 +6,7 @@ import { ROUTES } from "@/Constants/Common/RouteConstant";
 import { SORT_BY_OPTIONS, SORT_DIRECTION_OPTIONS } from "@/Constants/Dashboard/Category/CategoryConstant";
 
 import useAllCategory from "@/Hooks/Dashboard/Category/useAllCategory";
-import useFilterParams from "@/Hooks/Common/useFilterParams";
+import useCheckboxCategory from "@/Hooks/Dashboard/Category/useCheckboxCategory";
 
 import { Card } from "@/Components/Elements/Cards/Card";
 import { Button } from "@/Components/Elements/Shadcn/button";
@@ -20,60 +20,25 @@ import CategoryTable from "@/Components/Fragments/Dashboard/Category/Table/Categ
 import CategoryModalEdit from "@/Components/Fragments/Dashboard/Category/Modal/CategoryModalEdit";
 import CategoryModalCreate from "@/Components/Fragments/Dashboard/Category/Modal/CategoryModalCreate";
 import CategoryModalDelete from "@/Components/Fragments/Dashboard/Category/Modal/CategoryModalDelete";
+import CategoryModalBulkDelete from "@/Components/Fragments/Dashboard/Category/Modal/CategoryModalBulkDelete";
 import DashStatisticCard from "@/Components/Fragments/Dashboard/Common/Card/DashStatisticCard";
 
 const CategoryPage = () => {
-  const { categories, loading, errorMessage, loadCategories, statistic } = useAllCategory();
-  const { filters, updateFilters, resetFilters } = useFilterParams();
+  const { categories, loading, errorMessage, statistic, filters, showReset, optimisticSearch, handleSearchChange, handleSortByChange, handleSortDirectionChange, handleResetFilter } = useAllCategory();
+
+  const { isChecked, setIsChecked, handleCheckboxChange, handleAllCheckboxChange } = useCheckboxCategory();
+
+  // coupling reset checkbox ketika melakukan filter atau reset filter
+  const filtersKey = JSON.stringify(filters);
+  useEffect(() => {
+    setIsChecked([]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filtersKey]);
 
   const [selectedCreateCategory, setSelectedCreateCategory] = useState(null);
   const [selectedEditCategory, setSelectedEditCategory] = useState(null);
   const [selectedDeleteCategory, setSelectedDeleteCategory] = useState(null);
-
-  const search = filters.search || "";
-  const [optimisticSearch, setOptimisticSearch] = useState(search);
-  useEffect(() => {
-    setOptimisticSearch(search);
-  }, [search]);
-
-  const showReset = !!(filters.sort_by || filters.sort_direction || search);
-
-  useEffect(() => {
-    loadCategories(filters);
-  }, [filters, loadCategories]);
-
-  const timerRef = useRef(null);
-  const handleSearchChange = useCallback(
-    (e) => {
-      setOptimisticSearch(e.target.value);
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-      }
-
-      timerRef.current = setTimeout(() => {
-        updateFilters({ search: e.target.value });
-      }, 300);
-    },
-    [updateFilters],
-  );
-
-  const handleSortByChange = useCallback(
-    (e) => {
-      updateFilters({ sort_by: e });
-    },
-    [updateFilters],
-  );
-
-  const handleSortDirectionChange = useCallback(
-    (e) => {
-      updateFilters({ sort_direction: e });
-    },
-    [updateFilters],
-  );
-
-  const handleResetFilter = useCallback(() => {
-    resetFilters();
-  }, [resetFilters]);
+  const [selectedBulkDeleteCategory, setSelectedBulkDeleteCategory] = useState(false);
 
   const handleOpenDeleteModal = useCallback((categorySelected) => {
     setSelectedDeleteCategory(categorySelected);
@@ -85,6 +50,10 @@ const CategoryPage = () => {
 
   const handleOpenCreateModal = useCallback((state) => {
     setSelectedCreateCategory(state);
+  }, []);
+
+  const handleOpenBulkDeleteModal = useCallback((state) => {
+    setSelectedBulkDeleteCategory(state);
   }, []);
 
   return (
@@ -139,14 +108,27 @@ const CategoryPage = () => {
       </div>
 
       <div className="col-span-2 space-y-4">
+        <div
+          className={`flex justify-end gap-4 transition-all overflow-hidden h-fit duration-500 ease-out ${isChecked.length > 0 ? "max-h-16 visible opacity-100 translate-y-0" : "max-h-0 invisible m-0 p-0 opacity-0 -translate-y-5 pointer-events-none"}`}
+        >
+          <Button variant="outline" onClick={() => setIsChecked([])}>
+            Batal Pilih
+          </Button>
+          <Button variant="destructive" onClick={() => handleOpenBulkDeleteModal(true)}>
+            Hapus {isChecked.length} Data Terpilih?
+          </Button>
+        </div>
+
         <Card>
           <CategoryTable
             loading={loading}
             categories={categories}
             errorMessage={errorMessage}
-            loadCategories={loadCategories}
             onOpenEditModal={handleOpenEditModal}
             onOpenDeleteModal={handleOpenDeleteModal}
+            isChecked={isChecked}
+            handleAllCheckboxChange={handleAllCheckboxChange}
+            handleCheckboxChange={handleCheckboxChange}
           />
         </Card>
       </div>
@@ -154,6 +136,7 @@ const CategoryPage = () => {
       {selectedEditCategory && <CategoryModalEdit selectedCategory={selectedEditCategory} onOpenModal={handleOpenEditModal} />}
       {selectedCreateCategory && <CategoryModalCreate isOpen={selectedCreateCategory} onOpenModal={handleOpenCreateModal} />}
       {selectedDeleteCategory && <CategoryModalDelete selectedCategory={selectedDeleteCategory} onOpenModal={handleOpenDeleteModal} />}
+      {selectedBulkDeleteCategory && <CategoryModalBulkDelete isOpen={selectedBulkDeleteCategory} onOpenModal={handleOpenBulkDeleteModal} items={isChecked} setIsChecked={setIsChecked} />}
     </div>
   );
 };

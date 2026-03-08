@@ -30,6 +30,11 @@ const CategoryService = {
     const response = await apiUtils.delete(`${CATEGORY_ENDPOINT}/${categoryId}`);
     return response.data;
   },
+
+  bulkDelete: async (categoryIds) => {
+    const response = await apiUtils.delete(CATEGORY_ENDPOINT, { data: { ids: categoryIds } });
+    return response.data;
+  },
 };
 
 export default CategoryService;
