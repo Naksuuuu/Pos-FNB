@@ -121,12 +121,12 @@ const DiningTablePage = () => {
 
       <div className="space-y-4 xl:col-span-2">
         <div
-          className={`flex justify-end gap-4 transition-all overflow-hidden h-fit duration-500 ease-out ${allItemsChecked.length > 0 ? "max-h-16 visible opacity-100 translate-y-0" : "max-h-0 invisible m-0 p-0 opacity-0 -translate-y-5 pointer-events-none"}`}
+          className={`grid grid-cols-5 justify-end gap-4 transition-all overflow-hidden h-fit duration-500 ease-out ${allItemsChecked.length > 0 ? "max-h-16 visible opacity-100 translate-y-0" : "max-h-0 invisible m-0 p-0 opacity-0 -translate-y-5 pointer-events-none"}`}
         >
           <Button variant="outline" onClick={() => setIsChecked([])}>
             Batal Pilih
           </Button>
-          <Button variant="destructive" onClick={() => handleOpenBulkDeleteModal(true)}>
+          <Button variant="destructive" className="col-span-4" onClick={() => handleOpenBulkDeleteModal(true)}>
             Hapus {allItemsChecked.length} Data Terpilih?
           </Button>
         </div>

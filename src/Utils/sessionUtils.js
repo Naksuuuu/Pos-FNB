@@ -1,34 +1,35 @@
+import Cookies from "js-cookie";
+
 const AUTH_TOKEN_KEY = "auth_token";
 const USER_DATA_KEY = "user_data";
 
 export const setAuthToken = (token) => {
   if (token) {
-    sessionStorage.setItem(AUTH_TOKEN_KEY, token);
+    Cookies.set(AUTH_TOKEN_KEY, token, { expires: 7 });
   }
 };
 
 export const getAuthToken = () => {
-  return sessionStorage.getItem(AUTH_TOKEN_KEY);
+  return Cookies.get(AUTH_TOKEN_KEY) || null;
 };
 
 export const clearAuthToken = () => {
-  sessionStorage.removeItem(AUTH_TOKEN_KEY);
-  sessionStorage.removeItem(USER_DATA_KEY);
+  Cookies.remove(AUTH_TOKEN_KEY);
 };
 
 export const setUserData = (userData) => {
   if (userData) {
-    sessionStorage.setItem(USER_DATA_KEY, JSON.stringify(userData));
+    Cookies.set(USER_DATA_KEY, JSON.stringify(userData), { expires: 7 });
   }
 };
 
 export const getUserData = () => {
-  const userData = sessionStorage.getItem(USER_DATA_KEY);
+  const userData = Cookies.get(USER_DATA_KEY);
   return userData ? JSON.parse(userData) : null;
 };
 
 export const clearUserData = () => {
-  sessionStorage.removeItem(USER_DATA_KEY);
+  Cookies.remove(USER_DATA_KEY);
 };
 
 export const clearAllAuthData = () => {
