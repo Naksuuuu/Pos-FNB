@@ -29,11 +29,11 @@ const CATEGORY_ID_OPTIONS = [{ label: "Semua", value: "" }];
 // ];
 
 const TABLE_MENU_HEAD_COLUMNS = [
-  { header: "No", width: "w-[50px]" },
-  { header: "Nama", width: "min-w-[200px] w-3/6" },
-  { header: "Kategori", width: "w-1/6" },
-  { header: "Harga", width: "w-1/6" },
-  { header: "Status", width: "w-1/6 text-center" },
+  { header: "No", width: "w-[50px]!" },
+  { header: "Nama", width: "min-w-[200px] w-2/5" },
+  { header: "Kategori", width: "w-1/5" },
+  { header: "Harga", width: "w-1/5" },
+  { header: "Status", width: "w-1/5 text-center" },
   { header: "Aksi", width: "max-w-[50px]! text-center" },
 ];
 

@@ -18,11 +18,11 @@ const SORT_ROLE_OPTIONS = [
 
 const TABLE_USER_HEAD_COLUMNS = [
   { header: "No", width: "w-[50px]!" },
-  { header: "Nama", width: "min-w-[200px] max-w-full" },
-  { header: "Username", width: "w-[200px]" },
-  { header: "Email", width: "w-[200px]" },
-  { header: "No Handphone", width: "w-[200px]" },
-  { header: "Role", width: "w-[150px]! text-center" },
+  { header: "Nama", width: "min-w-[200px] w-2/6" },
+  { header: "Username", width: "w-1/6" },
+  { header: "Email", width: "w-1/6" },
+  { header: "No Handphone", width: "w-1/6" },
+  { header: "Role", width: "w-1/6 text-center" },
   { header: "Aksi", width: "w-[150px] text-center" },
 ];
 

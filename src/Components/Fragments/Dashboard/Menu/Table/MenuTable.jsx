@@ -66,7 +66,7 @@ const MenuTable = memo(({ loading, errorMessage, menus = [], pagination, onOpenD
                     />
                   </TableCell>
                   <TableCell>{pagination.from + index}</TableCell>
-                  <TableCell className="truncate w-2/7">
+                  <TableCell className="w-2/5 truncate">
                     <p onClick={() => handleExpandedRow(menu.id)} className="w-full whitespace-normal cursor-pointer">
                       {menu.name}
                     </p>
@@ -78,10 +78,12 @@ const MenuTable = memo(({ loading, errorMessage, menus = [], pagination, onOpenD
                       {menu.is_available ? "Tersedia" : "Tidak Tersedia"}
                     </Badge>
                   </TableCell>
-                  <TableCell className="flex justify-center gap-2 text-center">
-                    <Pen className="cursor-pointer size-4 text-success" onClick={() => onOpenEditModal(menu)} />
-                    <Trash className="cursor-pointer size-4 text-destructive" onClick={() => onOpenDeleteModal(menu)} />
-                    <Eye className="text-black cursor-pointer size-4" onClick={() => handleExpandedRow(menu.id)} />
+                  <TableCell>
+                    <div className="flex justify-center gap-2 text-center">
+                      <Pen className="cursor-pointer size-4 text-success" onClick={() => onOpenEditModal(menu)} />
+                      <Trash className="cursor-pointer size-4 text-destructive" onClick={() => onOpenDeleteModal(menu)} />
+                      <Eye className="text-black cursor-pointer size-4" onClick={() => handleExpandedRow(menu.id)} />
+                    </div>
                   </TableCell>
                 </TableRow>
 

@@ -37,7 +37,7 @@ const InputSearch = memo(({ onSearchChange, placeholder = "Search...", ...props 
             <X />
           </Button>
         ) : (
-          <Button size="xs" className="bg-white!" variant="outline" disabled>
+          <Button size="xs" className="bg-white! invisible md:visible" variant="outline" disabled>
             Ctrl + K
           </Button>
         )
