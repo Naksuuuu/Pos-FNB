@@ -19,13 +19,22 @@ const IS_AVAILABLE_OPTIONS = [
 
 const CATEGORY_ID_OPTIONS = [{ label: "Semua", value: "" }];
 
+// const TABLE_MENU_HEAD_COLUMNS = [
+//   { header: "No", width: "w-[50px]" },
+//   { header: "Nama", width: "min-w-[300px] max-w-full" },
+//   { header: "Kategori", width: "w-[300px]" },
+//   { header: "Harga", width: "w-[200px]" },
+//   { header: "Status", width: "w-[200px] text-center" },
+//   { header: "Aksi", width: "w-[150px] text-center" },
+// ];
+
 const TABLE_MENU_HEAD_COLUMNS = [
   { header: "No", width: "w-[50px]" },
-  { header: "Nama", width: "min-w-[300px] max-w-full" },
-  { header: "Kategori", width: "w-[300px]" },
-  { header: "Harga", width: "w-[200px]" },
-  { header: "Status", width: "w-[200px] text-center" },
-  { header: "Aksi", width: "w-[150px] text-center" },
+  { header: "Nama", width: "min-w-[200px] w-3/6" },
+  { header: "Kategori", width: "w-1/6" },
+  { header: "Harga", width: "w-1/6" },
+  { header: "Status", width: "w-1/6 text-center" },
+  { header: "Aksi", width: "max-w-[50px]! text-center" },
 ];
 
 export { SORY_BY_OPTIONS, SORT_DIRECTION_OPTIONS, IS_AVAILABLE_OPTIONS, CATEGORY_ID_OPTIONS, TABLE_MENU_HEAD_COLUMNS };
