@@ -1,5 +1,5 @@
 import { Fragment, memo, useCallback, useState } from "react";
-import { Pen, Trash } from "lucide-react";
+import { Eye, Pen, Trash } from "lucide-react";
 import { format } from "date-fns";
 
 import { TABLE_USER_HEAD_COLUMNS } from "@/Constants/Dashboard/User/UserConstant";
@@ -82,6 +82,7 @@ const UserTable = memo(({ loading, errorMessage, users = [], pagination, onOpenD
                     <div className="flex items-center justify-center h-full gap-2 text-center">
                       <Pen className="size-4 cursor-pointer text-success hover:text-success/80!" onClick={() => onOpenEditModal(user)} />
                       <Trash className="size-4 cursor-pointer text-destructive hover:text-destructive/80!" onClick={() => onOpenDeleteModal(user)} />
+                      <Eye className="size-4 cursor-pointer text-black" onClick={() => handleExpandedRow(user.id)} />
                     </div>
                   </TableCell>
                 </TableRow>
