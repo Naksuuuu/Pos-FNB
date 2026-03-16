@@ -18,7 +18,7 @@ const useAllUser = () => {
   const search = filters.search || "";
   const [optimisticSearch, setOptimisticSearch] = useState(search);
 
-  const showReset = !!(filters.sort_by || filters.sort_direction || search || filters.role);
+  const showReset = !!(filters.sort_by || filters.sort_direction || search || filters.role || filters.date_filter);
 
   const loadUsers = useCallback(
     async (filters = {}) => {
@@ -70,6 +70,13 @@ const useAllUser = () => {
     [updateFilters],
   );
 
+  const handleSortDateChange = useCallback(
+    (e) => {
+      updateFilters({ date_filter: e, page: 1 });
+    },
+    [updateFilters],
+  );
+
   const handleResetFilter = useCallback(() => {
     resetFilters();
   }, [resetFilters]);
@@ -95,6 +102,7 @@ const useAllUser = () => {
     handleSortByChange,
     handleSortDirectionChange,
     handleSortRoleChange,
+    handleSortDateChange,
     showReset,
     handleResetFilter,
   };

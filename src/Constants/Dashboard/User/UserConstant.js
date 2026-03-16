@@ -16,6 +16,15 @@ const SORT_ROLE_OPTIONS = [
   { label: "Kasir", value: "cashier" },
 ];
 
+const SORT_DATE_OPTIONS = [
+  { label: "Semua", value: "" },
+  { label: "7 Hari Terakhir", value: "last_7_days" },
+  { label: "1 Bulan Terakhir", value: "this_month" },
+  { label: "3 Bulan Terakhir", value: "last_3_months" },
+  { label: "1 Tahun Terakhir", value: "last_1_year" },
+  { label: "Pilih Tanggal", value: "custom" },
+];
+
 const TABLE_USER_HEAD_COLUMNS = [
   { header: "No", width: "w-[50px]!" },
   { header: "Nama", width: "min-w-[200px] w-2/6" },
@@ -31,4 +40,4 @@ const ROLE_OPTIONS = [
   { label: "Kasir", value: "cashier" },
 ];
 
-export { TABLE_USER_HEAD_COLUMNS, SORT_BY_OPTIONS, SORT_DIRECTION_OPTIONS, SORT_ROLE_OPTIONS, ROLE_OPTIONS };
+export { TABLE_USER_HEAD_COLUMNS, SORT_BY_OPTIONS, SORT_DIRECTION_OPTIONS, SORT_ROLE_OPTIONS, SORT_DATE_OPTIONS, ROLE_OPTIONS };

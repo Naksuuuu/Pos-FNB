@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useState } from "react";
 import { Plus } from "lucide-react";
 
-import { SORT_BY_OPTIONS, SORT_DIRECTION_OPTIONS, SORT_ROLE_OPTIONS } from "@/Constants/Dashboard/User/UserConstant";
+import { SORT_BY_OPTIONS, SORT_DATE_OPTIONS, SORT_DIRECTION_OPTIONS, SORT_ROLE_OPTIONS } from "@/Constants/Dashboard/User/UserConstant";
 
 import useAllUser from "@/Hooks/Dashboard/User/useAllUser";
 import useCheckboxUser from "@/Hooks/Dashboard/User/useCheckboxUser";
@@ -13,6 +13,7 @@ import { InputSearch } from "@/Components/Elements/Inputs/InputSearch";
 import { ButtonResetFilter } from "@/Components/Elements/Buttons/ButtonResetFilter";
 import { Field } from "@/Components/Elements/Shadcn/field";
 import { Label } from "@/Components/Elements/Shadcn/label";
+import { SelectDate } from "@/Components/Elements/Inputs/SelectDate";
 
 import UserTable from "@/Components/Fragments/Dashboard/User/Table/UserTable";
 import UserModalEdit from "@/Components/Fragments/Dashboard/User/Modal/UserModalEdit";
@@ -35,6 +36,7 @@ const UserPage = memo(() => {
     handleSortByChange,
     handleSortDirectionChange,
     handleSortRoleChange,
+    handleSortDateChange,
     showReset,
     handleResetFilter,
   } = useAllUser();
@@ -89,7 +91,7 @@ const UserPage = memo(() => {
           </Button>
         </div>
 
-        <div className="grid items-end grid-cols-2 gap-4 md:grid-cols-3">
+        <div className="grid items-end grid-cols-2 gap-4 md:grid-cols-4">
           <Field>
             <Label htmlFor="sort_by">Berdasarkan</Label>
             <Select id="sort_by" name="sort_by" items={SORT_BY_OPTIONS} onValueChange={handleSortByChange} value={filters.sort_by || null} label="Berdasarkan" placeholder="Pilih Berdasarkan" />
@@ -111,6 +113,10 @@ const UserPage = memo(() => {
           <Field>
             <Label htmlFor="role">Role</Label>
             <Select id="role" name="role" items={SORT_ROLE_OPTIONS} onValueChange={handleSortRoleChange} value={filters.role || null} label="Role" placeholder="Pilih role" />
+          </Field>
+          <Field>
+            <Label htmlFor="date">Tanggal</Label>
+            <SelectDate id="date" name="date" items={SORT_DATE_OPTIONS} onValueChange={handleSortDateChange} value={filters.date_filter || null} label="Tanggal" placeholder="Pilih tanggal" />
           </Field>
         </div>
       </Card>

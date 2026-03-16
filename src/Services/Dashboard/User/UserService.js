@@ -4,7 +4,7 @@ const USER_ENDPOINT = "/dashboard/users";
 
 const UserService = {
   users: async (params) => {
-    const { search, sort_by, sort_direction, role, page } = params;
+    const { search, sort_by, sort_direction, role, page, date_filter } = params;
 
     const queryParams = {
       search,
@@ -12,6 +12,7 @@ const UserService = {
       sort_direction,
       role,
       page,
+      date_filter,
     };
 
     const response = await apiUtils.get(USER_ENDPOINT, { params: queryParams });

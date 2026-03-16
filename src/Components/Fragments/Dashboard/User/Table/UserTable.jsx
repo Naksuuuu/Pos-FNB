@@ -61,7 +61,6 @@ const UserTable = memo(({ loading, errorMessage, users = [], pagination, onOpenD
                         })
                       }
                     />
-                    {console.log(user)}
                   </TableCell>
                   <TableCell>{pagination?.from ? pagination.from + index : index + 1}</TableCell>
                   <TableCell className="w-2/6 truncate">
