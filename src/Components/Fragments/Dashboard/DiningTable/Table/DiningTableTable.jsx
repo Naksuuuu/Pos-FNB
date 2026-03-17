@@ -2,7 +2,7 @@ import { memo } from "react";
 import { Pen, Trash } from "lucide-react";
 
 import { TABLE_DINING_TABLE_HEAD_COLUMNS } from "@/Constants/Dashboard/DiningTable/DiningTableConstant";
-import { PER_PAGE_OPTIONS } from "@/Constants/Common/PerPage";
+import { PER_PAGE_OPTIONS } from "@/Constants/Common/CommonConstant";
 
 import { Select } from "@/Components/Elements/Inputs/Select";
 import { Pagination } from "@/Components/Elements/Paginations/Pagination";

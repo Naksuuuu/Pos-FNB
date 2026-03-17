@@ -3,7 +3,7 @@ import { Eye, Pen, Trash } from "lucide-react";
 import { format } from "date-fns";
 
 import { MENU_STATUS_BADGE, TABLE_MENU_HEAD_COLUMNS } from "@/Constants/Dashboard/Menu/MenuConstant";
-import { PER_PAGE_OPTIONS } from "@/Constants/Common/PerPage";
+import { PER_PAGE_OPTIONS } from "@/Constants/Common/CommonConstant";
 import { rupiah } from "@/Utils/rupiahHelper";
 
 import { Select } from "@/Components/Elements/Inputs/Select";

@@ -3,7 +3,8 @@ import { Link } from "react-router";
 import { ArrowLeft, Package, Plus } from "lucide-react";
 
 import { ROUTES } from "@/Constants/Common/RouteConstant";
-import { SORT_BY_OPTIONS, SORT_DIRECTION_OPTIONS } from "@/Constants/Dashboard/Category/CategoryConstant";
+import { SORT_BY_OPTIONS } from "@/Constants/Dashboard/Category/CategoryConstant";
+import { SORT_DIRECTION_OPTIONS } from "@/Constants/Common/CommonConstant";
 
 import useAllCategory from "@/Hooks/Dashboard/Category/useAllCategory";
 import useCheckboxCategory from "@/Hooks/Dashboard/Category/useCheckboxCategory";

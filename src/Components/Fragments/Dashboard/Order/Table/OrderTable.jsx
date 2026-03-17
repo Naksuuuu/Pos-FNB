@@ -5,7 +5,7 @@ import { format } from "date-fns";
 import { rupiah } from "@/Utils/rupiahHelper";
 
 import { ORDER_STATUS_BADGE, TABLE_ORDER_HEAD_COLUMNS } from "@/Constants/Dashboard/Order/OrderConstant";
-import { PER_PAGE_OPTIONS } from "@/Constants/Common/PerPage";
+import { PER_PAGE_OPTIONS } from "@/Constants/Common/CommonConstant";
 
 import { Pagination } from "@/Components/Elements/Paginations/Pagination";
 import { Select } from "@/Components/Elements/Inputs/Select";

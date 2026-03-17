@@ -3,7 +3,7 @@ import { Eye, Pen, Trash } from "lucide-react";
 import { format } from "date-fns";
 
 import { ROLE_OPTIONS, TABLE_USER_HEAD_COLUMNS } from "@/Constants/Dashboard/User/UserConstant";
-import { PER_PAGE_OPTIONS } from "@/Constants/Common/PerPage";
+import { PER_PAGE_OPTIONS } from "@/Constants/Common/CommonConstant";
 
 import { Select } from "@/Components/Elements/Inputs/Select";
 import { Pagination } from "@/Components/Elements/Paginations/Pagination";

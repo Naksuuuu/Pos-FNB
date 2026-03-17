@@ -4,12 +4,6 @@ const STATUS_OPTIONS = [
   { label: "Ditempati", value: "occupied" },
 ];
 
-const SORT_DIRECTION_OPTIONS = [
-  { label: "Default", value: "" },
-  { label: "Terlama / Terkecil", value: "asc" },
-  { label: "Terbaru / Terbesar", value: "desc" },
-];
-
 const STATUS_OPTIONS_SCHEMA = STATUS_OPTIONS.filter((option) => option.value !== "");
 
 const TABLE_DINING_TABLE_HEAD_COLUMNS = [
@@ -31,4 +25,4 @@ const TABLE_DINING_TABLE_HEAD_COLUMNS = [
   },
 ];
 
-export { STATUS_OPTIONS, SORT_DIRECTION_OPTIONS, STATUS_OPTIONS_SCHEMA, TABLE_DINING_TABLE_HEAD_COLUMNS };
+export { STATUS_OPTIONS, STATUS_OPTIONS_SCHEMA, TABLE_DINING_TABLE_HEAD_COLUMNS };

@@ -2,7 +2,8 @@ import { useCallback, useEffect, useState } from "react";
 import { ArrowLeft, Plus } from "lucide-react";
 import { Link } from "react-router";
 
-import { SORT_DIRECTION_OPTIONS, STATUS_OPTIONS } from "@/Constants/Dashboard/DiningTable/DiningTableConstant";
+import { STATUS_OPTIONS } from "@/Constants/Dashboard/DiningTable/DiningTableConstant";
+import { SORT_DIRECTION_OPTIONS } from "@/Constants/Common/CommonConstant";
 
 import useAllDiningTable from "@/Hooks/Dashboard/DiningTable/useAllDiningTable";
 import useCheckboxDiningTable from "@/Hooks/Dashboard/DiningTable/useCheckboxDiningTable";

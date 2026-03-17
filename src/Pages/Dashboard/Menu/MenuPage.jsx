@@ -1,7 +1,8 @@
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { Plus, Settings } from "lucide-react";
 
-import { IS_AVAILABLE_OPTIONS, SORT_DIRECTION_OPTIONS, SORY_BY_OPTIONS } from "@/Constants/Dashboard/Menu/MenuConstant";
+import { IS_AVAILABLE_OPTIONS, SORY_BY_OPTIONS } from "@/Constants/Dashboard/Menu/MenuConstant";
+import { SORT_DIRECTION_OPTIONS } from "@/Constants/Common/CommonConstant";
 import { ROUTES } from "@/Constants/Common/RouteConstant";
 
 import useAllMenu from "@/Hooks/Dashboard/Menu/useAllMenu";

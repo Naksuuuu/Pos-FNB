@@ -1,9 +1,3 @@
-const SORT_DIRECTION_OPTIONS = [
-  { label: "Default", value: "" },
-  { label: "Terlama / Terkecil", value: "asc" },
-  { label: "Terbaru / Terbesar", value: "desc" },
-];
-
 const SORT_BY_OPTIONS = [
   { label: "Semua", value: "" },
   { label: "Nama", value: "name" },
@@ -18,4 +12,4 @@ const TABLE_CATEGORY_HEAD_COLUMNS = [
   { header: "Aksi", width: "w-[150px] text-center" },
 ];
 
-export { TABLE_CATEGORY_HEAD_COLUMNS, SORT_BY_OPTIONS, SORT_DIRECTION_OPTIONS };
+export { TABLE_CATEGORY_HEAD_COLUMNS, SORT_BY_OPTIONS };

@@ -1,9 +1,3 @@
-const SORT_DIRECTION_OPTIONS = [
-  { label: "Default", value: "" },
-  { label: "Terlama / Terkecil", value: "asc" },
-  { label: "Terbaru / Terbesar", value: "desc" },
-];
-
 const SORT_BY_OPTIONS = [
   { label: "Semua", value: "" },
   { label: "Nama", value: "name" },
@@ -40,4 +34,4 @@ const ROLE_OPTIONS = [
   { label: "Kasir", value: "cashier", variant: "warning" },
 ];
 
-export { TABLE_USER_HEAD_COLUMNS, SORT_BY_OPTIONS, SORT_DIRECTION_OPTIONS, SORT_ROLE_OPTIONS, SORT_DATE_OPTIONS, ROLE_OPTIONS };
+export { TABLE_USER_HEAD_COLUMNS, SORT_BY_OPTIONS, SORT_ROLE_OPTIONS, SORT_DATE_OPTIONS, ROLE_OPTIONS };

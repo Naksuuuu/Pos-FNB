@@ -5,12 +5,6 @@ const SORY_BY_OPTIONS = [
   { label: "Harga ", value: "price" },
 ];
 
-const SORT_DIRECTION_OPTIONS = [
-  { label: "Default", value: "" },
-  { label: "Terlama / Terkecil", value: "asc" },
-  { label: "Terbaru / Terbesar", value: "desc" },
-];
-
 const IS_AVAILABLE_OPTIONS = [
   { label: "Semua", value: "" },
   { label: "Tersedia", value: "1" },
@@ -42,4 +36,4 @@ const MENU_STATUS_BADGE = [
   { variant: "destructive", label: "Tidak Tersedia", value: false },
 ];
 
-export { SORY_BY_OPTIONS, SORT_DIRECTION_OPTIONS, IS_AVAILABLE_OPTIONS, CATEGORY_ID_OPTIONS, TABLE_MENU_HEAD_COLUMNS, MENU_STATUS_BADGE };
+export { SORY_BY_OPTIONS, IS_AVAILABLE_OPTIONS, CATEGORY_ID_OPTIONS, TABLE_MENU_HEAD_COLUMNS, MENU_STATUS_BADGE };
