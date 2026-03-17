@@ -4,12 +4,12 @@ const MENU_ENDPOINT = "/dashboard/menus";
 
 const MenuService = {
   menus: async (params = {}) => {
-    const { page = 1, search, sort_by, sort_direction, is_available, category_id } = params;
+    const { page = 1, search, sort_by, sort_direction, is_available, category_id, per_page } = params;
 
     const queryParams = {
       page,
       search,
-      per_page: 15,
+      per_page,
       sort_by,
       sort_direction,
       is_available,

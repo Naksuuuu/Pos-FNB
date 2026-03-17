@@ -1,11 +1,11 @@
 import { SORT_DATE_OPTIONS, STATUS_OPTIONS } from "@/Constants/Dashboard/Order/OrderConstant";
 import useAllOrder from "@/Hooks/Dashboard/Order/useAllOrder";
 
-import { Card } from "@/Components/Elements/Cards/Card";
-import { Select } from "@/Components/Elements/Inputs/Select";
-import { ButtonResetFilter } from "@/Components/Elements/Buttons/ButtonResetFilter";
 import { InputSearch } from "@/Components/Elements/Inputs/InputSearch";
+import { Select } from "@/Components/Elements/Inputs/Select";
 import { SelectDate } from "@/Components/Elements/Inputs/SelectDate";
+import { Card } from "@/Components/Elements/Cards/Card";
+import { ButtonResetFilter } from "@/Components/Elements/Buttons/ButtonResetFilter";
 import { Label } from "@/Components/Elements/Shadcn/label";
 import { Field } from "@/Components/Elements/Shadcn/field";
 
@@ -27,6 +27,7 @@ const OrderPage = () => {
     handleSearchChange,
     handleResetFilter,
     handleSortDateChange,
+    handlePerPageChange,
   } = useAllOrder();
 
   return (
@@ -51,7 +52,15 @@ const OrderPage = () => {
       <ButtonResetFilter condition={showReset} onResetFilter={handleResetFilter} />
 
       <Card className="space-y-2 ">
-        <OrderTable orders={orders} loading={loading} errorMessage={errorMessage} pagination={pagination} handlePageChange={handlePageChange} />
+        <OrderTable
+          orders={orders}
+          loading={loading}
+          errorMessage={errorMessage}
+          pagination={pagination}
+          handlePageChange={handlePageChange}
+          handlePerPageChange={handlePerPageChange}
+          filters={filters}
+        />
       </Card>
     </>
   );

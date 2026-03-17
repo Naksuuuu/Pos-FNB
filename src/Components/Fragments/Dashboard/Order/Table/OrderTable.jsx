@@ -5,8 +5,10 @@ import { format } from "date-fns";
 import { rupiah } from "@/Utils/rupiahHelper";
 
 import { ORDER_STATUS_BADGE, TABLE_ORDER_HEAD_COLUMNS } from "@/Constants/Dashboard/Order/OrderConstant";
+import { PER_PAGE_OPTIONS } from "@/Constants/Common/PerPage";
 
 import { Pagination } from "@/Components/Elements/Paginations/Pagination";
+import { Select } from "@/Components/Elements/Inputs/Select";
 import { Badge } from "@/Components/Elements/Shadcn/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/Elements/Shadcn/table";
 import { Separator } from "@/Components/Elements/Shadcn/separator";
@@ -15,7 +17,7 @@ import { Button } from "@/Components/Elements/Shadcn/button";
 import DashTableError from "@/Components/Fragments/Dashboard/Common/Table/DashTableError";
 import DashTableLoading from "@/Components/Fragments/Dashboard/Common/Table/DashTableLoading";
 
-const OrderTable = memo(({ loading, errorMessage, orders = [], pagination, handlePageChange }) => {
+const OrderTable = memo(({ loading, errorMessage, orders = [], pagination, handlePageChange, handlePerPageChange, filters }) => {
   const [expandedRowId, setExpandedRowId] = useState(null);
 
   const handleExpandedRow = useCallback((id) => {
@@ -113,7 +115,13 @@ const OrderTable = memo(({ loading, errorMessage, orders = [], pagination, handl
         </TableBody>
       </Table>
 
-      <Pagination pagination={pagination} onPageChange={handlePageChange} />
+      <div className="flex">
+        <div className="flex items-center gap-2">
+          <p className="text-nowrap">Data per halaman</p>
+          <Select items={PER_PAGE_OPTIONS} value={filters.per_page || 15} onValueChange={(value) => handlePerPageChange(Number(value))} />
+        </div>
+        <Pagination pagination={pagination} onPageChange={handlePageChange} align="end" />
+      </div>
     </>
   );
 });

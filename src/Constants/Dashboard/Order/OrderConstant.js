@@ -2,7 +2,6 @@ const STATUS_OPTIONS = [
   { label: "Semua", value: "" },
   { label: "Selesai", value: "completed" },
   { label: "Diajukan", value: "submitted" },
-  { label: "Diproses", value: "processing" },
   { label: "Dibatalkan", value: "canceled" },
 ];
 

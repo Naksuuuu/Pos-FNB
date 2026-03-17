@@ -6,14 +6,14 @@ import { SORT_BY_OPTIONS, SORT_DATE_OPTIONS, SORT_DIRECTION_OPTIONS, SORT_ROLE_O
 import useAllUser from "@/Hooks/Dashboard/User/useAllUser";
 import useCheckboxUser from "@/Hooks/Dashboard/User/useCheckboxUser";
 
+import { SelectDate } from "@/Components/Elements/Inputs/SelectDate";
+import { InputSearch } from "@/Components/Elements/Inputs/InputSearch";
+import { Select } from "@/Components/Elements/Inputs/Select";
+import { ButtonResetFilter } from "@/Components/Elements/Buttons/ButtonResetFilter";
 import { Card } from "@/Components/Elements/Cards/Card";
 import { Button } from "@/Components/Elements/Shadcn/button";
-import { Select } from "@/Components/Elements/Inputs/Select";
-import { InputSearch } from "@/Components/Elements/Inputs/InputSearch";
-import { ButtonResetFilter } from "@/Components/Elements/Buttons/ButtonResetFilter";
 import { Field } from "@/Components/Elements/Shadcn/field";
 import { Label } from "@/Components/Elements/Shadcn/label";
-import { SelectDate } from "@/Components/Elements/Inputs/SelectDate";
 
 import UserTable from "@/Components/Fragments/Dashboard/User/Table/UserTable";
 import UserModalEdit from "@/Components/Fragments/Dashboard/User/Modal/UserModalEdit";
@@ -39,6 +39,7 @@ const UserPage = memo(() => {
     handleSortDateChange,
     showReset,
     handleResetFilter,
+    handlePerPageChange,
   } = useAllUser();
 
   const { isChecked, setIsChecked, allItemsChecked, handleCheckboxChange, handleAllCheckboxChange } = useCheckboxUser();
@@ -145,6 +146,8 @@ const UserPage = memo(() => {
           isChecked={isChecked}
           handleAllCheckboxChange={handleAllCheckboxChange}
           handleCheckboxChange={handleCheckboxChange}
+          handlePerPageChange={handlePerPageChange}
+          filters={filters}
         />
       </Card>
 

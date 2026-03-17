@@ -73,6 +73,13 @@ const useAllOrder = () => {
     [updateFilters],
   );
 
+  const handlePerPageChange = useCallback(
+    (e) => {
+      updateFilters({ per_page: Number(e), page: 1 });
+    },
+    [updateFilters],
+  );
+
   useEffect(() => {
     setOptimisticSearch(search);
   }, [search]);
@@ -95,6 +102,7 @@ const useAllOrder = () => {
     handleSearchChange,
     handleResetFilter,
     handleSortDateChange,
+    handlePerPageChange,
   };
 };
 

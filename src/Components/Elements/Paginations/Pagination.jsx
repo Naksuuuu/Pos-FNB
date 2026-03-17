@@ -1,9 +1,9 @@
 import { memo } from "react";
 import { Pagination as PaginationMain, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/Components/Elements/Shadcn/pagination";
 
-const Pagination = memo(({ pagination, onPageChange }) => {
+const Pagination = memo(({ pagination, onPageChange, align = "center" }) => {
   return (
-    <PaginationMain className="">
+    <PaginationMain className={`justify-${align}`}>
       <PaginationContent className="bg-background">
         {pagination.prev_page ? (
           <PaginationItem>

@@ -6,11 +6,11 @@ import { IS_AVAILABLE_OPTIONS, SORT_DIRECTION_OPTIONS, SORY_BY_OPTIONS } from "@
 import useAllMenu from "@/Hooks/Dashboard/Menu/useAllMenu";
 import useCheckboxMenu from "@/Hooks/Dashboard/Menu/useCheckboxMenu";
 
-import { Card } from "@/Components/Elements/Cards/Card";
-import { DropDown } from "@/Components/Elements/Buttons/DropDown";
-import { ButtonResetFilter } from "@/Components/Elements/Buttons/ButtonResetFilter";
-import { Select } from "@/Components/Elements/Inputs/Select";
 import { InputSearch } from "@/Components/Elements/Inputs/InputSearch";
+import { Select } from "@/Components/Elements/Inputs/Select";
+import { Card } from "@/Components/Elements/Cards/Card";
+import { ButtonResetFilter } from "@/Components/Elements/Buttons/ButtonResetFilter";
+import { DropDown } from "@/Components/Elements/Buttons/DropDown";
 import { Field } from "@/Components/Elements/Shadcn/field";
 import { Label } from "@/Components/Elements/Shadcn/label";
 import { Button } from "@/Components/Elements/Shadcn/button";
@@ -42,6 +42,7 @@ const MenuPage = memo(() => {
     handleIsAvailableChange,
     handleCategoryIdChange,
     handleResetFilter,
+    handlePerPageChange,
   } = useAllMenu();
 
   const { allItemsChecked, handleAllCheckboxChange, handleCheckboxChange, isChecked, setIsChecked } = useCheckboxMenu();
@@ -194,6 +195,8 @@ const MenuPage = memo(() => {
           isChecked={isChecked}
           handleAllCheckboxChange={handleAllCheckboxChange}
           handleCheckboxChange={handleCheckboxChange}
+          handlePerPageChange={handlePerPageChange}
+          filters={filters}
         />
       </Card>
 

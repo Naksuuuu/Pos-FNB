@@ -4,13 +4,13 @@ const ORDER_ENDPOINT = "/dashboard/orders";
 
 const OrderService = {
   orders: async (params) => {
-    const { page = 1, search, status, date_filter } = params;
+    const { page = 1, search, status, date_filter, per_page } = params;
     const queryParams = {
       page,
       search,
       status,
       date_filter,
-      per_page: 15,
+      per_page,
     };
 
     const response = await apiUtils.get(ORDER_ENDPOINT, { params: queryParams });
