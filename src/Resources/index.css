@@ -47,6 +47,7 @@
   --dashboard: oklch(0.98 0 0);
   --success: oklch(0.76 0.177 163.223);
   --warning: oklch(0.82 0.189 84.429);
+  --info: oklch(0.4742 0.2223 267.38);
 }
 
 @theme inline {
@@ -93,6 +94,7 @@
   --color-dashboard: var(--dashboard);
   --color-success: var(--success);
   --color-warning: var(--warning);
+  --color-info: var(--info);
 }
 
 /* .dark {

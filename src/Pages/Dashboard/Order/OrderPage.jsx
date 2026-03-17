@@ -51,7 +51,7 @@ const OrderPage = () => {
       <ButtonResetFilter condition={showReset} onResetFilter={handleResetFilter} />
 
       <Card className="space-y-2 ">
-        <OrderTable orders={orders} loading={loading} errorMessage={errorMessage} pagination={pagination} onOpenDeleteModal={() => {}} onOpenEditModal={() => {}} handlePageChange={handlePageChange} />
+        <OrderTable orders={orders} loading={loading} errorMessage={errorMessage} pagination={pagination} handlePageChange={handlePageChange} />
       </Card>
     </>
   );
