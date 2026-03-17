@@ -16,9 +16,22 @@ const DashNavbar = () => {
     await dispatch(LogoutUser()).unwrap();
   }, [dispatch]);
 
+  const handleToggleFullscreen = useCallback(() => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch((err) => {
+        console.error(`Gagal masuk mode fullscreen: ${err.message}`);
+      });
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+    }
+  }, []);
+
   const categoryItems = useMemo(
     () => [
       { key: "profile", label: "Profile", to: "/dashboard/profile" },
+      { key: "fullscreen", label: "Layar Penuh", onClick: handleToggleFullscreen },
       {
         key: "logout",
         label: "Logout",
@@ -26,12 +39,12 @@ const DashNavbar = () => {
         className: "text-destructive hover:text-destructive/80!",
       },
     ],
-    [handleLogout],
+    [handleLogout, handleToggleFullscreen],
   );
 
   return (
-    <div className="sticky top-0 left-0 right-0 border-b bg-background z-10">
-      <div className="flex items-center justify-between h-18 p-4 ">
+    <div className="sticky top-0 left-0 right-0 z-10 border-b bg-background">
+      <div className="flex items-center justify-between p-4 h-18 ">
         <div>
           <SidebarTrigger />
         </div>
@@ -46,10 +59,10 @@ const DashNavbar = () => {
                 </div>
                 <div className="flex flex-col">
                   <h3 className="font-semibold leading-none">{user?.username}</h3>
-                  <p className="text-sm text-muted-foreground leading-none">{user?.role}</p>
+                  <p className="text-sm leading-none text-muted-foreground">{user?.role}</p>
                 </div>
               </div>
-              <ChevronDown className="in-data-popup-open:rotate-180 transition-all duration-300" />
+              <ChevronDown className="transition-all duration-300 in-data-popup-open:rotate-180" />
             </div>
           }
           items={categoryItems}

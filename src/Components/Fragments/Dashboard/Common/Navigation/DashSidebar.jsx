@@ -2,7 +2,7 @@ import { memo, useCallback, useMemo } from "react";
 import { Link, useLocation } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 
-import { ChevronRight, LogOut } from "lucide-react";
+import { ChevronRight, Expand, LogOut } from "lucide-react";
 
 import { ROUTES } from "@/Constants/Common/RouteConstant";
 import { SidebarItem } from "@/Context/SidebarItem";
@@ -27,10 +27,7 @@ import { selectAuthRole } from "@/Redux/Features/Auth/Login/LoginSelector";
 
 const CreateSidebar = memo(({ pathname }) => {
   const currentRole = useSelector(selectAuthRole);
-  const SIDEBAR_ITEMS = useMemo(
-    () => SidebarItem.filter((item) => item.allowed_roles.includes(currentRole)),
-    [currentRole],
-  );
+  const SIDEBAR_ITEMS = useMemo(() => SidebarItem.filter((item) => item.allowed_roles.includes(currentRole)), [currentRole]);
   const dispatch = useDispatch();
 
   const handleLogout = useCallback(async () => {
@@ -43,7 +40,7 @@ const CreateSidebar = memo(({ pathname }) => {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
-              className="py-6 w-full text-center"
+              className="w-full py-6 text-center"
               render={
                 <Link to={ROUTES.PUBLIC.HOME}>
                   <h1 className="text-2xl font-extrabold tracking-tight">
@@ -67,7 +64,7 @@ const CreateSidebar = memo(({ pathname }) => {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <SidebarGroup>
+        <SidebarGroup className="items-center gap-1 p-0 font-semibold tracking-wide">
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton
