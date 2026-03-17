@@ -70,6 +70,13 @@ const useAllDiningTable = () => {
     [updateFilters],
   );
 
+  const handlePerPageChange = useCallback(
+    (e) => {
+      updateFilters({ per_page: Number(e), page: 1 });
+    },
+    [updateFilters],
+  );
+
   const handleResetFilter = useCallback(() => {
     resetFilters();
   }, [resetFilters]);
@@ -96,6 +103,7 @@ const useAllDiningTable = () => {
     handleSortDirectionChange,
     handleStatusChange,
     handleResetFilter,
+    handlePerPageChange,
   };
 };
 

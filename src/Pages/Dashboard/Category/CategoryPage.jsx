@@ -8,11 +8,11 @@ import { SORT_BY_OPTIONS, SORT_DIRECTION_OPTIONS } from "@/Constants/Dashboard/C
 import useAllCategory from "@/Hooks/Dashboard/Category/useAllCategory";
 import useCheckboxCategory from "@/Hooks/Dashboard/Category/useCheckboxCategory";
 
-import { Card } from "@/Components/Elements/Cards/Card";
-import { Button } from "@/Components/Elements/Shadcn/button";
 import { Select } from "@/Components/Elements/Inputs/Select";
 import { InputSearch } from "@/Components/Elements/Inputs/InputSearch";
 import { ButtonResetFilter } from "@/Components/Elements/Buttons/ButtonResetFilter";
+import { Card } from "@/Components/Elements/Cards/Card";
+import { Button } from "@/Components/Elements/Shadcn/button";
 import { Field } from "@/Components/Elements/Shadcn/field";
 import { Label } from "@/Components/Elements/Shadcn/label";
 
@@ -57,7 +57,7 @@ const CategoryPage = () => {
   }, []);
 
   return (
-    <div className="bg-dashboard grid grid-cols-1 xl:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 gap-4 bg-dashboard xl:grid-cols-3">
       <div className="space-y-4">
         <Button className="w-full">
           <Link to={ROUTES.DASHBOARD.INVENTORY.MENU} className="flex items-center gap-2">
@@ -84,7 +84,7 @@ const CategoryPage = () => {
               <InputSearch id="search" name="search" onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari kategori..." />
             </Field>
           </div>
-          <div className="w-full flex justify-between gap-4">
+          <div className="flex justify-between w-full gap-4">
             <Field>
               <Label htmlFor="sort-by">Berdasarkan</Label>
               <Select id="sort-by" name="sort-by" items={SORT_BY_OPTIONS} onValueChange={handleSortByChange} value={filters.sort_by || null} label="Berdasarkan" placeholder="Pilih Berdasarkan" />

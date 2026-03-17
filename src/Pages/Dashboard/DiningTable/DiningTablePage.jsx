@@ -39,6 +39,7 @@ const DiningTablePage = () => {
     handleSortDirectionChange,
     handleStatusChange,
     handleResetFilter,
+    handlePerPageChange,
   } = useAllDiningTable();
 
   const { allItemsChecked, handleAllCheckboxChange, handleCheckboxChange, isChecked, setIsChecked } = useCheckboxDiningTable();
@@ -143,6 +144,8 @@ const DiningTablePage = () => {
             isChecked={isChecked}
             handleAllCheckboxChange={handleAllCheckboxChange}
             handleCheckboxChange={handleCheckboxChange}
+            handlePerPageChange={handlePerPageChange}
+            filters={filters}
           />
         </Card>
       </div>
