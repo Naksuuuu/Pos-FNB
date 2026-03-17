@@ -15,8 +15,9 @@ const initialState = {
   },
   statistic: {
     total_order: 0,
-    pending: 0,
+    submitted: 0,
     completed: 0,
+    processing: 0,
     canceled: 0,
   },
   pagination: {
@@ -61,8 +62,9 @@ const orderSlice = createSlice({
         state.orders = action.payload.orders;
         state.statistic = {
           total_order: parseInt(action.payload.statistic.total_order),
-          pending: parseInt(action.payload.statistic.pending),
+          submitted: parseInt(action.payload.statistic.submitted),
           completed: parseInt(action.payload.statistic.completed),
+          processing: parseInt(action.payload.statistic.processing),
           canceled: parseInt(action.payload.statistic.canceled),
         };
         state.pagination = {
