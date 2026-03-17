@@ -2,6 +2,7 @@ import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { Plus, Settings } from "lucide-react";
 
 import { IS_AVAILABLE_OPTIONS, SORT_DIRECTION_OPTIONS, SORY_BY_OPTIONS } from "@/Constants/Dashboard/Menu/MenuConstant";
+import { ROUTES } from "@/Constants/Common/RouteConstant";
 
 import useAllMenu from "@/Hooks/Dashboard/Menu/useAllMenu";
 import useCheckboxMenu from "@/Hooks/Dashboard/Menu/useCheckboxMenu";
@@ -89,7 +90,7 @@ const MenuPage = memo(() => {
 
   const categoryItems = useMemo(
     () => [
-      { key: "list-cat", label: "Lihat Semua Kategori", to: "/dashboard/inventory/category" },
+      { key: "list-cat", label: "Lihat Semua Kategori", to: ROUTES.DASHBOARD.INVENTORY.CATEGORY },
       { key: "add-cat", label: "Tambah Kategori", onClick: () => handleOpenCreateCategoryModal(true) },
     ],
     [handleOpenCreateCategoryModal],
@@ -97,7 +98,7 @@ const MenuPage = memo(() => {
 
   const tableItems = useMemo(
     () => [
-      { key: "list-table", label: "Lihat Semua Meja", to: "/dashboard/inventory/table" },
+      { key: "list-table", label: "Lihat Semua Meja", to: ROUTES.DASHBOARD.INVENTORY.TABLE },
       { key: "add-table", label: "Tambah Meja", onClick: () => handleOpenCreateDiningTableModal(true) },
     ],
     [handleOpenCreateDiningTableModal],

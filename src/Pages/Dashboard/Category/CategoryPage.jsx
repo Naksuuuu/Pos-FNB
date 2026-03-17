@@ -59,12 +59,15 @@ const CategoryPage = () => {
   return (
     <div className="grid grid-cols-1 gap-4 bg-dashboard xl:grid-cols-3">
       <div className="space-y-4">
-        <Button className="w-full">
-          <Link to={ROUTES.DASHBOARD.INVENTORY.MENU} className="flex items-center gap-2">
-            <ArrowLeft className="size-4" />
-            Kembali Ke Managemen Menu
-          </Link>
-        </Button>
+        <Button
+          className="w-full"
+          render={
+            <Link to={ROUTES.DASHBOARD.INVENTORY.MENU} className="flex items-center gap-2">
+              <ArrowLeft className="size-4" />
+              Kembali Ke Managemen Menu
+            </Link>
+          }
+        ></Button>
         <Card className="space-y-4">
           <div>
             <h2 className="font-semibold ">Statistik Kategori</h2>

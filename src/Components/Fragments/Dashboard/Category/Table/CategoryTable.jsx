@@ -5,6 +5,7 @@ import { TABLE_CATEGORY_HEAD_COLUMNS } from "@/Constants/Dashboard/Category/Cate
 
 import { Checkbox } from "@/Components/Elements/Shadcn/checkbox";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/Elements/Shadcn/table";
+import { Button } from "@/Components/Elements/Shadcn/button";
 
 import DashTableError from "@/Components/Fragments/Dashboard/Common/Table/DashTableError";
 import DashTableLoading from "@/Components/Fragments/Dashboard/Common/Table/DashTableLoading";
@@ -26,7 +27,7 @@ const CategoryTable = memo(({ loading, errorMessage, categories = [], onOpenDele
           </TableRow>
         </TableHeader>
         <TableBody>
-          {loading && !errorMessage && <DashTableLoading rows="15" columns={TABLE_CATEGORY_HEAD_COLUMNS.length + 1} />}
+          {loading && !errorMessage && <DashTableLoading rows="15" columns={TABLE_CATEGORY_HEAD_COLUMNS.length + 1} actionCountLoading={2} />}
           {errorMessage && !loading && <DashTableError message={errorMessage} />}
           {!loading && !errorMessage && categories.length < 1 && <DashTableError message="Tidak ada data kategori" />}
           {!loading &&
@@ -40,8 +41,14 @@ const CategoryTable = memo(({ loading, errorMessage, categories = [], onOpenDele
                 <TableCell>{category.name}</TableCell>
                 <TableCell className="text-center">{category.menu_count}</TableCell>
                 <TableCell className="flex gap-2 text-center justify-center">
-                  <Pen className="size-4 text-success" onClick={() => onOpenEditModal(category)} />
-                  <Trash className="size-4 text-destructive" onClick={() => onOpenDeleteModal(category)} />
+                  <div className="flex items-center justify-center h-full gap-2 text-center">
+                    <Button variant="outline" onClick={() => onOpenEditModal(category)}>
+                      <Pen className="cursor-pointer size-4 text-success" />
+                    </Button>
+                    <Button variant="outline" onClick={() => onOpenDeleteModal(category)}>
+                      <Trash className="cursor-pointer size-4 text-destructive" />
+                    </Button>
+                  </div>
                 </TableCell>
               </TableRow>
             ))}

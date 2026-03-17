@@ -7,6 +7,7 @@ import { PER_PAGE_OPTIONS } from "@/Constants/Common/PerPage";
 import { Select } from "@/Components/Elements/Inputs/Select";
 import { Pagination } from "@/Components/Elements/Paginations/Pagination";
 import { Badge } from "@/Components/Elements/Shadcn/badge";
+import { Button } from "@/Components/Elements/Shadcn/button";
 import { Checkbox } from "@/Components/Elements/Shadcn/checkbox";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/Elements/Shadcn/table";
 
@@ -52,7 +53,7 @@ const DiningTableTable = memo(
             </TableRow>
           </TableHeader>
           <TableBody>
-            {loading && !errorMessage && <DashTableLoading rows={15} columns={TABLE_DINING_TABLE_HEAD_COLUMNS.length + 1} />}
+            {loading && !errorMessage && <DashTableLoading rows={15} columns={TABLE_DINING_TABLE_HEAD_COLUMNS.length + 1} actionCountLoading={2} />}
             {errorMessage && !loading && <DashTableError message={errorMessage} />}
             {!loading && !errorMessage && diningTables.length < 1 && <DashTableError message="Tidak ada data meja" />}
             {!loading &&
@@ -80,8 +81,14 @@ const DiningTableTable = memo(
                     )}
                   </TableCell>
                   <TableCell className="flex justify-center gap-2 text-center">
-                    <Pen className="size-4 text-success" onClick={() => onOpenEditModal(table)} />
-                    <Trash className="size-4 text-destructive" onClick={() => onOpenDeleteModal(table)} />
+                    <div className="flex items-center justify-center h-full gap-2 text-center">
+                      <Button variant="outline" onClick={() => onOpenEditModal(table)}>
+                        <Pen className="cursor-pointer size-4 text-success" />
+                      </Button>
+                      <Button variant="outline" onClick={() => onOpenDeleteModal(table)}>
+                        <Trash className="cursor-pointer size-4 text-destructive" />
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
