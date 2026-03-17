@@ -65,16 +65,7 @@ const UserForm = ({ errors, control, register, type = "create" }) => {
             name="role"
             control={control}
             render={({ field }) => (
-              <Select
-                items={ROLE_OPTIONS}
-                label="Role User"
-                id="role"
-                name="role"
-                placeholder="Pilih role"
-                value={field.value || ""}
-                onValueChange={(val) => field.onChange(val)}
-                aria-invalid={!!errors.role}
-              />
+              <Select items={ROLE_OPTIONS} id="role" name="role" placeholder="Pilih role" value={field.value || ""} onValueChange={(val) => field.onChange(val)} aria-invalid={!!errors.role} />
             )}
           />
           {errors.role && <FieldError>{errors.role.message}</FieldError>}

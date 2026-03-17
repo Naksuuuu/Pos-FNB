@@ -136,7 +136,7 @@ const MenuTable = memo(
         <div className="flex">
           <div className="flex items-center gap-2">
             <p className="text-nowrap">Data per halaman</p>
-            <Select items={PER_PAGE_OPTIONS} value={filters.per_page || 15} onValueChange={(value) => handlePerPageChange(Number(value))} />
+            <Select id="per-page" name="per-page" items={PER_PAGE_OPTIONS} value={filters.per_page || 15} onValueChange={(value) => handlePerPageChange(Number(value))} />
           </div>
           <Pagination pagination={pagination} onPageChange={handlePageChange} align="end" />
         </div>

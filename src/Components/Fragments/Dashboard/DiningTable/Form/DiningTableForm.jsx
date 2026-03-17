@@ -28,7 +28,6 @@ const DiningTableForm = ({ register, errors, control }) => {
             render={({ field }) => (
               <Select
                 items={STATUS_OPTIONS_SCHEMA}
-                label="Status"
                 id="status"
                 name="status"
                 placeholder="Pilih status"

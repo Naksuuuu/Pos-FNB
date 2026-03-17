@@ -41,11 +41,11 @@ const OrderPage = () => {
         </Field>
         <Field>
           <Label htmlFor="status">Status</Label>
-          <Select id="status" name="status" items={STATUS_OPTIONS} label="Status" placeholder="Pilih Status" onValueChange={handleStatusChange} value={filters.status || null} />
+          <Select id="status" name="status" items={STATUS_OPTIONS} placeholder="Pilih Status" onValueChange={handleStatusChange} value={filters.status || null} />
         </Field>
         <Field>
           <Label htmlFor="date">Tanggal</Label>
-          <SelectDate id="date" name="date" items={SORT_DATE_OPTIONS} label="Tanggal" placeholder="Pilih Tanggal" onValueChange={handleSortDateChange} value={filters.date_filter || null} />
+          <SelectDate id="date" name="date" items={SORT_DATE_OPTIONS} placeholder="Pilih Tanggal" onValueChange={handleSortDateChange} value={filters.date_filter || null} />
         </Field>
       </Card>
 

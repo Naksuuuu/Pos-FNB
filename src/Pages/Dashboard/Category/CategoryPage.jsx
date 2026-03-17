@@ -87,7 +87,7 @@ const CategoryPage = () => {
           <div className="flex justify-between w-full gap-4">
             <Field>
               <Label htmlFor="sort-by">Berdasarkan</Label>
-              <Select id="sort-by" name="sort-by" items={SORT_BY_OPTIONS} onValueChange={handleSortByChange} value={filters.sort_by || null} label="Berdasarkan" placeholder="Pilih Berdasarkan" />
+              <Select id="sort-by" name="sort-by" items={SORT_BY_OPTIONS} onValueChange={handleSortByChange} value={filters.sort_by || null} placeholder="Pilih Berdasarkan" />
             </Field>
             <Field>
               <Label htmlFor="sort-direction">Urutan</Label>
@@ -97,7 +97,6 @@ const CategoryPage = () => {
                 items={SORT_DIRECTION_OPTIONS}
                 onValueChange={handleSortDirectionChange}
                 value={filters.sort_direction || null}
-                label="Urutan"
                 placeholder="Pilih Urutan"
               />
             </Field>

@@ -30,14 +30,14 @@ const UserPage = memo(() => {
     statistic,
     pagination,
     filters,
-    handlePageChange,
+    showReset,
     optimisticSearch,
+    handlePageChange,
     handleSearchChange,
     handleSortByChange,
     handleSortDirectionChange,
     handleSortRoleChange,
     handleSortDateChange,
-    showReset,
     handleResetFilter,
     handlePerPageChange,
   } = useAllUser();
@@ -95,7 +95,7 @@ const UserPage = memo(() => {
         <div className="grid items-end grid-cols-2 gap-4 md:grid-cols-4">
           <Field>
             <Label htmlFor="sort_by">Berdasarkan</Label>
-            <Select id="sort_by" name="sort_by" items={SORT_BY_OPTIONS} onValueChange={handleSortByChange} value={filters.sort_by || null} label="Berdasarkan" placeholder="Pilih Berdasarkan" />
+            <Select id="sort_by" name="sort_by" items={SORT_BY_OPTIONS} onValueChange={handleSortByChange} value={filters.sort_by || null} placeholder="Pilih Berdasarkan" />
           </Field>
 
           <Field>
@@ -106,18 +106,17 @@ const UserPage = memo(() => {
               items={SORT_DIRECTION_OPTIONS}
               onValueChange={handleSortDirectionChange}
               value={filters.sort_direction || null}
-              label="Urutan"
               placeholder="Pilih urutan"
             />
           </Field>
 
           <Field>
             <Label htmlFor="role">Role</Label>
-            <Select id="role" name="role" items={SORT_ROLE_OPTIONS} onValueChange={handleSortRoleChange} value={filters.role || null} label="Role" placeholder="Pilih role" />
+            <Select id="role" name="role" items={SORT_ROLE_OPTIONS} onValueChange={handleSortRoleChange} value={filters.role || null} placeholder="Pilih role" />
           </Field>
           <Field>
             <Label htmlFor="date">Tanggal</Label>
-            <SelectDate id="date" name="date" items={SORT_DATE_OPTIONS} onValueChange={handleSortDateChange} value={filters.date_filter || null} label="Tanggal" placeholder="Pilih tanggal" />
+            <SelectDate id="date" name="date" items={SORT_DATE_OPTIONS} onValueChange={handleSortDateChange} value={filters.date_filter || null} placeholder="Pilih tanggal" />
           </Field>
         </div>
       </Card>

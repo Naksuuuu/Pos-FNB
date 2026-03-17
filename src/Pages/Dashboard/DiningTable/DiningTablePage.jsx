@@ -100,7 +100,7 @@ const DiningTablePage = () => {
           <div className="flex gap-4">
             <Field>
               <Label htmlFor="sort_staus">Status</Label>
-              <Select id="sort_status" name="sort_status" items={STATUS_OPTIONS} onValueChange={handleStatusChange} value={filters.status || null} label="Status" placeholder="Pilih Status" />
+              <Select id="sort_status" name="sort_status" items={STATUS_OPTIONS} onValueChange={handleStatusChange} value={filters.status || null} placeholder="Pilih Status" />
             </Field>
             <Field>
               <Label htmlFor="sort_direction">Urutan</Label>
@@ -110,7 +110,6 @@ const DiningTablePage = () => {
                 items={SORT_DIRECTION_OPTIONS}
                 onValueChange={handleSortDirectionChange}
                 value={filters.sort_direction || null}
-                label="Urutan"
                 placeholder="Pilih urutan"
               />
             </Field>

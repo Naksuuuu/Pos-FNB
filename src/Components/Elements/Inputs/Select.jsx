@@ -1,15 +1,7 @@
 import { memo } from "react";
-import {
-  Select as SelectMain,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/Components/Elements/Shadcn/select";
+import { Select as SelectMain, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/Components/Elements/Shadcn/select";
 
-const Select = memo(({ items, label, placeholder, ...props }) => {
+const Select = memo(({ items, placeholder, ...props }) => {
   const ariaInvalid = props["aria-invalid"] || false;
 
   return (
@@ -19,7 +11,6 @@ const Select = memo(({ items, label, placeholder, ...props }) => {
       </SelectTrigger>
       <SelectContent alignItemWithTrigger={false}>
         <SelectGroup>
-          <SelectLabel>{label || "Cari Berdasarkan"}</SelectLabel>
           {items.map((item) => (
             <SelectItem key={item.value} value={item.value}>
               {item.label}

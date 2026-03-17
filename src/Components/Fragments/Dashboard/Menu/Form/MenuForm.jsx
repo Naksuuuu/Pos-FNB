@@ -118,7 +118,6 @@ const MenuForm = ({ errors, control, register, categoryOptions, type = "create",
             render={({ field }) => (
               <Select
                 items={categoryOptions}
-                label="Kategori"
                 id="category_id_select"
                 name="category_id"
                 placeholder="Pilih kategori"
