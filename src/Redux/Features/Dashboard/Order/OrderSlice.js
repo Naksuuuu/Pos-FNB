@@ -17,7 +17,6 @@ const initialState = {
     total_order: 0,
     submitted: 0,
     completed: 0,
-    processing: 0,
     canceled: 0,
   },
   pagination: {

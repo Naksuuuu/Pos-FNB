@@ -1,14 +1,39 @@
+import { useEffect } from "react";
 import Toaster from "@/Components/Elements/Toasts/Toaster";
 import DashNavbar from "@/Components/Fragments/Dashboard/Common/Navigation/DashNavbar";
 import DashSidebar from "@/Components/Fragments/Dashboard/Common/Navigation/DashSidebar";
 
 const DashLayout = ({ children }) => {
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "F11") {
+        e.preventDefault();
+
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch((err) => {
+            console.error(`Gagal masuk mode fullscreen: ${err.message}`);
+          });
+        } else {
+          if (document.exitFullscreen) {
+            document.exitFullscreen();
+          }
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
   return (
     <DashSidebar>
       <main className="relative w-full bg-dashboard">
         <DashNavbar />
 
-        <div className="mx-2 md:mx-4 my-2 md:my-4 space-y-4">{children}</div>
+        <div className="mx-2 my-2 space-y-4 md:mx-4 md:my-4">{children}</div>
         <Toaster />
       </main>
     </DashSidebar>
