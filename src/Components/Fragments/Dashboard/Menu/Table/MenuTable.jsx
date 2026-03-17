@@ -2,7 +2,7 @@ import { Fragment, memo, useCallback, useState } from "react";
 import { Eye, Pen, Trash } from "lucide-react";
 import { format } from "date-fns";
 
-import { TABLE_MENU_HEAD_COLUMNS } from "@/Constants/Dashboard/Menu/MenuConstant";
+import { MENU_STATUS_BADGE, TABLE_MENU_HEAD_COLUMNS } from "@/Constants/Dashboard/Menu/MenuConstant";
 import { rupiah } from "@/Utils/rupiahHelper";
 
 import { Badge } from "@/Components/Elements/Shadcn/badge";
@@ -14,6 +14,7 @@ import { ImageWithFallback } from "@/Components/Elements/Images/ImageWithFallbac
 
 import DashTableError from "@/Components/Fragments/Dashboard/Common/Table/DashTableError";
 import DashTableLoading from "@/Components/Fragments/Dashboard/Common/Table/DashTableLoading";
+import { Button } from "@/Components/Elements/Shadcn/button";
 
 const MenuTable = memo(({ loading, errorMessage, menus = [], pagination, onOpenDeleteModal, onOpenEditModal, handlePageChange, isChecked, handleAllCheckboxChange, handleCheckboxChange }) => {
   const [expandedRowId, setExpandedRowId] = useState(null);
@@ -46,7 +47,7 @@ const MenuTable = memo(({ loading, errorMessage, menus = [], pagination, onOpenD
           </TableRow>
         </TableHeader>
         <TableBody>
-          {loading && !errorMessage && <DashTableLoading rows="15" columns={TABLE_MENU_HEAD_COLUMNS.length + 1} />}
+          {loading && !errorMessage && <DashTableLoading rows="15" columns={TABLE_MENU_HEAD_COLUMNS.length + 1} actionCountLoading={3} />}
           {errorMessage && !loading && <DashTableError message={errorMessage} />}
           {menus.length < 1 && !loading && <DashTableError message="Tidak ada data menu" />}
           {!loading &&
@@ -74,15 +75,21 @@ const MenuTable = memo(({ loading, errorMessage, menus = [], pagination, onOpenD
                   <TableCell>{menu.category?.name ?? "Tidak ada Kategorgi"}</TableCell>
                   <TableCell>{rupiah(menu.price)}</TableCell>
                   <TableCell className="text-center">
-                    <Badge variant={menu.is_available ? "success" : "destructive"} className="capitalize">
-                      {menu.is_available ? "Tersedia" : "Tidak Tersedia"}
+                    <Badge variant={MENU_STATUS_BADGE.find((status) => status.value === menu.is_available)?.variant || "info"} className="capitalize">
+                      {MENU_STATUS_BADGE.find((status) => status.value === menu.is_available)?.label || (menu.is_available ? "Tersedia" : "Tidak Tersedia")}
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    <div className="flex justify-center gap-2 text-center">
-                      <Pen className="cursor-pointer size-4 text-success" onClick={() => onOpenEditModal(menu)} />
-                      <Trash className="cursor-pointer size-4 text-destructive" onClick={() => onOpenDeleteModal(menu)} />
-                      <Eye className="text-black cursor-pointer size-4" onClick={() => handleExpandedRow(menu.id)} />
+                    <div className="flex items-center justify-center h-full gap-2 text-center">
+                      <Button variant="outline" onClick={() => onOpenEditModal(menu)}>
+                        <Pen className="cursor-pointer size-4 text-success" />
+                      </Button>
+                      <Button variant="outline" onClick={() => onOpenDeleteModal(menu)}>
+                        <Trash className="cursor-pointer size-4 text-destructive" />
+                      </Button>
+                      <Button variant="outline" onClick={() => handleExpandedRow(menu.id)}>
+                        <Eye className="cursor-pointer text-foreground size-4" />
+                      </Button>
                     </div>
                   </TableCell>
                 </TableRow>

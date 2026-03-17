@@ -44,7 +44,7 @@ const OrderTable = memo(({ loading, errorMessage, orders = [], pagination, handl
                 <TableRow>
                   <TableCell>{pagination.from + index}</TableCell>
                   <TableCell>
-                    <p onClick={() => handleExpandedRow(order.id)} className="w-full  cursor-pointer">
+                    <p onClick={() => handleExpandedRow(order.id)} className="w-full cursor-pointer">
                       {order.order_no}
                     </p>
                   </TableCell>
@@ -61,9 +61,9 @@ const OrderTable = memo(({ loading, errorMessage, orders = [], pagination, handl
                     </Badge>
                   </TableCell>
 
-                  <TableCell className="flex gap-2 text-center justify-center">
+                  <TableCell className="flex items-center justify-center h-full gap-2 text-center">
                     <Button size="icon" variant="outline" onClick={() => handleExpandedRow(order.id)}>
-                      <Eye className="size-4 text-black cursor-pointer" />
+                      <Eye className="cursor-pointer text-foreground size-4" />
                     </Button>
                   </TableCell>
                 </TableRow>
@@ -79,7 +79,7 @@ const OrderTable = memo(({ loading, errorMessage, orders = [], pagination, handl
                               {order.items.map((item) => (
                                 <li key={item.id}>
                                   <p className="w-full whitespace-normal line-clamp-6">
-                                    {item.qty}x {item.menu.name} <span className="font-semibold text-xs">({rupiah(item.subtotal)})</span>
+                                    {item.qty}x {item.menu.name} <span className="text-xs font-semibold">({rupiah(item.subtotal)})</span>
                                   </p>
                                 </li>
                               ))}
@@ -93,7 +93,7 @@ const OrderTable = memo(({ loading, errorMessage, orders = [], pagination, handl
                           </div>
 
                           <Separator orientation="vertical" className="w-px " />
-                          <div className="w-1/3 text-start space-y-2">
+                          <div className="w-1/3 space-y-2 text-start">
                             <div>
                               <p className="font-medium text-foreground">Tanggal Dibuat :</p>
                               <p>{order.created_at ? format(order.created_at, "dd MMM yyyy HH:mm") : "Tidak ada tanggal dibuat"}</p>

@@ -36,8 +36,8 @@ const TABLE_USER_HEAD_COLUMNS = [
 ];
 
 const ROLE_OPTIONS = [
-  { label: "Admin", value: "admin" },
-  { label: "Kasir", value: "cashier" },
+  { label: "Admin", value: "admin", variant: "success" },
+  { label: "Kasir", value: "cashier", variant: "warning" },
 ];
 
 export { TABLE_USER_HEAD_COLUMNS, SORT_BY_OPTIONS, SORT_DIRECTION_OPTIONS, SORT_ROLE_OPTIONS, SORT_DATE_OPTIONS, ROLE_OPTIONS };

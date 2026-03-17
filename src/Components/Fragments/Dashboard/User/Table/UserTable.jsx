@@ -2,7 +2,7 @@ import { Fragment, memo, useCallback, useState } from "react";
 import { Eye, Pen, Trash } from "lucide-react";
 import { format } from "date-fns";
 
-import { TABLE_USER_HEAD_COLUMNS } from "@/Constants/Dashboard/User/UserConstant";
+import { ROLE_OPTIONS, TABLE_USER_HEAD_COLUMNS } from "@/Constants/Dashboard/User/UserConstant";
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/Elements/Shadcn/table";
 import { Pagination } from "@/Components/Elements/Paginations/Pagination";
@@ -11,6 +11,7 @@ import { Badge } from "@/Components/Elements/Shadcn/badge";
 import DashTableError from "@/Components/Fragments/Dashboard/Common/Table/DashTableError";
 import DashTableLoading from "@/Components/Fragments/Dashboard/Common/Table/DashTableLoading";
 import { Separator } from "@/Components/Elements/Shadcn/separator";
+import { Button } from "@/Components/Elements/Shadcn/button";
 
 const UserTable = memo(({ loading, errorMessage, users = [], pagination, onOpenDeleteModal, onOpenEditModal, handlePageChange, isChecked, handleAllCheckboxChange, handleCheckboxChange }) => {
   const [expandedRowId, setExpandedRowId] = useState(null);
@@ -43,7 +44,7 @@ const UserTable = memo(({ loading, errorMessage, users = [], pagination, onOpenD
           </TableRow>
         </TableHeader>
         <TableBody>
-          {loading && !errorMessage && <DashTableLoading rows="15" columns={TABLE_USER_HEAD_COLUMNS.length + 1} />}
+          {loading && !errorMessage && <DashTableLoading rows="15" columns={TABLE_USER_HEAD_COLUMNS.length + 1} actionCountLoading={3} />}
           {errorMessage && !loading && <DashTableError message={errorMessage} />}
           {users.length < 1 && !loading && <DashTableError message="Tidak ada data user" />}
           {!loading &&
@@ -74,15 +75,21 @@ const UserTable = memo(({ loading, errorMessage, users = [], pagination, onOpenD
                   <TableCell>{user.email ?? <span>-</span>}</TableCell>
                   <TableCell>{user.phone ?? <span>-</span>}</TableCell>
                   <TableCell className="text-center">
-                    <Badge variant={user.role === "admin" ? "success" : "warning"} className="capitalize">
+                    <Badge variant={ROLE_OPTIONS.find((role) => role.value === user.role)?.variant || "default"} className="capitalize">
                       {user.role}
                     </Badge>
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center justify-center h-full gap-2 text-center">
-                      <Pen className="size-4 cursor-pointer text-success hover:text-success/80!" onClick={() => onOpenEditModal(user)} />
-                      <Trash className="size-4 cursor-pointer text-destructive hover:text-destructive/80!" onClick={() => onOpenDeleteModal(user)} />
-                      <Eye className="size-4 cursor-pointer text-black" onClick={() => handleExpandedRow(user.id)} />
+                      <Button variant="outline" onClick={() => onOpenEditModal(user)}>
+                        <Pen className="size-4 cursor-pointer text-success hover:text-success/80!" />
+                      </Button>
+                      <Button variant="outline" onClick={() => onOpenDeleteModal(user)}>
+                        <Trash className="size-4 cursor-pointer text-destructive hover:text-destructive/80!" />
+                      </Button>
+                      <Button variant="outline" onClick={() => handleExpandedRow(user.id)}>
+                        <Eye className="cursor-pointer text-foreground size-4" />
+                      </Button>
                     </div>
                   </TableCell>
                 </TableRow>

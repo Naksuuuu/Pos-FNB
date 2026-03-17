@@ -37,4 +37,9 @@ const TABLE_MENU_HEAD_COLUMNS = [
   { header: "Aksi", width: "max-w-[50px]! text-center" },
 ];
 
-export { SORY_BY_OPTIONS, SORT_DIRECTION_OPTIONS, IS_AVAILABLE_OPTIONS, CATEGORY_ID_OPTIONS, TABLE_MENU_HEAD_COLUMNS };
+const MENU_STATUS_BADGE = [
+  { variant: "success", label: "Tersedia", value: true },
+  { variant: "destructive", label: "Tidak Tersedia", value: false },
+];
+
+export { SORY_BY_OPTIONS, SORT_DIRECTION_OPTIONS, IS_AVAILABLE_OPTIONS, CATEGORY_ID_OPTIONS, TABLE_MENU_HEAD_COLUMNS, MENU_STATUS_BADGE };
