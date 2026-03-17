@@ -4,12 +4,12 @@ const ORDER_ENDPOINT = "/dashboard/orders";
 
 const OrderService = {
   orders: async (params) => {
-    const { page = 1, search, tanggal, status } = params;
+    const { page = 1, search, status, date_filter } = params;
     const queryParams = {
       page,
       search,
-      tanggal,
       status,
+      date_filter,
       per_page: 15,
     };
 

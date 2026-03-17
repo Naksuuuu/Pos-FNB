@@ -7,10 +7,10 @@ const initialState = {
   loading: false,
   error: null,
   filters: {
-    search: "string",
-    status: "string",
-    customer_name: "string",
-    tanggal: "string",
+    search: "",
+    status: "",
+    customer_name: "",
+    date_filter: "",
     per_page: 0,
   },
   statistic: {
@@ -31,23 +31,20 @@ const initialState = {
   },
 };
 
-export const fetchOrders = createAsyncThunk(
-  "dashboard/order/fetchOrders",
-  async (params = {}, { rejectedWithValue }) => {
-    try {
-      const response = await OrderService.orders(params);
-      if (!response.success) {
-        return rejectedWithValue(response.message || "Failed to fetch orders");
-      }
-
-      return response.data;
-    } catch (error) {
-      return rejectedWithValue({
-        message: error?.message || "Failed to fetch orders",
-      });
+export const fetchOrders = createAsyncThunk("dashboard/order/fetchOrders", async (params = {}, { rejectedWithValue }) => {
+  try {
+    const response = await OrderService.orders(params);
+    if (!response.success) {
+      return rejectedWithValue(response.message || "Failed to fetch orders");
     }
-  },
-);
+
+    return response.data;
+  } catch (error) {
+    return rejectedWithValue({
+      message: error?.message || "Failed to fetch orders",
+    });
+  }
+});
 
 const orderSlice = createSlice({
   name: "order",

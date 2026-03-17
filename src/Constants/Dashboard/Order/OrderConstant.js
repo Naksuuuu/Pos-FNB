@@ -15,4 +15,13 @@ const TABLE_ORDER_HEAD_COLUMNS = [
   { header: "Aksi", width: "w-1/6 text-center" },
 ];
 
-export { TABLE_ORDER_HEAD_COLUMNS, STATUS_OPTIONS };
+const SORT_DATE_OPTIONS = [
+  { label: "Semua", value: "" },
+  { label: "7 Hari Terakhir", value: "last_7_days" },
+  { label: "1 Bulan Terakhir", value: "this_month" },
+  { label: "3 Bulan Terakhir", value: "last_3_months" },
+  { label: "1 Tahun Terakhir", value: "last_1_year" },
+  { label: "Pilih Tanggal", value: "custom" },
+];
+
+export { TABLE_ORDER_HEAD_COLUMNS, STATUS_OPTIONS, SORT_DATE_OPTIONS };

@@ -13,6 +13,9 @@ const initialState = {
     search: null,
     sort_by: null,
     sort_direction: null,
+    role: null,
+    date_filter: null,
+    per_page: 0,
   },
   statistic: {
     total_user: 0,
