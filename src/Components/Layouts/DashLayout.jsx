@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import Toaster from "@/Components/Elements/Toasts/Toaster";
 import DashNavbar from "@/Components/Fragments/Dashboard/Common/Navigation/DashNavbar";
 import DashSidebar from "@/Components/Fragments/Dashboard/Common/Navigation/DashSidebar";
+import NavbarProvider from "@/Context/Dashboard/Navbar/DashNavbarContext";
 
 const DashLayout = ({ children }) => {
   useEffect(() => {
@@ -30,12 +31,14 @@ const DashLayout = ({ children }) => {
 
   return (
     <DashSidebar>
-      <main className="relative w-full bg-dashboard">
-        <DashNavbar />
+      <NavbarProvider>
+        <main className="relative w-full bg-dashboard">
+          <DashNavbar />
 
-        <div className="mx-2 my-2 space-y-4 md:mx-4 md:my-4">{children}</div>
-        <Toaster />
-      </main>
+          <div className="mx-2 my-2 space-y-4 md:mx-4 md:my-4">{children}</div>
+          <Toaster />
+        </main>
+      </NavbarProvider>
     </DashSidebar>
   );
 };

@@ -9,11 +9,15 @@ import DashboardOrderReducer from "./Features/Dashboard/Order/OrderSlice";
 import userReducer from "./Features/Dashboard/User/UserSlice";
 import authSlice from "./Features/Auth/Login/LoginSlice";
 import profileReducer from "./Features/Dashboard/Profile/ProfileSlice";
+import cashierNewOrderReducer from "./Features/Dashboard/Cashier/CashierNewOrderSlice";
+import cashierPaymentReducer from "./Features/Dashboard/Cashier/CashierPaymentSlice";
 
 const dashboardReducer = combineReducers({
   menu: menuReducer,
   category: categoryReducer,
   diningTable: diningTableReducer,
+  cashierNewOrder: cashierNewOrderReducer,
+  cashierPayment: cashierPaymentReducer,
   order: DashboardOrderReducer,
   user: userReducer,
   profile: profileReducer,

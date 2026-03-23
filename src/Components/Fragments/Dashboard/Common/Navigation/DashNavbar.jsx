@@ -2,6 +2,8 @@ import { useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ChevronDown, User } from "lucide-react";
 
+import { useNavbar } from "@/Context/Dashboard/Navbar/DashNavbarContext";
+
 import { selectProfile } from "@/Redux/Features/Dashboard/Profile/ProfileSelector";
 import { LogoutUser } from "@/Redux/Features/Auth/Login/LoginSlice";
 
@@ -11,6 +13,7 @@ import { SidebarTrigger } from "@/Components/Elements/Shadcn/sidebar";
 const DashNavbar = () => {
   const user = useSelector(selectProfile);
   const dispatch = useDispatch();
+  const { centerContent } = useNavbar();
 
   const handleLogout = useCallback(async () => {
     await dispatch(LogoutUser()).unwrap();
@@ -48,6 +51,8 @@ const DashNavbar = () => {
         <div>
           <SidebarTrigger />
         </div>
+
+        {centerContent && <div>{centerContent}</div>}
 
         <DropDown
           buttonProps={{ variant: "ghost", size: "lg", className: "text-start" }}
