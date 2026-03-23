@@ -1,11 +1,26 @@
 import CashierService from "@/Services/Dashboard/Cashier/CashierService";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
+const mapOrdersPayload = (payload = {}) => ({
+  submittedOrders: payload.orders || [],
+  pagination: {
+    current_page: parseInt(payload.pagination?.current_page || 1),
+    last_page: parseInt(payload.pagination?.last_page || 1),
+    per_page: parseInt(payload.pagination?.per_page || 100),
+    total: parseInt(payload.pagination?.total || 0),
+    from: parseInt(payload.pagination?.from || 1),
+    to: parseInt(payload.pagination?.to || 1),
+    next_page: payload.pagination?.next_page ? parseInt(payload.pagination.next_page) : null,
+    prev_page: payload.pagination?.prev_page ? parseInt(payload.pagination.prev_page) : null,
+  },
+});
+
 const initialState = {
   submittedOrders: [],
   loadingSubmittedOrders: false,
   loadingPayment: false,
   loadingUpdateStatus: false,
+  isNewOrder: false,
   error: null,
   pagination: {
     current_page: 1,
@@ -29,6 +44,32 @@ export const fetchSubmittedOrders = createAsyncThunk("dashboard/cashierPayment/f
   } catch (error) {
     return rejectWithValue({
       message: error?.message || "Failed to fetch submitted orders",
+    });
+  }
+});
+
+export const refetchSubmittedOrders = createAsyncThunk("dashboard/cashierPayment/refetchSubmittedOrders", async (params = {}, { rejectWithValue, getState }) => {
+  try {
+    const prevOrders = getState().dashboard.cashierPayment.submittedOrders || [];
+    const prevIds = new Set(prevOrders.map((order) => String(order.id)));
+
+    const response = await CashierService.orders({ ...params });
+    if (!response.success) {
+      return rejectWithValue({
+        message: response.message || "Failed to refresh submitted orders",
+      });
+    }
+
+    const nextOrders = response.data?.orders || [];
+    const hasNewOrder = nextOrders.some((order) => !prevIds.has(String(order.id)));
+
+    return {
+      data: response.data,
+      isNewOrder: hasNewOrder,
+    };
+  } catch (error) {
+    return rejectWithValue({
+      message: error?.message || "Failed to refresh submitted orders",
     });
   }
 });
@@ -72,7 +113,11 @@ export const updateOrderStatus = createAsyncThunk("dashboard/cashierPayment/upda
 const cashierPaymentSlice = createSlice({
   name: "cashierPayment",
   initialState,
-  reducers: {},
+  reducers: {
+    clearNewOrderFlag: (state) => {
+      state.isNewOrder = false;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchSubmittedOrders.pending, (state) => {
@@ -81,21 +126,20 @@ const cashierPaymentSlice = createSlice({
       })
       .addCase(fetchSubmittedOrders.fulfilled, (state, action) => {
         state.loadingSubmittedOrders = false;
-        state.submittedOrders = action.payload.orders;
-        state.pagination = {
-          current_page: parseInt(action.payload.pagination.current_page),
-          last_page: parseInt(action.payload.pagination.last_page),
-          per_page: parseInt(action.payload.pagination.per_page),
-          total: parseInt(action.payload.pagination.total),
-          from: parseInt(action.payload.pagination.from),
-          to: parseInt(action.payload.pagination.to),
-          next_page: action.payload.pagination.next_page ? parseInt(action.payload.pagination.next_page) : null,
-          prev_page: action.payload.pagination.prev_page ? parseInt(action.payload.pagination.prev_page) : null,
-        };
+        const mapped = mapOrdersPayload(action.payload);
+        state.submittedOrders = mapped.submittedOrders;
+        state.pagination = mapped.pagination;
+        state.isNewOrder = false;
       })
       .addCase(fetchSubmittedOrders.rejected, (state, action) => {
         state.loadingSubmittedOrders = false;
         state.error = action.payload?.message || action.error.message;
+      })
+      .addCase(refetchSubmittedOrders.fulfilled, (state, action) => {
+        const mapped = mapOrdersPayload(action.payload.data);
+        state.submittedOrders = mapped.submittedOrders;
+        state.pagination = mapped.pagination;
+        state.isNewOrder = action.payload.isNewOrder;
       })
       .addCase(payOrder.pending, (state) => {
         state.loadingPayment = true;
@@ -119,5 +163,7 @@ const cashierPaymentSlice = createSlice({
       });
   },
 });
+
+export const { clearNewOrderFlag } = cashierPaymentSlice.actions;
 
 export default cashierPaymentSlice.reducer;

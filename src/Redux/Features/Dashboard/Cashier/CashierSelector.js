@@ -33,4 +33,5 @@ export const selectCashierPaymentVM = createSelector([selectCashierPaymentState]
   loadingSubmittedOrders: cashierState.loadingSubmittedOrders,
   loadingPayment: cashierState.loadingPayment,
   loadingUpdateStatus: cashierState.loadingUpdateStatus,
+  isNewOrder: cashierState.isNewOrder,
 }));

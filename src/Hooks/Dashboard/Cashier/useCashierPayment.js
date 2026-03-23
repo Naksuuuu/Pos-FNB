@@ -4,7 +4,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 // , payOrder
-import { fetchSubmittedOrders, updateOrderStatus } from "@/Redux/Features/Dashboard/Cashier/CashierPaymentSlice";
+import { clearNewOrderFlag, fetchSubmittedOrders, refetchSubmittedOrders, updateOrderStatus } from "@/Redux/Features/Dashboard/Cashier/CashierPaymentSlice";
 import { selectCashierPaymentVM } from "@/Redux/Features/Dashboard/Cashier/CashierSelector";
 import { CashierPaymentSchema } from "@/Schema/Cashier/CashierSchema";
 
@@ -15,7 +15,7 @@ const normalizeCashDigits = (value) => String(value ?? "").replace(/[^0-9]/g, ""
 const useCashierPayment = () => {
   const dispatch = useDispatch();
 
-  const { submittedOrders, loadingSubmittedOrders, loadingPayment, loadingUpdateStatus } = useSelector(selectCashierPaymentVM);
+  const { submittedOrders, loadingSubmittedOrders, loadingPayment, loadingUpdateStatus, isNewOrder } = useSelector(selectCashierPaymentVM);
 
   const [selectedOrderId, setSelectedOrderId] = useState(null);
 
@@ -41,6 +41,14 @@ const useCashierPayment = () => {
 
   const loadSubmittedOrders = useCallback(() => {
     dispatch(fetchSubmittedOrders());
+  }, [dispatch]);
+
+  const refreshSubmittedOrders = useCallback(() => {
+    dispatch(refetchSubmittedOrders());
+  }, [dispatch]);
+
+  const clearNewOrder = useCallback(() => {
+    dispatch(clearNewOrderFlag());
   }, [dispatch]);
 
   const selectedOrder = useMemo(() => submittedOrders.find((order) => order.id === selectedOrderId) || submittedOrders[0] || null, [selectedOrderId, submittedOrders]);
@@ -99,11 +107,11 @@ const useCashierPayment = () => {
     loadSubmittedOrders();
 
     const intervalId = setInterval(() => {
-      loadSubmittedOrders();
+      refreshSubmittedOrders();
     }, 30000);
 
     return () => clearInterval(intervalId);
-  }, [loadSubmittedOrders]);
+  }, [loadSubmittedOrders, refreshSubmittedOrders]);
 
   return {
     submittedOrders,
@@ -128,7 +136,10 @@ const useCashierPayment = () => {
     canProcessPayment,
     loadingPayment,
     loadingUpdateStatus,
+    isNewOrder,
+    clearNewOrder,
     loadSubmittedOrders,
+    refreshSubmittedOrders,
     processPayment,
   };
 };

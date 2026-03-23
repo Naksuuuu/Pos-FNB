@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { CircleMinus, CirclePlus, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -36,9 +37,13 @@ const CashierPaymentTab = () => {
     canProcessPayment,
     loadingPayment,
     loadingUpdateStatus,
-    loadSubmittedOrders,
+    isNewOrder,
+    clearNewOrder,
+    refreshSubmittedOrders,
     processPayment,
   } = useCashierPayment();
+
+  const notificationAudioRef = useRef(null);
 
   const handleSubmitForm = async () => {
     try {
@@ -50,8 +55,27 @@ const CashierPaymentTab = () => {
   };
 
   const handleRefresh = async () => {
-    loadSubmittedOrders();
+    refreshSubmittedOrders();
   };
+
+  useEffect(() => {
+    notificationAudioRef.current = new Audio("/notification/new-order.mp3");
+  }, []);
+
+  useEffect(() => {
+    if (!isNewOrder) {
+      return;
+    }
+
+    const notificationAudio = notificationAudioRef.current;
+    if (notificationAudio) {
+      console.log(notificationAudio);
+      notificationAudio.currentTime = 0;
+      notificationAudio.play().catch(() => {});
+    }
+
+    clearNewOrder();
+  }, [isNewOrder, clearNewOrder]);
 
   return (
     <div className="grid grid-cols-1 gap-4 xl:grid-cols-3" style={{ height: `calc(100dvh - ${NAVBAR_HEIGHT}px)` }}>
