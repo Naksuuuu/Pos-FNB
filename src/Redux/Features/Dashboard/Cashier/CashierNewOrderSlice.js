@@ -15,18 +15,8 @@ const initialState = {
     search: null,
     category_id: null,
     is_available: null,
-    per_page: 100,
   },
-  pagination: {
-    current_page: 1,
-    last_page: 1,
-    per_page: 100,
-    total: 0,
-    from: 1,
-    to: 1,
-    next_page: null,
-    prev_page: null,
-  },
+  pagination: {},
 };
 
 export const fetchMenus = createAsyncThunk("dashboard/cashierNewOrder/fetchMenus", async (params = {}, { rejectWithValue }) => {
@@ -101,7 +91,6 @@ export const cashierResources = createAsyncThunk("dashboard/cashierNewOrder/cash
       categories: categoriesRes.data.categories,
       tables: tablesRes.data.tables,
       menus: menusRes.data.menus,
-      pagination: menusRes.data.pagination,
       filters: menusRes.data.filters,
     };
   } catch (error) {
@@ -144,16 +133,6 @@ const cashierNewOrderSlice = createSlice({
       .addCase(fetchMenus.fulfilled, (state, action) => {
         state.loading = false;
         state.menus = action.payload.menus;
-        state.pagination = {
-          current_page: parseInt(action.payload.pagination.current_page),
-          last_page: parseInt(action.payload.pagination.last_page),
-          per_page: parseInt(action.payload.pagination.per_page),
-          total: parseInt(action.payload.pagination.total),
-          from: parseInt(action.payload.pagination.from),
-          to: parseInt(action.payload.pagination.to),
-          next_page: action.payload.pagination.next_page ? parseInt(action.payload.pagination.next_page) : null,
-          prev_page: action.payload.pagination.prev_page ? parseInt(action.payload.pagination.prev_page) : null,
-        };
         state.filters = action.payload.filters;
       })
       .addCase(fetchMenus.rejected, (state, action) => {
@@ -191,16 +170,6 @@ const cashierNewOrderSlice = createSlice({
         state.categories = action.payload.categories;
         state.tables = action.payload.tables;
         state.menus = action.payload.menus;
-        state.pagination = {
-          current_page: parseInt(action.payload.pagination.current_page),
-          last_page: parseInt(action.payload.pagination.last_page),
-          per_page: parseInt(action.payload.pagination.per_page),
-          total: parseInt(action.payload.pagination.total),
-          from: parseInt(action.payload.pagination.from),
-          to: parseInt(action.payload.pagination.to),
-          next_page: action.payload.pagination.next_page ? parseInt(action.payload.pagination.next_page) : null,
-          prev_page: action.payload.pagination.prev_page ? parseInt(action.payload.pagination.prev_page) : null,
-        };
         state.filters = action.payload.filters;
       })
       .addCase(cashierResources.rejected, (state, action) => {

@@ -1,19 +1,18 @@
 import { apiUtils } from "@/Services/Common/Base";
 
-const MENU_ENDPOINT = "/dashboard/menus";
+const MENU_ENDPOINT = "/dashboard/cashier/menus";
 const ORDER_ENDPOINT = "/dashboard/orders";
+const STORE_ORDER_ENDPOINT = "/dashboard/cashier";
 const PAYMENT_ENDPOINT = "/payments";
-const CATEGORY_ENDPOINT = "/dashboard/categories";
+const CATEGORY_ENDPOINT = "/dashboard/cashier/categories";
 const DINING_TABLE_ENDPOINT = "/dashboard/tables";
 
 const CashierService = {
   menus: async (params = {}) => {
-    const { page = 1, search, category_id, per_page = 100 } = params;
+    const { search, category_id } = params;
 
     const queryParams = {
-      page,
       search,
-      per_page,
       is_available: 1,
       category_id,
     };
@@ -54,7 +53,7 @@ const CashierService = {
   },
 
   createOrder: async (payload) => {
-    const response = await apiUtils.post(ORDER_ENDPOINT, payload);
+    const response = await apiUtils.post(STORE_ORDER_ENDPOINT, payload);
     return response.data;
   },
 

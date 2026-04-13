@@ -14,10 +14,10 @@ const useAllCatalog = () => {
 
   const totalPrice = useMemo(() => orderItems.reduce((acc, item) => acc + item.price, 0), [orderItems]);
 
-  const loadCatalogs = useCallback(async () => {
+  const loadCatalogs = useCallback(() => {
     if (catalogs.length > 0) return;
-    await dispatch(fetchCatalogs());
-  }, [dispatch, catalogs]);
+    dispatch(fetchCatalogs());
+  }, [dispatch, catalogs.length]);
 
   return { loadCatalogs, catalogs, loading, orderItems, totalPrice };
 };

@@ -12,7 +12,7 @@ const useAllOrder = () => {
   const checkout = useCallback(
     async ({ customerName, items, code }) => {
       const orderPayload = {
-        code: code || "VIP2",
+        code: code || "A1",
         customer_name: customerName || "Guest",
         items: (items || []).map((item) => ({
           menu_id: item.menu_id,

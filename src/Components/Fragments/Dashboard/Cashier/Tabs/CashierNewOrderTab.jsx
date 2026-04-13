@@ -17,8 +17,6 @@ import { Label } from "@/Components/Elements/Shadcn/label";
 import { Controller } from "react-hook-form";
 import { useCallback } from "react";
 import useCashierResources from "@/Hooks/Dashboard/Cashier/useCashierResources";
-import { PER_PAGE_OPTIONS } from "@/Constants/Common/CommonConstant";
-import { Pagination } from "@/Components/Elements/Paginations/Pagination";
 import { InputSearch } from "@/Components/Elements/Inputs/InputSearch";
 
 const NAVBAR_HEIGHT = 105; // 72px (navbar) + 33px (inner padding)
@@ -51,7 +49,6 @@ const CashierNewOrderTab = ({ onOrderCreated }) => {
     categories,
     menus,
     tables,
-    pagination,
 
     optimisticSearch,
 
@@ -59,8 +56,6 @@ const CashierNewOrderTab = ({ onOrderCreated }) => {
     loadingCreateOrder,
 
     handleCategoryChange,
-    handlePerPageChange,
-    handlePageChange,
     handleSearchChange,
   } = useCashierResources();
 
@@ -108,13 +103,6 @@ const CashierNewOrderTab = ({ onOrderCreated }) => {
         <div className="grid grid-cols-2 gap-3 pb-1  lg:grid-cols-3 2xl:grid-cols-4 flex-1 overflow-y-scroll min-h-0 auto-rows-max no-scrollbar ">
           <CashierMenuCard loadingResources={loadingResources} menus={menus} addToCart={addToCart} />
         </div>
-        <Card className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <p className="text-nowrap">Data per halaman</p>
-            <Select id="per-page" name="per-page" items={PER_PAGE_OPTIONS} value={filters.per_page || 100} onValueChange={(value) => handlePerPageChange(Number(value))} />
-          </div>
-          <Pagination pagination={pagination} onPageChange={handlePageChange} align="end" />
-        </Card>
       </div>
 
       <Card className="space-y-4 xl:sticky xl:top-0 h-full flex flex-col min-h-0">

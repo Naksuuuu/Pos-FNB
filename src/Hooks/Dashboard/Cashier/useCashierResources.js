@@ -13,7 +13,7 @@ const useCashierResources = () => {
   const search = filters.search || "";
   const [optimisticSearch, setOptimisticSearch] = useState(search);
 
-  const { menus, categories: categoriesFromStore, tables: tablesFromStore, loadingResources, loadingCreateOrder, pagination } = useSelector(selectCashierNewOrderVM, shallowEqual);
+  const { menus, categories: categoriesFromStore, tables: tablesFromStore, loadingResources, loadingCreateOrder } = useSelector(selectCashierNewOrderVM, shallowEqual);
 
   const categories = useMemo(() => [{ value: "", label: "Semua" }, ...categoriesFromStore.map((category) => ({ value: category.id, label: category.name }))], [categoriesFromStore]);
 
@@ -59,21 +59,6 @@ const useCashierResources = () => {
     [updateFilters],
   );
 
-  const handlePerPageChange = useCallback(
-    (perPage) => {
-      updateFilters({ per_page: perPage, page: 1 });
-    },
-
-    [updateFilters],
-  );
-
-  const handlePageChange = useCallback(
-    (newPage) => {
-      updateFilters({ page: newPage });
-    },
-    [updateFilters],
-  );
-
   useEffect(() => {
     dispatch(
       cashierResources({
@@ -98,7 +83,6 @@ const useCashierResources = () => {
     categories,
     menus,
     tables,
-    pagination,
 
     optimisticSearch,
 
@@ -106,8 +90,6 @@ const useCashierResources = () => {
     loadingCreateOrder,
 
     handleCategoryChange,
-    handlePerPageChange,
-    handlePageChange,
     handleSearchChange,
   };
 };

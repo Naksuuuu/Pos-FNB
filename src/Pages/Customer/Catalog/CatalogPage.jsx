@@ -11,7 +11,7 @@ import { rupiah } from "@/Utils/rupiahHelper";
 import { Badge } from "@/Components/Elements/Shadcn/badge";
 import CatalogCard from "@/Components/Fragments/Customer/Catalog/Card/CatalogCard";
 
-const ListCatalog = () => {
+const CatalogPage = () => {
   const navigate = useNavigate();
   const { catalogs, loadCatalogs, loading, orderItems, totalPrice } = useAllCatalog();
 
@@ -79,4 +79,4 @@ const ListCatalog = () => {
   );
 };
 
-export default ListCatalog;
+export default CatalogPage;
