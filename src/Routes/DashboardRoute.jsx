@@ -14,6 +14,7 @@ const CategoryPage = lazy(() => import("@/Pages/Dashboard/Category/CategoryPage"
 const DiningTablePage = lazy(() => import("@/Pages/Dashboard/DiningTable/DiningTablePage"));
 const UserPage = lazy(() => import("@/Pages/Dashboard/User/UserPage"));
 const ProfilePage = lazy(() => import("@/Pages/Dashboard/Profile/ProfilePage"));
+const SettingsPage = lazy(() => import("@/Pages/Dashboard/Settings/SettingsPage"));
 const SidebarProvider = lazy(() => import("@/Components/Elements/Shadcn/sidebar").then((m) => ({ default: m.SidebarProvider })));
 
 const createProtectedRoute = (component, allowedRoles) => {
@@ -36,6 +37,10 @@ const DashboardRoute = [
   {
     path: ROUTES.DASHBOARD.PROFILE,
     element: createProtectedRoute(<ProfilePage />, ["admin", "cashier"]),
+  },
+  {
+    path: ROUTES.DASHBOARD.SETTINGS,
+    element: createProtectedRoute(<SettingsPage />, ["admin"]),
   },
   {
     path: ROUTES.DASHBOARD.USER,

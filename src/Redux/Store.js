@@ -11,6 +11,7 @@ import authSlice from "./Features/Auth/Login/LoginSlice";
 import profileReducer from "./Features/Dashboard/Profile/ProfileSlice";
 import cashierNewOrderReducer from "./Features/Dashboard/Cashier/CashierNewOrderSlice";
 import cashierPaymentReducer from "./Features/Dashboard/Cashier/CashierPaymentSlice";
+import settingsReducer from "./Features/Dashboard/Settings/SettingsSlice";
 
 const dashboardReducer = combineReducers({
   menu: menuReducer,
@@ -21,6 +22,7 @@ const dashboardReducer = combineReducers({
   order: DashboardOrderReducer,
   user: userReducer,
   profile: profileReducer,
+  settings: settingsReducer,
 });
 
 const authReducer = combineReducers({

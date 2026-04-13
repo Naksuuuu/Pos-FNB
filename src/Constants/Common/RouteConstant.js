@@ -13,6 +13,7 @@ export const ROUTES = {
     HOME: "/dashboard",
     USER: "/dashboard/user",
     CASHIER: "/dashboard/cashier",
+    SETTINGS: "/dashboard/settings",
     INVENTORY: {
       MENU: "/dashboard/inventory",
       CATEGORY: "/dashboard/inventory/category",

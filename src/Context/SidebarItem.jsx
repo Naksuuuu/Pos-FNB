@@ -1,4 +1,4 @@
-import { Computer, LayoutDashboard, ConciergeBell, User, Package } from "lucide-react";
+import { Computer, LayoutDashboard, ConciergeBell, User, Package, Settings } from "lucide-react";
 import { ROUTES } from "@/Constants/Common/RouteConstant";
 
 export const SidebarItem = [
@@ -36,5 +36,12 @@ export const SidebarItem = [
     icon: Computer,
     children: null,
     allowed_roles: ["admin", "cashier"],
+  },
+  {
+    title: "Settings",
+    path: ROUTES.DASHBOARD.SETTINGS,
+    icon: Settings,
+    children: null,
+    allowed_roles: ["admin"],
   },
 ];
