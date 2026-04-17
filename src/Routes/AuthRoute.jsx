@@ -4,8 +4,8 @@ import { Navigate } from "react-router";
 
 import { selectIsAuthenticated } from "@/Redux/Features/Auth/Login/LoginSelector";
 
-import LoadingApp from "@/Pages/Common/LoadingApp";
-const LoginPage = lazy(() => import("@/Pages/Auth/Login/LoginPage"));
+import LoadingApp from "@/Pages/LoadingApp";
+const LoginPage = lazy(() => import("@/Features/Auth/Login/Pages/LoginPage"));
 
 const ProtectAuthRoute = ({ children }) => {
   const isAuthenticated = useSelector(selectIsAuthenticated);

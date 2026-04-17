@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 
 import { selectAuthRole, selectIsAuthenticated } from "@/Redux/Features/Auth/Login/LoginSelector";
 
-import { ROUTES } from "@/Constants/Common/RouteConstant";
+import { ROUTES } from "@/Constants/RouteConstant";
 
 const ProtectedRoute = ({ children, allowedRoles = [] }) => {
   const isAuthenticated = useSelector(selectIsAuthenticated);

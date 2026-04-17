@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import Toaster from "@/Components/Elements/Toasts/Toaster";
-import DashNavbar from "@/Components/Fragments/Dashboard/Common/Navigation/DashNavbar";
-import DashSidebar from "@/Components/Fragments/Dashboard/Common/Navigation/DashSidebar";
-import NavbarProvider from "@/Context/Dashboard/Navbar/DashNavbarContext";
+import DashNavbar from "@/Features/Dashboard/Shared/Component/Navigation/DashNavbar";
+import DashSidebar from "@/Features/Dashboard/Shared/Component/Navigation/DashSidebar";
+import NavbarProvider from "@/Features/Dashboard/Shared/Context/DashNavbarContext";
 
 const DashLayout = ({ children }) => {
   useEffect(() => {

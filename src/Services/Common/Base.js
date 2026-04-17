@@ -1,7 +1,7 @@
 import axios from "axios";
 import { parseValidationErrors } from "../../Utils/errorHandler";
 import { clearAuthToken, getAuthToken } from "@/Utils/sessionUtils";
-import { ROUTES } from "@/Constants/Common/RouteConstant";
+import { ROUTES } from "@/Constants/RouteConstant";
 // import { clearAuthToken, getAuthToken } from "../../Utils/cookieUtils";
 
 const BASE_URL = import.meta.env.VITE_BASE_API_URL;

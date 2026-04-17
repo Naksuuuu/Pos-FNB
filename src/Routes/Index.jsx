@@ -3,12 +3,13 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import { Provider } from "react-redux";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import store from "@/Redux/Store";
 
-import RootErrorBoundary from "@/Pages/Common/RootErrorBoundary";
+import RootErrorBoundary from "@/Pages/RootErrorBoundary";
 import DashboardRoute from "@/Routes/DashboardRoute";
 import PublicRoute from "@/Routes/PublicRoute";
-import NotFound from "@/Pages/Common/NotFound";
+import NotFound from "@/Pages/NotFound";
 import AuthRoute from "@/Routes/AuthRoute";
 
 export const Routes = createBrowserRouter([
@@ -26,10 +27,22 @@ export const Routes = createBrowserRouter([
   },
 ]);
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 30 * 1000,
+      refetchOnWindowFocus: false,
+      retry: 1,
+    },
+  },
+});
+
 const App = () => (
-  <Provider store={store}>
-    <RouterProvider router={Routes} fallbackElement={<RootErrorBoundary />} />
-  </Provider>
+  <QueryClientProvider client={queryClient}>
+    <Provider store={store}>
+      <RouterProvider router={Routes} fallbackElement={<RootErrorBoundary />} />
+    </Provider>
+  </QueryClientProvider>
 );
 
 createRoot(document.getElementById("root")).render(
