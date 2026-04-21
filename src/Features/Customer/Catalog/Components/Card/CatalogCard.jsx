@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
 
 import { ROUTES } from "@/Constants/RouteConstant";
 import { rupiah } from "@/Utils/rupiahHelper";
@@ -8,6 +8,9 @@ import { Button } from "@/Components/Elements/Shadcn/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/Components/Elements/Shadcn/card";
 
 const ProductCard = ({ catalog }) => {
+  const [searchParams] = useSearchParams();
+  const tableCode = searchParams.get("code")?.trim() || "";
+
   return (
     <Card className="relative w-full max-w-sm gap-0 py-3 pt-0 mx-auto overflow-hidden">
       <CardHeader className="p-3">
@@ -20,7 +23,12 @@ const ProductCard = ({ catalog }) => {
         <CardDescription>{rupiah(catalog.price)}</CardDescription>
 
         <CardFooter className="w-full gap-2 p-0 md:flex-row">
-          <Button className="w-full" variant="outline" nativeButton={false} render={(props) => <Link {...props} to={ROUTES.PUBLIC.CATALOG_DETAIL.replace(":catalogId", catalog.id)} />}>
+          <Button
+            className="w-full"
+            variant="outline"
+            nativeButton={false}
+            render={(props) => <Link {...props} to={`${ROUTES.PUBLIC.CATALOG_DETAIL.replace(":catalogId", catalog.id)}${tableCode ? `?code=${encodeURIComponent(tableCode)}` : ""}`} />}
+          >
             Tambah
           </Button>
         </CardFooter>

@@ -1,5 +1,5 @@
-import { useCallback } from "react";
-import { Link, useNavigate } from "react-router";
+import { useCallback, useEffect } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router";
 import { Pen, Plus, Trash } from "lucide-react";
 import { useForm } from "react-hook-form";
 
@@ -19,7 +19,11 @@ import CustomerNavbar from "@/Features/Customer/Shared/Components/Navigation/Cus
 
 const OrderPage = () => {
   const navigate = useNavigate();
-  const code = "VIP2";
+  const [searchParams] = useSearchParams();
+  const tableCode = searchParams.get("code")?.trim() || "";
+  const effectiveTableCode = tableCode || "VIP2";
+  const queryWithCode = tableCode ? `?code=${encodeURIComponent(tableCode)}` : "";
+
   const { orderItems, totalPrice, checkout, deleteOrderItem, loadingCheckout } = useAllOrder();
 
   const {
@@ -27,10 +31,15 @@ const OrderPage = () => {
     handleSubmit,
     setError,
     clearErrors,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm({
-    defaultValues: { customer_name: "", code },
+    defaultValues: { customer_name: "", code: effectiveTableCode },
   });
+
+  useEffect(() => {
+    setValue("code", effectiveTableCode);
+  }, [effectiveTableCode, setValue]);
 
   const handleCheckout = useCallback(
     async (values) => {
@@ -43,7 +52,7 @@ const OrderPage = () => {
 
       try {
         await checkout({ customerName: values.customer_name, items: orderItems, code: values.code });
-        navigate(ROUTES.PUBLIC.PAYMENT);
+        navigate({ pathname: ROUTES.PUBLIC.PAYMENT, search: queryWithCode });
       } catch (error) {
         if (error?.validationErrors) {
           Object.entries(error.validationErrors).forEach(([field, message]) => {
@@ -53,12 +62,12 @@ const OrderPage = () => {
         }
       }
     },
-    [checkout, clearErrors, navigate, orderItems, setError],
+    [checkout, clearErrors, navigate, orderItems, queryWithCode, setError],
   );
 
   return (
     <>
-      <CustomerNavbar navbarTitle="Pesanan" backLink={ROUTES.PUBLIC.CATALOG} />
+      <CustomerNavbar navbarTitle="Pesanan" backLink={`${ROUTES.PUBLIC.CATALOG}${queryWithCode}`} />
 
       <div className="flex-1 w-full px-3 space-y-4">
         <section className="md:px-4">
@@ -73,7 +82,7 @@ const OrderPage = () => {
                   variant="outline"
                   nativeButton={false}
                   render={(props) => (
-                    <Link {...props} to={ROUTES.PUBLIC.CATALOG}>
+                    <Link {...props} to={`${ROUTES.PUBLIC.CATALOG}${queryWithCode}`}>
                       <div className="flex items-center gap-2">
                         <Plus className="size-4" />
                         <span className="text-sm font-semibold">Tambah Lagi</span>
@@ -101,7 +110,7 @@ const OrderPage = () => {
                           size="sm"
                           nativeButton={false}
                           render={(props) => (
-                            <Link {...props} to={ROUTES.PUBLIC.CATALOG_DETAIL.replace(":catalogId", item.menu_id)} state={{ fromOrder: true, quantity: item.qty }}>
+                            <Link {...props} to={`${ROUTES.PUBLIC.CATALOG_DETAIL.replace(":catalogId", item.menu_id)}${queryWithCode}`} state={{ fromOrder: true, quantity: item.qty }}>
                               <div className="flex items-center gap-1">
                                 <Pen className="size-3" />
                                 <span className="text-sm font-semibold">Edit</span>
@@ -133,7 +142,7 @@ const OrderPage = () => {
                 <div className="flex items-center justify-between">
                   <p className="text-sm font-semibold ">Nomor Meja</p>
 
-                  <Badge variant="secondary">{code}</Badge>
+                  <Badge variant="secondary">{effectiveTableCode}</Badge>
                 </div>
                 <Input id="code" type="hidden" {...register("code", { required: "Nomor meja wajib diisi" })} disabled={true} className="hidden" />
                 {errors.code?.message && <FieldError>{errors.code.message}</FieldError>}

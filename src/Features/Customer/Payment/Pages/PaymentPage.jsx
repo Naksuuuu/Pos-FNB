@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import { CheckCircle2 } from "lucide-react";
 
 import { ROUTES } from "@/Constants/RouteConstant";
@@ -12,6 +12,8 @@ import { Card, CardContent } from "@/Components/Elements/Shadcn/card";
 
 const PaymentPage = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const tableCodeFromQuery = searchParams.get("code")?.trim() || "";
 
   const storedOrder = useMemo(() => {
     return JSON.parse(sessionStorage.getItem("orderResult") || "null");
@@ -41,7 +43,7 @@ const PaymentPage = () => {
               <p className="font-semibold">Pesanan berhasil dibuat</p>
             </div>
             <p className="mt-1 text-sm text-muted-foreground">Nomor Order: {order.order_no || "-"}</p>
-            <p className="text-sm text-muted-foreground">Meja: {order.table?.code || "VIP2"}</p>
+            <p className="text-sm text-muted-foreground">Meja: {order.table?.code || tableCodeFromQuery || "-"}</p>
             <p className="font-semibold">Konfirmasi Pembayaran</p>
             <p className="text-sm text-muted-foreground">Silahkan konfirmasi pembayaran di kasir. Agar pesanan kamu diproses dengan benar.</p>
           </CardContent>

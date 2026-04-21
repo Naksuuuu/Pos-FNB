@@ -1,19 +1,65 @@
-import { useCallback, useMemo } from "react";
-import { useNavigate } from "react-router";
+import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useNavigate, useSearchParams } from "react-router";
 import { ShoppingBasket } from "lucide-react";
+import { toast } from "sonner";
 
 import { ROUTES } from "@/Constants/RouteConstant";
 
 import useAllCatalog from "@/Features/Customer/Catalog/Hooks/useAllCatalog";
+import useAvailableCustomerTables from "@/Features/Customer/Catalog/Hooks/useAvailableCustomerTables";
 
 import { rupiah } from "@/Utils/rupiahHelper";
 
 import { Badge } from "@/Components/Elements/Shadcn/badge";
+import { Select } from "@/Components/Elements/Inputs/Select";
 import CatalogCard from "@/Features/Customer/Catalog/Components/Card/CatalogCard";
 
 const CatalogPage = () => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { catalogs, loading, orderItems, totalPrice } = useAllCatalog();
+  const { tables, loadingTables } = useAvailableCustomerTables();
+  const tableCode = searchParams.get("code")?.trim() || "";
+  const scanWarningShownRef = useRef(false);
+
+  const tableOptions = useMemo(() => tables.map((table) => ({ label: table.code, value: table.code })), [tables]);
+
+  const isScannedMode = Boolean(tableCode);
+  const isSelectedTableValid = useMemo(() => (tableCode ? tables.some((table) => table.code === tableCode) : false), [tableCode, tables]);
+
+  useEffect(() => {
+    if (!isScannedMode || loadingTables || isSelectedTableValid || scanWarningShownRef.current) {
+      return;
+    }
+
+    toast.warning("Meja tidak aktid atau Tidak tercatat");
+    scanWarningShownRef.current = true;
+  }, [isScannedMode, loadingTables, isSelectedTableValid]);
+
+  useEffect(() => {
+    if (!isScannedMode || loadingTables) {
+      return;
+    }
+
+    if (isSelectedTableValid) {
+      scanWarningShownRef.current = false;
+    }
+  }, [isScannedMode, isSelectedTableValid, loadingTables]);
+
+  const handleTableChange = useCallback(
+    (value) => {
+      const nextParams = new URLSearchParams(searchParams);
+
+      if (value) {
+        nextParams.set("code", value);
+      } else {
+        nextParams.delete("code");
+      }
+
+      setSearchParams(nextParams);
+    },
+    [searchParams, setSearchParams],
+  );
 
   const groupedCatalogs = useMemo(() => {
     if (catalogs.length === 0) return null;
@@ -21,11 +67,41 @@ const CatalogPage = () => {
   }, [catalogs]);
 
   const handleCheckout = useCallback(() => {
-    navigate(ROUTES.PUBLIC.ORDER);
-  }, [navigate]);
+    if (!isSelectedTableValid) {
+      toast.warning("Pilih nomor meja terlebih dahulu");
+      return;
+    }
+
+    navigate({
+      pathname: ROUTES.PUBLIC.ORDER,
+      search: tableCode ? `?code=${encodeURIComponent(tableCode)}` : "",
+    });
+  }, [isSelectedTableValid, navigate, tableCode]);
 
   return (
     <div className="relative w-full px-3">
+      {isScannedMode && isSelectedTableValid && (
+        <div className="w-full max-w-3xl p-3 mx-auto mt-3 mb-2 border rounded-md bg-primary/5 border-primary/20">
+          <p className="text-sm">
+            Nomor meja: <span className="font-semibold">{tableCode}</span>
+          </p>
+        </div>
+      )}
+
+      {(!isScannedMode || !isSelectedTableValid) && (
+        <div className="w-full max-w-3xl p-3 mx-auto mt-3 mb-2 border rounded-md bg-background border-border space-y-2">
+          <p className="text-sm font-medium">Pilih nomor meja</p>
+          <Select
+            id="customer-table-code"
+            name="customer-table-code"
+            items={tableOptions}
+            placeholder={loadingTables ? "Memuat meja..." : "Pilih nomor meja"}
+            value={isSelectedTableValid ? tableCode : null}
+            onValueChange={handleTableChange}
+          />
+        </div>
+      )}
+
       <div className="">
         {!loading &&
           groupedCatalogs &&

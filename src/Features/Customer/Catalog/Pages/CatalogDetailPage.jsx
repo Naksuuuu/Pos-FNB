@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate, useSearchParams } from "react-router";
 import { Minus, Plus, X } from "lucide-react";
 
 import { ROUTES } from "@/Constants/RouteConstant";
@@ -18,9 +18,12 @@ const CatalogDetailPage = () => {
   const { catalog, loading } = useDetailCatalog();
 
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { state } = useLocation();
   const isFromOrder = Boolean(state?.fromOrder);
   const [quantity, setQuantity] = useState(isFromOrder ? state.quantity : 1);
+  const tableCode = searchParams.get("code")?.trim() || "";
+  const queryWithCode = tableCode ? `?code=${encodeURIComponent(tableCode)}` : "";
 
   const incrementQuantity = useCallback((qty) => {
     setQuantity((prev) => Math.max(1, prev + qty));
@@ -55,15 +58,24 @@ const CatalogDetailPage = () => {
       }
 
       sessionStorage.setItem("orderItems", JSON.stringify(storedOrders));
-      navigate(isFromOrder ? ROUTES.PUBLIC.ORDER : ROUTES.PUBLIC.CATALOG);
+      navigate({
+        pathname: isFromOrder ? ROUTES.PUBLIC.ORDER : ROUTES.PUBLIC.CATALOG,
+        search: queryWithCode,
+      });
     },
-    [isFromOrder, navigate],
+    [isFromOrder, navigate, queryWithCode],
   );
 
   return (
     <main className="relative flex flex-col w-full h-screen ">
       <div className="absolute top-4 right-4">
-        <Button variant="outline" size="icon" className="rounded-full" nativeButton={false} render={(props) => <Link {...props} to={isFromOrder ? ROUTES.PUBLIC.ORDER : ROUTES.PUBLIC.CATALOG} />}>
+        <Button
+          variant="outline"
+          size="icon"
+          className="rounded-full"
+          nativeButton={false}
+          render={(props) => <Link {...props} to={`${isFromOrder ? ROUTES.PUBLIC.ORDER : ROUTES.PUBLIC.CATALOG}${queryWithCode}`} />}
+        >
           <X />
         </Button>
       </div>

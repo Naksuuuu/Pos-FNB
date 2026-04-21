@@ -1,6 +1,7 @@
 import { apiUtils } from "@/Services/Common/Base";
 
 const CATALOG_ENDPOINT = "/customer/menus";
+const CUSTOMER_TABLES_ENDPOINT = "/customer/tables";
 
 const CatalogService = {
   catalogs: async (params = {}) => {
@@ -16,6 +17,11 @@ const CatalogService = {
 
     const response = await apiUtils.get(CATALOG_ENDPOINT, { params: queryParams });
 
+    return response.data;
+  },
+
+  tables: async (params = {}) => {
+    const response = await apiUtils.get(CUSTOMER_TABLES_ENDPOINT, { params });
     return response.data;
   },
 };
