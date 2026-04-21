@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
 import { Upload } from "lucide-react";
+
+import useSettingLogo from "@/Features/Dashboard/Settings/Hooks/useSettingLogo";
 
 import { Card } from "@/Components/Elements/Cards/Card";
 import { Input } from "@/Components/Elements/Inputs/Input";
@@ -8,35 +9,8 @@ import { Spinner } from "@/Components/Elements/Shadcn/spinner";
 import { Field, FieldError, FieldLabel } from "@/Components/Elements/Shadcn/field";
 import { ImageWithFallback } from "@/Components/Elements/Images/ImageWithFallback";
 
-const SettingsLogoSection = ({ setting, registerLogo, logoErrors, loadingUpload, loadingDeleteLogo, onSubmitLogo, onUploadLogo, onDeleteLogo, resetLogo }) => {
-  const [logoPreview, setLogoPreview] = useState(null);
-
-  const onLogoFileChange = useCallback((e) => {
-    const file = e.target.files?.[0];
-
-    if (!file) {
-      setLogoPreview(null);
-      return;
-    }
-
-    const previewUrl = URL.createObjectURL(file);
-    setLogoPreview(previewUrl);
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      if (logoPreview) {
-        URL.revokeObjectURL(logoPreview);
-      }
-    };
-  }, [logoPreview]);
-
-  const handleSubmitLogoForm = async (formData) => {
-    const response = await onUploadLogo(formData);
-    setLogoPreview(null);
-    resetLogo({ logo: undefined });
-    return response;
-  };
+const SettingsLogoSection = () => {
+  const { setting, logoPreview, logoFieldProps, logoErrors, loadingUpload, onSubmitLogo } = useSettingLogo();
 
   return (
     <Card className="space-y-4" outerClassName="border border-border rounded-2xl">
@@ -51,17 +25,17 @@ const SettingsLogoSection = ({ setting, registerLogo, logoErrors, loadingUpload,
         </div>
 
         <div className="space-y-3 md:col-span-8">
-          <div className="flex items-center justify-center border rounded-md bg-input/20 min-h-40">
+          <div className="flex items-center justify-center w-full max-h-[30vh] overflow-hidden border rounded-md bg-input/20 aspect-video">
             {logoPreview ? (
-              <img src={logoPreview} alt={setting?.restaurant_name || "Preview logo tenant"} className="object-contain max-h-40" />
+              <img src={logoPreview} alt={setting?.restaurant_name || "Preview logo tenant"} className="object-cover object-center w-full h-full" />
             ) : setting?.logo_url ? (
-              <ImageWithFallback src={setting.logo_url} alt={setting?.restaurant_name || "Logo tenant"} className="object-contain max-h-40" />
+              <ImageWithFallback src={setting.logo_url} alt={setting?.restaurant_name || "Logo tenant"} className="object-cover object-center w-full h-full" />
             ) : (
               <p className="text-sm text-muted-foreground">Belum ada logo</p>
             )}
           </div>
 
-          <form className="space-y-3" onSubmit={onSubmitLogo(handleSubmitLogoForm)}>
+          <form className="space-y-3" onSubmit={onSubmitLogo}>
             <Field>
               <FieldLabel htmlFor="logo">File Logo (JPG/PNG, max 2MB)</FieldLabel>
 
@@ -71,34 +45,14 @@ const SettingsLogoSection = ({ setting, registerLogo, logoErrors, loadingUpload,
                 </div>
               </label>
 
-              <Input
-                type="file"
-                id="logo"
-                name="logo"
-                accept="image/jpeg,image/jpg,image/png"
-                className="hidden"
-                {...registerLogo("logo", {
-                  setValueAs: (files) => (files && files.length > 0 ? files : undefined),
-                  onChange: onLogoFileChange,
-                })}
-                aria-invalid={!!logoErrors.logo}
-              />
+              <Input type="file" id="logo" name="logo" accept="image/jpeg,image/jpg,image/png" className="hidden" {...logoFieldProps} aria-invalid={!!logoErrors.logo} />
               {logoErrors.logo && <FieldError>{logoErrors.logo.message}</FieldError>}
             </Field>
 
             <div className="flex items-center gap-2">
-              <Button type="submit" disabled={!setting?.id || loadingUpload} className="relative min-w-28">
+              <Button type="submit" disabled={!setting || loadingUpload} className="relative min-w-28">
                 <span className={loadingUpload ? "invisible" : "visible"}>Upload Logo</span>
                 {loadingUpload && (
-                  <div className="absolute">
-                    <Spinner />
-                  </div>
-                )}
-              </Button>
-
-              <Button type="button" variant="destructive" disabled={!setting?.id || !setting?.logo_url || loadingDeleteLogo} className="relative" onClick={onDeleteLogo}>
-                <span className={loadingDeleteLogo ? "invisible" : "visible"}>Hapus Logo</span>
-                {loadingDeleteLogo && (
                   <div className="absolute">
                     <Spinner />
                   </div>

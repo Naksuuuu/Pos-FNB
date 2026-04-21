@@ -1,7 +1,7 @@
-import { Controller } from "react-hook-form";
 import { Store } from "lucide-react";
 
 import SettingsSectionRow from "@/Features/Dashboard/Settings/Components/SettingsSectionRow";
+import useSaveSetting from "@/Features/Dashboard/Settings/Hooks/useSaveSetting";
 
 import { Button } from "@/Components/Elements/Shadcn/button";
 import { Input } from "@/Components/Elements/Inputs/Input";
@@ -9,28 +9,9 @@ import { Switch } from "@/Components/Elements/Shadcn/switch";
 import { Spinner } from "@/Components/Elements/Shadcn/spinner";
 import { Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/Components/Elements/Shadcn/field";
 
-const normalizeDateTime = (dateValue) => {
-  if (!dateValue) {
-    return "-";
-  }
-
-  const parsedDate = new Date(dateValue);
-  if (Number.isNaN(parsedDate.getTime())) {
-    return "-";
-  }
-
-  return parsedDate.toLocaleString("id-ID", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  });
-};
-
-const SettingsFormSection = ({ register, control, watch, errors, loadingSave, loadingGet, setting, onSubmit }) => {
-  const createdAtLabel = normalizeDateTime(setting?.created_at);
-  const updatedAtLabel = normalizeDateTime(setting?.updated_at);
-  const selectedDashboardColor = watch("dashboard_color");
-  const isOperational = watch("is_operational");
-  const isActive = watch("is_active");
+const SettingsFormSection = () => {
+  const { loadingGet, loadingSave, createdAtLabel, updatedAtLabel, selectedDashboardColor, isOperational, isActive, errors, register, operationalField, activeField, onSubmit, timeInputProps } =
+    useSaveSetting();
 
   return (
     <form className="p-4 space-y-0 md:p-6" onSubmit={onSubmit}>
@@ -52,12 +33,12 @@ const SettingsFormSection = ({ register, control, watch, errors, loadingSave, lo
         <FieldGroup className="grid grid-cols-1 gap-3 md:grid-cols-2">
           <Field>
             <FieldLabel htmlFor="opening_time">Jam Buka</FieldLabel>
-            <Input id="opening_time" type="time" name="opening_time" {...register("opening_time")} aria-invalid={!!errors.opening_time} />
+            <Input id="opening_time" type="time" step="1" name="opening_time" {...timeInputProps.opening_time} aria-invalid={!!errors.opening_time} />
             {errors.opening_time && <FieldError>{errors.opening_time.message}</FieldError>}
           </Field>
           <Field>
             <FieldLabel htmlFor="closing_time">Jam Tutup</FieldLabel>
-            <Input id="closing_time" type="time" name="closing_time" {...register("closing_time")} aria-invalid={!!errors.closing_time} />
+            <Input id="closing_time" type="time" step="1" name="closing_time" {...timeInputProps.closing_time} aria-invalid={!!errors.closing_time} />
             {errors.closing_time && <FieldError>{errors.closing_time.message}</FieldError>}
           </Field>
         </FieldGroup>
@@ -75,12 +56,7 @@ const SettingsFormSection = ({ register, control, watch, errors, loadingSave, lo
 
       <SettingsSectionRow title="Status operasional" description="Aktifkan jika tenant sedang menerima pesanan.">
         <Field orientation="horizontal" className="items-center">
-          <Controller
-            id="is_operational"
-            name="is_operational"
-            control={control}
-            render={({ field }) => <Switch id="is_operational" name="is_operational" checked={field.value || false} onCheckedChange={field.onChange} aria-invalid={!!errors.is_operational} />}
-          />
+          <Switch id="is_operational" name="is_operational" checked={operationalField.value || false} onCheckedChange={operationalField.onChange} aria-invalid={!!errors.is_operational} />
           <FieldContent>
             <FieldDescription>{isOperational ? "Tenant beroperasi" : "Tenant tidak beroperasi"}</FieldDescription>
             {errors.is_operational && <FieldError>{errors.is_operational.message}</FieldError>}
@@ -90,12 +66,7 @@ const SettingsFormSection = ({ register, control, watch, errors, loadingSave, lo
 
       <SettingsSectionRow title="Status data" description="Menandakan record settings ini aktif di sistem.">
         <Field orientation="horizontal" className="items-center">
-          <Controller
-            id="is_active"
-            name="is_active"
-            control={control}
-            render={({ field }) => <Switch id="is_active" name="is_active" checked={field.value || false} onCheckedChange={field.onChange} aria-invalid={!!errors.is_active} />}
-          />
+          <Switch id="is_active" name="is_active" checked={activeField.value || false} onCheckedChange={activeField.onChange} aria-invalid={!!errors.is_active} />
           <FieldContent>
             <FieldDescription>{isActive ? "Settings aktif" : "Settings nonaktif"}</FieldDescription>
             {errors.is_active && <FieldError>{errors.is_active.message}</FieldError>}

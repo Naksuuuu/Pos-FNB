@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { Link, useLocation, useNavigate, useSearchParams } from "react-router";
-import { Minus, Plus, X } from "lucide-react";
+import { CircleOff, Minus, Plus, X } from "lucide-react";
 
 import { ROUTES } from "@/Constants/RouteConstant";
 
@@ -22,6 +22,7 @@ const CatalogDetailPage = () => {
   const { state } = useLocation();
   const isFromOrder = Boolean(state?.fromOrder);
   const [quantity, setQuantity] = useState(isFromOrder ? state.quantity : 1);
+  const [canAddTopping] = useState(false);
   const tableCode = searchParams.get("code")?.trim() || "";
   const queryWithCode = tableCode ? `?code=${encodeURIComponent(tableCode)}` : "";
 
@@ -91,13 +92,24 @@ const CatalogDetailPage = () => {
           <div className="h-1/3">
             <ImageWithFallback src={catalog.image_url} alt={catalog.name} className="object-cover object-center w-full h-full aspect-video" />
           </div>
-          <div className="relative min-h-2/3">
+          <div className="relative min-h-2/3 bg-linear-to-b from-background via-background to-muted/30">
             <div className="absolute w-full h-4 -top-3 bg-background rounded-t-2xl"></div>
 
             <div className="p-3 border-b">
               <h1 className="text-xl uppercase">{catalog.name}</h1>
               <p className="text-lg font-bold">{rupiah(catalog.price)}</p>
               <p className="mt-2 mb-4 text-xs text-muted-foreground">{catalog.description}</p>
+            </div>
+
+            <div className="p-3 space-y-3 border-b">
+              <h2 className="text-sm font-semibold uppercase">Topping</h2>
+
+              {!canAddTopping && (
+                <div className="flex flex-col items-center justify-center py-8 text-center border border-dashed min-h-100 rounded-xl bg-muted/30 border-border">
+                  <CircleOff className="mb-3 size-12 text-muted-foreground" />
+                  <p className="text-sm text-muted-foreground">Tidak ada topping tersedia untuk menu ini.</p>
+                </div>
+              )}
             </div>
 
             <ActionCard onActionClick={() => handleOrder(catalog, quantity)} actionTitle={isFromOrder ? "Update Order" : "Tambah Order"}>
