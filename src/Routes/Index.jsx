@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import store from "@/Redux/Store";
 
+import TenantProvider from "@/Features/Shared/Context/TenantContext";
 import RootErrorBoundary from "@/Pages/RootErrorBoundary";
 import DashboardRoute from "@/Routes/DashboardRoute";
 import PublicRoute from "@/Routes/PublicRoute";
@@ -40,7 +41,9 @@ const queryClient = new QueryClient({
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <Provider store={store}>
-      <RouterProvider router={Routes} fallbackElement={<RootErrorBoundary />} />
+      <TenantProvider>
+        <RouterProvider router={Routes} fallbackElement={<RootErrorBoundary />} />
+      </TenantProvider>
     </Provider>
   </QueryClientProvider>
 );

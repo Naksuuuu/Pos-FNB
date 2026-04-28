@@ -1,7 +1,5 @@
-import { useCallback, useEffect } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router";
 import { Pen, Plus, Trash } from "lucide-react";
-import { useForm } from "react-hook-form";
 
 import { ROUTES } from "@/Constants/RouteConstant";
 
@@ -12,6 +10,7 @@ import { rupiah } from "@/Utils/rupiahHelper";
 import { Button } from "@/Components/Elements/Shadcn/button";
 import { Input } from "@/Components/Elements/Shadcn/input";
 import { Badge } from "@/Components/Elements/Shadcn/badge";
+import { Textarea } from "@/Components/Elements/Shadcn/textarea";
 import { FieldError } from "@/Components/Elements/Shadcn/field";
 import { Card, CardContent } from "@/Components/Elements/Shadcn/card";
 import ActionCard from "@/Features/Customer/Shared/Components/Card/ActionCard";
@@ -24,46 +23,9 @@ const OrderPage = () => {
   const effectiveTableCode = tableCode || "VIP2";
   const queryWithCode = tableCode ? `?code=${encodeURIComponent(tableCode)}` : "";
 
-  const { orderItems, totalPrice, checkout, deleteOrderItem, loadingCheckout } = useAllOrder();
-
-  const {
-    register,
-    handleSubmit,
-    setError,
-    clearErrors,
-    setValue,
-    formState: { errors, isSubmitting },
-  } = useForm({
-    defaultValues: { customer_name: "", code: effectiveTableCode },
+  const { orderItems, totalPrice, deleteOrderItem, register, handleSubmit, errors, isSubmitting, handleCheckout, loadingCheckout } = useAllOrder(effectiveTableCode, queryWithCode, () => {
+    navigate({ pathname: ROUTES.PUBLIC.PAYMENT, search: queryWithCode });
   });
-
-  useEffect(() => {
-    setValue("code", effectiveTableCode);
-  }, [effectiveTableCode, setValue]);
-
-  const handleCheckout = useCallback(
-    async (values) => {
-      if (orderItems.length === 0) {
-        setError("items", { type: "manual", message: "Belum ada pesanan." });
-        return;
-      }
-
-      clearErrors();
-
-      try {
-        await checkout({ customerName: values.customer_name, items: orderItems, code: values.code });
-        navigate({ pathname: ROUTES.PUBLIC.PAYMENT, search: queryWithCode });
-      } catch (error) {
-        if (error?.validationErrors) {
-          Object.entries(error.validationErrors).forEach(([field, message]) => {
-            setError(field, { type: "server", message: message || "Tidak valid" });
-          });
-          return;
-        }
-      }
-    },
-    [checkout, clearErrors, navigate, orderItems, queryWithCode, setError],
-  );
 
   return (
     <>
@@ -153,11 +115,18 @@ const OrderPage = () => {
                 <Input
                   id="customer_name"
                   placeholder="Masukkan nama kamu..."
+                  className="bg-input/30"
                   autoComplete="off"
                   aria-invalid={Boolean(errors.customer_name)}
                   {...register("customer_name", { required: "Nama pelanggan wajib diisi" })}
                 />
                 {errors.customer_name?.message && <FieldError>{errors.customer_name.message}</FieldError>}
+              </div>
+
+              <div className="py-4 space-y-2">
+                <p className="text-sm font-semibold ">Catatan Pesanan (Opsional)</p>
+                <Textarea id="notes" placeholder="Contoh: Tanpa bawang, pesan 1 jam lagi, dll..." aria-invalid={Boolean(errors.notes)} {...register("notes")} />
+                {errors.notes?.message && <FieldError>{errors.notes.message}</FieldError>}
               </div>
             </CardContent>
           </Card>

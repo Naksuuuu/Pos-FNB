@@ -6,14 +6,14 @@ import { useQuery } from "@tanstack/react-query";
 import CatalogService from "@/Features/Customer/Catalog/Services/CatalogService";
 import { CUSTOMER_CATALOG_QUERY_KEYS } from "@/Features/Customer/Catalog/Constants/CatalogConstant";
 import useAvailableCustomerTables from "@/Features/Customer/Catalog/Hooks/useAvailableCustomerTables";
-import useTenantInformation from "@/Features/Customer/Shared/Hooks/useTenantInformation";
+import useTenant from "@/Features/Shared/Hooks/useTenant";
 import { ROUTES } from "@/Constants/RouteConstant";
 
 const useAllCatalog = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { tables, loadingTables } = useAvailableCustomerTables();
-  const { tenant, loadingTenant } = useTenantInformation();
+  const { tenant, loadingTenant } = useTenant();
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: CUSTOMER_CATALOG_QUERY_KEYS.list({}),

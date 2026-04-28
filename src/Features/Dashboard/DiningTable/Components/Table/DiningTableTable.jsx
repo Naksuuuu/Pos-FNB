@@ -11,6 +11,7 @@ import { Button } from "@/Components/Elements/Shadcn/button";
 import { Checkbox } from "@/Components/Elements/Shadcn/checkbox";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/Components/Elements/Shadcn/table";
 
+import DiningTableQrCode from "@/Features/Dashboard/DiningTable/Components/QR/DiningTableQrCode";
 import DashTableError from "@/Features/Dashboard/Shared/Component/Table/DashTableError";
 import DashTableLoading from "@/Features/Dashboard/Shared/Component/Table/DashTableLoading";
 
@@ -79,6 +80,11 @@ const DiningTableTable = memo(
                     ) : (
                       <Badge className="px-2 py-1 bg-destructive/10 text-destructive">Dipakai</Badge>
                     )}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    <div className="flex justify-center">
+                      <DiningTableQrCode scanUrl={table.scan_url} code={table.code} />
+                    </div>
                   </TableCell>
                   <TableCell className="flex justify-center gap-2 text-center">
                     <div className="flex items-center justify-center h-full gap-2 text-center">

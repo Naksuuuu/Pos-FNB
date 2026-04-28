@@ -26,6 +26,10 @@ const TABLE_DINING_TABLE_HEAD_COLUMNS = [
     width: "min-w-[100px] max-w-[400px] text-center",
   },
   {
+    header: "QR",
+    width: "min-w-[110px] max-w-[140px] text-center",
+  },
+  {
     header: "Aksi",
     width: "w-[150px] text-center",
   },
