@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
+import Cookies from "js-cookie";
 
 import OrderService from "@/Features/Customer/Order/Services/OrderService";
 import { CUSTOMER_ORDER_QUERY_KEYS } from "@/Features/Customer/Order/Constants/OrderConstant";
@@ -56,11 +57,27 @@ const useAllOrder = (effectiveTableCode, queryWithCode, onCheckoutSuccess) => {
         };
 
         const response = await mutation.mutateAsync(orderPayload);
-        sessionStorage.setItem("orderResult", JSON.stringify(response));
+
+        // SAVE TO COOKIE WITH 1 YEAR EXPIRATION
+        let orderHistory = [];
+        try {
+          const storedHistory = Cookies.get("orderHistory");
+          orderHistory = storedHistory ? JSON.parse(storedHistory) : [];
+        } catch {
+          orderHistory = [];
+        }
+
+        // Push new order response
+        orderHistory.push(response);
+
+        // Keep last 10 items to prevent cookie size bloat
+        const trimmedHistory = orderHistory.slice(-10);
+        Cookies.set("orderHistory", JSON.stringify(trimmedHistory), { expires: 365 });
+
         sessionStorage.removeItem("orderItems");
 
         if (onCheckoutSuccess) {
-          onCheckoutSuccess();
+          onCheckoutSuccess(response);
         }
       } catch (error) {
         if (error?.validationErrors) {

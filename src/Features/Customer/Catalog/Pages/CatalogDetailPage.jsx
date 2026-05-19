@@ -13,9 +13,12 @@ import ActionCard from "@/Features/Customer/Shared/Components/Card/ActionCard";
 import { Skeleton } from "@/Components/Elements/Shadcn/skeleton";
 import { Spinner } from "@/Components/Elements/Shadcn/spinner";
 import { ImageWithFallback } from "@/Components/Elements/Images/ImageWithFallback";
+import useTenant from "@/Features/Shared/Hooks/useTenant";
 
 const CatalogDetailPage = () => {
   const { catalog, loading } = useDetailCatalog();
+  const { tenant } = useTenant();
+  const isClosed = tenant?.is_operational === false;
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -75,7 +78,9 @@ const CatalogDetailPage = () => {
           size="icon"
           className="rounded-full"
           nativeButton={false}
-          render={(props) => <Link {...props} to={`${isFromOrder ? ROUTES.PUBLIC.ORDER : ROUTES.PUBLIC.CATALOG}${queryWithCode}`} />}
+          render={(props) => (
+            <Link {...props} to={`${isFromOrder ? ROUTES.PUBLIC.ORDER : ROUTES.PUBLIC.CATALOG}${queryWithCode}`} />
+          )}
         >
           <X />
         </Button>
@@ -90,7 +95,11 @@ const CatalogDetailPage = () => {
       {catalog && !loading && (
         <>
           <div className="h-1/3">
-            <ImageWithFallback src={catalog.image_url} alt={catalog.name} className="object-cover object-center w-full h-full aspect-video" />
+            <ImageWithFallback
+              src={catalog.image_url}
+              alt={catalog.name}
+              className="object-cover object-center w-full h-full aspect-video"
+            />
           </div>
           <div className="relative min-h-2/3 bg-linear-to-b from-background via-background to-muted/30">
             <div className="absolute w-full h-4 -top-3 bg-background rounded-t-2xl"></div>
@@ -112,14 +121,30 @@ const CatalogDetailPage = () => {
               )}
             </div>
 
-            <ActionCard onActionClick={() => handleOrder(catalog, quantity)} actionTitle={isFromOrder ? "Update Order" : "Tambah Order"}>
+            <ActionCard
+              onActionClick={() => handleOrder(catalog, quantity)}
+              actionTitle={isClosed ? "Toko Sedang Tutup" : isFromOrder ? "Update Order" : "Tambah Order"}
+              disabled={isClosed}
+            >
               <p>Total Items</p>
               <div className="flex items-center gap-4">
-                <Button size="icon" className="rounded-full size-6" variant="outline" onClick={() => decrentQuantity(1)}>
+                <Button
+                  size="icon"
+                  className="rounded-full size-6"
+                  variant="outline"
+                  onClick={() => decrentQuantity(1)}
+                  disabled={isClosed}
+                >
                   <Minus />
                 </Button>
                 {quantity}
-                <Button size="icon" className="rounded-full size-6" variant="outline" onClick={() => incrementQuantity(1)}>
+                <Button
+                  size="icon"
+                  className="rounded-full size-6"
+                  variant="outline"
+                  onClick={() => incrementQuantity(1)}
+                  disabled={isClosed}
+                >
                   <Plus />
                 </Button>
               </div>

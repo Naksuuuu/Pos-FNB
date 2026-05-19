@@ -15,6 +15,8 @@ import { FieldError } from "@/Components/Elements/Shadcn/field";
 import { Card, CardContent } from "@/Components/Elements/Shadcn/card";
 import ActionCard from "@/Features/Customer/Shared/Components/Card/ActionCard";
 import CustomerNavbar from "@/Features/Customer/Shared/Components/Navigation/CustomerNavbar";
+import { Separator } from "@/Components/Elements/Shadcn/separator";
+import useTenant from "@/Features/Shared/Hooks/useTenant";
 
 const OrderPage = () => {
   const navigate = useNavigate();
@@ -23,9 +25,20 @@ const OrderPage = () => {
   const effectiveTableCode = tableCode || "VIP2";
   const queryWithCode = tableCode ? `?code=${encodeURIComponent(tableCode)}` : "";
 
-  const { orderItems, totalPrice, deleteOrderItem, register, handleSubmit, errors, isSubmitting, handleCheckout, loadingCheckout } = useAllOrder(effectiveTableCode, queryWithCode, () => {
-    navigate({ pathname: ROUTES.PUBLIC.PAYMENT, search: queryWithCode });
+  const { tenant } = useTenant();
+  const taxPercentage = parseFloat(tenant?.tax_percentage || "0");
+
+  const { orderItems, totalPrice, deleteOrderItem, register, handleSubmit, errors, isSubmitting, handleCheckout, loadingCheckout } = useAllOrder(effectiveTableCode, queryWithCode, (orderResponse) => {
+    const orderData = orderResponse?.order || orderResponse?.data?.order || orderResponse || {};
+    const orderId = orderData.id || "";
+    navigate({
+      pathname: ROUTES.PUBLIC.PAYMENT,
+      search: `?code=${encodeURIComponent(tableCode || effectiveTableCode)}&orderId=${encodeURIComponent(orderId)}`,
+    });
   });
+
+  const taxAmount = totalPrice * (taxPercentage / 100);
+  const finalTotal = totalPrice + taxAmount;
 
   return (
     <>
@@ -131,12 +144,34 @@ const OrderPage = () => {
             </CardContent>
           </Card>
         </section>
+
+        <section className="md:px-4">
+          <p className="text-xs font-semibold tracking-widest uppercase text-muted-foreground">Ringkasan Pembayaran</p>
+
+          <Card className="py-0 mt-3 border-none rounded-md shadow-md">
+            <CardContent className="px-4 py-4 space-y-3">
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-muted-foreground">Subtotal (Harga Menu)</span>
+                <span className="font-medium">{rupiah(totalPrice)}</span>
+              </div>
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-muted-foreground">Pajak ({taxPercentage}%)</span>
+                <span className="font-medium">{rupiah(taxAmount)}</span>
+              </div>
+              <Separator className="my-2 border-b border-dashed bg-transparent w-full" />
+              <div className="flex items-center justify-between font-bold text-sm">
+                <span>Total Akhir</span>
+                <span className="text-primary">{rupiah(finalTotal)}</span>
+              </div>
+            </CardContent>
+          </Card>
+        </section>
       </div>
 
       <ActionCard onActionClick={handleSubmit(handleCheckout)} actionTitle={isSubmitting || loadingCheckout ? "Memproses..." : "Lanjut ke Pembayaran"}>
         <p>Total Pembayaran</p>
         <div className="flex items-center gap-4">
-          <h4 className="font-semibold text-md">{rupiah(totalPrice)}</h4>
+          <h4 className="font-semibold text-md">{rupiah(finalTotal)}</h4>
         </div>
       </ActionCard>
     </>

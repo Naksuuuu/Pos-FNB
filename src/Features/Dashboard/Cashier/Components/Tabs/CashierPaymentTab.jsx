@@ -1,8 +1,9 @@
-import { useEffect, useRef } from "react";
-import { CircleMinus, CirclePlus, Loader2 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { CircleMinus, CirclePlus, Loader2, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
 
 import useCashierPayment from "@/Features/Dashboard/Cashier/Hooks/useCashierPayment";
+import DashModalConfirmation from "@/Features/Dashboard/Shared/Component/Modal/DashModalConfirmation";
 
 import { rupiah } from "@/Utils/rupiahHelper";
 
@@ -34,13 +35,18 @@ const CashierPaymentTab = () => {
     defaultQuickCash,
     isCashEnough,
 
+    paymentMethod,
+    setPaymentMethod,
+
     canProcessPayment,
     loadingPayment,
-    loadingUpdateStatus,
+    loadingCancel,
     isNewOrder,
     clearNewOrder,
     refreshSubmittedOrders,
+    isRefreshing,
     processPayment,
+    cancelOrder,
   } = useCashierPayment();
 
   const notificationAudioRef = useRef(null);
@@ -51,6 +57,22 @@ const CashierPaymentTab = () => {
       toast.success(response?.message || "Pembayaran berhasil diproses");
     } catch (error) {
       toast.error(error?.message || "Gagal memproses pembayaran");
+    }
+  };
+
+  const [isOpenCancelModal, setIsOpenCancelModal] = useState(false);
+
+  const handleCancel = () => {
+    setIsOpenCancelModal(true);
+  };
+
+  const handleConfirmCancel = async () => {
+    try {
+      const response = await cancelOrder();
+      toast.success(response?.message || "Pesanan berhasil dibatalkan");
+      setIsOpenCancelModal(false);
+    } catch (error) {
+      toast.error(error?.message || "Gagal membatalkan pesanan");
     }
   };
 
@@ -84,7 +106,8 @@ const CashierPaymentTab = () => {
             <p className="text-base font-semibold">Pesanan Menunggu</p>
             <p className="text-sm text-muted-foreground">Hanya order dengan status submitted</p>
           </div>
-          <Button variant="outline" size="sm" onClick={handleRefresh} disabled={loadingSubmittedOrders}>
+          <Button variant="outline" size="sm" onClick={handleRefresh} disabled={loadingSubmittedOrders || isRefreshing}>
+            {isRefreshing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Refresh
           </Button>
         </div>
@@ -111,7 +134,9 @@ const CashierPaymentTab = () => {
               >
                 <div className="flex items-center justify-between gap-2">
                   <p className="font-semibold">{order.order_no || order.code}</p>
-                  <Badge variant="info">Submitted</Badge>
+                  <Badge variant={order.status === "submitted" ? "info" : order.status === "canceled" ? "destructive" : "secondary"}>
+                    {order.status ? order.status.charAt(0).toUpperCase() + order.status.slice(1) : "Submitted"}
+                  </Badge>
                 </div>
                 <p className="text-sm">{order.customer_name || "Pelanggan"}</p>
                 <p className="text-xs text-muted-foreground">
@@ -167,7 +192,26 @@ const CashierPaymentTab = () => {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-muted-foreground">Metode Pembayaran</span>
-                  <Badge variant="secondary">Cash</Badge>
+                  <div className="inline-flex p-0.5 border rounded-lg border-border bg-input/20">
+                    <Button
+                      type="button"
+                      variant={paymentMethod === "tunai" ? "default" : "ghost"}
+                      size="sm"
+                      className="h-8 px-3 rounded-md text-xs cursor-pointer"
+                      onClick={() => setPaymentMethod("tunai")}
+                    >
+                      Tunai
+                    </Button>
+                    <Button
+                      type="button"
+                      variant={paymentMethod === "nontunai" ? "default" : "ghost"}
+                      size="sm"
+                      className="h-8 px-3 rounded-md text-xs cursor-pointer"
+                      onClick={() => setPaymentMethod("nontunai")}
+                    >
+                      Non-Tunai
+                    </Button>
+                  </div>
                 </div>
               </div>
 
@@ -215,14 +259,43 @@ const CashierPaymentTab = () => {
                 )}
               </div>
 
-              <Button type="submit" disabled={!canProcessPayment} className="w-full">
-                {loadingPayment || loadingUpdateStatus ? <Loader2 className="animate-spin" /> : null}
-                Konfirmasi Pembayaran
-              </Button>
+              <div className="flex gap-2 w-full">
+                <Button
+                  type="button"
+                  variant="destructive"
+                  onClick={handleCancel}
+                  disabled={loadingPayment || loadingCancel}
+                  className="flex-1 cursor-pointer"
+                >
+                  {loadingCancel ? <Loader2 className="animate-spin mr-1" /> : null}
+                  Batalkan Pesanan
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={!canProcessPayment || loadingPayment || loadingCancel}
+                  className="flex-1 cursor-pointer"
+                >
+                  {loadingPayment ? <Loader2 className="animate-spin mr-1" /> : null}
+                  Konfirmasi Pembayaran
+                </Button>
+              </div>
             </form>
           </>
         )}
       </Card>
+
+      <DashModalConfirmation
+        isOpen={isOpenCancelModal}
+        title="Batalkan Pesanan?"
+        description={`Apakah Anda yakin ingin membatalkan pesanan ${selectedOrder?.order_no || selectedOrder?.code || "ini"}? Aksi ini tidak dapat dibatalkan.`}
+        onOpenModal={() => setIsOpenCancelModal(false)}
+        loading={loadingCancel}
+        handleDelete={handleConfirmCancel}
+        id={selectedOrder?.id}
+        icon={AlertTriangle}
+        confirmLabel="Batalkan Pesanan"
+        variant="destructive"
+      />
     </div>
   );
 };

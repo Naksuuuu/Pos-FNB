@@ -24,10 +24,16 @@ import {
 } from "@/Components/Elements/Shadcn/sidebar";
 import { Button } from "@/Components/Elements/Shadcn/button";
 import { selectAuthRole } from "@/Redux/Features/Auth/Login/LoginSelector";
+import useTenant from "@/Features/Shared/Hooks/useTenant";
 
 const CreateSidebar = memo(({ pathname }) => {
+  const { tenant } = useTenant();
+
   const currentRole = useSelector(selectAuthRole);
-  const SIDEBAR_ITEMS = useMemo(() => SidebarItem.filter((item) => item.allowed_roles.includes(currentRole)), [currentRole]);
+  const SIDEBAR_ITEMS = useMemo(
+    () => SidebarItem.filter((item) => item.allowed_roles.includes(currentRole)),
+    [currentRole],
+  );
   const { logout } = useLogout();
 
   const handleLogout = useCallback(async () => {
@@ -43,9 +49,11 @@ const CreateSidebar = memo(({ pathname }) => {
               className="w-full py-6 text-center"
               render={
                 <Link to={ROUTES.PUBLIC.HOME}>
-                  <h1 className="text-2xl font-extrabold tracking-tight">
-                    POS <span className="text-primary/90">App</span>
-                  </h1>
+                  {tenant?.restaurant_name && (
+                    <h1 className="text-2xl w-full font-extrabold tracking-tight text-primary text-center">
+                      {tenant.restaurant_name}
+                    </h1>
+                  )}
                 </Link>
               }
             ></SidebarMenuButton>

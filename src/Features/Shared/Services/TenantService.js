@@ -1,12 +1,12 @@
 import { apiUtils } from "@/Services/Common/Base";
 
-const TENANT_INFORMATION_ENDPOINT = "/customer/tenant-information";
+const TENANT_INFORMATION_ENDPOINT = "/tenant/information";
 
-const CustomerSharedService = {
+const TenantService = {
   tenantInformation: async () => {
     const response = await apiUtils.get(TENANT_INFORMATION_ENDPOINT);
     return response.data;
   },
 };
 
-export default CustomerSharedService;
+export default TenantService;

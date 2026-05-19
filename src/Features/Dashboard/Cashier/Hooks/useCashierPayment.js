@@ -15,6 +15,10 @@ const useCashierPayment = () => {
   const queryClient = useQueryClient();
   const [selectedOrderId, setSelectedOrderId] = useState(null);
   const [isNewOrder, setIsNewOrder] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("tunai");
+  const [isCanceling, setIsCanceling] = useState(false);
+  const [isConfirming, setIsConfirming] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const previousOrderIdsRef = useRef(new Set());
 
   const {
@@ -37,7 +41,7 @@ const useCashierPayment = () => {
   const {
     data,
     isLoading: loadingSubmittedOrders,
-    refetch: refreshSubmittedOrders,
+    refetch,
   } = useQuery({
     queryKey: CASHIER_QUERY_KEYS.submittedOrders(ordersParams),
     queryFn: async () => {
@@ -50,7 +54,22 @@ const useCashierPayment = () => {
     refetchInterval: 30000,
   });
 
-  const submittedOrders = useMemo(() => data?.orders || [], [data?.orders]);
+  const refreshSubmittedOrders = useCallback(async () => {
+    setIsRefreshing(true);
+    try {
+      await refetch();
+      await new Promise((resolve) => setTimeout(resolve, 800));
+    } finally {
+      setIsRefreshing(false);
+    }
+  }, [refetch]);
+
+  const submittedOrders = useMemo(() => {
+    if (Array.isArray(data)) {
+      return data;
+    }
+    return data?.orders || [];
+  }, [data]);
 
   useEffect(() => {
     const nextIds = new Set(submittedOrders.map((order) => String(order.id)));
@@ -103,11 +122,11 @@ const useCashierPayment = () => {
     [setValue],
   );
 
-  const updateStatusMutation = useMutation({
+  const updatePaymentMutation = useMutation({
     mutationFn: async ({ orderId, payload }) => {
-      const response = await CashierService.updateOrderStatus(orderId, payload);
+      const response = await CashierService.updatePaymentStatus(orderId, payload);
       if (!response.success || (response.status !== 200 && response.status !== 201)) {
-        throw new Error(response?.message || "Failed to update order status");
+        throw new Error(response?.message || "Gagal memperbarui status pembayaran");
       }
       return response;
     },
@@ -125,18 +144,64 @@ const useCashierPayment = () => {
       throw new Error("Uang diterima masih kurang");
     }
 
-    const response = await updateStatusMutation.mutateAsync({
-      orderId: selectedOrder.id,
-      payload: { status: "completed" },
-    });
+    const orderId = selectedOrder.id;
+    if (!orderId) {
+      throw new Error("ID Pesanan tidak ditemukan");
+    }
 
-    reset();
-    await refreshSubmittedOrders();
+    setIsConfirming(true);
+    try {
+      const response = await updatePaymentMutation.mutateAsync({
+        orderId,
+        payload: {
+          method: paymentMethod,
+          amount: paymentTotal,
+          status: "completed",
+        },
+      });
 
-    return response;
-  }, [selectedOrder, parsedCashAmount, paymentTotal, updateStatusMutation, reset, refreshSubmittedOrders]);
+      reset();
+      setPaymentMethod("tunai");
+      await refreshSubmittedOrders();
 
-  const canProcessPayment = !!selectedOrder && !updateStatusMutation.isPending && isCashEnough;
+      return response;
+    } finally {
+      setIsConfirming(false);
+    }
+  }, [selectedOrder, parsedCashAmount, paymentTotal, paymentMethod, updatePaymentMutation, reset, refreshSubmittedOrders]);
+
+  const cancelOrder = useCallback(async () => {
+    if (!selectedOrder) {
+      throw new Error("Pilih pesanan terlebih dahulu");
+    }
+
+    const orderId = selectedOrder.id;
+    if (!orderId) {
+      throw new Error("ID Pesanan tidak ditemukan");
+    }
+
+    setIsCanceling(true);
+    try {
+      const response = await updatePaymentMutation.mutateAsync({
+        orderId,
+        payload: {
+          method: paymentMethod,
+          amount: paymentTotal,
+          status: "canceled",
+        },
+      });
+
+      reset();
+      setPaymentMethod("tunai");
+      await refreshSubmittedOrders();
+
+      return response;
+    } finally {
+      setIsCanceling(false);
+    }
+  }, [selectedOrder, paymentTotal, paymentMethod, updatePaymentMutation, reset, refreshSubmittedOrders]);
+
+  const canProcessPayment = !!selectedOrder && !isConfirming && !isCanceling && isCashEnough;
 
   return {
     submittedOrders,
@@ -158,14 +223,19 @@ const useCashierPayment = () => {
     defaultQuickCash,
     isCashEnough,
 
+    paymentMethod,
+    setPaymentMethod,
+
     canProcessPayment,
-    loadingPayment: false,
-    loadingUpdateStatus: updateStatusMutation.isPending,
+    loadingPayment: isConfirming,
+    loadingCancel: isCanceling,
     isNewOrder,
     clearNewOrder,
     loadSubmittedOrders: refreshSubmittedOrders,
     refreshSubmittedOrders,
+    isRefreshing,
     processPayment,
+    cancelOrder,
   };
 };
 

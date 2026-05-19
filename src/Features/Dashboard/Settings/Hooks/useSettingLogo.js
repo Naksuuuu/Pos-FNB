@@ -8,6 +8,7 @@ import { SETTINGS_QUERY_KEYS } from "@/Features/Dashboard/Settings/Constants/Set
 import useSettingResource from "@/Features/Dashboard/Settings/Hooks/useSettingResource";
 import SettingsService from "@/Features/Dashboard/Settings/Services/SettingsService";
 import { SettingLogoSchema } from "@/Features/Dashboard/Settings/Schema/SettingsSchema";
+import { SHARED_QUERY_KEYS } from "@/Features/Shared/Constants/SharedConstant";
 
 const useSettingLogo = () => {
   const queryClient = useQueryClient();
@@ -55,6 +56,7 @@ const useSettingLogo = () => {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: SETTINGS_QUERY_KEYS.detail() });
+      await queryClient.invalidateQueries({ queryKey: SHARED_QUERY_KEYS.tenant() });
     },
   });
 

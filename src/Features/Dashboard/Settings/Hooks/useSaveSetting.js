@@ -9,6 +9,7 @@ import { SETTINGS_QUERY_KEYS } from "@/Features/Dashboard/Settings/Constants/Set
 import useSettingResource from "@/Features/Dashboard/Settings/Hooks/useSettingResource";
 import SettingsService from "@/Features/Dashboard/Settings/Services/SettingsService";
 import { UpdateSettingSchema } from "@/Features/Dashboard/Settings/Schema/SettingsSchema";
+import { SHARED_QUERY_KEYS } from "@/Features/Shared/Constants/SharedConstant";
 
 const useSaveSetting = () => {
   const queryClient = useQueryClient();
@@ -17,6 +18,7 @@ const useSaveSetting = () => {
   const {
     control,
     register,
+    setValue,
     watch,
     reset,
     setError,
@@ -29,8 +31,8 @@ const useSaveSetting = () => {
       tax_percentage: "10",
       dashboard_color: "#D97706",
       is_operational: false,
-      opening_time: "08:00:00",
-      closing_time: "22:00:00",
+      opening_time: "08:00",
+      closing_time: "22:00",
       is_active: true,
     },
   });
@@ -59,21 +61,21 @@ const useSaveSetting = () => {
         const openingRaw = String(setting.opening_time || "").trim();
 
         if (!openingRaw) {
-          return "08:00:00";
+          return "08:00";
         }
 
         const openingParsed = parse(openingRaw, openingRaw.length === 8 ? "HH:mm:ss" : "HH:mm", new Date());
-        return isValid(openingParsed) ? format(openingParsed, "HH:mm:ss") : "08:00:00";
+        return isValid(openingParsed) ? format(openingParsed, "HH:mm") : "08:00";
       })(),
       closing_time: (() => {
         const closingRaw = String(setting.closing_time || "").trim();
 
         if (!closingRaw) {
-          return "22:00:00";
+          return "22:00";
         }
 
         const closingParsed = parse(closingRaw, closingRaw.length === 8 ? "HH:mm:ss" : "HH:mm", new Date());
-        return isValid(closingParsed) ? format(closingParsed, "HH:mm:ss") : "22:00:00";
+        return isValid(closingParsed) ? format(closingParsed, "HH:mm") : "22:00";
       })(),
       is_active: Boolean(setting.is_active),
     });
@@ -99,6 +101,7 @@ const useSaveSetting = () => {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: SETTINGS_QUERY_KEYS.detail() });
+      await queryClient.invalidateQueries({ queryKey: SHARED_QUERY_KEYS.tenant() });
     },
   });
 
@@ -167,6 +170,7 @@ const useSaveSetting = () => {
     isActive,
     errors,
     register,
+    setValue,
     operationalField,
     activeField,
     onSubmit,
@@ -180,7 +184,7 @@ const useSaveSetting = () => {
           }
 
           const timeParsed = parse(timeRaw, timeRaw.length === 8 ? "HH:mm:ss" : "HH:mm", new Date());
-          return isValid(timeParsed) ? format(timeParsed, "HH:mm:ss") : "";
+          return isValid(timeParsed) ? format(timeParsed, "HH:mm") : "";
         },
       }),
       closing_time: register("closing_time", {
@@ -192,7 +196,7 @@ const useSaveSetting = () => {
           }
 
           const timeParsed = parse(timeRaw, timeRaw.length === 8 ? "HH:mm:ss" : "HH:mm", new Date());
-          return isValid(timeParsed) ? format(timeParsed, "HH:mm:ss") : "";
+          return isValid(timeParsed) ? format(timeParsed, "HH:mm") : "";
         },
       }),
     },

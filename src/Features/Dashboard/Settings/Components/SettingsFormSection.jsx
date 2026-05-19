@@ -10,7 +10,7 @@ import { Spinner } from "@/Components/Elements/Shadcn/spinner";
 import { Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/Components/Elements/Shadcn/field";
 
 const SettingsFormSection = () => {
-  const { loadingGet, loadingSave, createdAtLabel, updatedAtLabel, selectedDashboardColor, isOperational, isActive, errors, register, operationalField, activeField, onSubmit, timeInputProps } =
+  const { loadingGet, loadingSave, createdAtLabel, updatedAtLabel, selectedDashboardColor, isOperational, isActive, errors, register, setValue, operationalField, activeField, onSubmit, timeInputProps } =
     useSaveSetting();
 
   return (
@@ -33,12 +33,12 @@ const SettingsFormSection = () => {
         <FieldGroup className="grid grid-cols-1 gap-3 md:grid-cols-2">
           <Field>
             <FieldLabel htmlFor="opening_time">Jam Buka</FieldLabel>
-            <Input id="opening_time" type="time" step="1" name="opening_time" {...timeInputProps.opening_time} aria-invalid={!!errors.opening_time} />
+            <Input id="opening_time" type="time" name="opening_time" {...timeInputProps.opening_time} aria-invalid={!!errors.opening_time} />
             {errors.opening_time && <FieldError>{errors.opening_time.message}</FieldError>}
           </Field>
           <Field>
             <FieldLabel htmlFor="closing_time">Jam Tutup</FieldLabel>
-            <Input id="closing_time" type="time" step="1" name="closing_time" {...timeInputProps.closing_time} aria-invalid={!!errors.closing_time} />
+            <Input id="closing_time" type="time" name="closing_time" {...timeInputProps.closing_time} aria-invalid={!!errors.closing_time} />
             {errors.closing_time && <FieldError>{errors.closing_time.message}</FieldError>}
           </Field>
         </FieldGroup>
@@ -47,8 +47,21 @@ const SettingsFormSection = () => {
       <SettingsSectionRow title="Warna dashboard" description="Pilih warna utama branding dashboard tenant.">
         <Field>
           <div className="flex items-center gap-2">
-            <Input id="dashboard_color" type="color" name="dashboard_color" className="w-24" {...register("dashboard_color")} aria-invalid={!!errors.dashboard_color} />
-            <Input id="dashboard_color_text" type="text" value={selectedDashboardColor || ""} readOnly aria-invalid={!!errors.dashboard_color} />
+            <Input
+              id="dashboard_color"
+              type="color"
+              className="w-24"
+              value={selectedDashboardColor?.startsWith("#") && selectedDashboardColor.length === 7 ? selectedDashboardColor : "#D97706"}
+              onChange={(e) => setValue("dashboard_color", e.target.value)}
+              aria-invalid={!!errors.dashboard_color}
+            />
+            <Input
+              id="dashboard_color_text"
+              type="text"
+              placeholder="Contoh: #D97706"
+              {...register("dashboard_color")}
+              aria-invalid={!!errors.dashboard_color}
+            />
           </div>
           {errors.dashboard_color && <FieldError>{errors.dashboard_color.message}</FieldError>}
         </Field>

@@ -11,6 +11,7 @@ const TABLE_ORDER_HEAD_COLUMNS = [
   { header: "Nama Pelanggan", width: "w-2/6" },
   { header: "Kode Meja", width: "w-1/6" },
   { header: "Total Harga", width: "w-1/6" },
+  { header: "Metode", width: "w-1/6 text-center" },
   { header: "Status", width: "w-1/6 text-center" },
   { header: "Aksi", width: "w-1/6 text-center" },
 ];

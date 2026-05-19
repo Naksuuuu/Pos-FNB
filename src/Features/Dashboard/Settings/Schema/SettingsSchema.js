@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const isValidTime = /^([01]\d|2[0-3]):[0-5]\d:[0-5]\d$/;
+const isValidTime = /^([01]\d|2[0-3]):[0-5]\d$/;
 
 const restaurant_name = z.string().min(1, "Nama restoran wajib diisi!").max(255, "Nama restoran maksimal 255 karakter");
 
@@ -12,8 +12,8 @@ const tax_percentage = z
 
 const dashboard_color = z.string().regex(/^#([0-9A-Fa-f]{6})$/, "Warna dashboard harus format hex, contoh #D97706");
 
-const opening_time = z.string().regex(isValidTime, "Jam buka harus format HH:mm:ss");
-const closing_time = z.string().regex(isValidTime, "Jam tutup harus format HH:mm:ss");
+const opening_time = z.string().regex(isValidTime, "Jam buka harus format HH:mm");
+const closing_time = z.string().regex(isValidTime, "Jam tutup harus format HH:mm");
 
 export const UpdateSettingSchema = z.object({
   restaurant_name,

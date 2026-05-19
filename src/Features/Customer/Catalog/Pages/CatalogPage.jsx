@@ -40,7 +40,11 @@ const CatalogPage = () => {
         outerClassName="border border-border  rounded-b-md rounded-t-none shadow-none mb-3"
         className="p-0 md:p-0 max-h-[50vh] flex items-center justify-center w-full overflow-hidden  bg-input/20 aspect-video"
       >
-        <ImageWithFallback src={tenant?.logo_url} alt={tenantName} className="object-cover object-center w-full h-full" />
+        <ImageWithFallback
+          src={tenant?.logo_url}
+          alt={tenantName}
+          className="object-cover object-center w-full h-full"
+        />
       </Card>
 
       <div className="px-3 mb-3">
@@ -53,19 +57,38 @@ const CatalogPage = () => {
               </div>
             ) : (
               <div className="space-y-2">
-                <h1 className="text-xl font-extrabold leading-tight">{tenantName}</h1>
+                <h1 className="text-xl font-extrabold leading-tight text-primary">{tenantName}</h1>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Clock3 className="size-4" />
                   <span>
-                    Buka hari ini, {openingTime}-{closingTime}
+                    {tenant?.is_operational ? (
+                      "Buka hari ini"
+                    ) : (
+                      <span className="text-destructive">Tutup hari ini</span>
+                    )}{" "}
+                    {tenant?.is_operational && `, ${openingTime}-${closingTime}`}
                   </span>
                 </div>
               </div>
             )}
           </Card>
 
+          {tenant?.is_operational === false && (
+            <Card
+              outerClassName="border border-destructive/20 rounded-md shadow-none"
+              className="bg-destructive/5 text-destructive p-3 flex items-center gap-2"
+            >
+              <span className="font-semibold text-sm">
+                Toko Sedang Tutup. Maaf, saat ini kami sedang tidak menerima pesanan.
+              </span>
+            </Card>
+          )}
+
           {isScannedMode && isSelectedTableValid && (
-            <Card outerClassName="shadow-none border border-primary/20 border rounded-md" className="w-full p-3 bg-primary/5">
+            <Card
+              outerClassName="shadow-none border border-primary/20 border rounded-md"
+              className="w-full p-3 bg-primary/5"
+            >
               <p className="text-sm">
                 Nomor meja: <span className="font-semibold">{tableCode}</span>
               </p>
@@ -107,13 +130,13 @@ const CatalogPage = () => {
                 <div className="w-full mx-auto scroll-mt-44">
                   <div className="flex items-center w-full gap-2 my-4">
                     <div className="font-bold uppercase">
-                      <h2 className="text-2xl">{categoryName}</h2>
+                      <h2 className="text-2xl text-primary">{categoryName}</h2>
                     </div>
                     <div className="h-0.5 bg-gray-200 grow"></div>
                   </div>
                   <div className="grid w-full grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
                     {catalogs.map((catalog, index) => (
-                      <CatalogCard key={index} catalog={catalog} />
+                      <CatalogCard key={index} catalog={catalog} isClosed={tenant?.is_operational === false} />
                     ))}
                   </div>
                 </div>
@@ -121,7 +144,7 @@ const CatalogPage = () => {
             ))}
         </div>
 
-        {orderItems.length > 0 && (
+        {orderItems.length > 0 && tenant?.is_operational && (
           <>
             <div className="fixed left-0 right-0 px-3 bottom-3 z-999" onClick={handleCheckout}>
               <div className="flex items-center w-full h-16 max-w-3xl mx-auto overflow-hidden border rounded-md shadow-sm bg-background">

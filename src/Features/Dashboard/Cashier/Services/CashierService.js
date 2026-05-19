@@ -66,6 +66,11 @@ const CashierService = {
     return response.data;
   },
 
+  updatePaymentStatus: async (orderId, payload) => {
+    const response = await apiUtils.put(`/dashboard/cashier/orders/${orderId}/payment`, payload);
+    return response.data;
+  },
+
   paymentOrder: async (payload) => {
     const response = await apiUtils.post(PAYMENT_ENDPOINT, payload);
     return response.data;
