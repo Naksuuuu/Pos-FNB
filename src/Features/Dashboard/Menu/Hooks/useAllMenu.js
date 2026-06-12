@@ -46,7 +46,7 @@ const useAllMenu = () => {
     },
   });
 
-  const categories = categoriesData?.categories || [];
+  const categories = useMemo(() => categoriesData?.categories || [], [categoriesData?.categories]);
   const menus = data?.menus || [];
   const statistic = data?.statistic
     ? {
@@ -84,12 +84,21 @@ const useAllMenu = () => {
   const loading = isLoading;
   const errorMessage = error?.message || null;
 
-  const categoryOptions = useMemo(() => [...CATEGORY_ID_OPTIONS, ...categories.map((category) => ({ label: category.name, value: category.id }))], [categories]);
+  const categoryOptions = useMemo(
+    () => [...CATEGORY_ID_OPTIONS, ...categories.map((category) => ({ label: category.name, value: category.id }))],
+    [categories],
+  );
 
   const search = filters.search || "";
   const [optimisticSearch, setOptimisticSearch] = useState(search);
 
-  const showReset = !!(filters.sort_by || filters.sort_direction || filters.is_available || filters.category_id || search);
+  const showReset = !!(
+    filters.sort_by ||
+    filters.sort_direction ||
+    filters.is_available ||
+    filters.category_id ||
+    search
+  );
 
   const handlePageChange = useCallback(
     (newPage) => {

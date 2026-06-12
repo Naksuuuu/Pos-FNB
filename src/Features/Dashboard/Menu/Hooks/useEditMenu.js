@@ -22,7 +22,7 @@ const useEditMenu = () => {
     },
   });
 
-  const categories = categoryData?.categories || [];
+  const categories = useMemo(() => categoryData?.categories || [], [categoryData?.categories]);
 
   const mutation = useMutation({
     mutationFn: async ({ menuId, menuData }) => {

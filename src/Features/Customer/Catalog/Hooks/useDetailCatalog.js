@@ -20,12 +20,10 @@ const useDetailCatalog = () => {
     },
   });
 
-  const catalogs = data?.menus || [];
+  const catalogs = useMemo(() => data?.menus || [], [data?.menus]);
   const loading = isLoading;
 
-  const catalog = useMemo(() => {
-    return catalogs.find((item) => item.id.toString() === catalogId);
-  }, [catalogs, catalogId]);
+  const catalog = useMemo(() => catalogs.find((item) => item.id.toString() === catalogId), [catalogs, catalogId]);
 
   return { catalog, loading };
 };

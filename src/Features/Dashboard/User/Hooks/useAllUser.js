@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import useFilterParams from "@/Hooks/useFilterParams";
@@ -31,9 +31,9 @@ const useAllUser = () => {
     },
   });
 
-  const users = data?.users || [];
-  const pagination = data?.pagination || {};
-  const statistic = data?.statistic || {};
+  const users = useMemo(() => data?.users || [], [data?.users]);
+  const pagination = useMemo(() => data?.pagination || {}, [data?.pagination]);
+  const statistic = useMemo(() => data?.statistic || {}, [data?.statistic]);
 
   const handlePageChange = useCallback(
     (newPage) => {

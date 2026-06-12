@@ -55,11 +55,19 @@ const useCashierResources = () => {
     },
   });
 
-  const categoriesFromStore = categoriesData?.categories || [];
-  const tablesFromStore = tablesData?.tables || [];
-  const menus = menusData?.menus || [];
+  const categoriesFromStore = useMemo(() => categoriesData?.categories || [], [categoriesData?.categories]);
 
-  const categories = useMemo(() => [{ value: "", label: "Semua" }, ...categoriesFromStore.map((category) => ({ value: category.id, label: category.name }))], [categoriesFromStore]);
+  const tablesFromStore = useMemo(() => tablesData?.tables || [], [tablesData?.tables]);
+
+  const menus = useMemo(() => menusData?.menus || [], [menusData?.menus]);
+
+  const categories = useMemo(
+    () => [
+      { value: "", label: "Semua" },
+      ...categoriesFromStore.map((category) => ({ value: category.id, label: category.name })),
+    ],
+    [categoriesFromStore],
+  );
 
   const tables = useMemo(
     () => [

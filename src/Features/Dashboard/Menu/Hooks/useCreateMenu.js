@@ -25,7 +25,7 @@ const useCreateMenu = () => {
     },
   });
 
-  const categories = categoryData?.categories || [];
+  const categories = useMemo(() => categoryData?.categories || [], [categoryData?.categories]);
 
   const mutation = useMutation({
     mutationFn: async (menuData) => {

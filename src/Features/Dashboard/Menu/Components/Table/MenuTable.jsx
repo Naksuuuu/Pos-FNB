@@ -39,8 +39,6 @@ const MenuTable = memo(
       setExpandedRowId((prevId) => (prevId === id ? null : id));
     }, []);
 
-    console.log(menus);
-
     return (
       <>
         <Table className="min-w-full border-b">
