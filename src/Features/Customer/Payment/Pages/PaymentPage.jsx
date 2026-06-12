@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from "react";
-import { useNavigate, useSearchParams } from "react-router";
+import { useNavigate, useSearchParams, useLocation } from "react-router";
 import { CheckCircle2 } from "lucide-react";
 import Cookies from "js-cookie";
 
@@ -15,9 +15,14 @@ import { Badge } from "@/Components/Elements/Shadcn/badge";
 
 const PaymentPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const tableCodeFromQuery = searchParams.get("code")?.trim() || "";
   const orderIdFromQuery = searchParams.get("orderId")?.trim() || "";
+
+  const fromHistory = location.state?.fromHistory;
+  const queryWithCode = tableCodeFromQuery ? `?code=${encodeURIComponent(tableCodeFromQuery)}` : "";
+  const backLink = fromHistory ? `${ROUTES.PUBLIC.ORDER_HISTORY}` : `${ROUTES.PUBLIC.CATALOG}${queryWithCode}`;
 
   const orderHistory = useMemo(() => {
     try {
@@ -77,7 +82,7 @@ const PaymentPage = () => {
 
   return (
     <>
-      <CustomerNavbar navbarTitle="Pembayaran" backLink={ROUTES.PUBLIC.CATALOG} />
+      <CustomerNavbar navbarTitle="Pembayaran" backLink={backLink} />
 
       <div className="flex flex-col flex-1 gap-4 px-3 pb-8">
         {/* Section 1: Success Banner & Order Meta */}

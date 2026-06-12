@@ -8,6 +8,8 @@ export const ROUTES = {
     CATALOG_DETAIL: "/catalog/:catalogId",
     ORDER: "/order",
     PAYMENT: "/payment",
+    PROFILE: "/profile",
+    ORDER_HISTORY: "/profile/order-history",
   },
   DASHBOARD: {
     HOME: "/dashboard",

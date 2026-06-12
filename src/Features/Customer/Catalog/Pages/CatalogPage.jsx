@@ -1,4 +1,4 @@
-import { Clock3, ShoppingBasket, Store } from "lucide-react";
+import { Clock3, Menu, ShoppingBasket } from "lucide-react";
 
 import useAllCatalog from "@/Features/Customer/Catalog/Hooks/useAllCatalog";
 
@@ -10,6 +10,8 @@ import CatalogCard from "@/Features/Customer/Catalog/Components/Card/CatalogCard
 import { ImageWithFallback } from "@/Components/Elements/Images/ImageWithFallback";
 import { Card } from "@/Components/Elements/Cards/Card";
 import { Button } from "@/Components/Elements/Shadcn/button";
+import { ROUTES } from "@/Constants/RouteConstant";
+import { Link } from "react-router";
 
 const CatalogPage = () => {
   const {
@@ -45,6 +47,23 @@ const CatalogPage = () => {
           alt={tenantName}
           className="object-cover object-center w-full h-full"
         />
+
+        <div className="absolute top-4 right-4">
+          <Button
+            variant="outline"
+            size="icon"
+            className="rounded-full"
+            nativeButton={false}
+            render={(props) => (
+              <Link
+                {...props}
+                to={`${ROUTES.PUBLIC.PROFILE}${tableCode ? `?code=${encodeURIComponent(tableCode)}` : ""}`}
+              />
+            )}
+          >
+            <Menu />
+          </Button>
+        </div>
       </Card>
 
       <div className="px-3 mb-3">

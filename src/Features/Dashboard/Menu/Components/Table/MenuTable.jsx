@@ -19,12 +19,27 @@ import DashTableError from "@/Features/Dashboard/Shared/Component/Table/DashTabl
 import DashTableLoading from "@/Features/Dashboard/Shared/Component/Table/DashTableLoading";
 
 const MenuTable = memo(
-  ({ loading, errorMessage, menus = [], pagination, onOpenDeleteModal, onOpenEditModal, handlePageChange, isChecked, handleAllCheckboxChange, handleCheckboxChange, handlePerPageChange, filters }) => {
+  ({
+    loading,
+    errorMessage,
+    menus = [],
+    pagination,
+    onOpenDeleteModal,
+    onOpenEditModal,
+    handlePageChange,
+    isChecked,
+    handleAllCheckboxChange,
+    handleCheckboxChange,
+    handlePerPageChange,
+    filters,
+  }) => {
     const [expandedRowId, setExpandedRowId] = useState(null);
 
     const handleExpandedRow = useCallback((id) => {
       setExpandedRowId((prevId) => (prevId === id ? null : id));
     }, []);
+
+    console.log(menus);
 
     return (
       <>
@@ -33,7 +48,10 @@ const MenuTable = memo(
             <TableRow>
               <TableHead className="p-2!">
                 <Checkbox
-                  checked={isChecked.find((itm) => itm.page === pagination.current_page)?.idMenus.length === menus.length && menus.length > 0}
+                  checked={
+                    isChecked.find((itm) => itm.page === pagination.current_page)?.idMenus.length === menus.length &&
+                    menus.length > 0
+                  }
                   onCheckedChange={() =>
                     handleAllCheckboxChange({
                       page: pagination.current_page,
@@ -50,7 +68,9 @@ const MenuTable = memo(
             </TableRow>
           </TableHeader>
           <TableBody>
-            {loading && !errorMessage && <DashTableLoading rows="15" columns={TABLE_MENU_HEAD_COLUMNS.length + 1} actionCountLoading={3} />}
+            {loading && !errorMessage && (
+              <DashTableLoading rows="15" columns={TABLE_MENU_HEAD_COLUMNS.length + 1} actionCountLoading={3} />
+            )}
             {errorMessage && !loading && <DashTableError message={errorMessage} />}
             {menus.length < 1 && !loading && <DashTableError message="Tidak ada data menu" />}
             {!loading &&
@@ -60,7 +80,10 @@ const MenuTable = memo(
                   <TableRow>
                     <TableCell className="p-2!">
                       <Checkbox
-                        checked={isChecked.find((itm) => itm.page === pagination.current_page)?.idMenus.includes(menu.id) ?? false}
+                        checked={
+                          isChecked.find((itm) => itm.page === pagination.current_page)?.idMenus.includes(menu.id) ??
+                          false
+                        }
                         onCheckedChange={() =>
                           handleCheckboxChange({
                             page: pagination.current_page,
@@ -78,8 +101,14 @@ const MenuTable = memo(
                     <TableCell>{menu.category?.name ?? "Tidak ada Kategorgi"}</TableCell>
                     <TableCell>{rupiah(menu.price)}</TableCell>
                     <TableCell className="text-center">
-                      <Badge variant={MENU_STATUS_BADGE.find((status) => status.value === menu.is_available)?.variant || "info"} className="capitalize">
-                        {MENU_STATUS_BADGE.find((status) => status.value === menu.is_available)?.label || (menu.is_available ? "Tersedia" : "Tidak Tersedia")}
+                      <Badge
+                        variant={
+                          MENU_STATUS_BADGE.find((status) => status.value === menu.is_available)?.variant || "info"
+                        }
+                        className="capitalize"
+                      >
+                        {MENU_STATUS_BADGE.find((status) => status.value === menu.is_available)?.label ||
+                          (menu.is_available ? "Tersedia" : "Tidak Tersedia")}
                       </Badge>
                     </TableCell>
                     <TableCell>
@@ -99,7 +128,9 @@ const MenuTable = memo(
 
                   <TableRow className="w-full ">
                     <TableCell colSpan={TABLE_MENU_HEAD_COLUMNS.length + 1} className="relative p-0">
-                      <div className={`grid transition-all duration-300 ease-out ${expandedRowId === menu.id ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}>
+                      <div
+                        className={`grid transition-all duration-300 ease-out ${expandedRowId === menu.id ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
+                      >
                         <div className="overflow-hidden ">
                           <div className="flex justify-between gap-4 p-4">
                             <div className="w-1/4 aspect-video">
@@ -109,19 +140,29 @@ const MenuTable = memo(
                             <Separator orientation="vertical" className="w-px " />
                             <div className="w-1/4 text-start">
                               <p className="font-medium text-foreground">Deskripsi :</p>
-                              <p className="w-full whitespace-normal line-clamp-6">{menu.description ?? "Tidak ada deskripsi"}</p>
+                              <p className="w-full whitespace-normal line-clamp-6">
+                                {menu.description ?? "Tidak ada deskripsi"}
+                              </p>
                             </div>
 
                             <Separator orientation="vertical" className="w-px " />
                             <div className="w-1/4 text-start">
                               <p className="font-medium text-foreground">Tanggal Dibuat :</p>
-                              <p>{menu.created_at ? format(menu.created_at, "dd MMM yyyy HH:mm") : "Tidak ada tanggal dibuat"}</p>
+                              <p>
+                                {menu.created_at
+                                  ? format(menu.created_at, "dd MMM yyyy HH:mm")
+                                  : "Tidak ada tanggal dibuat"}
+                              </p>
                             </div>
 
                             <Separator orientation="vertical" className="w-px " />
                             <div className="w-1/4 text-start">
                               <p className="font-medium text-foreground">Terakhir Diperbaharui :</p>
-                              <p>{menu.updated_at ? format(menu.updated_at, "dd MMM yyyy HH:mm") : "Tidak ada tanggal diperbaharui"}</p>
+                              <p>
+                                {menu.updated_at
+                                  ? format(menu.updated_at, "dd MMM yyyy HH:mm")
+                                  : "Tidak ada tanggal diperbaharui"}
+                              </p>
                             </div>
                           </div>
                         </div>
@@ -136,7 +177,13 @@ const MenuTable = memo(
         <div className="flex">
           <div className="flex items-center gap-2">
             <p className="text-nowrap">Data per halaman</p>
-            <Select id="per-page" name="per-page" items={PER_PAGE_OPTIONS} value={filters.per_page || 15} onValueChange={(value) => handlePerPageChange(Number(value))} />
+            <Select
+              id="per-page"
+              name="per-page"
+              items={PER_PAGE_OPTIONS}
+              value={filters.per_page || 15}
+              onValueChange={(value) => handlePerPageChange(Number(value))}
+            />
           </div>
           <Pagination pagination={pagination} onPageChange={handlePageChange} align="end" />
         </div>

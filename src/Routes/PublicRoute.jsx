@@ -7,6 +7,8 @@ const CatalogPage = lazy(() => import("@/Features/Customer/Catalog/Pages/Catalog
 const CatalogDetailPage = lazy(() => import("@/Features/Customer/Catalog/Pages/CatalogDetailPage"));
 const OrderPage = lazy(() => import("@/Features/Customer/Order/Pages/OrderPage"));
 const PaymentPage = lazy(() => import("@/Features/Customer/Payment/Pages/PaymentPage"));
+const ProfilePage = lazy(() => import("@/Features/Customer/Profile/Pages/ProfilePage"));
+const OrderHistoryPage = lazy(() => import("@/Features/Customer/Profile/Pages/OrderHistoryPage"));
 const CustLayout = lazy(() => import("@/Components/Layouts/CustLayout"));
 
 const PublicRoute = [
@@ -29,6 +31,14 @@ const PublicRoute = [
   {
     path: ROUTES.PUBLIC.PAYMENT,
     element: <CustLayout children={<PaymentPage />} />,
+  },
+  {
+    path: ROUTES.PUBLIC.PROFILE,
+    element: <CustLayout children={<ProfilePage />} />,
+  },
+  {
+    path: ROUTES.PUBLIC.ORDER_HISTORY,
+    element: <CustLayout children={<OrderHistoryPage />} />,
   },
 ];
 
