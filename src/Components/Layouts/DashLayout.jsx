@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import Toaster from "@/Components/Elements/Toasts/Toaster";
 import DashNavbar from "@/Features/Dashboard/Shared/Component/Navigation/DashNavbar";
 import DashSidebar from "@/Features/Dashboard/Shared/Component/Navigation/DashSidebar";
 import NavbarProvider from "@/Features/Dashboard/Shared/Context/DashNavbarContext";
@@ -36,7 +35,6 @@ const DashLayout = ({ children }) => {
           <DashNavbar />
 
           <div className="mx-2 my-2 space-y-4 md:mx-4 md:my-4">{children}</div>
-          <Toaster />
         </main>
       </NavbarProvider>
     </DashSidebar>

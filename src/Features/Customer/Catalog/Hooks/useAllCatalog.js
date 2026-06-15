@@ -50,14 +50,17 @@ const useAllCatalog = () => {
   const closingTime = tenant?.closing_time ? String(tenant.closing_time).slice(0, 5) : "23:59";
   const tableOptions = useMemo(() => tables.map((table) => ({ label: table.code, value: table.code })), [tables]);
   const isScannedMode = Boolean(tableCode);
-  const isSelectedTableValid = useMemo(() => (tableCode ? tables.some((table) => table.code === tableCode) : false), [tableCode, tables]);
+  const isSelectedTableValid = useMemo(
+    () => (tableCode ? tables.some((table) => table.code === tableCode) : false),
+    [tableCode, tables],
+  );
 
   useEffect(() => {
     if (!isScannedMode || loadingTables || isSelectedTableValid || scanWarningShownRef.current) {
       return;
     }
 
-    toast.warning("Meja tidak aktid atau Tidak tercatat");
+    toast.warning("Meja tidak aktif atau Tidak tercatat");
     scanWarningShownRef.current = true;
   }, [isScannedMode, isSelectedTableValid, loadingTables]);
 

@@ -1,4 +1,3 @@
-import { Toaster } from "sonner";
 import { Card } from "@/Components/Elements/Cards/Card";
 
 const AuthLayout = ({ children, title = "halo", subtitle = "subtitle" }) => {
@@ -67,7 +66,7 @@ const AuthLayout = ({ children, title = "halo", subtitle = "subtitle" }) => {
             </div>
 
             {children}
-            <Toaster
+            {/* <Toaster
               toastOptions={{
                 classNames: {
                   toast: "!bg-background !text-foreground !border-border",
@@ -75,7 +74,7 @@ const AuthLayout = ({ children, title = "halo", subtitle = "subtitle" }) => {
                   error: "!bg-destructive/40 !text-black !border-destructive/20",
                 },
               }}
-            />
+            /> */}
 
             <div className="mt-8 pt-4 border-t border-primary/20">
               <p className="text-xs text-center text-gray-600">© 2026 POS FNB. All rights reserved.</p>

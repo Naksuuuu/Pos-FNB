@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { ChevronDown, User } from "lucide-react";
 
 import { useNavbar } from "@/Features/Dashboard/Shared/Context/DashNavbarContext";
-import useLogout from "@/Features/Auth/Login/Hooks/useLogout";
+import useLogout from "@/Features/Auth/Logout/Hooks/useLogout";
 
 import { selectAuthUser } from "@/Redux/Features/Auth/Login/LoginSelector";
 

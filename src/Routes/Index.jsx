@@ -12,6 +12,7 @@ import DashboardRoute from "@/Routes/DashboardRoute";
 import PublicRoute from "@/Routes/PublicRoute";
 import NotFound from "@/Pages/NotFound";
 import AuthRoute from "@/Routes/AuthRoute";
+import Toaster from "@/Components/Elements/Toasts/Toaster";
 
 export const Routes = createBrowserRouter([
   {
@@ -43,6 +44,7 @@ const App = () => (
     <Provider store={store}>
       <TenantProvider>
         <RouterProvider router={Routes} fallbackElement={<RootErrorBoundary />} />
+        <Toaster />
       </TenantProvider>
     </Provider>
   </QueryClientProvider>
@@ -50,6 +52,6 @@ const App = () => (
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <App />,
+    <App />
   </StrictMode>,
 );

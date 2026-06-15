@@ -6,7 +6,7 @@ import { ChevronRight, LogOut } from "lucide-react";
 
 import { ROUTES } from "@/Constants/RouteConstant";
 import { SidebarItem } from "@/Features/Dashboard/Shared/Constants/SidebarItem";
-import useLogout from "@/Features/Auth/Login/Hooks/useLogout";
+import useLogout from "@/Features/Auth/Logout/Hooks/useLogout";
 
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/Components/Elements/Shadcn/collapsible";
 import {

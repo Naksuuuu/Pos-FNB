@@ -1,44 +1,17 @@
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Lock, User } from "lucide-react";
 
 import useLogin from "@/Features/Auth/Login/Hooks/useLogin";
-import { LoginSchema } from "@/Features/Auth/Login/Schema/AuthSchema";
 
 import { Input, InputPassword } from "@/Components/Elements/Inputs/Input";
 import { Button } from "@/Components/Elements/Shadcn/button";
 import { Field, FieldError, FieldGroup, FieldSet } from "@/Components/Elements/Shadcn/field";
 import { Label } from "@/Components/Elements/Shadcn/label";
 import { Spinner } from "@/Components/Elements/Shadcn/spinner";
+import { Link } from "react-router";
+import { ROUTES } from "@/Constants/RouteConstant";
 
 const LoginForm = () => {
-  const { Login, loading } = useLogin();
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setError,
-  } = useForm({
-    resolver: zodResolver(LoginSchema),
-  });
-
-  const handleSubmitForm = async (data) => {
-    try {
-      const response = await Login(data);
-      toast.success(response.message || "Login berhasil");
-    } catch (error) {
-      if (error?.validationErrors) {
-        Object.entries(error.validationErrors).forEach(([field, message]) => {
-          setError(field, { type: "server", message });
-        });
-        return;
-      }
-
-      toast.error(error?.message || "Gagal login");
-    }
-  };
+  const { loading, register, handleSubmit, handleSubmitForm, errors } = useLogin();
 
   return (
     <form onSubmit={handleSubmit(handleSubmitForm)}>
@@ -48,14 +21,29 @@ const LoginForm = () => {
             <Label htmlFor="username">
               Username<span className="text-destructive">*</span>
             </Label>
-            <Input type="text" id="username" name="username" placeholder="Username" {...register("username")} aria-invalid={!!errors.username} firstAddon={<User />} />
+            <Input
+              type="text"
+              id="username"
+              name="username"
+              placeholder="Username"
+              {...register("username")}
+              aria-invalid={!!errors.username}
+              firstAddon={<User />}
+            />
             {errors.username && <FieldError>{errors.username.message}</FieldError>}
           </Field>
           <Field>
             <Label htmlFor="password">
               Password<span className="text-destructive">*</span>
             </Label>
-            <InputPassword id="password" name="password" placeholder="Password" {...register("password")} aria-invalid={!!errors.password} firstAddon={<Lock />} />
+            <InputPassword
+              id="password"
+              name="password"
+              placeholder="Password"
+              {...register("password")}
+              aria-invalid={!!errors.password}
+              firstAddon={<Lock />}
+            />
             {errors.password && <FieldError>{errors.password.message}</FieldError>}
           </Field>
           <Field>
@@ -67,6 +55,17 @@ const LoginForm = () => {
                 </div>
               )}
             </Button>
+          </Field>
+        </FieldGroup>
+        <FieldGroup>
+          <Field>
+            <Link
+              to={ROUTES.AUTH.REGISTER}
+              variant="link"
+              className="w-full font-semibold h-auto py-0 underline text-primary"
+            >
+              Belum punya akun? Daftar
+            </Link>
           </Field>
         </FieldGroup>
       </FieldSet>

@@ -1,36 +1,72 @@
-import { memo } from "react";
+import { memo, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router";
-import { CircleUser, ClipboardList } from "lucide-react";
+import { ClipboardList, LogOut, User } from "lucide-react";
 
 import { ROUTES } from "@/Constants/RouteConstant";
 import { Button } from "@/Components/Elements/Shadcn/button";
-import { Card } from "@/Components/Elements/Cards/Card";
 import CustomerNavbar from "@/Features/Customer/Shared/Components/Navigation/CustomerNavbar";
+import useLogout from "@/Features/Auth/Logout/Hooks/useLogout";
+import { useSelector } from "react-redux";
+import { selectIsAuthenticated } from "@/Redux/Features/Auth/Login/LoginSelector";
 
 const ProfilePage = memo(() => {
   const navigate = useNavigate();
+  const { logout } = useLogout();
   const [searchParams] = useSearchParams();
   const queryParams = searchParams.toString() ? `?${searchParams.toString()}` : "";
+
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+
+  const handleAuth = useCallback(async () => {
+    isAuthenticated ? await logout() : navigate(`${ROUTES.AUTH.LOGIN}?callbackUrl=${ROUTES.PUBLIC.PROFILE}`);
+  }, [isAuthenticated, logout, navigate]);
 
   return (
     <>
       <CustomerNavbar navbarTitle="Profil" backLink={`${ROUTES.PUBLIC.CATALOG}${queryParams}`} />
 
-      <div className="flex-1 w-full px-4 py-4 space-y-4 max-w-3xl mx-auto">
-        <button
-          onClick={() =>
-            navigate({
-              pathname: ROUTES.PUBLIC.ORDER_HISTORY,
-              search: queryParams,
-            })
-          }
-          className="w-full flex items-center gap-3 p-4 border rounded-lg bg-background border-border shadow-sm hover:bg-slate-50 active:bg-slate-100 transition-colors text-left cursor-pointer"
-        >
-          <div className="flex items-center justify-center size-10 rounded-md bg-primary/5 text-primary border border-border">
-            <ClipboardList className="size-5" />
+      <div className="flex-1 w-full p-4  max-w-3xl mx-auto flex flex-col items-center justify-between">
+        <div className="flex-1 w-full flex flex-col gap-4">
+          <Button
+            variant="outline"
+            onClick={() =>
+              navigate({
+                pathname: ROUTES.PUBLIC.ORDER_HISTORY,
+                search: queryParams,
+              })
+            }
+            className="w-full h-auto py-3 flex gap-4"
+          >
+            <div className="flex items-center justify-center size-10 rounded-md bg-primary/5 text-primary border border-border">
+              <User className="size-5" />
+            </div>
+            <span className="font-semibold flex-1 text-sm text-left">Akun Saya</span>
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() =>
+              navigate({
+                pathname: ROUTES.PUBLIC.ORDER_HISTORY,
+                search: queryParams,
+              })
+            }
+            className="w-full h-auto py-3 flex gap-4"
+          >
+            <div className="flex items-center justify-center size-10 rounded-md bg-primary/5 text-primary border border-border">
+              <ClipboardList className="size-5" />
+            </div>
+            <span className="font-semibold flex-1 text-sm text-left">Riwayat Pesanan</span>
+          </Button>
+        </div>
+
+        <Button variant="outline" onClick={handleAuth} className="w-full h-auto py-3 flex gap-4">
+          <div
+            className={`flex items-center justify-center size-10 rounded-md ${isAuthenticated ? "bg-destructive/5 text-destructive" : "bg-primary/5 text-primary"} border border-border`}
+          >
+            <LogOut className="size-5" />
           </div>
-          <span className="font-semibold flex-1 text-sm">Riwayat Pesanan</span>
-        </button>
+          <span className="font-semibold flex-1 text-sm text-left">{isAuthenticated ? "Keluar" : "Masuk"}</span>
+        </Button>
       </div>
     </>
   );

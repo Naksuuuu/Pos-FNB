@@ -12,7 +12,7 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
   const url = new URL(window.location.href);
   const newUrl = `${ROUTES.AUTH.LOGIN}?callbackUrl=${url.pathname}${url.search}`;
   if (!isAuthenticated) return <Navigate to={newUrl} replace />;
-  if (!allowedRoles.includes(currentRole)) return <Navigate to={ROUTES.DASHBOARD.HOME} replace />;
+  if (!allowedRoles.includes(currentRole)) return <Navigate to={ROUTES.PUBLIC.HOME} replace />;
 
   return children;
 };

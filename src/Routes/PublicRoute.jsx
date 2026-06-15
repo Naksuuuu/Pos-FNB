@@ -14,7 +14,7 @@ const CustLayout = lazy(() => import("@/Components/Layouts/CustLayout"));
 const PublicRoute = [
   {
     path: ROUTES.PUBLIC.HOME,
-    element: <Navigate to={ROUTES.DASHBOARD.HOME} />,
+    element: <Navigate to={ROUTES.PUBLIC.CATALOG} />,
   },
   {
     path: ROUTES.PUBLIC.CATALOG,

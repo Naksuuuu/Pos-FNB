@@ -2,11 +2,11 @@ import { useCallback } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
 
-import LoginService from "@/Features/Auth/Login/Services/LoginService";
-import { AUTH_QUERY_KEYS } from "@/Features/Auth/Login/Constants/AuthConstant";
+import { AUTH_QUERY_KEYS } from "@/Features/Auth/Shared/Constants/AuthConstant";
 import { clearCredentials } from "@/Redux/Features/Auth/Login/LoginSlice";
 import { clearAllAuthData, getAuthToken } from "@/Utils/sessionUtils";
 import { ROUTES } from "@/Constants/RouteConstant";
+import LogoutService from "@/Features/Auth/Logout/Services/LogoutService";
 
 const useLogout = () => {
   const dispatch = useDispatch();
@@ -17,7 +17,7 @@ const useLogout = () => {
       const token = getAuthToken();
 
       if (token) {
-        await LoginService.logout(token);
+        await LogoutService.logout(token);
       }
 
       return true;
