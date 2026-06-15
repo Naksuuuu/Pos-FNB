@@ -25,6 +25,7 @@ const MenuService = {
     formData.append("image", menuData.image[0]);
     formData.append("name", menuData.name);
     formData.append("price", menuData.price);
+    formData.append("hpp", menuData.hpp !== undefined && menuData.hpp !== null ? menuData.hpp : 0);
     formData.append("stock", menuData.stock);
     formData.append("category_id", menuData.category_id);
     formData.append("description", menuData.description);

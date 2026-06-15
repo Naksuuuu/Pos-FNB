@@ -18,15 +18,26 @@ const is_available = z
   .default(false)
   .transform((val) => (val ? 1 : 0));
 
+const hpp = z
+  .string()
+  .min(1, "HPP Wajib diisi!")
+  .refine((v) => !Number.isNaN(Number(v)), "HPP harus berupa angka!")
+  .transform((v) => Number(v))
+  .refine((v) => v >= 0, "Minimal HPP 0 Rupiah!");
+
 const CreateMenuSchema = z.object({
   name,
   price,
+  hpp,
   category_id,
   description,
   image: z
     .any()
     .refine((files) => !files || files instanceof FileList, "Foto wajib diisi")
-    .refine((files) => !files || ["image/jpeg", "image/jpg", "image/png"].includes(files[0]?.type), "Hanya JPEG/JPG/PNG yang diperbolehkan")
+    .refine(
+      (files) => !files || ["image/jpeg", "image/jpg", "image/png"].includes(files[0]?.type),
+      "Hanya JPEG/JPG/PNG yang diperbolehkan",
+    )
     .refine((files) => !files || files[0]?.size <= 2 * 1024 * 1024, "Ukuran file maksimal 2MB"),
   is_available,
 });
@@ -34,13 +45,24 @@ const CreateMenuSchema = z.object({
 const EditMenuSchema = z.object({
   name,
   price,
+  hpp,
   category_id,
   description,
   image: z
     .any()
     .optional()
-    .refine((files) => !files || !(files instanceof FileList) || files.length === 0 || ["image/jpeg", "image/jpg", "image/png"].includes(files[0]?.type), "Hanya JPEG/JPG/PNG yang diperbolehkan")
-    .refine((files) => !files || !(files instanceof FileList) || files.length === 0 || files[0]?.size <= 2 * 1024 * 1024, "Ukuran file maksimal 2MB"),
+    .refine(
+      (files) =>
+        !files ||
+        !(files instanceof FileList) ||
+        files.length === 0 ||
+        ["image/jpeg", "image/jpg", "image/png"].includes(files[0]?.type),
+      "Hanya JPEG/JPG/PNG yang diperbolehkan",
+    )
+    .refine(
+      (files) => !files || !(files instanceof FileList) || files.length === 0 || files[0]?.size <= 2 * 1024 * 1024,
+      "Ukuran file maksimal 2MB",
+    ),
   is_available,
 });
 

@@ -6,6 +6,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import CashierService from "@/Features/Dashboard/Cashier/Services/CashierService";
 import { CASHIER_QUERY_KEYS } from "@/Features/Dashboard/Cashier/Constants/CashierConstant";
 import { CashierPaymentSchema } from "@/Features/Dashboard/Cashier/Schema/CashierSchema";
+import { ORDER_QUERY_KEYS } from "@/Features/Dashboard/Order/Constants/OrderConstant";
 
 const defaultQuickCash = [20000, 50000, 100000];
 
@@ -22,7 +23,6 @@ const useCashierPayment = () => {
   const previousOrderIdsRef = useRef(new Set());
 
   const {
-    register,
     handleSubmit,
     reset,
     formState: { errors },
@@ -36,16 +36,14 @@ const useCashierPayment = () => {
     mode: "onChange",
   });
 
-  const ordersParams = { status: "submitted", page: 1, per_page: 100 };
-
   const {
     data,
     isLoading: loadingSubmittedOrders,
     refetch,
   } = useQuery({
-    queryKey: CASHIER_QUERY_KEYS.submittedOrders(ordersParams),
+    queryKey: CASHIER_QUERY_KEYS.submittedOrders(),
     queryFn: async () => {
-      const response = await CashierService.orders(ordersParams);
+      const response = await CashierService.orders();
       if (!response.success) {
         throw new Error(response.message || "Failed to fetch submitted orders");
       }
@@ -93,7 +91,10 @@ const useCashierPayment = () => {
     setIsNewOrder(false);
   }, []);
 
-  const selectedOrder = useMemo(() => submittedOrders.find((order) => order.id === selectedOrderId) || submittedOrders[0] || null, [selectedOrderId, submittedOrders]);
+  const selectedOrder = useMemo(
+    () => submittedOrders.find((order) => order.id === selectedOrderId) || submittedOrders[0] || null,
+    [selectedOrderId, submittedOrders],
+  );
 
   const paymentTotal = Number(selectedOrder?.total_amount || 0);
 
@@ -107,7 +108,6 @@ const useCashierPayment = () => {
     return Number.isFinite(normalized) ? normalized : 0;
   }, [cashAmountField]);
 
-  const formattedCashAmount = parsedCashAmount > 0 ? parsedCashAmount.toLocaleString("id-ID") : "";
   const changeAmount = Math.max(parsedCashAmount - paymentTotal, 0);
   const isCashEnough = parsedCashAmount >= paymentTotal && parsedCashAmount > 0;
 
@@ -131,7 +131,8 @@ const useCashierPayment = () => {
       return response;
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: CASHIER_QUERY_KEYS.submittedOrders(ordersParams) });
+      await queryClient.invalidateQueries({ queryKey: CASHIER_QUERY_KEYS.submittedOrders() });
+      await queryClient.invalidateQueries({ queryKey: ORDER_QUERY_KEYS.root });
     },
   });
 
@@ -168,7 +169,15 @@ const useCashierPayment = () => {
     } finally {
       setIsConfirming(false);
     }
-  }, [selectedOrder, parsedCashAmount, paymentTotal, paymentMethod, updatePaymentMutation, reset, refreshSubmittedOrders]);
+  }, [
+    selectedOrder,
+    parsedCashAmount,
+    paymentTotal,
+    paymentMethod,
+    updatePaymentMutation,
+    reset,
+    refreshSubmittedOrders,
+  ]);
 
   const cancelOrder = useCallback(async () => {
     if (!selectedOrder) {
@@ -210,15 +219,14 @@ const useCashierPayment = () => {
     selectedOrderId,
     setSelectedOrderId,
 
-    register,
     handleSubmit,
     errors,
+    control,
     setValue,
     setCashAmount,
 
     paymentTotal,
     parsedCashAmount,
-    formattedCashAmount,
     changeAmount,
     defaultQuickCash,
     isCashEnough,

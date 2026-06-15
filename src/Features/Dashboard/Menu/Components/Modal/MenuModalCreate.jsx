@@ -20,6 +20,14 @@ const MenuModalCreate = ({ isOpen, onOpenModal }) => {
     control,
   } = useForm({
     resolver: zodResolver(CreateMenuSchema),
+    defaultValues: {
+      name: "",
+      price: "",
+      hpp: "",
+      category_id: "",
+      is_available: false,
+      description: "",
+    },
   });
 
   const handleSubmitForm = async (data) => {
@@ -40,10 +48,17 @@ const MenuModalCreate = ({ isOpen, onOpenModal }) => {
   };
 
   return (
-    <DashModalForm isOpen={isOpen} onOpenModal={onOpenModal} loading={loading} handleSubmit={handleSubmit} onSubmitForm={handleSubmitForm} title="Tambah Menu" icon={PackagePlus}>
+    <DashModalForm
+      isOpen={isOpen}
+      onOpenModal={onOpenModal}
+      loading={loading}
+      handleSubmit={handleSubmit}
+      onSubmitForm={handleSubmitForm}
+      title="Tambah Menu"
+      icon={PackagePlus}
+    >
       <MenuForm register={register} control={control} errors={errors} categoryOptions={categoryOptions} type="create" />
     </DashModalForm>
   );
 };
 export default MenuModalCreate;
-

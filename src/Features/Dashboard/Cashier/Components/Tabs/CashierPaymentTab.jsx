@@ -9,7 +9,7 @@ import { rupiah } from "@/Utils/rupiahHelper";
 
 import { Card } from "@/Components/Elements/Cards/Card";
 import { Button } from "@/Components/Elements/Shadcn/button";
-import { Input } from "@/Components/Elements/Inputs/Input";
+import { Input, InputRupiah } from "@/Components/Elements/Inputs/Input";
 import { Badge } from "@/Components/Elements/Shadcn/badge";
 import { Separator } from "@/Components/Elements/Shadcn/separator";
 import { Field, FieldError } from "@/Components/Elements/Shadcn/field";
@@ -24,13 +24,12 @@ const CashierPaymentTab = () => {
     selectedOrder,
     setSelectedOrderId,
 
-    register,
     handleSubmit,
     errors,
+    control,
     setCashAmount,
 
     paymentTotal,
-    formattedCashAmount,
     changeAmount,
     defaultQuickCash,
     isCashEnough,
@@ -134,7 +133,11 @@ const CashierPaymentTab = () => {
               >
                 <div className="flex items-center justify-between gap-2">
                   <p className="font-semibold">{order.order_no || order.code}</p>
-                  <Badge variant={order.status === "submitted" ? "info" : order.status === "canceled" ? "destructive" : "secondary"}>
+                  <Badge
+                    variant={
+                      order.status === "submitted" ? "info" : order.status === "canceled" ? "destructive" : "secondary"
+                    }
+                  >
                     {order.status ? order.status.charAt(0).toUpperCase() + order.status.slice(1) : "Submitted"}
                   </Badge>
                 </div>
@@ -149,7 +152,9 @@ const CashierPaymentTab = () => {
       </Card>
 
       <Card className="flex flex-col h-full gap-4 overflow-hidden " outerClassName="xl:col-span-2">
-        {!selectedOrder && <p className="py-16 text-center text-muted-foreground">Pilih pesanan untuk proses pembayaran.</p>}
+        {!selectedOrder && (
+          <p className="py-16 text-center text-muted-foreground">Pilih pesanan untuk proses pembayaran.</p>
+        )}
 
         {selectedOrder && (
           <>
@@ -217,14 +222,11 @@ const CashierPaymentTab = () => {
 
               <Field>
                 <Label htmlFor="cash_amount">Uang Diterima</Label>
-                <Input
+                <InputRupiah
                   id="cash_amount"
-                  firstAddon="Rp"
+                  name="cash_amount"
+                  control={control}
                   placeholder="Masukkan uang diterima"
-                  inputMode="numeric"
-                  {...register("cash_amount")}
-                  value={formattedCashAmount}
-                  onChange={(e) => setCashAmount(e.target.value)}
                 />
                 {errors.cash_amount && <FieldError>{errors.cash_amount.message}</FieldError>}
               </Field>

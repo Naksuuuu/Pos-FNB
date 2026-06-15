@@ -131,12 +131,12 @@ const MenuTable = memo(
                       >
                         <div className="overflow-hidden ">
                           <div className="flex justify-between gap-4 p-4">
-                            <div className="w-1/4 aspect-video">
+                            <div className="w-1/5 aspect-video">
                               <ImageWithFallback src={menu.image_url} alt={menu.name} className="rounded-md" />
                             </div>
 
                             <Separator orientation="vertical" className="w-px " />
-                            <div className="w-1/4 text-start">
+                            <div className="w-1/5 text-start">
                               <p className="font-medium text-foreground">Deskripsi :</p>
                               <p className="w-full whitespace-normal line-clamp-6">
                                 {menu.description ?? "Tidak ada deskripsi"}
@@ -144,7 +144,13 @@ const MenuTable = memo(
                             </div>
 
                             <Separator orientation="vertical" className="w-px " />
-                            <div className="w-1/4 text-start">
+                            <div className="w-1/5 text-start">
+                              <p className="font-medium text-foreground">HPP :</p>
+                              <p>{rupiah(menu.hpp ?? 0)}</p>
+                            </div>
+
+                            <Separator orientation="vertical" className="w-px " />
+                            <div className="w-1/5 text-start">
                               <p className="font-medium text-foreground">Tanggal Dibuat :</p>
                               <p>
                                 {menu.created_at
@@ -154,7 +160,7 @@ const MenuTable = memo(
                             </div>
 
                             <Separator orientation="vertical" className="w-px " />
-                            <div className="w-1/4 text-start">
+                            <div className="w-1/5 text-start">
                               <p className="font-medium text-foreground">Terakhir Diperbaharui :</p>
                               <p>
                                 {menu.updated_at

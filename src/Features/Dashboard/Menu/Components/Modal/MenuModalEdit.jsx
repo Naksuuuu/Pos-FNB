@@ -23,6 +23,7 @@ const MenuModalEdit = ({ selectedMenu, onOpenModal }) => {
     defaultValues: {
       name: selectedMenu.name,
       price: String(selectedMenu.price),
+      hpp: String(selectedMenu.hpp),
       description: selectedMenu.description,
       category_id: String(selectedMenu.category_id),
       is_available: selectedMenu.is_available,
@@ -47,11 +48,25 @@ const MenuModalEdit = ({ selectedMenu, onOpenModal }) => {
   };
 
   return (
-    <DashModalForm isOpen={!!selectedMenu} onOpenModal={onOpenModal} loading={loading} handleSubmit={handleSubmit} onSubmitForm={handleSubmitForm} title="Edit Menu" icon={PackageSearch}>
-      <MenuForm register={register} control={control} errors={errors} categoryOptions={categoryOptions} type="edit" selectedMenu={selectedMenu} />
+    <DashModalForm
+      isOpen={!!selectedMenu}
+      onOpenModal={onOpenModal}
+      loading={loading}
+      handleSubmit={handleSubmit}
+      onSubmitForm={handleSubmitForm}
+      title="Edit Menu"
+      icon={PackageSearch}
+    >
+      <MenuForm
+        register={register}
+        control={control}
+        errors={errors}
+        categoryOptions={categoryOptions}
+        type="edit"
+        selectedMenu={selectedMenu}
+      />
     </DashModalForm>
   );
 };
 
 export default MenuModalEdit;
-

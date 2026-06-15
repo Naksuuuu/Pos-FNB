@@ -1,11 +1,11 @@
 import { apiUtils } from "@/Services/Common/Base";
 
 const MENU_ENDPOINT = "/dashboard/cashier/menus";
-const ORDER_ENDPOINT = "/dashboard/orders";
+const ORDER_ENDPOINT = "/dashboard/cashier/payments";
 const STORE_ORDER_ENDPOINT = "/dashboard/cashier";
-const PAYMENT_ENDPOINT = "/payments";
 const CATEGORY_ENDPOINT = "/dashboard/cashier/categories";
 const DINING_TABLE_ENDPOINT = "/dashboard/tables";
+const UPDATE_ORDER_PAYMENT_ENDPOINT = (orderId) => `/dashboard/cashier/orders/${orderId}/payment`;
 
 const CashierService = {
   menus: async (params = {}) => {
@@ -39,16 +39,8 @@ const CashierService = {
     return response.data;
   },
 
-  orders: async (params) => {
-    const { page = 1, per_page = 100, status = "submitted" } = params;
-
-    const queryParams = {
-      page,
-      per_page,
-      status,
-    };
-
-    const response = await apiUtils.get(ORDER_ENDPOINT, { params: queryParams });
+  orders: async () => {
+    const response = await apiUtils.get(ORDER_ENDPOINT);
     return response.data;
   },
 
@@ -57,22 +49,8 @@ const CashierService = {
     return response.data;
   },
 
-  updateOrderStatus: async (orderId, payload) => {
-    const body = {
-      status: payload.status,
-    };
-
-    const response = await apiUtils.put(`${ORDER_ENDPOINT}/${orderId}`, body);
-    return response.data;
-  },
-
   updatePaymentStatus: async (orderId, payload) => {
-    const response = await apiUtils.put(`/dashboard/cashier/orders/${orderId}/payment`, payload);
-    return response.data;
-  },
-
-  paymentOrder: async (payload) => {
-    const response = await apiUtils.post(PAYMENT_ENDPOINT, payload);
+    const response = await apiUtils.put(UPDATE_ORDER_PAYMENT_ENDPOINT(orderId), payload);
     return response.data;
   },
 };
