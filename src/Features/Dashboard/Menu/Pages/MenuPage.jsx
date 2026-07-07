@@ -113,7 +113,13 @@ const MenuPage = memo(() => {
         <div className="grid items-end grid-cols-2 gap-4 xl:grid-cols-4">
           <Field>
             <Label htmlFor="search">Cari Menu</Label>
-            <InputSearch id="search" name="search" onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari menu..." />
+            <InputSearch
+              id="search"
+              name="search"
+              onSearchChange={handleSearchChange}
+              value={optimisticSearch}
+              placeholder="Cari menu..."
+            />
           </Field>
 
           <Button onClick={handleOpenCreateModal}>
@@ -121,15 +127,34 @@ const MenuPage = memo(() => {
             Tambah Menu
           </Button>
 
-          <DropDown triggerLabel="Kelola Kategori" triggerIcon={Settings} items={categoryItems} buttonProps={{ variant: "default", size: "default" }} contentAlign="start" />
+          <DropDown
+            triggerLabel="Kelola Kategori"
+            triggerIcon={Settings}
+            items={categoryItems}
+            buttonProps={{ variant: "default", size: "default" }}
+            contentAlign="start"
+          />
 
-          <DropDown triggerLabel="Kelola Meja" triggerIcon={Settings} items={tableItems} buttonProps={{ variant: "default", size: "default" }} contentAlign="start" />
+          <DropDown
+            triggerLabel="Kelola Meja"
+            triggerIcon={Settings}
+            items={tableItems}
+            buttonProps={{ variant: "default", size: "default" }}
+            contentAlign="start"
+          />
         </div>
 
         <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
           <Field>
             <Label htmlFor="sort_by">Berdasarkan</Label>
-            <Select id="sort_by" name="sort_by" items={SORY_BY_OPTIONS} onValueChange={handleSortByChange} value={filters.sort_by || null} placeholder="Pilih Berdasarkan" />
+            <Select
+              id="sort_by"
+              name="sort_by"
+              items={SORY_BY_OPTIONS}
+              onValueChange={handleSortByChange}
+              value={filters.sort_by || null}
+              placeholder="Pilih Berdasarkan"
+            />
           </Field>
 
           <Field>
@@ -146,12 +171,26 @@ const MenuPage = memo(() => {
 
           <Field>
             <Label htmlFor="is_available">Ketersediaan</Label>
-            <Select id="is_available" name="is_available" items={IS_AVAILABLE_OPTIONS} onValueChange={handleIsAvailableChange} value={filters.is_available || null} placeholder="Pilih ketersediaan" />
+            <Select
+              id="is_available"
+              name="is_available"
+              items={IS_AVAILABLE_OPTIONS}
+              onValueChange={handleIsAvailableChange}
+              value={filters.is_available || null}
+              placeholder="Pilih ketersediaan"
+            />
           </Field>
 
           <Field>
             <Label htmlFor="category_id">Kategori</Label>
-            <Select id="category_id" name="category_id" items={categoryOptions} onValueChange={handleCategoryIdChange} value={filters.category_id || null} placeholder="Pilih kategori" />
+            <Select
+              id="category_id"
+              name="category_id"
+              items={categoryOptions}
+              onValueChange={handleCategoryIdChange}
+              value={filters.category_id || null}
+              placeholder="Pilih kategori"
+            />
           </Field>
         </div>
       </Card>
@@ -188,10 +227,21 @@ const MenuPage = memo(() => {
       {selectedDeleteMenu && <MenuModalDelete selectedMenu={selectedDeleteMenu} onOpenModal={handleOpenDeleteModal} />}
       {selectedEditMenu && <MenuModalEdit selectedMenu={selectedEditMenu} onOpenModal={handleOpenEditModal} />}
       {selectedAddMenu && <MenuModalCreate isOpen={selectedAddMenu} onOpenModal={handleOpenCreateModal} />}
-      {selectedBulkDeleteMenu && <MenuModalBulkDelete isOpen={selectedBulkDeleteMenu} onOpenModal={handleOpenBulkDeleteModal} items={allItemsChecked} setIsChecked={setIsChecked} />}
+      {selectedBulkDeleteMenu && (
+        <MenuModalBulkDelete
+          isOpen={selectedBulkDeleteMenu}
+          onOpenModal={handleOpenBulkDeleteModal}
+          items={allItemsChecked}
+          setIsChecked={setIsChecked}
+        />
+      )}
 
-      {categoryModalOpen && <CategoryModalCreate isOpen={categoryModalOpen} onOpenModal={handleOpenCreateCategoryModal} />}
-      {diningTableModalOpen && <DiningTableModalCreate isOpen={diningTableModalOpen} onOpenModal={handleOpenCreateDiningTableModal} />}
+      {categoryModalOpen && (
+        <CategoryModalCreate isOpen={categoryModalOpen} onOpenModal={handleOpenCreateCategoryModal} />
+      )}
+      {diningTableModalOpen && (
+        <DiningTableModalCreate isOpen={diningTableModalOpen} onOpenModal={handleOpenCreateDiningTableModal} />
+      )}
     </>
   );
 });
