@@ -1,30 +1,131 @@
-import { Store } from "lucide-react";
+import { Store, MapPin, Wifi, Phone, Instagram } from "lucide-react";
 
 import SettingsSectionRow from "@/Features/Dashboard/Settings/Components/SettingsSectionRow";
 import useSaveSetting from "@/Features/Dashboard/Settings/Hooks/useSaveSetting";
 
 import { Button } from "@/Components/Elements/Shadcn/button";
 import { Input } from "@/Components/Elements/Inputs/Input";
+import { Textarea } from "@/Components/Elements/Shadcn/textarea";
 import { Switch } from "@/Components/Elements/Shadcn/switch";
 import { Spinner } from "@/Components/Elements/Shadcn/spinner";
-import { Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/Components/Elements/Shadcn/field";
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/Components/Elements/Shadcn/field";
+import { Badge } from "@/Components/Elements/Shadcn/badge";
 
 const SettingsFormSection = () => {
-  const { loadingGet, loadingSave, createdAtLabel, updatedAtLabel, selectedDashboardColor, isOperational, isActive, errors, register, setValue, operationalField, activeField, onSubmit, timeInputProps } =
-    useSaveSetting();
+  const {
+    setting,
+    loadingGet,
+    loadingSave,
+    createdAtLabel,
+    updatedAtLabel,
+    selectedDashboardColor,
+    isOperational,
+    isActive,
+    errors,
+    register,
+    setValue,
+    operationalField,
+    activeField,
+    onSubmit,
+    timeInputProps,
+  } = useSaveSetting();
 
   return (
     <form className="p-4 space-y-0 md:p-6" onSubmit={onSubmit}>
-      <SettingsSectionRow title="Nama tenant" description="Nama tenant yang dipakai di dashboard dan identitas operasional.">
+      <SettingsSectionRow
+        title="Nama tenant"
+        description="Nama tenant yang dipakai di dashboard dan identitas operasional."
+      >
         <Field>
-          <Input id="restaurant_name" name="restaurant_name" placeholder="Contoh: Resto Nusantara" {...register("restaurant_name")} aria-invalid={!!errors.restaurant_name} firstAddon={<Store />} />
+          <Input
+            id="restaurant_name"
+            name="restaurant_name"
+            placeholder="Contoh: Resto Nusantara"
+            {...register("restaurant_name")}
+            aria-invalid={!!errors.restaurant_name}
+            firstAddon={<Store />}
+          />
           {errors.restaurant_name && <FieldError>{errors.restaurant_name.message}</FieldError>}
+        </Field>
+      </SettingsSectionRow>
+
+      <SettingsSectionRow title="Status layanan" description="Status tingkat layanan paket aktif tenant.">
+        <div className="h-full flex items-center">
+          <Badge>{setting?.status || "basic"}</Badge>
+        </div>
+      </SettingsSectionRow>
+
+      <SettingsSectionRow title="Alamat" description="Alamat lengkap lokasi tenant.">
+        <Field>
+          <Textarea
+            id="address"
+            name="address"
+            placeholder="Contoh: Jl. Pahlawan No. 45, Jakarta"
+            {...register("address")}
+            aria-invalid={!!errors.address}
+          />
+          {errors.address && <FieldError>{errors.address.message}</FieldError>}
+        </Field>
+      </SettingsSectionRow>
+
+      <SettingsSectionRow title="Nomor telepon" description="Nomor telepon operasional tenant.">
+        <Field>
+          <Input
+            id="phone_number"
+            name="phone_number"
+            placeholder="Contoh: 081234567890"
+            {...register("phone_number")}
+            aria-invalid={!!errors.phone_number}
+            firstAddon={<Phone className="size-4" />}
+          />
+          {errors.phone_number && <FieldError>{errors.phone_number.message}</FieldError>}
+        </Field>
+      </SettingsSectionRow>
+
+      <SettingsSectionRow title="Instagram" description="Username instagram tenant untuk sosial media.">
+        <Field>
+          <Input
+            id="instagram"
+            name="instagram"
+            placeholder="Contoh: username_tenant"
+            {...register("instagram")}
+            aria-invalid={!!errors.instagram}
+            firstAddon={<Instagram className="size-4" />}
+          />
+          {errors.instagram && <FieldError>{errors.instagram.message}</FieldError>}
+        </Field>
+      </SettingsSectionRow>
+
+      <SettingsSectionRow title="Password Wifi" description="Password wifi untuk pelanggan di area tenant.">
+        <Field>
+          <Input
+            id="wifi_password"
+            name="wifi_password"
+            placeholder="Contoh: wifigratis123"
+            {...register("wifi_password")}
+            aria-invalid={!!errors.wifi_password}
+            firstAddon={<Wifi className="size-4" />}
+          />
+          {errors.wifi_password && <FieldError>{errors.wifi_password.message}</FieldError>}
         </Field>
       </SettingsSectionRow>
 
       <SettingsSectionRow title="Pajak" description="Persentase pajak yang akan dipakai pada perhitungan transaksi.">
         <Field>
-          <Input id="tax_percentage" name="tax_percentage" placeholder="Contoh: 10" {...register("tax_percentage")} aria-invalid={!!errors.tax_percentage} />
+          <Input
+            id="tax_percentage"
+            name="tax_percentage"
+            placeholder="Contoh: 10"
+            {...register("tax_percentage")}
+            aria-invalid={!!errors.tax_percentage}
+          />
           {errors.tax_percentage && <FieldError>{errors.tax_percentage.message}</FieldError>}
         </Field>
       </SettingsSectionRow>
@@ -33,12 +134,24 @@ const SettingsFormSection = () => {
         <FieldGroup className="grid grid-cols-1 gap-3 md:grid-cols-2">
           <Field>
             <FieldLabel htmlFor="opening_time">Jam Buka</FieldLabel>
-            <Input id="opening_time" type="time" name="opening_time" {...timeInputProps.opening_time} aria-invalid={!!errors.opening_time} />
+            <Input
+              id="opening_time"
+              type="time"
+              name="opening_time"
+              {...timeInputProps.opening_time}
+              aria-invalid={!!errors.opening_time}
+            />
             {errors.opening_time && <FieldError>{errors.opening_time.message}</FieldError>}
           </Field>
           <Field>
             <FieldLabel htmlFor="closing_time">Jam Tutup</FieldLabel>
-            <Input id="closing_time" type="time" name="closing_time" {...timeInputProps.closing_time} aria-invalid={!!errors.closing_time} />
+            <Input
+              id="closing_time"
+              type="time"
+              name="closing_time"
+              {...timeInputProps.closing_time}
+              aria-invalid={!!errors.closing_time}
+            />
             {errors.closing_time && <FieldError>{errors.closing_time.message}</FieldError>}
           </Field>
         </FieldGroup>
@@ -51,7 +164,11 @@ const SettingsFormSection = () => {
               id="dashboard_color"
               type="color"
               className="w-24"
-              value={selectedDashboardColor?.startsWith("#") && selectedDashboardColor.length === 7 ? selectedDashboardColor : "#D97706"}
+              value={
+                selectedDashboardColor?.startsWith("#") && selectedDashboardColor.length === 7
+                  ? selectedDashboardColor
+                  : "#D97706"
+              }
               onChange={(e) => setValue("dashboard_color", e.target.value)}
               aria-invalid={!!errors.dashboard_color}
             />
@@ -69,7 +186,13 @@ const SettingsFormSection = () => {
 
       <SettingsSectionRow title="Status operasional" description="Aktifkan jika tenant sedang menerima pesanan.">
         <Field orientation="horizontal" className="items-center">
-          <Switch id="is_operational" name="is_operational" checked={operationalField.value || false} onCheckedChange={operationalField.onChange} aria-invalid={!!errors.is_operational} />
+          <Switch
+            id="is_operational"
+            name="is_operational"
+            checked={operationalField.value || false}
+            onCheckedChange={operationalField.onChange}
+            aria-invalid={!!errors.is_operational}
+          />
           <FieldContent>
             <FieldDescription>{isOperational ? "Tenant beroperasi" : "Tenant tidak beroperasi"}</FieldDescription>
             {errors.is_operational && <FieldError>{errors.is_operational.message}</FieldError>}
@@ -79,7 +202,13 @@ const SettingsFormSection = () => {
 
       <SettingsSectionRow title="Status data" description="Menandakan record settings ini aktif di sistem.">
         <Field orientation="horizontal" className="items-center">
-          <Switch id="is_active" name="is_active" checked={activeField.value || false} onCheckedChange={activeField.onChange} aria-invalid={!!errors.is_active} />
+          <Switch
+            id="is_active"
+            name="is_active"
+            checked={activeField.value || false}
+            onCheckedChange={activeField.onChange}
+            aria-invalid={!!errors.is_active}
+          />
           <FieldContent>
             <FieldDescription>{isActive ? "Settings aktif" : "Settings nonaktif"}</FieldDescription>
             {errors.is_active && <FieldError>{errors.is_active.message}</FieldError>}

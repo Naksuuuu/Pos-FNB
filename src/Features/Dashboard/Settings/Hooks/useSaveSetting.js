@@ -34,6 +34,10 @@ const useSaveSetting = () => {
       opening_time: "08:00",
       closing_time: "22:00",
       is_active: true,
+      address: "",
+      wifi_password: "",
+      phone_number: "",
+      instagram: "",
     },
   });
 
@@ -78,6 +82,10 @@ const useSaveSetting = () => {
         return isValid(closingParsed) ? format(closingParsed, "HH:mm") : "22:00";
       })(),
       is_active: Boolean(setting.is_active),
+      address: setting.address || "",
+      wifi_password: setting.wifi_password || "",
+      phone_number: setting.phone_number || "",
+      instagram: setting.instagram || "",
     });
   }, [reset, setting]);
 
@@ -123,7 +131,13 @@ const useSaveSetting = () => {
         opening_time: formData.opening_time,
         closing_time: formData.closing_time,
         is_active: formData.is_active,
+        address: formData.address || "",
+        wifi_password: formData.wifi_password || "",
+        phone_number: formData.phone_number || "",
+        instagram: formData.instagram || "",
       });
+
+      console.log(response);
 
       toast.success(response.message || "Settings berhasil disimpan");
     } catch (error) {
@@ -161,6 +175,7 @@ const useSaveSetting = () => {
   const isActive = watch("is_active");
 
   return {
+    setting,
     loadingGet,
     loadingSave: mutation.isPending,
     createdAtLabel,

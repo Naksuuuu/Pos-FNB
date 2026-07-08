@@ -23,6 +23,16 @@ export const UpdateSettingSchema = z.object({
   opening_time,
   closing_time,
   is_active: z.boolean().default(false),
+  address: z.string().max(500, "Alamat maksimal 500 karakter").nullable().optional().or(z.literal("")),
+  wifi_password: z.string().max(100, "Password wifi maksimal 100 karakter").nullable().optional().or(z.literal("")),
+  phone_number: z
+    .string()
+    .max(20, "Nomor telepon maksimal 20 karakter")
+    .regex(/^(\+?[0-9]+)?$/, "Nomor telepon hanya boleh berisi angka atau diawali +")
+    .nullable()
+    .optional()
+    .or(z.literal("")),
+  instagram: z.string().max(100, "Username instagram maksimal 100 karakter").nullable().optional().or(z.literal("")),
 });
 
 export const SettingLogoSchema = z.object({

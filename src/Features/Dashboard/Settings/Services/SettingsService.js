@@ -8,11 +8,6 @@ const SettingsService = {
     return response.data;
   },
 
-  create: async (payload) => {
-    const response = await apiUtils.post(SETTINGS_ENDPOINT, payload);
-    return response.data;
-  },
-
   update: async (payload) => {
     const response = await apiUtils.put(SETTINGS_ENDPOINT, payload);
     return response.data;
