@@ -10,6 +10,8 @@ import { selectAuthUser } from "@/Redux/Features/Auth/Login/LoginSelector";
 import { DropDown } from "@/Components/Elements/Buttons/DropDown";
 import { SidebarTrigger } from "@/Components/Elements/Shadcn/sidebar";
 
+import BluetoothPrinterTrigger from "@/Features/Dashboard/Shared/Component/Navigation/BluetoothPrinterTrigger";
+
 const DashNavbar = () => {
   const user = useSelector(selectAuthUser);
   const { logout } = useLogout();
@@ -54,25 +56,29 @@ const DashNavbar = () => {
 
         {centerContent && <div>{centerContent}</div>}
 
-        <DropDown
-          buttonProps={{ variant: "ghost", size: "lg", className: "text-start" }}
-          triggerLabel={
-            <div className="flex items-center gap-10">
-              <div className="flex items-center gap-2">
-                <div className="p-2 rounded-full bg-primary/20 text-primary">
-                  <User />
+        <div className="flex items-center gap-3">
+          <BluetoothPrinterTrigger />
+
+          <DropDown
+            buttonProps={{ variant: "ghost", size: "lg", className: "text-start" }}
+            triggerLabel={
+              <div className="flex items-center gap-10">
+                <div className="flex items-center gap-2">
+                  <div className="p-2 rounded-full bg-primary/20 text-primary">
+                    <User />
+                  </div>
+                  <div className="flex flex-col">
+                    <h3 className="font-semibold leading-none">{user?.username}</h3>
+                    <p className="text-sm leading-none text-muted-foreground">{user?.role}</p>
+                  </div>
                 </div>
-                <div className="flex flex-col">
-                  <h3 className="font-semibold leading-none">{user?.username}</h3>
-                  <p className="text-sm leading-none text-muted-foreground">{user?.role}</p>
-                </div>
+                <ChevronDown className="transition-all duration-300 in-data-popup-open:rotate-180" />
               </div>
-              <ChevronDown className="transition-all duration-300 in-data-popup-open:rotate-180" />
-            </div>
-          }
-          items={categoryItems}
-          contentProps={{ align: "end" }}
-        />
+            }
+            items={categoryItems}
+            contentProps={{ align: "end" }}
+          />
+        </div>
       </div>
     </div>
   );

@@ -137,8 +137,6 @@ const useSaveSetting = () => {
         instagram: formData.instagram || "",
       });
 
-      console.log(response);
-
       toast.success(response.message || "Settings berhasil disimpan");
     } catch (error) {
       if (error?.validationErrors) {

@@ -1,10 +1,12 @@
 import { lazy, Suspense } from "react";
+import { Outlet } from "react-router";
 
 import { ROUTES } from "@/Constants/RouteConstant";
+import { BluetoothPrinterProvider } from "@/Features/Shared/Context/BluetoothPrinterContext";
 
 import ProtectedRoute from "@/Routes/ProtectedRoute";
-
 import LoadingApp from "@/Pages/LoadingApp";
+
 const OrderPage = lazy(() => import("@/Features/Dashboard/Order/Pages/OrderPage"));
 const DashLayout = lazy(() => import("@/Components/Layouts/DashLayout"));
 const HomePage = lazy(() => import("@/Features/Dashboard/Home/Pages/HomePage"));
@@ -17,13 +19,17 @@ const ProfilePage = lazy(() => import("@/Features/Dashboard/Profile/Pages/Profil
 const SettingsPage = lazy(() => import("@/Features/Dashboard/Settings/Pages/SettingsPage"));
 const SidebarProvider = lazy(() => import("@/Components/Elements/Shadcn/sidebar").then((m) => ({ default: m.SidebarProvider })));
 
-const createProtectedRoute = (component, allowedRoles) => {
+const DashboardLayout = () => {
   return (
     <Suspense fallback={<LoadingApp />}>
-      <ProtectedRoute allowedRoles={allowedRoles}>
-        <SidebarProvider>
-          <DashLayout>{component}</DashLayout>
-        </SidebarProvider>
+      <ProtectedRoute allowedRoles={["admin", "cashier"]}>
+        <BluetoothPrinterProvider>
+          <SidebarProvider>
+            <DashLayout>
+              <Outlet />
+            </DashLayout>
+          </SidebarProvider>
+        </BluetoothPrinterProvider>
       </ProtectedRoute>
     </Suspense>
   );
@@ -31,42 +37,53 @@ const createProtectedRoute = (component, allowedRoles) => {
 
 const DashboardRoute = [
   {
-    path: ROUTES.DASHBOARD.HOME,
-    element: createProtectedRoute(<HomePage />, ["admin", "cashier"]),
-  },
-  {
-    path: ROUTES.DASHBOARD.PROFILE,
-    element: createProtectedRoute(<ProfilePage />, ["admin", "cashier"]),
-  },
-  {
-    path: ROUTES.DASHBOARD.SETTINGS,
-    element: createProtectedRoute(<SettingsPage />, ["admin"]),
-  },
-  {
-    path: ROUTES.DASHBOARD.USER,
-    element: createProtectedRoute(<UserPage />, ["admin"]),
-  },
-
-  {
-    path: ROUTES.DASHBOARD.INVENTORY.MENU,
-    element: createProtectedRoute(<MenuPage />, ["admin", "cashier"]),
-  },
-  {
-    path: ROUTES.DASHBOARD.INVENTORY.CATEGORY,
-    element: createProtectedRoute(<CategoryPage />, ["admin", "cashier"]),
-  },
-  {
-    path: ROUTES.DASHBOARD.INVENTORY.TABLE,
-    element: createProtectedRoute(<DiningTablePage />, ["admin", "cashier"]),
-  },
-  {
-    path: ROUTES.DASHBOARD.ORDER,
-    element: createProtectedRoute(<OrderPage />, ["admin", "cashier"]),
-  },
-
-  {
-    path: ROUTES.DASHBOARD.CASHIER,
-    element: createProtectedRoute(<CashierPage />, ["admin", "cashier"]),
+    element: <DashboardLayout />,
+    children: [
+      {
+        path: ROUTES.DASHBOARD.HOME,
+        element: <HomePage />,
+      },
+      {
+        path: ROUTES.DASHBOARD.PROFILE,
+        element: <ProfilePage />,
+      },
+      {
+        path: ROUTES.DASHBOARD.SETTINGS,
+        element: (
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <SettingsPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: ROUTES.DASHBOARD.USER,
+        element: (
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <UserPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: ROUTES.DASHBOARD.INVENTORY.MENU,
+        element: <MenuPage />,
+      },
+      {
+        path: ROUTES.DASHBOARD.INVENTORY.CATEGORY,
+        element: <CategoryPage />,
+      },
+      {
+        path: ROUTES.DASHBOARD.INVENTORY.TABLE,
+        element: <DiningTablePage />,
+      },
+      {
+        path: ROUTES.DASHBOARD.ORDER,
+        element: <OrderPage />,
+      },
+      {
+        path: ROUTES.DASHBOARD.CASHIER,
+        element: <CashierPage />,
+      },
+    ],
   },
 ];
 

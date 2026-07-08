@@ -1,9 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import { CircleMinus, CirclePlus, Loader2, AlertTriangle } from "lucide-react";
+import { CircleMinus, CirclePlus, Loader2, AlertTriangle, Printer } from "lucide-react";
 import { toast } from "sonner";
 
 import useCashierPayment from "@/Features/Dashboard/Cashier/Hooks/useCashierPayment";
 import DashModalConfirmation from "@/Features/Dashboard/Shared/Component/Modal/DashModalConfirmation";
+
+import { useBluetoothPrinter } from "@/Features/Shared/Context/BluetoothPrinterContext";
+import useTenant from "@/Features/Shared/Hooks/useTenant";
+import { buildReceiptBytes } from "@/Utils/ReceiptFormatter";
 
 import { rupiah } from "@/Utils/rupiahHelper";
 
@@ -30,6 +34,10 @@ const CashierPaymentTab = () => {
     setCashAmount,
 
     paymentTotal,
+    orderSubtotal,
+    taxAmount,
+    taxPercentage,
+    parsedCashAmount,
     changeAmount,
     defaultQuickCash,
     isCashEnough,
@@ -48,12 +56,70 @@ const CashierPaymentTab = () => {
     cancelOrder,
   } = useCashierPayment();
 
+  const { tenant } = useTenant();
+  const { isConnected, printRaw } = useBluetoothPrinter();
+
   const notificationAudioRef = useRef(null);
+
+  const [isOpenPrintModal, setIsOpenPrintModal] = useState(false);
+  const [completedOrder, setCompletedOrder] = useState(null);
+  const [completedPaymentDetails, setCompletedPaymentDetails] = useState({
+    method: "tunai",
+    cashAmount: 0,
+    changeAmount: 0,
+  });
+
+  const handlePrintReceipt = async (order, details = null) => {
+    if (!order) return;
+    if (!isConnected) {
+      toast.error("Printer bluetooth belum terhubung. Silakan hubungkan printer di navbar.");
+      return;
+    }
+
+    try {
+      const method = details ? details.method : paymentMethod;
+      const cash = details ? details.cashAmount : parsedCashAmount;
+      const change = details ? details.changeAmount : changeAmount;
+
+      const bytes = buildReceiptBytes({
+        order,
+        tenant,
+        paymentMethod: method,
+        parsedCashAmount: cash,
+        changeAmount: change,
+      });
+
+      const success = await printRaw(bytes);
+      if (success) {
+        toast.success("Struk berhasil dicetak");
+      }
+    } catch (err) {
+      toast.error(`Gagal mencetak struk: ${err.message}`);
+    }
+  };
+
+  const handleConfirmPrint = async () => {
+    setIsOpenPrintModal(false);
+    if (completedOrder) {
+      await handlePrintReceipt(completedOrder, completedPaymentDetails);
+    }
+  };
 
   const handleSubmitForm = async () => {
     try {
+      const orderToPrint = { ...selectedOrder };
+      const paymentDetails = {
+        method: paymentMethod,
+        cashAmount: parsedCashAmount,
+        changeAmount: changeAmount,
+      };
+
       const response = await processPayment();
       toast.success(response?.message || "Pembayaran berhasil diproses");
+
+      setCompletedOrder(orderToPrint);
+      setCompletedPaymentDetails(paymentDetails);
+      setIsOpenPrintModal(true);
     } catch (error) {
       toast.error(error?.message || "Gagal memproses pembayaran");
     }
@@ -190,9 +256,17 @@ const CashierPaymentTab = () => {
             </div>
 
             <form onSubmit={handleSubmit(handleSubmitForm)} className="w-full space-y-4 ">
-              <div className="space-y-1 text-sm">
+              <div className="space-y-1.5 text-sm">
                 <div className="flex items-center justify-between">
-                  <span className="text-muted-foreground">Total Tagihan</span>
+                  <span className="text-muted-foreground">Subtotal</span>
+                  <span className="font-medium text-foreground">{rupiah(orderSubtotal)}</span>
+                </div>
+                <div className="flex items-center justify-between text-muted-foreground">
+                  <span>Pajak ({taxPercentage}%)</span>
+                  <span>{rupiah(taxAmount)}</span>
+                </div>
+                <div className="flex items-center justify-between pt-1 border-t border-dashed">
+                  <span className="font-semibold text-muted-foreground">Total Tagihan</span>
                   <span className="text-lg font-semibold text-primary">{rupiah(paymentTotal)}</span>
                 </div>
                 <div className="flex items-center justify-between">
@@ -297,6 +371,17 @@ const CashierPaymentTab = () => {
         icon={AlertTriangle}
         confirmLabel="Batalkan Pesanan"
         variant="destructive"
+      />
+
+      <DashModalConfirmation
+        isOpen={isOpenPrintModal}
+        title="Cetak Struk Pembayaran?"
+        description="Apakah Anda ingin mencetak struk untuk transaksi pembayaran ini?"
+        onOpenModal={() => setIsOpenPrintModal(false)}
+        handleDelete={handleConfirmPrint}
+        icon={Printer}
+        confirmLabel="Cetak Struk"
+        variant="default"
       />
     </div>
   );

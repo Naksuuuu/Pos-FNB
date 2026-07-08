@@ -1,8 +1,12 @@
 import { Fragment, memo, useCallback, useState } from "react";
-import { Eye } from "lucide-react";
+import { Eye, Printer } from "lucide-react";
 import { format } from "date-fns";
+import { toast } from "sonner";
 
 import { rupiah } from "@/Utils/rupiahHelper";
+import { buildReceiptBytes } from "@/Utils/ReceiptFormatter";
+import { useBluetoothPrinter } from "@/Features/Shared/Context/BluetoothPrinterContext";
+import useTenant from "@/Features/Shared/Hooks/useTenant";
 
 import { ORDER_STATUS_BADGE, TABLE_ORDER_HEAD_COLUMNS } from "@/Features/Dashboard/Order/Constants/OrderConstant";
 import { PER_PAGE_OPTIONS } from "@/Constants/CommonConstant";
@@ -20,6 +24,8 @@ import DashTableLoading from "@/Features/Dashboard/Shared/Component/Table/DashTa
 const OrderTable = memo(
   ({ loading, errorMessage, orders = [], pagination, handlePageChange, handlePerPageChange, filters }) => {
     const [expandedRowId, setExpandedRowId] = useState(null);
+    const { isConnected, printRaw } = useBluetoothPrinter();
+    const { tenant } = useTenant();
 
     const handleExpandedRow = useCallback((id) => {
       setExpandedRowId((prevId) => (prevId === id ? null : id));
@@ -82,6 +88,35 @@ const OrderTable = memo(
                     <TableCell className="flex items-center justify-center h-full gap-2 text-center">
                       <Button size="icon" variant="outline" onClick={() => handleExpandedRow(order.id)}>
                         <Eye className="cursor-pointer text-foreground size-4" />
+                      </Button>
+                      <Button
+                        size="icon"
+                        variant="outline"
+                        disabled={order.status === "canceled"}
+                        onClick={async (e) => {
+                          e.stopPropagation();
+                          if (!isConnected) {
+                            toast.error("Printer bluetooth belum terhubung. Hubungkan printer di navbar.");
+                            return;
+                          }
+                          try {
+                            const bytes = buildReceiptBytes({
+                              order,
+                              tenant,
+                              paymentMethod: order.payment?.method || "tunai",
+                              parsedCashAmount: order.payment?.amount || order.total_amount,
+                              changeAmount: 0,
+                            });
+                            const success = await printRaw(bytes);
+                            if (success) {
+                              toast.success("Struk berhasil dicetak");
+                            }
+                          } catch (err) {
+                            toast.error(`Gagal mencetak struk: ${err.message}`);
+                          }
+                        }}
+                      >
+                        <Printer className="cursor-pointer text-foreground size-4" />
                       </Button>
                     </TableCell>
                   </TableRow>

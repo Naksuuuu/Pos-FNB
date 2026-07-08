@@ -97,6 +97,9 @@ const useCashierPayment = () => {
   );
 
   const paymentTotal = Number(selectedOrder?.total_amount || 0);
+  const taxPercentage = Number(selectedOrder?.tax_percentage) || 0;
+  const orderSubtotal = paymentTotal / (1 + taxPercentage / 100);
+  const taxAmount = paymentTotal - orderSubtotal;
 
   const cashAmountField = useWatch({
     control,
@@ -226,6 +229,9 @@ const useCashierPayment = () => {
     setCashAmount,
 
     paymentTotal,
+    orderSubtotal,
+    taxAmount,
+    taxPercentage,
     parsedCashAmount,
     changeAmount,
     defaultQuickCash,

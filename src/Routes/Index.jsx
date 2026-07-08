@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import store from "@/Redux/Store";
 
 import TenantProvider from "@/Features/Shared/Context/TenantContext";
+import { BluetoothPrinterProvider } from "@/Features/Shared/Context/BluetoothPrinterContext";
 import RootErrorBoundary from "@/Pages/RootErrorBoundary";
 import DashboardRoute from "@/Routes/DashboardRoute";
 import PublicRoute from "@/Routes/PublicRoute";
@@ -43,8 +44,10 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <Provider store={store}>
       <TenantProvider>
-        <RouterProvider router={Routes} fallbackElement={<RootErrorBoundary />} />
-        <Toaster />
+        <BluetoothPrinterProvider>
+          <RouterProvider router={Routes} fallbackElement={<RootErrorBoundary />} />
+          <Toaster />
+        </BluetoothPrinterProvider>
       </TenantProvider>
     </Provider>
   </QueryClientProvider>

@@ -38,6 +38,7 @@ const CashierNewOrderTab = ({ onOrderCreated }) => {
 
     subtotal,
     tax,
+    taxPercentage,
     grandTotal,
 
     canSubmitQueue,
@@ -170,7 +171,7 @@ const CashierNewOrderTab = ({ onOrderCreated }) => {
             </div>
             <Separator className="w-full border-b border-dashed bg-transparent" />
             <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Pajak (10%)</span>
+              <span className="text-muted-foreground">Pajak ({taxPercentage}%)</span>
               <span>{rupiah(tax)}</span>
             </div>
             <Separator className="w-full border-b border-dashed bg-transparent" />

@@ -6,9 +6,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import CashierService from "@/Features/Dashboard/Cashier/Services/CashierService";
 import { CASHIER_QUERY_KEYS } from "@/Features/Dashboard/Cashier/Constants/CashierConstant";
 import { CreateCashierOrderSchema } from "@/Features/Dashboard/Cashier/Schema/CashierSchema";
+import useTenant from "@/Features/Shared/Hooks/useTenant";
 
 const useCashierNewOrder = () => {
   const queryClient = useQueryClient();
+  const { tenant } = useTenant();
   const [cart, setCart] = useState([]);
 
   const {
@@ -31,8 +33,10 @@ const useCashierNewOrder = () => {
   const selectedTableCode = useWatch({ control, name: "code" }) || "";
   const customerName = useWatch({ control, name: "customer_name" }) || "";
 
+  const taxPercentage = Number(tenant?.tax_percentage || 0);
+
   const subtotal = useMemo(() => cart.reduce((sum, item) => sum + Number(item.price || 0) * Number(item.qty || 0), 0), [cart]);
-  const tax = useMemo(() => Math.round(subtotal * 0.1), [subtotal]);
+  const tax = useMemo(() => Math.round(subtotal * (taxPercentage / 100)), [subtotal, taxPercentage]);
   const grandTotal = useMemo(() => subtotal + tax, [subtotal, tax]);
 
   const canSubmitQueue = useMemo(() => {
@@ -135,6 +139,7 @@ const useCashierNewOrder = () => {
 
     subtotal,
     tax,
+    taxPercentage,
     grandTotal,
 
     canSubmitQueue,
