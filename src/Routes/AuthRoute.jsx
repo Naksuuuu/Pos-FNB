@@ -5,6 +5,8 @@ import { Navigate } from "react-router";
 import { selectAuthRole, selectIsAuthenticated } from "@/Redux/Features/Auth/Login/LoginSelector";
 
 import LoadingApp from "@/Pages/LoadingApp";
+import TenantTierGuard from "./TenantTierGuard";
+
 const RegisterPage = lazy(() => import("@/Features/Auth/Register/Pages/RegisterPage"));
 const LoginPage = lazy(() => import("@/Features/Auth/Login/Pages/LoginPage"));
 
@@ -36,7 +38,11 @@ const AuthRoute = [
   },
   {
     path: "/auth/register",
-    element: createAuthRoute(<RegisterPage />),
+    element: (
+      <TenantTierGuard allowedTiers={["pro"]}>
+        {createAuthRoute(<RegisterPage />)}
+      </TenantTierGuard>
+    ),
   },
 ];
 

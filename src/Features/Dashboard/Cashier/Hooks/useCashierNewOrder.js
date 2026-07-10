@@ -103,7 +103,10 @@ const useCashierNewOrder = () => {
 
   const mutation = useMutation({
     mutationFn: async (menuData) => {
-      const response = await CashierService.createOrder(menuData);
+      const response = await CashierService.createOrder({
+        ...menuData,
+        customer_id: null,
+      });
 
       if (!response.success || (response.status !== 200 && response.status !== 201)) {
         throw new Error(response?.message || "Failed to create order");

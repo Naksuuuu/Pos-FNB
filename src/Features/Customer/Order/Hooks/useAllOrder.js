@@ -3,12 +3,21 @@ import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import Cookies from "js-cookie";
 
+import { useSelector } from "react-redux";
+
 import OrderService from "@/Features/Customer/Order/Services/OrderService";
 import { CUSTOMER_ORDER_QUERY_KEYS } from "@/Features/Customer/Order/Constants/OrderConstant";
+import { selectIsAuthenticated, selectAuthUser } from "@/Redux/Features/Auth/Login/LoginSelector";
+import useTenantTier from "@/Features/Shared/Hooks/useTenantTier";
 
-const useAllOrder = (effectiveTableCode, queryWithCode, onCheckoutSuccess) => {
+const useAllOrder = (effectiveTableCode, onCheckoutSuccess) => {
+  const { isTenantPro } = useTenantTier();
+
   const storedItems = sessionStorage.getItem("orderItems");
   const [orderItems, setOrderItems] = useState(storedItems ? JSON.parse(storedItems) : []);
+
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const user = useSelector(selectAuthUser);
 
   const {
     register,
@@ -18,7 +27,17 @@ const useAllOrder = (effectiveTableCode, queryWithCode, onCheckoutSuccess) => {
     setValue,
     formState: { errors, isSubmitting },
   } = useForm({
-    defaultValues: { customer_name: "", code: effectiveTableCode, notes: "" },
+    defaultValues: {
+      customer_name: isAuthenticated && isTenantPro ? user?.name || "" : "",
+      customer_id: isAuthenticated && isTenantPro ? user?.id : null,
+      code: effectiveTableCode,
+      notes: "",
+    },
+    values: {
+      customer_name: isAuthenticated && isTenantPro ? user?.name || "" : "",
+      customer_id: isAuthenticated && isTenantPro ? user?.id : null,
+      code: effectiveTableCode,
+    },
   });
 
   const mutation = useMutation({
@@ -114,6 +133,9 @@ const useAllOrder = (effectiveTableCode, queryWithCode, onCheckoutSuccess) => {
     handleSubmit,
     errors,
     isSubmitting,
+    isAuthenticated,
+    // Tenant status
+    isTenantPro,
     // Checkout handler
     handleCheckout,
     loadingCheckout: mutation.isPending,

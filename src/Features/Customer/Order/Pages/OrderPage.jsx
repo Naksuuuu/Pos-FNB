@@ -28,7 +28,19 @@ const OrderPage = () => {
   const { tenant } = useTenant();
   const taxPercentage = parseFloat(tenant?.tax_percentage || "0");
 
-  const { orderItems, totalPrice, deleteOrderItem, register, handleSubmit, errors, isSubmitting, handleCheckout, loadingCheckout } = useAllOrder(effectiveTableCode, queryWithCode, (orderResponse) => {
+  const {
+    isTenantPro,
+    orderItems,
+    totalPrice,
+    deleteOrderItem,
+    register,
+    handleSubmit,
+    errors,
+    isSubmitting,
+    handleCheckout,
+    loadingCheckout,
+    isAuthenticated,
+  } = useAllOrder(effectiveTableCode, (orderResponse) => {
     const orderData = orderResponse?.order || orderResponse?.data?.order || orderResponse || {};
     const orderId = orderData.id || "";
     navigate({
@@ -85,7 +97,11 @@ const OrderPage = () => {
                           size="sm"
                           nativeButton={false}
                           render={(props) => (
-                            <Link {...props} to={`${ROUTES.PUBLIC.CATALOG_DETAIL.replace(":catalogId", item.menu_id)}${queryWithCode}`} state={{ fromOrder: true, quantity: item.qty }}>
+                            <Link
+                              {...props}
+                              to={`${ROUTES.PUBLIC.CATALOG_DETAIL.replace(":catalogId", item.menu_id)}${queryWithCode}`}
+                              state={{ fromOrder: true, quantity: item.qty }}
+                            >
                               <div className="flex items-center gap-1">
                                 <Pen className="size-3" />
                                 <span className="text-sm font-semibold">Edit</span>
@@ -119,7 +135,13 @@ const OrderPage = () => {
 
                   <Badge variant="secondary">{effectiveTableCode}</Badge>
                 </div>
-                <Input id="code" type="hidden" {...register("code", { required: "Nomor meja wajib diisi" })} disabled={true} className="hidden" />
+                <Input
+                  id="code"
+                  type="hidden"
+                  {...register("code", { required: "Nomor meja wajib diisi" })}
+                  disabled={true}
+                  className="hidden"
+                />
                 {errors.code?.message && <FieldError>{errors.code.message}</FieldError>}
               </div>
 
@@ -128,8 +150,9 @@ const OrderPage = () => {
                 <Input
                   id="customer_name"
                   placeholder="Masukkan nama kamu..."
-                  className="bg-input/30"
+                  className="bg-input/30 disabled:cursor-not-allowed disabled:opacity-75"
                   autoComplete="off"
+                  disabled={isAuthenticated && !!isTenantPro}
                   aria-invalid={Boolean(errors.customer_name)}
                   {...register("customer_name", { required: "Nama pelanggan wajib diisi" })}
                 />
@@ -138,7 +161,12 @@ const OrderPage = () => {
 
               <div className="py-4 space-y-2">
                 <p className="text-sm font-semibold ">Catatan Pesanan (Opsional)</p>
-                <Textarea id="notes" placeholder="Contoh: Tanpa bawang, pesan 1 jam lagi, dll..." aria-invalid={Boolean(errors.notes)} {...register("notes")} />
+                <Textarea
+                  id="notes"
+                  placeholder="Contoh: Tanpa bawang, pesan 1 jam lagi, dll..."
+                  aria-invalid={Boolean(errors.notes)}
+                  {...register("notes")}
+                />
                 {errors.notes?.message && <FieldError>{errors.notes.message}</FieldError>}
               </div>
             </CardContent>
@@ -168,7 +196,10 @@ const OrderPage = () => {
         </section>
       </div>
 
-      <ActionCard onActionClick={handleSubmit(handleCheckout)} actionTitle={isSubmitting || loadingCheckout ? "Memproses..." : "Lanjut ke Pembayaran"}>
+      <ActionCard
+        onActionClick={handleSubmit(handleCheckout)}
+        actionTitle={isSubmitting || loadingCheckout ? "Memproses..." : "Lanjut ke Pembayaran"}
+      >
         <p>Total Pembayaran</p>
         <div className="flex items-center gap-4">
           <h4 className="font-semibold text-md">{rupiah(finalTotal)}</h4>

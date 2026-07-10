@@ -7,6 +7,11 @@ const OrderService = {
     const response = await apiUtils.post(ORDER_ENDPOINT, orderData);
     return response.data;
   },
+
+  getByCustomerId: async (customerId) => {
+    const response = await apiUtils.get(`${ORDER_ENDPOINT}/${customerId}`);
+    return response.data;
+  },
 };
 
 export default OrderService;

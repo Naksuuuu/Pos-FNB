@@ -1,5 +1,4 @@
-import { useCallback, useState } from "react";
-import { Link, useLocation, useNavigate, useSearchParams } from "react-router";
+import { Link } from "react-router";
 import { CircleOff, Minus, Plus, X } from "lucide-react";
 
 import { ROUTES } from "@/Constants/RouteConstant";
@@ -16,59 +15,20 @@ import { ImageWithFallback } from "@/Components/Elements/Images/ImageWithFallbac
 import useTenant from "@/Features/Shared/Hooks/useTenant";
 
 const CatalogDetailPage = () => {
-  const { catalog, loading } = useDetailCatalog();
+  const {
+    catalog,
+    loading,
+    quantity,
+    incrementQuantity,
+    decrentQuantity,
+    handleOrder,
+    isFromOrder,
+    queryWithCode,
+  } = useDetailCatalog();
+
   const { tenant } = useTenant();
   const isClosed = tenant?.is_operational === false;
-
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const { state } = useLocation();
-  const isFromOrder = Boolean(state?.fromOrder);
-  const [quantity, setQuantity] = useState(isFromOrder ? state.quantity : 1);
-  const [canAddTopping] = useState(false);
-  const tableCode = searchParams.get("code")?.trim() || "";
-  const queryWithCode = tableCode ? `?code=${encodeURIComponent(tableCode)}` : "";
-
-  const incrementQuantity = useCallback((qty) => {
-    setQuantity((prev) => Math.max(1, prev + qty));
-  }, []);
-
-  const decrentQuantity = useCallback((qty) => {
-    setQuantity((prev) => Math.max(1, prev - qty));
-  }, []);
-
-  const handleOrder = useCallback(
-    (catalog, quantity) => {
-      const storedOrders = JSON.parse(sessionStorage.getItem("orderItems") || "[]");
-      const existingIndex = storedOrders.findIndex((item) => item.menu_id === catalog.id && item.name === catalog.name);
-      const unitPrice = catalog.price || 0;
-
-      if (existingIndex !== -1) {
-        const existing = storedOrders[existingIndex];
-        const nextQty = isFromOrder ? quantity : existing.qty + quantity;
-        const updated = {
-          ...existing,
-          qty: nextQty,
-          price: unitPrice * nextQty,
-        };
-        storedOrders.splice(existingIndex, 1, updated);
-      } else {
-        storedOrders.unshift({
-          name: catalog.name,
-          menu_id: catalog.id,
-          qty: quantity,
-          price: unitPrice * quantity,
-        });
-      }
-
-      sessionStorage.setItem("orderItems", JSON.stringify(storedOrders));
-      navigate({
-        pathname: isFromOrder ? ROUTES.PUBLIC.ORDER : ROUTES.PUBLIC.CATALOG,
-        search: queryWithCode,
-      });
-    },
-    [isFromOrder, navigate, queryWithCode],
-  );
+  const canAddTopping = false;
 
   return (
     <main className="relative flex flex-col w-full h-screen ">

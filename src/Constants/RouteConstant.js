@@ -9,8 +9,10 @@ export const ROUTES = {
     CATALOG_DETAIL: "/catalog/:catalogId",
     ORDER: "/order",
     PAYMENT: "/payment",
-    PROFILE: "/profile",
-    ORDER_HISTORY: "/profile/order-history",
+    USER: "/user",
+    PROFILE: "/user/profile",
+    ORDER_HISTORY: "/user/order",
+    ORDER_HISTORY_DETAIL: "/user/order/detail",
   },
   DASHBOARD: {
     HOME: "/dashboard",

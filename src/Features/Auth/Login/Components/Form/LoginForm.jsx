@@ -11,7 +11,7 @@ import { Link } from "react-router";
 import { ROUTES } from "@/Constants/RouteConstant";
 
 const LoginForm = () => {
-  const { loading, register, handleSubmit, handleSubmitForm, errors } = useLogin();
+  const { loading, register, handleSubmit, handleSubmitForm, errors, isTenantPro } = useLogin();
 
   return (
     <form onSubmit={handleSubmit(handleSubmitForm)}>
@@ -57,17 +57,19 @@ const LoginForm = () => {
             </Button>
           </Field>
         </FieldGroup>
-        <FieldGroup>
-          <Field>
-            <Link
-              to={ROUTES.AUTH.REGISTER}
-              variant="link"
-              className="w-full font-semibold h-auto py-0 underline text-primary"
-            >
-              Belum punya akun? Daftar
-            </Link>
-          </Field>
-        </FieldGroup>
+        {isTenantPro && (
+          <FieldGroup>
+            <Field>
+              <Link
+                to={ROUTES.AUTH.REGISTER}
+                variant="link"
+                className="w-full font-semibold h-auto py-0 underline text-primary"
+              >
+                Belum punya akun? Daftar
+              </Link>
+            </Field>
+          </FieldGroup>
+        )}
       </FieldSet>
     </form>
   );

@@ -1,13 +1,7 @@
-import { useEffect, useRef, useState } from "react";
 import { CircleMinus, CirclePlus, Loader2, AlertTriangle, Printer } from "lucide-react";
-import { toast } from "sonner";
 
 import useCashierPayment from "@/Features/Dashboard/Cashier/Hooks/useCashierPayment";
 import DashModalConfirmation from "@/Features/Dashboard/Shared/Component/Modal/DashModalConfirmation";
-
-import { useBluetoothPrinter } from "@/Features/Shared/Context/BluetoothPrinterContext";
-import useTenant from "@/Features/Shared/Hooks/useTenant";
-import { buildReceiptBytes } from "@/Utils/ReceiptFormatter";
 
 import { rupiah } from "@/Utils/rupiahHelper";
 
@@ -37,7 +31,6 @@ const CashierPaymentTab = () => {
     orderSubtotal,
     taxAmount,
     taxPercentage,
-    parsedCashAmount,
     changeAmount,
     defaultQuickCash,
     isCashEnough,
@@ -48,120 +41,23 @@ const CashierPaymentTab = () => {
     canProcessPayment,
     loadingPayment,
     loadingCancel,
-    isNewOrder,
-    clearNewOrder,
     refreshSubmittedOrders,
     isRefreshing,
-    processPayment,
-    cancelOrder,
+
+    // Modal and print values
+    isOpenPrintModal,
+    setIsOpenPrintModal,
+    isOpenCancelModal,
+    setIsOpenCancelModal,
+    handleConfirmPrint,
+    handleSubmitForm,
+    handleCancel,
+    handleConfirmCancel,
   } = useCashierPayment();
-
-  const { tenant } = useTenant();
-  const { isConnected, printRaw } = useBluetoothPrinter();
-
-  const notificationAudioRef = useRef(null);
-
-  const [isOpenPrintModal, setIsOpenPrintModal] = useState(false);
-  const [completedOrder, setCompletedOrder] = useState(null);
-  const [completedPaymentDetails, setCompletedPaymentDetails] = useState({
-    method: "tunai",
-    cashAmount: 0,
-    changeAmount: 0,
-  });
-
-  const handlePrintReceipt = async (order, details = null) => {
-    if (!order) return;
-    if (!isConnected) {
-      toast.error("Printer bluetooth belum terhubung. Silakan hubungkan printer di navbar.");
-      return;
-    }
-
-    try {
-      const method = details ? details.method : paymentMethod;
-      const cash = details ? details.cashAmount : parsedCashAmount;
-      const change = details ? details.changeAmount : changeAmount;
-
-      const bytes = buildReceiptBytes({
-        order,
-        tenant,
-        paymentMethod: method,
-        parsedCashAmount: cash,
-        changeAmount: change,
-      });
-
-      const success = await printRaw(bytes);
-      if (success) {
-        toast.success("Struk berhasil dicetak");
-      }
-    } catch (err) {
-      toast.error(`Gagal mencetak struk: ${err.message}`);
-    }
-  };
-
-  const handleConfirmPrint = async () => {
-    setIsOpenPrintModal(false);
-    if (completedOrder) {
-      await handlePrintReceipt(completedOrder, completedPaymentDetails);
-    }
-  };
-
-  const handleSubmitForm = async () => {
-    try {
-      const orderToPrint = { ...selectedOrder };
-      const paymentDetails = {
-        method: paymentMethod,
-        cashAmount: parsedCashAmount,
-        changeAmount: changeAmount,
-      };
-
-      const response = await processPayment();
-      toast.success(response?.message || "Pembayaran berhasil diproses");
-
-      setCompletedOrder(orderToPrint);
-      setCompletedPaymentDetails(paymentDetails);
-      setIsOpenPrintModal(true);
-    } catch (error) {
-      toast.error(error?.message || "Gagal memproses pembayaran");
-    }
-  };
-
-  const [isOpenCancelModal, setIsOpenCancelModal] = useState(false);
-
-  const handleCancel = () => {
-    setIsOpenCancelModal(true);
-  };
-
-  const handleConfirmCancel = async () => {
-    try {
-      const response = await cancelOrder();
-      toast.success(response?.message || "Pesanan berhasil dibatalkan");
-      setIsOpenCancelModal(false);
-    } catch (error) {
-      toast.error(error?.message || "Gagal membatalkan pesanan");
-    }
-  };
 
   const handleRefresh = async () => {
     refreshSubmittedOrders();
   };
-
-  useEffect(() => {
-    notificationAudioRef.current = new Audio("/notification/new-order.mp3");
-  }, []);
-
-  useEffect(() => {
-    if (!isNewOrder) {
-      return;
-    }
-
-    const notificationAudio = notificationAudioRef.current;
-    if (notificationAudio) {
-      notificationAudio.currentTime = 0;
-      notificationAudio.play().catch(() => {});
-    }
-
-    clearNewOrder();
-  }, [isNewOrder, clearNewOrder]);
 
   return (
     <div className="grid grid-cols-1 gap-4 xl:grid-cols-3" style={{ height: `calc(100dvh - ${NAVBAR_HEIGHT}px)` }}>
@@ -236,7 +132,7 @@ const CashierPaymentTab = () => {
                 </div>
                 <div className="text-end">
                   <p className="text-sm text-muted-foreground ">Meja</p>
-                  <p className="text-lg font-semibold">{selectedOrder.table?.code || "Take Away"}</p>
+                  <p className="text-lg font-semibold">{selectedOrder.table_code || "-"}</p>
                 </div>
               </div>
 

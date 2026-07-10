@@ -7,9 +7,12 @@ const CatalogPage = lazy(() => import("@/Features/Customer/Catalog/Pages/Catalog
 const CatalogDetailPage = lazy(() => import("@/Features/Customer/Catalog/Pages/CatalogDetailPage"));
 const OrderPage = lazy(() => import("@/Features/Customer/Order/Pages/OrderPage"));
 const PaymentPage = lazy(() => import("@/Features/Customer/Payment/Pages/PaymentPage"));
+const UserPage = lazy(() => import("@/Features/Customer/User/Pages/UserPage"));
 const ProfilePage = lazy(() => import("@/Features/Customer/Profile/Pages/ProfilePage"));
-const OrderHistoryPage = lazy(() => import("@/Features/Customer/Profile/Pages/OrderHistoryPage"));
+const OrderHistoryPage = lazy(() => import("@/Features/Customer/Order/Pages/OrderHistoryPage"));
+const OrderHistoryDetailPage = lazy(() => import("@/Features/Customer/Order/Pages/OrderHistoryDetailPage"));
 const CustLayout = lazy(() => import("@/Components/Layouts/CustLayout"));
+import TenantTierGuard from "./TenantTierGuard";
 
 const PublicRoute = [
   {
@@ -33,12 +36,24 @@ const PublicRoute = [
     element: <CustLayout children={<PaymentPage />} />,
   },
   {
+    path: ROUTES.PUBLIC.USER,
+    element: <CustLayout children={<UserPage />} />,
+  },
+  {
     path: ROUTES.PUBLIC.PROFILE,
-    element: <CustLayout children={<ProfilePage />} />,
+    element: (
+      <TenantTierGuard allowedTiers={["pro"]}>
+        <CustLayout children={<ProfilePage />} />
+      </TenantTierGuard>
+    ),
   },
   {
     path: ROUTES.PUBLIC.ORDER_HISTORY,
     element: <CustLayout children={<OrderHistoryPage />} />,
+  },
+  {
+    path: ROUTES.PUBLIC.ORDER_HISTORY_DETAIL,
+    element: <CustLayout children={<OrderHistoryDetailPage />} />,
   },
 ];
 

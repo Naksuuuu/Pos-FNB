@@ -7,6 +7,7 @@ import { clearCredentials } from "@/Redux/Features/Auth/Login/LoginSlice";
 import { clearAllAuthData, getAuthToken } from "@/Utils/sessionUtils";
 import { ROUTES } from "@/Constants/RouteConstant";
 import LogoutService from "@/Features/Auth/Logout/Services/LogoutService";
+import Cookies from "js-cookie";
 
 const useLogout = () => {
   const dispatch = useDispatch();
@@ -25,6 +26,8 @@ const useLogout = () => {
     onSettled: () => {
       clearAllAuthData();
       dispatch(clearCredentials());
+      Cookies.remove("orderHistory");
+
       window.location.href = ROUTES.AUTH.LOGIN;
     },
   });

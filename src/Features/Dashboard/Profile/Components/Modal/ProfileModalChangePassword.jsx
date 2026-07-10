@@ -1,10 +1,7 @@
+import { useCallback } from "react";
 import { LockOpen } from "lucide-react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 
 import useChangePassword from "@/Features/Dashboard/Profile/Hooks/useChangePassword";
-import { ChangePasswordSchema } from "@/Features/Dashboard/Profile/Schema/ProfileSchema";
 
 import { Field, FieldError, FieldGroup, FieldSet } from "@/Components/Elements/Shadcn/field";
 import { Label } from "@/Components/Elements/Shadcn/label";
@@ -12,32 +9,11 @@ import { InputPassword } from "@/Components/Elements/Inputs/Input";
 import DashModalForm from "@/Features/Dashboard/Shared/Component/Modal/DashModalForm";
 
 const ProfileModalChangePassword = ({ isOpen, onOpenModal }) => {
-  const { changePassword, loading } = useChangePassword();
+  const handleSuccess = useCallback(() => {
+    onOpenModal(false);
+  }, [onOpenModal]);
 
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-    setError,
-  } = useForm({
-    resolver: zodResolver(ChangePasswordSchema),
-  });
-
-  const handleSubmitForm = async (data) => {
-    try {
-      const response = await changePassword(data);
-      onOpenModal(false);
-      toast.success(response.message || "Password berhasil diubah");
-    } catch (error) {
-      if (error?.validationErrors) {
-        Object.entries(error.validationErrors).forEach(([field, message]) => {
-          setError(field, { type: "server", message });
-        });
-        return;
-      }
-      toast.error(error?.message || "Gagal mengubah password");
-    }
-  };
+  const { handleSubmit, handleSubmitForm, register, errors, loading } = useChangePassword(handleSuccess);
 
   return (
     <DashModalForm isOpen={isOpen} onOpenModal={onOpenModal} loading={loading} handleSubmit={handleSubmit} onSubmitForm={handleSubmitForm} title="Ganti Password" icon={LockOpen}>

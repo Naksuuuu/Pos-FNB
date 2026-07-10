@@ -1,17 +1,19 @@
 import { Clock3, Menu, ShoppingBasket } from "lucide-react";
+import { Link } from "react-router";
 
 import useAllCatalog from "@/Features/Customer/Catalog/Hooks/useAllCatalog";
 
+import { ROUTES } from "@/Constants/RouteConstant";
+
 import { rupiah } from "@/Utils/rupiahHelper";
+
+import CatalogCard from "@/Features/Customer/Catalog/Components/Card/CatalogCard";
 
 import { Badge } from "@/Components/Elements/Shadcn/badge";
 import { Select } from "@/Components/Elements/Inputs/Select";
-import CatalogCard from "@/Features/Customer/Catalog/Components/Card/CatalogCard";
 import { ImageWithFallback } from "@/Components/Elements/Images/ImageWithFallback";
 import { Card } from "@/Components/Elements/Cards/Card";
 import { Button } from "@/Components/Elements/Shadcn/button";
-import { ROUTES } from "@/Constants/RouteConstant";
-import { Link } from "react-router";
 
 const CatalogPage = () => {
   const {
@@ -57,7 +59,7 @@ const CatalogPage = () => {
             render={(props) => (
               <Link
                 {...props}
-                to={`${ROUTES.PUBLIC.PROFILE}${tableCode ? `?code=${encodeURIComponent(tableCode)}` : ""}`}
+                to={`${ROUTES.PUBLIC.USER}${tableCode ? `?code=${encodeURIComponent(tableCode)}` : ""}`}
               />
             )}
           >

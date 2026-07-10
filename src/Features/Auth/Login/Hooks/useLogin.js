@@ -3,6 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Cookies from "js-cookie";
 
 import LoginService from "@/Features/Auth/Login/Services/LoginService";
 import { AUTH_QUERY_KEYS } from "@/Features/Auth/Shared/Constants/AuthConstant";
@@ -10,9 +11,11 @@ import { clearCredentials, setAuthLoading, setCredentials } from "@/Redux/Featur
 import { clearAllAuthData, setAuthToken, setUserData } from "@/Utils/sessionUtils";
 import { LoginSchema } from "@/Features/Auth/Login/Schema/LoginSchema";
 import { toast } from "sonner";
+import useTenantTier from "@/Features/Shared/Hooks/useTenantTier";
 
 const useLogin = () => {
   const dispatch = useDispatch();
+  const { isTenantPro } = useTenantTier();
 
   const {
     register,
@@ -43,6 +46,7 @@ const useLogin = () => {
 
       setAuthToken(token);
       setUserData(user);
+      Cookies.remove("orderHistory");
       dispatch(setCredentials({ user, token }));
     },
     onError: () => {
@@ -84,6 +88,7 @@ const useLogin = () => {
     handleSubmit,
     errors,
     handleSubmitForm,
+    isTenantPro,
   };
 };
 

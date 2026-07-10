@@ -2,11 +2,16 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 import CashierService from "@/Features/Dashboard/Cashier/Services/CashierService";
 import { CASHIER_QUERY_KEYS } from "@/Features/Dashboard/Cashier/Constants/CashierConstant";
 import { CashierPaymentSchema } from "@/Features/Dashboard/Cashier/Schema/CashierSchema";
 import { ORDER_QUERY_KEYS } from "@/Features/Dashboard/Order/Constants/OrderConstant";
+
+import { useBluetoothPrinter } from "@/Features/Shared/Context/BluetoothPrinterContext";
+import useTenant from "@/Features/Shared/Hooks/useTenant";
+import { buildReceiptBytes } from "@/Utils/ReceiptFormatter";
 
 const defaultQuickCash = [20000, 50000, 100000];
 
@@ -21,6 +26,22 @@ const useCashierPayment = () => {
   const [isConfirming, setIsConfirming] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const previousOrderIdsRef = useRef(new Set());
+
+  // Bluetooth printer and tenant contexts
+  const { tenant } = useTenant();
+  const { isConnected, printRaw } = useBluetoothPrinter();
+
+  // Print and cancel modal states
+  const [isOpenPrintModal, setIsOpenPrintModal] = useState(false);
+  const [isOpenCancelModal, setIsOpenCancelModal] = useState(false);
+  const [completedOrder, setCompletedOrder] = useState(null);
+  const [completedPaymentDetails, setCompletedPaymentDetails] = useState({
+    method: "tunai",
+    cashAmount: 0,
+    changeAmount: 0,
+  });
+
+  const notificationAudioRef = useRef(null);
 
   const {
     handleSubmit,
@@ -91,6 +112,25 @@ const useCashierPayment = () => {
     setIsNewOrder(false);
   }, []);
 
+  // Audio Notification initialization and trigger
+  useEffect(() => {
+    notificationAudioRef.current = new Audio("/notification/new-order.mp3");
+  }, []);
+
+  useEffect(() => {
+    if (!isNewOrder) {
+      return;
+    }
+
+    const notificationAudio = notificationAudioRef.current;
+    if (notificationAudio) {
+      notificationAudio.currentTime = 0;
+      notificationAudio.play().catch(() => {});
+    }
+
+    clearNewOrder();
+  }, [isNewOrder, clearNewOrder]);
+
   const selectedOrder = useMemo(
     () => submittedOrders.find((order) => order.id === selectedOrderId) || submittedOrders[0] || null,
     [selectedOrderId, submittedOrders],
@@ -159,7 +199,7 @@ const useCashierPayment = () => {
         orderId,
         payload: {
           method: paymentMethod,
-          amount: paymentTotal,
+          payment_amount: paymentMethod === "tunai" ? parsedCashAmount : paymentTotal,
           status: "completed",
         },
       });
@@ -198,7 +238,7 @@ const useCashierPayment = () => {
         orderId,
         payload: {
           method: paymentMethod,
-          amount: paymentTotal,
+          payment_amount: 0,
           status: "canceled",
         },
       });
@@ -211,9 +251,80 @@ const useCashierPayment = () => {
     } finally {
       setIsCanceling(false);
     }
-  }, [selectedOrder, paymentTotal, paymentMethod, updatePaymentMutation, reset, refreshSubmittedOrders]);
+  }, [selectedOrder, paymentMethod, updatePaymentMutation, reset, refreshSubmittedOrders]);
 
   const canProcessPayment = !!selectedOrder && !isConfirming && !isCanceling && isCashEnough;
+
+  // Print Logic Handler
+  const handlePrintReceipt = useCallback(async (order, details = null) => {
+    if (!order) return;
+    if (!isConnected) {
+      toast.error("Printer bluetooth belum terhubung. Silakan hubungkan printer di navbar.");
+      return;
+    }
+
+    try {
+      const method = details ? details.method : paymentMethod;
+      const cash = details ? details.cashAmount : parsedCashAmount;
+      const change = details ? details.changeAmount : changeAmount;
+
+      const bytes = buildReceiptBytes({
+        order,
+        tenant,
+        paymentMethod: method,
+        parsedCashAmount: cash,
+        changeAmount: change,
+      });
+
+      const success = await printRaw(bytes);
+      if (success) {
+        toast.success("Struk berhasil dicetak");
+      }
+    } catch (err) {
+      toast.error(`Gagal mencetak struk: ${err.message}`);
+    }
+  }, [isConnected, paymentMethod, parsedCashAmount, changeAmount, tenant, printRaw]);
+
+  const handleConfirmPrint = useCallback(async () => {
+    setIsOpenPrintModal(false);
+    if (completedOrder) {
+      await handlePrintReceipt(completedOrder, completedPaymentDetails);
+    }
+  }, [completedOrder, completedPaymentDetails, handlePrintReceipt]);
+
+  const handleSubmitForm = useCallback(async () => {
+    try {
+      const orderToPrint = { ...selectedOrder };
+      const paymentDetails = {
+        method: paymentMethod,
+        cashAmount: parsedCashAmount,
+        changeAmount: changeAmount,
+      };
+
+      const response = await processPayment();
+      toast.success(response?.message || "Pembayaran berhasil diproses");
+
+      setCompletedOrder(orderToPrint);
+      setCompletedPaymentDetails(paymentDetails);
+      setIsOpenPrintModal(true);
+    } catch (error) {
+      toast.error(error?.message || "Gagal memproses pembayaran");
+    }
+  }, [selectedOrder, paymentMethod, parsedCashAmount, changeAmount, processPayment]);
+
+  const handleCancel = useCallback(() => {
+    setIsOpenCancelModal(true);
+  }, []);
+
+  const handleConfirmCancel = useCallback(async () => {
+    try {
+      const response = await cancelOrder();
+      toast.success(response?.message || "Pesanan berhasil dibatalkan");
+      setIsOpenCancelModal(false);
+    } catch (error) {
+      toast.error(error?.message || "Gagal membatalkan pesanan");
+    }
+  }, [cancelOrder]);
 
   return {
     submittedOrders,
@@ -250,6 +361,19 @@ const useCashierPayment = () => {
     isRefreshing,
     processPayment,
     cancelOrder,
+
+    // Modal and print values
+    isOpenPrintModal,
+    setIsOpenPrintModal,
+    isOpenCancelModal,
+    setIsOpenCancelModal,
+    completedOrder,
+    completedPaymentDetails,
+    handlePrintReceipt,
+    handleConfirmPrint,
+    handleSubmitForm,
+    handleCancel,
+    handleConfirmCancel,
   };
 };
 
