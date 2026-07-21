@@ -256,34 +256,37 @@ const useCashierPayment = () => {
   const canProcessPayment = !!selectedOrder && !isConfirming && !isCanceling && isCashEnough;
 
   // Print Logic Handler
-  const handlePrintReceipt = useCallback(async (order, details = null) => {
-    if (!order) return;
-    if (!isConnected) {
-      toast.error("Printer bluetooth belum terhubung. Silakan hubungkan printer di navbar.");
-      return;
-    }
-
-    try {
-      const method = details ? details.method : paymentMethod;
-      const cash = details ? details.cashAmount : parsedCashAmount;
-      const change = details ? details.changeAmount : changeAmount;
-
-      const bytes = buildReceiptBytes({
-        order,
-        tenant,
-        paymentMethod: method,
-        parsedCashAmount: cash,
-        changeAmount: change,
-      });
-
-      const success = await printRaw(bytes);
-      if (success) {
-        toast.success("Struk berhasil dicetak");
+  const handlePrintReceipt = useCallback(
+    async (order, details = null) => {
+      if (!order) return;
+      if (!isConnected) {
+        toast.error("Printer bluetooth belum terhubung. Silakan hubungkan printer di navbar.");
+        return;
       }
-    } catch (err) {
-      toast.error(`Gagal mencetak struk: ${err.message}`);
-    }
-  }, [isConnected, paymentMethod, parsedCashAmount, changeAmount, tenant, printRaw]);
+
+      try {
+        const method = details ? details.method : paymentMethod;
+        const cash = details ? details.cashAmount : parsedCashAmount;
+        const change = details ? details.changeAmount : changeAmount;
+
+        const bytes = buildReceiptBytes({
+          order,
+          tenant,
+          paymentMethod: method,
+          parsedCashAmount: cash,
+          changeAmount: change,
+        });
+
+        const success = await printRaw(bytes);
+        if (success) {
+          toast.success("Struk berhasil dicetak");
+        }
+      } catch (err) {
+        toast.error(`Gagal mencetak struk: ${err.message}`);
+      }
+    },
+    [isConnected, paymentMethod, parsedCashAmount, changeAmount, tenant, printRaw],
+  );
 
   const handleConfirmPrint = useCallback(async () => {
     setIsOpenPrintModal(false);

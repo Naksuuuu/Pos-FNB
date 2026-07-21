@@ -3,6 +3,7 @@ import { Plus } from "lucide-react";
 
 import { SORT_BY_OPTIONS, SORT_DATE_OPTIONS, SORT_ROLE_OPTIONS } from "@/Features/Dashboard/User/Constants/UserConstant";
 import { SORT_DIRECTION_OPTIONS } from "@/Constants/CommonConstant";
+import useTenantTier from "@/Features/Shared/Hooks/useTenantTier";
 
 import useAllUser from "@/Features/Dashboard/User/Hooks/useAllUser";
 import useCheckboxUser from "@/Features/Dashboard/User/Hooks/useCheckboxUser";
@@ -20,10 +21,12 @@ import UserTable from "@/Features/Dashboard/User/Components/Table/UserTable";
 import UserModalEdit from "@/Features/Dashboard/User/Components/Modal/UserModalEdit";
 import UserModalCreate from "@/Features/Dashboard/User/Components/Modal/UserModalCreate";
 import UserModalDelete from "@/Features/Dashboard/User/Components/Modal/UserModalDelete";
+import UserModalEditPoint from "@/Features/Dashboard/User/Components/Modal/UserModalEditPoint";
 import UserStatistic from "@/Features/Dashboard/User/Components/Statistic/UserStatistic";
 import UserModalBulkDelete from "@/Features/Dashboard/User/Components/Modal/UserModalBulkDelete";
 
 const UserPage = memo(() => {
+  const { isTenantPro } = useTenantTier();
   const {
     users,
     loading,
@@ -54,6 +57,7 @@ const UserPage = memo(() => {
 
   // state dan handler untuk modal
   const [selectedEditUser, setSelectedEditUser] = useState(null);
+  const [selectedEditPointUser, setSelectedEditPointUser] = useState(null);
   const [selectedDeleteUser, setSelectedDeleteUser] = useState(null);
   const [selectedCreateUser, setSelectedCreateUser] = useState(false);
   const [selectedBulkDeleteUser, setSelectedBulkDeleteUser] = useState(false);
@@ -64,6 +68,10 @@ const UserPage = memo(() => {
 
   const handleOpenEditModal = useCallback((userSelected) => {
     setSelectedEditUser(userSelected);
+  }, []);
+
+  const handleOpenEditPointModal = useCallback((userSelected) => {
+    setSelectedEditPointUser(userSelected);
   }, []);
 
   const handleOpenCreateModal = useCallback((state) => {
@@ -112,7 +120,7 @@ const UserPage = memo(() => {
 
           <Field>
             <Label htmlFor="role">Role</Label>
-            <Select id="role" name="role" items={SORT_ROLE_OPTIONS} onValueChange={handleSortRoleChange} value={filters.role || null} placeholder="Pilih role" />
+            <Select id="role" name="role" items={isTenantPro ? SORT_ROLE_OPTIONS : SORT_ROLE_OPTIONS.filter((role) => role.value !== "customer")} onValueChange={handleSortRoleChange} value={filters.role || null} placeholder="Pilih role" />
           </Field>
           <Field>
             <Label htmlFor="date">Tanggal</Label>
@@ -141,6 +149,7 @@ const UserPage = memo(() => {
           handlePageChange={handlePageChange}
           errorMessage={errorMessage}
           onOpenEditModal={handleOpenEditModal}
+          onOpenEditPointModal={handleOpenEditPointModal}
           onOpenDeleteModal={handleOpenDeleteModal}
           isChecked={isChecked}
           handleAllCheckboxChange={handleAllCheckboxChange}
@@ -151,6 +160,7 @@ const UserPage = memo(() => {
       </Card>
 
       {selectedEditUser && <UserModalEdit selectedUser={selectedEditUser} onOpenModal={handleOpenEditModal} />}
+      {selectedEditPointUser && <UserModalEditPoint selectedUser={selectedEditPointUser} onOpenModal={handleOpenEditPointModal} />}
       {selectedDeleteUser && <UserModalDelete selectedUser={selectedDeleteUser} onOpenModal={handleOpenDeleteModal} />}
       {selectedCreateUser && <UserModalCreate isOpen={selectedCreateUser} onOpenModal={handleOpenCreateModal} />}
       {selectedBulkDeleteUser && <UserModalBulkDelete isOpen={selectedBulkDeleteUser} onOpenModal={handleOpenBulkDeleteModal} items={allItemsChecked} setIsChecked={setIsChecked} />}

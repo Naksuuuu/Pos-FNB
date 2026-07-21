@@ -31,6 +31,29 @@ const OrderTable = memo(
       setExpandedRowId((prevId) => (prevId === id ? null : id));
     }, []);
 
+    const handlePrintStruk = async (e, order) => {
+      e.stopPropagation();
+      if (!isConnected) {
+        toast.error("Printer bluetooth belum terhubung. Hubungkan printer di navbar.");
+        return;
+      }
+      try {
+        const bytes = buildReceiptBytes({
+          order,
+          tenant,
+          paymentMethod: order.payment?.method || "tunai",
+          parsedCashAmount: order.payment?.amount || order.total_amount,
+          changeAmount: 0,
+        });
+        const success = await printRaw(bytes);
+        if (success) {
+          toast.success("Struk berhasil dicetak");
+        }
+      } catch (err) {
+        toast.error(`Gagal mencetak struk: ${err.message}`);
+      }
+    };
+
     return (
       <>
         <Table className="min-w-full border-b ">
@@ -67,6 +90,9 @@ const OrderTable = memo(
                         {order.customer_name}
                       </p>
                     </TableCell>
+                    <TableCell>
+                      {order.created_at ? format(new Date(order.created_at), "dd MMM yyyy HH:mm") : "-"}
+                    </TableCell>
                     <TableCell>{order.table?.code}</TableCell>
                     <TableCell>{rupiah(order.total_amount)}</TableCell>
                     <TableCell className="text-center">
@@ -92,82 +118,95 @@ const OrderTable = memo(
                       <Button
                         size="icon"
                         variant="outline"
-                        disabled={order.status === "canceled"}
-                        onClick={async (e) => {
-                          e.stopPropagation();
-                          if (!isConnected) {
-                            toast.error("Printer bluetooth belum terhubung. Hubungkan printer di navbar.");
-                            return;
-                          }
-                          try {
-                            const bytes = buildReceiptBytes({
-                              order,
-                              tenant,
-                              paymentMethod: order.payment?.method || "tunai",
-                              parsedCashAmount: order.payment?.amount || order.total_amount,
-                              changeAmount: 0,
-                            });
-                            const success = await printRaw(bytes);
-                            if (success) {
-                              toast.success("Struk berhasil dicetak");
-                            }
-                          } catch (err) {
-                            toast.error(`Gagal mencetak struk: ${err.message}`);
-                          }
-                        }}
+                        disabled={order.status === "canceled" || order.status === "submitted"}
+                        onClick={(e) => handlePrintStruk(e, order)}
                       >
                         <Printer className="cursor-pointer text-foreground size-4" />
                       </Button>
                     </TableCell>
                   </TableRow>
 
-                  <TableRow className="w-full ">
-                    <TableCell colSpan={TABLE_ORDER_HEAD_COLUMNS.length} className="relative p-0">
+                  <TableRow className="w-full">
+                    <TableCell colSpan={TABLE_ORDER_HEAD_COLUMNS.length} className="relative p-0 bg-muted/5">
                       <div
                         className={`grid transition-all duration-300 ease-out ${expandedRowId === order.id ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
                       >
-                        <div className="overflow-hidden ">
-                          <div className="flex justify-between gap-4 p-4">
-                            <div className="w-1/3 text-start">
-                              <p className="font-medium text-foreground">Item Dipesan ({order.items.length}) :</p>
-                              <ul className="list-disc ml-2 space-y-0.5">
-                                {order.items.map((item) => (
-                                  <li key={item.id}>
-                                    <p className="w-full whitespace-normal line-clamp-6">
-                                      {item.qty}x {item.menu.name}{" "}
-                                      <span className="text-xs font-semibold">({rupiah(item.subtotal)})</span>
-                                    </p>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-
-                            <Separator orientation="vertical" className="w-px " />
-                            <div className="w-1/3 text-start ">
-                              <p className="font-medium text-foreground">Notes :</p>
-                              <p className="w-full whitespace-normal line-clamp-6">
-                                {order.notes || "Tidak ada catatan "}
-                              </p>
-                            </div>
-
-                            <Separator orientation="vertical" className="w-px " />
-                            <div className="w-1/3 space-y-2 text-start">
+                        <div className="overflow-hidden">
+                          <div className="flex flex-col gap-4 p-5">
+                            <div className="flex justify-between text-sm bg-background p-4 rounded-lg border">
                               <div>
-                                <p className="font-medium text-foreground">Tanggal Dibuat :</p>
-                                <p>
-                                  {order.created_at
-                                    ? format(order.created_at, "dd MMM yyyy HH:mm")
-                                    : "Tidak ada tanggal dibuat"}
+                                <p className="font-semibold text-muted-foreground">Total Item</p>
+                                <p className="text-foreground font-semibold mt-1">
+                                  {order.items.reduce((sum, item) => sum + item.qty, 0)}
                                 </p>
                               </div>
                               <div>
-                                <p className="font-medium text-foreground">Terakhir Diperbaharui :</p>
-                                <p>
-                                  {order.updated_at
-                                    ? format(order.updated_at, "dd MMM yyyy HH:mm")
-                                    : "Tidak ada tanggal diperbaharui"}
+                                <p className="font-semibold text-muted-foreground">Catatan</p>
+                                <p
+                                  className="text-foreground font-medium mt-1 truncate"
+                                  title={order.notes || "Tidak ada catatan"}
+                                >
+                                  {order.notes || "-"}
                                 </p>
                               </div>
+                              <div>
+                                <p className="font-semibold text-muted-foreground">Subtotal</p>
+                                <p className="text-foreground font-semibold mt-1">{rupiah(order.subtotal_amount)}</p>
+                              </div>
+                              <div>
+                                <p className="font-semibold text-muted-foreground">Pajak</p>
+                                <p className="text-foreground font-semibold mt-1">
+                                  {Number(order.tax_percentage) > 0 ? `${Number(order.tax_percentage)}%` : "-"}
+                                </p>
+                              </div>
+                              <div>
+                                <p className="font-semibold text-muted-foreground">Diskon</p>
+                                <p className="text-destructive font-semibold mt-1">
+                                  {Number(order.discount_amount) > 0 ? `-${rupiah(order.discount_amount)}` : "-"}
+                                </p>
+                              </div>
+                              <div>
+                                <p className="font-semibold text-muted-foreground">Dibayar</p>
+                                <p
+                                  className={`font-bold mt-1 ${order.payment.payment_amount == 0 ? `text-destructive` : `text-emerald-600`}`}
+                                >
+                                  {order.payment.payment_amount == 0
+                                    ? "Belum Bayar"
+                                    : rupiah(order.payment.payment_amount)}
+                                </p>
+                              </div>
+                              <div>
+                                <p className="font-semibold text-muted-foreground">Kembalian</p>
+                                <p className="text-emerald-600 font-bold mt-1">{rupiah(order.payment.amount_change)}</p>
+                              </div>
+                            </div>
+
+                            {/* Nested Ordered Items Table */}
+                            <div className="border rounded-lg overflow-hidden bg-background">
+                              <Table>
+                                <TableHeader className="bg-muted/40">
+                                  <TableRow>
+                                    <TableHead className="font-semibold">Item Detail</TableHead>
+                                    <TableHead className="font-semibold text-center w-24">Kuantitas</TableHead>
+                                    <TableHead className="font-semibold text-right w-36">Harga Satuan</TableHead>
+                                    <TableHead className="font-semibold text-right w-36">Subtotal</TableHead>
+                                  </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                  {order.items.map((item) => (
+                                    <TableRow key={item.id} className="hover:bg-muted/10">
+                                      <TableCell className="font-medium text-foreground">
+                                        {item.menu?.name || "Item Tidak Diketahui"}
+                                      </TableCell>
+                                      <TableCell className="text-center">{item.qty}</TableCell>
+                                      <TableCell className="text-right">{rupiah(item.price)}</TableCell>
+                                      <TableCell className="text-right font-medium text-foreground">
+                                        {rupiah(item.subtotal)}
+                                      </TableCell>
+                                    </TableRow>
+                                  ))}
+                                </TableBody>
+                              </Table>
                             </div>
                           </div>
                         </div>

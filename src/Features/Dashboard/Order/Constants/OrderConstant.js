@@ -9,6 +9,7 @@ const TABLE_ORDER_HEAD_COLUMNS = [
   { header: "No", width: "w-[50px]" },
   { header: "Order ID", width: "w-1/6" },
   { header: "Nama Pelanggan", width: "w-2/6" },
+  { header: "Tanggal", width: "w-1/6" },
   { header: "Kode Meja", width: "w-1/6" },
   { header: "Total Harga", width: "w-1/6" },
   { header: "Metode", width: "w-1/6 text-center" },

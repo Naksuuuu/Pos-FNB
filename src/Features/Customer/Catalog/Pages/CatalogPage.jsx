@@ -168,7 +168,7 @@ const CatalogPage = () => {
         {orderItems.length > 0 && tenant?.is_operational && (
           <>
             <div className="fixed left-0 right-0 px-3 bottom-3 z-999" onClick={handleCheckout}>
-              <div className="flex items-center w-full h-16 max-w-3xl mx-auto overflow-hidden border rounded-md shadow-sm bg-background">
+              <div className="flex items-center w-full h-16 max-w-3xl mx-auto overflow-hidden rounded-md shadow-sm bg-background cursor-pointer">
                 <div className="relative p-4">
                   <ShoppingBasket className="size-6" />
                   <Badge className="absolute top-0 rounded-full right-1" size="icon" variant="destructive">

@@ -5,7 +5,7 @@ const useTenantTier = () => {
   const { tenant, loadingTenant } = useTenant();
 
   const isTenantPro = useMemo(() => {
-    const tier = (tenant?.status || tenant?.tier || "basic").toLowerCase();
+    const tier = (tenant?.status || "pro").toLowerCase();
     return tier === "pro";
   }, [tenant]);
 

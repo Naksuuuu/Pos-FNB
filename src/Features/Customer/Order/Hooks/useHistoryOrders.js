@@ -53,13 +53,7 @@ const useHistoryOrders = () => {
     return rawOrders
       .map((item, index) => {
         const order = item?.order || item?.data?.order || item || {};
-        const orderItems = order?.items || [];
-        const subtotal = orderItems.reduce((acc, orderItem) => {
-          return acc + Number(orderItem.subtotal || orderItem.price || 0);
-        }, 0);
-        const taxPercentage = parseFloat(order?.tax_percentage || "0");
-        const taxAmount = subtotal * (taxPercentage / 100);
-        const grandTotal = subtotal + taxAmount;
+        const grandTotal = order?.total_amount;
 
         return {
           id: order.id,

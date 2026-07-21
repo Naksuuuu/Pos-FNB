@@ -1,10 +1,11 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { Controller } from "react-hook-form";
 import { Loader2, Minus, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import useCashierNewOrder from "@/Features/Dashboard/Cashier/Hooks/useCashierNewOrder";
 import useCashierResources from "@/Features/Dashboard/Cashier/Hooks/useCashierResources";
+import useTenantTier from "@/Features/Shared/Hooks/useTenantTier";
 
 import { rupiah } from "@/Utils/rupiahHelper";
 
@@ -19,10 +20,13 @@ import { Label } from "@/Components/Elements/Shadcn/label";
 import { InputSearch } from "@/Components/Elements/Inputs/InputSearch";
 
 import CashierMenuCard from "@/Features/Dashboard/Cashier/Components/Card/CashierMenuCard";
+import CashierMemberModal from "@/Features/Dashboard/Cashier/Components/Modal/CashierMemberModal";
 
 const NAVBAR_HEIGHT = 105;
 
 const CashierNewOrderTab = ({ onOrderCreated }) => {
+  const [memberModalOpen, setMemberModalOpen] = useState(false);
+  const { isTenantPro } = useTenantTier();
   const {
     register,
     control,
@@ -46,7 +50,16 @@ const CashierNewOrderTab = ({ onOrderCreated }) => {
     loadingCreateOrder,
   } = useCashierNewOrder();
 
-  const { filters, categories, menus, tables, optimisticSearch, loadingResources, handleCategoryChange, handleSearchChange } = useCashierResources();
+  const {
+    filters,
+    categories,
+    menus,
+    tables,
+    optimisticSearch,
+    loadingResources,
+    handleCategoryChange,
+    handleSearchChange,
+  } = useCashierResources();
 
   const handleSubmitForm = useCallback(
     async (data) => {
@@ -62,12 +75,21 @@ const CashierNewOrderTab = ({ onOrderCreated }) => {
   );
 
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-3 xl:grid-cols-4" style={{ height: `calc(100dvh - ${NAVBAR_HEIGHT}px)` }}>
+    <div
+      className="grid grid-cols-1 gap-4 md:grid-cols-3 xl:grid-cols-4 "
+      style={{ height: `calc(100dvh - ${NAVBAR_HEIGHT}px)` }}
+    >
       <div className="space-y-4 md:col-span-2 xl:col-span-3 min-h-0 flex flex-col">
         <Card className="flex items-center gap-4">
           <Field className="w-1/5 mb-0">
             <Label htmlFor="search">Cari Menu</Label>
-            <InputSearch id="search" name="search" onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari menu..." />
+            <InputSearch
+              id="search"
+              name="search"
+              onSearchChange={handleSearchChange}
+              value={optimisticSearch}
+              placeholder="Cari menu..."
+            />
           </Field>
 
           <div className="flex-1 min-w-0">
@@ -78,7 +100,11 @@ const CashierNewOrderTab = ({ onOrderCreated }) => {
                 {categories.map((category) => (
                   <Button
                     key={category.value}
-                    variant={filters.category_id === category.value || (!filters.category_id && category.value === "") ? "default" : "outline"}
+                    variant={
+                      filters.category_id === category.value || (!filters.category_id && category.value === "")
+                        ? "default"
+                        : "outline"
+                    }
                     size="sm"
                     className="shrink-0"
                     onClick={() => handleCategoryChange(category.value)}
@@ -95,7 +121,7 @@ const CashierNewOrderTab = ({ onOrderCreated }) => {
         </div>
       </div>
 
-      <Card className="space-y-4 xl:sticky xl:top-0 h-full flex flex-col min-h-0">
+      <Card className="space-y-4 xl:sticky xl:top-0 h-full flex flex-col min-h-0 overflow-y-scroll md:overflow-y-hidden">
         <form onSubmit={handleSubmit(handleSubmitForm)} className="flex flex-col gap-4 h-full">
           <FieldSet>
             <FieldLegend>
@@ -103,8 +129,25 @@ const CashierNewOrderTab = ({ onOrderCreated }) => {
               <p className="text-sm text-muted-foreground">Susun item pesanan sebelum dikirim ke antrian</p>
             </FieldLegend>
             <Field>
-              <Label htmlFor="customer_name">Nama Pelanggan</Label>
-              <Input id="customer_name" name="customer_name" placeholder="contoh: John Doe" {...register("customer_name")} />
+              <div className="flex justify-between items-center">
+                <Label htmlFor="customer_name">Nama Pelanggan</Label>
+                {isTenantPro && (
+                  <Button
+                    type="button"
+                    variant="link"
+                    className="h-auto p-0 text-xs font-semibold text-primary hover:no-underline"
+                    onClick={() => setMemberModalOpen(true)}
+                  >
+                    Daftar/Kelola Member
+                  </Button>
+                )}
+              </div>
+              <Input
+                id="customer_name"
+                name="customer_name"
+                placeholder="contoh: John Doe"
+                {...register("customer_name")}
+              />
               {errors.customer_name && <FieldError>{errors.customer_name.message}</FieldError>}
             </Field>
 
@@ -115,7 +158,15 @@ const CashierNewOrderTab = ({ onOrderCreated }) => {
                 name="code"
                 control={control}
                 render={({ field }) => (
-                  <Select items={tables} id="code_select" name="code" placeholder="contoh: 01" value={field.value || ""} onValueChange={(val) => field.onChange(val)} aria-invalid={!!errors.code} />
+                  <Select
+                    items={tables}
+                    id="code_select"
+                    name="code"
+                    placeholder="contoh: 01"
+                    value={field.value || ""}
+                    onValueChange={(val) => field.onChange(val)}
+                    aria-invalid={!!errors.code}
+                  />
                 )}
               />
               {errors.code && <FieldError>{errors.code.message}</FieldError>}
@@ -123,7 +174,13 @@ const CashierNewOrderTab = ({ onOrderCreated }) => {
 
             <Field>
               <Label htmlFor="notes">Catatan</Label>
-              <Textarea id="notes" name="notes" {...register("notes")} placeholder="contoh: tanpa bawang" className="min-h-20" />
+              <Textarea
+                id="notes"
+                name="notes"
+                {...register("notes")}
+                placeholder="contoh: tanpa bawang"
+                className="min-h-20"
+              />
               {errors.notes && <FieldError>{errors.notes.message}</FieldError>}
             </Field>
           </FieldSet>
@@ -131,7 +188,9 @@ const CashierNewOrderTab = ({ onOrderCreated }) => {
           <Separator className="w-full border-b border-dashed bg-transparent" />
 
           <div className="flex-1 overflow-y-auto min-h-0 no-scrollbar space-y-2">
-            {cart.length === 0 && <p className="py-6 text-center text-sm text-muted-foreground">Belum ada item dipilih.</p>}
+            {cart.length === 0 && (
+              <p className="py-6 text-center text-sm text-muted-foreground">Belum ada item dipilih.</p>
+            )}
 
             {cart.map((item) => (
               <div key={item.menu_id} className="rounded-lg border border-border p-2">
@@ -146,11 +205,21 @@ const CashierNewOrderTab = ({ onOrderCreated }) => {
                 </div>
                 <div className="mt-2 flex items-center justify-between">
                   <div className="flex items-center gap-1">
-                    <Button type="button" size="icon-xs" variant="outline" onClick={() => decreaseCartItem(item.menu_id)}>
+                    <Button
+                      type="button"
+                      size="icon-xs"
+                      variant="outline"
+                      onClick={() => decreaseCartItem(item.menu_id)}
+                    >
                       <Minus />
                     </Button>
                     <span className="min-w-6 text-center text-sm font-medium">{item.qty}</span>
-                    <Button type="button" size="icon-xs" variant="outline" onClick={() => increaseCartItem(item.menu_id)}>
+                    <Button
+                      type="button"
+                      size="icon-xs"
+                      variant="outline"
+                      onClick={() => increaseCartItem(item.menu_id)}
+                    >
                       <Plus />
                     </Button>
                   </div>
@@ -182,7 +251,12 @@ const CashierNewOrderTab = ({ onOrderCreated }) => {
           </div>
 
           <div className="grid grid-cols-2 gap-2">
-            <Button type="button" variant="outline" onClick={clearOrderForm} disabled={loadingCreateOrder || cart.length === 0}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={clearOrderForm}
+              disabled={loadingCreateOrder || cart.length === 0}
+            >
               Kosongkan
             </Button>
             <Button type="submit" disabled={!canSubmitQueue}>
@@ -192,6 +266,7 @@ const CashierNewOrderTab = ({ onOrderCreated }) => {
           </div>
         </form>
       </Card>
+      <CashierMemberModal isOpen={memberModalOpen} onOpenModal={setMemberModalOpen} />
     </div>
   );
 };

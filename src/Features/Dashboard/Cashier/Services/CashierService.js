@@ -53,6 +53,17 @@ const CashierService = {
     const response = await apiUtils.put(UPDATE_ORDER_PAYMENT_ENDPOINT(orderId), payload);
     return response.data;
   },
+
+  members: async (params = {}) => {
+    const { search } = params;
+    const response = await apiUtils.get("/dashboard/cashier/members", { params: { search } });
+    return response.data;
+  },
+
+  createMember: async (payload) => {
+    const response = await apiUtils.post("/dashboard/cashier/members", payload);
+    return response.data;
+  },
 };
 
 export default CashierService;

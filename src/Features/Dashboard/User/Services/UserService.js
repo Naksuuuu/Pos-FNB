@@ -39,6 +39,13 @@ const UserService = {
     const response = await apiUtils.delete(USER_ENDPOINT, { data: { ids: userIds } });
     return response.data;
   },
+
+  updateLoyaltyPoint: async (userId, points) => {
+    const response = await apiUtils.put(`${USER_ENDPOINT}/${userId}/loyalty-point`, {
+      loyalty_point: Number(points),
+    });
+    return response.data;
+  },
 };
 
 export default UserService;

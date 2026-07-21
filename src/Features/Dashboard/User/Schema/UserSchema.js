@@ -54,4 +54,13 @@ const EditUserSchema = z
     }
   });
 
-export { CreateUserSchema, EditUserSchema };
+const EditLoyaltyPointSchema = z.object({
+  loyalty_point: z
+    .string()
+    .min(1, "Loyalty poin wajib diisi!")
+    .refine((v) => !Number.isNaN(Number(v)), "Loyalty poin harus berupa angka!")
+    .transform((v) => Number(v))
+    .refine((v) => Number.isInteger(v) && v >= 0, "Loyalty poin tidak boleh negatif!"),
+});
+
+export { CreateUserSchema, EditUserSchema, EditLoyaltyPointSchema };

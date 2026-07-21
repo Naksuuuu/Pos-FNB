@@ -33,6 +33,12 @@ export const UpdateSettingSchema = z.object({
     .optional()
     .or(z.literal("")),
   instagram: z.string().max(100, "Username instagram maksimal 100 karakter").nullable().optional().or(z.literal("")),
+  point_conversion_rate: z
+    .preprocess((v) => (v === "" || v === undefined || v === null ? null : String(v)), z.string().nullable().optional())
+    .transform((v) => (v === null ? null : Number(v)))
+    .refine((v) => v === null || (Number.isInteger(v) && v >= 1), "Konversi poin harus berupa angka bulat minimal 1!")
+    .nullable()
+    .optional(),
 });
 
 export const SettingLogoSchema = z.object({

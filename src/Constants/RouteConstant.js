@@ -13,10 +13,12 @@ export const ROUTES = {
     PROFILE: "/user/profile",
     ORDER_HISTORY: "/user/order",
     ORDER_HISTORY_DETAIL: "/user/order/detail",
+    REWARDS: "/rewards",
+    MY_REWARDS: "/user/rewards",
   },
   DASHBOARD: {
     HOME: "/dashboard",
-    USER: "/dashboard/user",
+    USER: "/dashboard/users",
     CASHIER: "/dashboard/cashier",
     SETTINGS: "/dashboard/settings",
     INVENTORY: {
@@ -24,7 +26,8 @@ export const ROUTES = {
       CATEGORY: "/dashboard/inventory/category",
       TABLE: "/dashboard/inventory/table",
     },
-    ORDER: "/dashboard/order",
+    ORDER: "/dashboard/orders",
     PROFILE: "/dashboard/profile",
+    REWARD: "/dashboard/rewards",
   },
 };

@@ -13,17 +13,7 @@ import usePaymentDetails from "@/Features/Customer/Payment/Hooks/usePaymentDetai
 
 const PaymentPage = memo(() => {
   const navigate = useNavigate();
-  const {
-    order,
-    items,
-    subtotal,
-    taxPercentage,
-    taxAmount,
-    grandTotal,
-    displayIndex,
-    backLink,
-    tableCodeFromQuery,
-  } = usePaymentDetails();
+  const { order, items, taxAmount, displayIndex, backLink } = usePaymentDetails();
 
   if (!order) return null;
 
@@ -59,7 +49,7 @@ const PaymentPage = memo(() => {
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground">Nomor Meja</span>
                 <Badge variant="outline" className="font-semibold bg-background">
-                  {order.table?.code || tableCodeFromQuery || "Take Away"}
+                  {order.table?.code || "Take Away"}
                 </Badge>
               </div>
               <div className="flex items-center justify-between">
@@ -100,11 +90,17 @@ const PaymentPage = memo(() => {
             <div className="space-y-2.5 text-sm">
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground">Subtotal</span>
-                <span className="font-medium text-foreground">{rupiah(subtotal)}</span>
+                <span className="font-medium text-foreground">{rupiah(order.subtotal_amount)}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">Pajak ({taxPercentage}%)</span>
+                <span className="text-muted-foreground">Pajak ({order.tax_percentage}%)</span>
                 <span className="font-medium text-foreground">{rupiah(taxAmount)}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground">
+                  Diskon ({order.reward_redeem.reward.discount_percentage}%)
+                </span>
+                <span className="font-medium text-foreground">{rupiah(order.discount_amount)}</span>
               </div>
             </div>
 
@@ -113,7 +109,7 @@ const PaymentPage = memo(() => {
             {/* Dynamic Brand Primary Grand Total */}
             <div className="flex items-center justify-between font-bold text-sm">
               <span>Total Tagihan</span>
-              <span className="text-primary text-base font-bold">{rupiah(grandTotal)}</span>
+              <span className="text-primary text-base font-bold">{rupiah(order.total_amount)}</span>
             </div>
           </CardContent>
         </Card>

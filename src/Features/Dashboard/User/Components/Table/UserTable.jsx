@@ -4,6 +4,7 @@ import { format } from "date-fns";
 
 import { ROLE_OPTIONS, TABLE_USER_HEAD_COLUMNS } from "@/Features/Dashboard/User/Constants/UserConstant";
 import { PER_PAGE_OPTIONS } from "@/Constants/CommonConstant";
+import useTenantTier from "@/Features/Shared/Hooks/useTenantTier";
 
 import { Select } from "@/Components/Elements/Inputs/Select";
 import { Pagination } from "@/Components/Elements/Paginations/Pagination";
@@ -17,8 +18,9 @@ import DashTableError from "@/Features/Dashboard/Shared/Component/Table/DashTabl
 import DashTableLoading from "@/Features/Dashboard/Shared/Component/Table/DashTableLoading";
 
 const UserTable = memo(
-  ({ loading, errorMessage, users = [], pagination, onOpenDeleteModal, onOpenEditModal, handlePageChange, isChecked, handleAllCheckboxChange, handleCheckboxChange, handlePerPageChange, filters }) => {
+  ({ loading, errorMessage, users = [], pagination, onOpenDeleteModal, onOpenEditModal, onOpenEditPointModal, handlePageChange, isChecked, handleAllCheckboxChange, handleCheckboxChange, handlePerPageChange, filters }) => {
     const [expandedRowId, setExpandedRowId] = useState(null);
+    const { isTenantPro } = useTenantTier();
 
     const handleExpandedRow = useCallback((id) => {
       setExpandedRowId((prevId) => (prevId === id ? null : id));
@@ -33,10 +35,10 @@ const UserTable = memo(
                 <Checkbox
                   checked={isChecked.find((itm) => itm.page === pagination.current_page)?.idUsers.length === users.length && users.length > 0}
                   onCheckedChange={() =>
-                    handleAllCheckboxChange({
-                      page: pagination.current_page,
-                      idUsers: users.map((user) => user.id),
-                    })
+                     handleAllCheckboxChange({
+                       page: pagination.current_page,
+                       idUsers: users.map((user) => user.id),
+                     })
                   }
                 />
               </TableHead>
@@ -102,15 +104,29 @@ const UserTable = memo(
                     <TableCell colSpan={TABLE_USER_HEAD_COLUMNS.length + 1} className="relative p-0">
                       <div className={`grid transition-all duration-300 ease-out ${expandedRowId === user.id ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}>
                         <div className="overflow-hidden">
-                          <div className="flex justify-start gap-4 p-4">
-                            <div className="w-1/2 text-start">
+                          <div className="flex justify-start gap-4 p-4 items-center">
+                            <div className={user.role === "customer" && isTenantPro ? "w-1/3 text-start" : "w-1/2 text-start"}>
                               <p className="font-medium text-foreground">Tanggal Dibuat : {user.created_at ? format(user.created_at, "dd MMM yyyy HH:mm") : "Tidak ada tanggal dibuat"}</p>
                             </div>
 
-                            <Separator orientation="vertical" className="w-px " />
-                            <div className="w-1/2 text-start">
+                            <Separator orientation="vertical" className="w-px h-6" />
+                            <div className={user.role === "customer" && isTenantPro ? "w-1/3 text-start" : "w-1/2 text-start"}>
                               <p className="font-medium text-foreground">Terakhir Diperbaharui : {user.updated_at ? format(user.updated_at, "dd MMM yyyy HH:mm") : "Tidak ada tanggal diperbaharui"}</p>
                             </div>
+
+                            {user.role === "customer" && isTenantPro && (
+                              <>
+                                <Separator orientation="vertical" className="w-px h-6" />
+                                <div className="w-1/3 text-start flex items-center justify-between">
+                                  <p className="font-medium text-foreground">
+                                    Loyalty Point: <span className="font-semibold text-primary">{new Intl.NumberFormat("id-ID").format(user.loyalty_point || 0)}</span>
+                                  </p>
+                                  <Button variant="outline" size="sm" className="ml-2 h-7" onClick={() => onOpenEditPointModal(user)}>
+                                    Edit Poin
+                                  </Button>
+                                </div>
+                              </>
+                            )}
                           </div>
                         </div>
                       </div>

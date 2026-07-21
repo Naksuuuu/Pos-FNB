@@ -9,6 +9,7 @@ import OrderService from "@/Features/Customer/Order/Services/OrderService";
 import { CUSTOMER_ORDER_QUERY_KEYS } from "@/Features/Customer/Order/Constants/OrderConstant";
 import { selectIsAuthenticated, selectAuthUser } from "@/Redux/Features/Auth/Login/LoginSelector";
 import useTenantTier from "@/Features/Shared/Hooks/useTenantTier";
+import useCustomerMyRewards from "@/Features/Customer/Reward/Hooks/useCustomerMyRewards";
 
 const useAllOrder = (effectiveTableCode, onCheckoutSuccess) => {
   const { isTenantPro } = useTenantTier();
@@ -18,6 +19,13 @@ const useAllOrder = (effectiveTableCode, onCheckoutSuccess) => {
 
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const user = useSelector(selectAuthUser);
+
+  const { myRewards } = useCustomerMyRewards();
+  const [selectedReward, setSelectedReward] = useState(null);
+
+  const availableRewards = useMemo(() => {
+    return myRewards.filter((item) => item.status === "APPROVED" && !item.completed_at);
+  }, [myRewards]);
 
   const {
     register,
@@ -69,6 +77,7 @@ const useAllOrder = (effectiveTableCode, onCheckoutSuccess) => {
           code: values.code || "A1",
           customer_name: values.customer_name || "Guest",
           notes: values.notes || "",
+          reward_redeem_id: selectedReward?.id || null,
           items: (orderItems || []).map((item) => ({
             menu_id: item.menu_id,
             qty: Number(item.qty) || 1,
@@ -76,6 +85,8 @@ const useAllOrder = (effectiveTableCode, onCheckoutSuccess) => {
         };
 
         const response = await mutation.mutateAsync(orderPayload);
+
+        console.log(response);
 
         // SAVE TO COOKIE WITH 1 YEAR EXPIRATION
         let orderHistory = [];
@@ -107,7 +118,7 @@ const useAllOrder = (effectiveTableCode, onCheckoutSuccess) => {
         }
       }
     },
-    [orderItems, mutation, clearErrors, setError, onCheckoutSuccess],
+    [orderItems, mutation, clearErrors, setError, onCheckoutSuccess, selectedReward],
   );
 
   const deleteOrderItem = useCallback((menuId) => {
@@ -139,6 +150,10 @@ const useAllOrder = (effectiveTableCode, onCheckoutSuccess) => {
     // Checkout handler
     handleCheckout,
     loadingCheckout: mutation.isPending,
+    // Voucher rewards
+    availableRewards,
+    selectedReward,
+    setSelectedReward,
   };
 };
 

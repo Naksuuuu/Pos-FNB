@@ -7,11 +7,9 @@ import { ROUTES } from "@/Constants/RouteConstant";
 const usePaymentDetails = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const tableCodeFromQuery = searchParams.get("code")?.trim() || "";
   const orderIdFromQuery = searchParams.get("orderId")?.trim() || "";
 
-  const queryWithCode = tableCodeFromQuery ? `?code=${encodeURIComponent(tableCodeFromQuery)}` : "";
-  const backLink = `${ROUTES.PUBLIC.CATALOG}${queryWithCode}`;
+  const backLink = `${ROUTES.PUBLIC.CATALOG}`;
 
   const orderHistory = useMemo(() => {
     try {
@@ -39,16 +37,7 @@ const usePaymentDetails = () => {
 
   const items = useMemo(() => order?.items || [], [order]);
 
-  const subtotal = useMemo(() => {
-    return items.reduce((acc, item) => {
-      const itemSub = Number(item.subtotal || item.price || 0);
-      return acc + itemSub;
-    }, 0);
-  }, [items]);
-
-  const taxPercentage = parseFloat(order?.tax_percentage || "0");
-  const taxAmount = subtotal * (taxPercentage / 100);
-  const grandTotal = subtotal + taxAmount;
+  const taxAmount = order.total_amount * (parseFloat(order.tax_percentage) / 100);
 
   const orderIndex = useMemo(() => {
     if (!order) return -1;
@@ -66,16 +55,14 @@ const usePaymentDetails = () => {
     }
   }, [navigate, order]);
 
+  console.log(order);
+
   return {
     order,
     items,
-    subtotal,
-    taxPercentage,
     taxAmount,
-    grandTotal,
     displayIndex,
     backLink,
-    tableCodeFromQuery,
   };
 };
 

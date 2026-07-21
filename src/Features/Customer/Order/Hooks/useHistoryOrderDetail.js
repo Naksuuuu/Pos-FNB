@@ -37,9 +37,7 @@ const useHistoryOrderDetail = () => {
     }, 0);
   }, [items]);
 
-  const taxPercentage = parseFloat(order?.tax_percentage || "0");
-  const taxAmount = subtotal * (taxPercentage / 100);
-  const grandTotal = subtotal + taxAmount;
+  const taxAmount = subtotal * (parseFloat(order?.tax_percentage || "0") / 100);
 
   const orderIndex = useMemo(() => {
     if (!order) return -1;
@@ -61,10 +59,7 @@ const useHistoryOrderDetail = () => {
   return {
     order,
     items,
-    subtotal,
-    taxPercentage,
     taxAmount,
-    grandTotal,
     displayIndex,
     loading,
     backLink,

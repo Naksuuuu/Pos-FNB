@@ -38,6 +38,7 @@ const useSaveSetting = () => {
       wifi_password: "",
       phone_number: "",
       instagram: "",
+      point_conversion_rate: "",
     },
   });
 
@@ -86,6 +87,7 @@ const useSaveSetting = () => {
       wifi_password: setting.wifi_password || "",
       phone_number: setting.phone_number || "",
       instagram: setting.instagram || "",
+      point_conversion_rate: setting.point_conversion_rate !== undefined && setting.point_conversion_rate !== null ? String(setting.point_conversion_rate) : "",
     });
   }, [reset, setting]);
 
@@ -135,6 +137,7 @@ const useSaveSetting = () => {
         wifi_password: formData.wifi_password || "",
         phone_number: formData.phone_number || "",
         instagram: formData.instagram || "",
+        point_conversion_rate: formData.point_conversion_rate,
       });
 
       toast.success(response.message || "Settings berhasil disimpan");

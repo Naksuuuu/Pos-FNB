@@ -8,6 +8,7 @@ const SORT_ROLE_OPTIONS = [
   { label: "Semua", value: "" },
   { label: "Admin", value: "admin" },
   { label: "Kasir", value: "cashier" },
+  { label: "Customer", value: "customer" },
 ];
 
 const SORT_DATE_OPTIONS = [
@@ -32,6 +33,7 @@ const TABLE_USER_HEAD_COLUMNS = [
 const ROLE_OPTIONS = [
   { label: "Admin", value: "admin", variant: "success" },
   { label: "Kasir", value: "cashier", variant: "warning" },
+  { label: "Customer", value: "customer", variant: "info" },
 ];
 
 const USER_QUERY_KEYS = {

@@ -40,6 +40,9 @@ const OrderPage = () => {
     handleCheckout,
     loadingCheckout,
     isAuthenticated,
+    availableRewards,
+    selectedReward,
+    setSelectedReward,
   } = useAllOrder(effectiveTableCode, (orderResponse) => {
     const orderData = orderResponse?.order || orderResponse?.data?.order || orderResponse || {};
     const orderId = orderData.id || "";
@@ -49,15 +52,17 @@ const OrderPage = () => {
     });
   });
 
-  const taxAmount = totalPrice * (taxPercentage / 100);
-  const finalTotal = totalPrice + taxAmount;
+  const discountPercentage = selectedReward?.reward?.discount_percentage || 0;
+  const discountAmount = totalPrice * (discountPercentage / 100);
+  const taxAmount = (totalPrice - discountAmount) * (taxPercentage / 100);
+  const finalTotal = Math.max(0, totalPrice - discountAmount + taxAmount);
 
   return (
     <>
       <CustomerNavbar navbarTitle="Pesanan" backLink={`${ROUTES.PUBLIC.CATALOG}${queryWithCode}`} />
 
-      <div className="flex-1 w-full px-3 space-y-4">
-        <section className="md:px-4">
+      <div className="flex-1 w-full px-3 space-y-4 max-w-4xl mx-auto ">
+        <div className="md:px-4">
           <p className="text-xs font-semibold tracking-widest uppercase text-muted-foreground">Ringkasan Pesanan</p>
 
           <Card className="py-0 mt-3 border-none shadow-md">
@@ -122,9 +127,9 @@ const OrderPage = () => {
               </div>
             </CardContent>
           </Card>
-        </section>
+        </div>
 
-        <section className="md:px-4">
+        <div className="md:px-4">
           <p className="text-xs font-semibold tracking-widest uppercase text-muted-foreground">Detail Pemesan</p>
 
           <Card className="py-0 mt-3 border-none rounded-md shadow-md">
@@ -171,9 +176,57 @@ const OrderPage = () => {
               </div>
             </CardContent>
           </Card>
-        </section>
+        </div>
 
-        <section className="md:px-4">
+        {isTenantPro && isAuthenticated && availableRewards.length > 0 && (
+          <section className="md:px-4">
+            <p className="text-xs font-semibold tracking-widest uppercase text-muted-foreground">
+              Gunakan Reward / Voucher
+            </p>
+
+            <Card className="py-0 mt-3 border-none rounded-md shadow-md">
+              <CardContent className="px-4 py-4">
+                <div className="flex flex-col gap-2">
+                  <p className="text-sm font-semibold">Pilih Voucher Kamu</p>
+                  <div className="flex flex-col gap-2 max-h-48 overflow-y-auto no-scrollbar">
+                    {availableRewards.map((item) => {
+                      const isSelected = selectedReward?.id === item.id;
+                      return (
+                        <button
+                          key={item.id}
+                          type="button"
+                          onClick={() => setSelectedReward(isSelected ? null : item)}
+                          className={`flex items-center justify-between p-3 rounded-lg border text-left transition-all ${
+                            isSelected
+                              ? "border-primary bg-primary/5 text-primary shadow-sm"
+                              : "border-border bg-card text-card-foreground hover:bg-muted/50"
+                          }`}
+                        >
+                          <div>
+                            <span className="text-[10px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded bg-primary/10 text-primary">
+                              {item.reward?.category}
+                            </span>
+                            <span className="text-sm font-bold block mt-1">{item.reward?.name}</span>
+                          </div>
+                          <div className="text-right">
+                            <span className="text-sm font-extrabold text-primary block">
+                              -{item.reward?.discount_percentage}%
+                            </span>
+                            <span className="text-[10px] text-muted-foreground">
+                              {isSelected ? "Terpilih" : "Gunakan"}
+                            </span>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </section>
+        )}
+
+        <div className="md:px-4 ">
           <p className="text-xs font-semibold tracking-widest uppercase text-muted-foreground">Ringkasan Pembayaran</p>
 
           <Card className="py-0 mt-3 border-none rounded-md shadow-md">
@@ -182,6 +235,12 @@ const OrderPage = () => {
                 <span className="text-muted-foreground">Subtotal (Harga Menu)</span>
                 <span className="font-medium">{rupiah(totalPrice)}</span>
               </div>
+              {discountAmount > 0 && (
+                <div className="flex items-center justify-between text-sm text-green-600 font-semibold">
+                  <span>Diskon ({selectedReward?.reward?.name})</span>
+                  <span>-{rupiah(discountAmount)}</span>
+                </div>
+              )}
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">Pajak ({taxPercentage}%)</span>
                 <span className="font-medium">{rupiah(taxAmount)}</span>
@@ -193,7 +252,7 @@ const OrderPage = () => {
               </div>
             </CardContent>
           </Card>
-        </section>
+        </div>
       </div>
 
       <ActionCard

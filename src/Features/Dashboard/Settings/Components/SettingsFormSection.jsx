@@ -2,6 +2,7 @@ import { Store, MapPin, Wifi, Phone, Instagram } from "lucide-react";
 
 import SettingsSectionRow from "@/Features/Dashboard/Settings/Components/SettingsSectionRow";
 import useSaveSetting from "@/Features/Dashboard/Settings/Hooks/useSaveSetting";
+import useTenantTier from "@/Features/Shared/Hooks/useTenantTier";
 
 import { Button } from "@/Components/Elements/Shadcn/button";
 import { Input } from "@/Components/Elements/Inputs/Input";
@@ -19,6 +20,7 @@ import {
 import { Badge } from "@/Components/Elements/Shadcn/badge";
 
 const SettingsFormSection = () => {
+  const { isTenantPro } = useTenantTier();
   const {
     setting,
     loadingGet,
@@ -129,6 +131,21 @@ const SettingsFormSection = () => {
           {errors.tax_percentage && <FieldError>{errors.tax_percentage.message}</FieldError>}
         </Field>
       </SettingsSectionRow>
+
+      {isTenantPro && (
+        <SettingsSectionRow title="Konversi poin" description="Nilai Rupiah yang harus dibelanjakan pelanggan untuk mendapatkan 1 loyalty point.">
+          <Field>
+            <Input
+              id="point_conversion_rate"
+              name="point_conversion_rate"
+              placeholder="Contoh: 1000"
+              {...register("point_conversion_rate")}
+              aria-invalid={!!errors.point_conversion_rate}
+            />
+            {errors.point_conversion_rate && <FieldError>{errors.point_conversion_rate.message}</FieldError>}
+          </Field>
+        </SettingsSectionRow>
+      )}
 
       <SettingsSectionRow title="Jam operasional" description="Atur jam buka dan jam tutup tenant.">
         <FieldGroup className="grid grid-cols-1 gap-3 md:grid-cols-2">

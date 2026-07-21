@@ -20,7 +20,13 @@ const TenantProvider = ({ children }) => {
     },
   });
 
-  const tenant = useMemo(() => data?.tenant || null, [data?.tenant]);
+  const tenant = useMemo(() => {
+    const tenantData = data?.tenant;
+    if (!tenantData) return null;
+    return {
+      ...tenantData,
+    };
+  }, [data?.tenant]);
 
   useEffect(() => {
     if (tenant?.dashboard_color) {

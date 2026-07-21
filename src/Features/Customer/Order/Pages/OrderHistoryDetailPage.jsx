@@ -14,18 +14,7 @@ import useHistoryOrderDetail from "@/Features/Customer/Order/Hooks/useHistoryOrd
 
 const OrderHistoryDetailPage = memo(() => {
   const navigate = useNavigate();
-  const {
-    order,
-    items,
-    subtotal,
-    taxPercentage,
-    taxAmount,
-    grandTotal,
-    displayIndex,
-    loading,
-    backLink,
-    queryWithCode,
-  } = useHistoryOrderDetail();
+  const { order, items, taxAmount, displayIndex, loading, backLink, queryWithCode } = useHistoryOrderDetail();
 
   if (loading) {
     return (
@@ -45,7 +34,6 @@ const OrderHistoryDetailPage = memo(() => {
       <CustomerNavbar navbarTitle="Detail Pesanan" backLink={backLink} />
 
       <div className="flex flex-col flex-1 gap-4 px-3 max-w-3xl pb-8 mx-auto w-full">
-        {/* Section 1: Success Banner & Order Meta */}
         <Card className="py-0 border-none shadow-md overflow-hidden">
           <CardContent className="px-4 py-5 space-y-4">
             <div className="flex flex-col items-center justify-center w-full py-2">
@@ -64,7 +52,6 @@ const OrderHistoryDetailPage = memo(() => {
 
             <Separator className="border-b border-dashed bg-transparent w-full my-1" />
 
-            {/* Structured Order Metadata */}
             <div className="space-y-2.5 text-sm">
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground">Nomor Order</span>
@@ -113,20 +100,26 @@ const OrderHistoryDetailPage = memo(() => {
             <div className="space-y-2.5 text-sm">
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground">Subtotal</span>
-                <span className="font-medium text-foreground">{rupiah(subtotal)}</span>
+                <span className="font-medium text-foreground">{rupiah(order.subtotal_amount)}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">Pajak ({taxPercentage}%)</span>
+                <span className="text-muted-foreground">Pajak ({order.tax_percentage}%)</span>
                 <span className="font-medium text-foreground">{rupiah(taxAmount)}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground">
+                  Diskon ({(order.discount_amount / (order.subtotal_amount + taxAmount)) * 100}%)
+                </span>
+                <span className="font-medium text-foreground">{rupiah(order.discount_amount)}</span>
               </div>
             </div>
 
             <Separator className="my-2 border-b border-dashed bg-transparent w-full" />
 
-            {/* Grand Total */}
+            {/* Dynamic Brand Primary Grand Total */}
             <div className="flex items-center justify-between font-bold text-sm">
               <span>Total Tagihan</span>
-              <span className="text-primary text-base font-bold">{rupiah(grandTotal)}</span>
+              <span className="text-primary text-base font-bold">{rupiah(order.total_amount)}</span>
             </div>
           </CardContent>
         </Card>

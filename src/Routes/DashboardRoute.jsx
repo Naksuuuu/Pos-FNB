@@ -6,6 +6,7 @@ import { BluetoothPrinterProvider } from "@/Features/Shared/Context/BluetoothPri
 
 import ProtectedRoute from "@/Routes/ProtectedRoute";
 import LoadingApp from "@/Pages/LoadingApp";
+import TenantTierGuard from "@/Routes/TenantTierGuard";
 
 const OrderPage = lazy(() => import("@/Features/Dashboard/Order/Pages/OrderPage"));
 const DashLayout = lazy(() => import("@/Components/Layouts/DashLayout"));
@@ -17,7 +18,10 @@ const DiningTablePage = lazy(() => import("@/Features/Dashboard/DiningTable/Page
 const UserPage = lazy(() => import("@/Features/Dashboard/User/Pages/UserPage"));
 const ProfilePage = lazy(() => import("@/Features/Dashboard/Profile/Pages/ProfilePage"));
 const SettingsPage = lazy(() => import("@/Features/Dashboard/Settings/Pages/SettingsPage"));
-const SidebarProvider = lazy(() => import("@/Components/Elements/Shadcn/sidebar").then((m) => ({ default: m.SidebarProvider })));
+const RewardPage = lazy(() => import("@/Features/Dashboard/Reward/Pages/RewardPage"));
+const SidebarProvider = lazy(() =>
+  import("@/Components/Elements/Shadcn/sidebar").then((m) => ({ default: m.SidebarProvider })),
+);
 
 const DashboardLayout = () => {
   return (
@@ -82,6 +86,16 @@ const DashboardRoute = [
       {
         path: ROUTES.DASHBOARD.CASHIER,
         element: <CashierPage />,
+      },
+      {
+        path: ROUTES.DASHBOARD.REWARD,
+        element: (
+          <ProtectedRoute allowedRoles={["admin", "cashier"]}>
+            <TenantTierGuard allowedTiers={["pro"]}>
+              <RewardPage />
+            </TenantTierGuard>
+          </ProtectedRoute>
+        ),
       },
     ],
   },

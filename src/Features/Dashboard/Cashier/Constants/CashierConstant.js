@@ -4,6 +4,7 @@ const CASHIER_QUERY_KEYS = {
   categories: () => ["dashboard", "cashier", "categories"],
   tables: () => ["dashboard", "cashier", "tables"],
   submittedOrders: () => ["dashboard", "cashier", "submitted-orders"],
+  members: (filters = {}) => ["dashboard", "cashier", "members", filters],
 };
 
 export { CASHIER_QUERY_KEYS };

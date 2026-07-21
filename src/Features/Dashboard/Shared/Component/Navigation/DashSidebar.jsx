@@ -24,16 +24,20 @@ import {
 } from "@/Components/Elements/Shadcn/sidebar";
 import { Button } from "@/Components/Elements/Shadcn/button";
 import { selectAuthRole } from "@/Redux/Features/Auth/Login/LoginSelector";
-import useTenant from "@/Features/Shared/Hooks/useTenant";
+import useTenantTier from "@/Features/Shared/Hooks/useTenantTier";
 
 const CreateSidebar = memo(({ pathname }) => {
-  const { tenant } = useTenant();
-
+  const { tenant, isTenantPro } = useTenantTier();
   const currentRole = useSelector(selectAuthRole);
-  const SIDEBAR_ITEMS = useMemo(
-    () => SidebarItem.filter((item) => item.allowed_roles.includes(currentRole)),
-    [currentRole],
-  );
+
+  const SIDEBAR_ITEMS = useMemo(() => {
+    return SidebarItem.filter((item) => {
+      if (item.path === ROUTES.DASHBOARD.REWARD && !isTenantPro) {
+        return false;
+      }
+      return item.allowed_roles.includes(currentRole);
+    });
+  }, [currentRole, isTenantPro]);
   const { logout } = useLogout();
 
   const handleLogout = useCallback(async () => {
