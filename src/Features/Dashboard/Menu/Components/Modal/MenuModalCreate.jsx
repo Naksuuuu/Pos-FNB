@@ -10,7 +10,7 @@ import MenuForm from "@/Features/Dashboard/Menu/Components/Form/MenuForm";
 import { PackagePlus } from "lucide-react";
 
 const MenuModalCreate = ({ isOpen, onOpenModal }) => {
-  const { create, loading, categoryOptions } = useCreateMenu();
+  const { create, loading, categoryOptions, customOptionOptions } = useCreateMenu();
 
   const {
     register,
@@ -27,6 +27,7 @@ const MenuModalCreate = ({ isOpen, onOpenModal }) => {
       category_id: "",
       is_available: false,
       description: "",
+      customs: [],
     },
   });
 
@@ -57,7 +58,14 @@ const MenuModalCreate = ({ isOpen, onOpenModal }) => {
       title="Tambah Menu"
       icon={PackagePlus}
     >
-      <MenuForm register={register} control={control} errors={errors} categoryOptions={categoryOptions} type="create" />
+      <MenuForm
+        register={register}
+        control={control}
+        errors={errors}
+        categoryOptions={categoryOptions}
+        customOptionOptions={customOptionOptions}
+        type="create"
+      />
     </DashModalForm>
   );
 };

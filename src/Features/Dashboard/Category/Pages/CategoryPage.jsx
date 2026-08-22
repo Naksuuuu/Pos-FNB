@@ -25,7 +25,19 @@ import CategoryModalBulkDelete from "@/Features/Dashboard/Category/Components/Mo
 import DashStatisticCard from "@/Features/Dashboard/Shared/Component/Card/DashStatisticCard";
 
 const CategoryPage = () => {
-  const { categories, loading, errorMessage, statistic, filters, showReset, optimisticSearch, handleSearchChange, handleSortByChange, handleSortDirectionChange, handleResetFilter } = useAllCategory();
+  const {
+    categories,
+    loading,
+    errorMessage,
+    statistic,
+    filters,
+    showReset,
+    optimisticSearch,
+    handleSearchChange,
+    handleSortByChange,
+    handleSortDirectionChange,
+    handleResetFilter,
+  } = useAllCategory();
 
   const { isChecked, setIsChecked, handleCheckboxChange, handleAllCheckboxChange } = useCheckboxCategory();
 
@@ -62,6 +74,7 @@ const CategoryPage = () => {
       <div className="space-y-4">
         <Button
           className="w-full"
+          nativeButton={false}
           render={
             <Link to={ROUTES.DASHBOARD.INVENTORY.MENU} className="flex items-center gap-2">
               <ArrowLeft className="size-4" />
@@ -73,7 +86,12 @@ const CategoryPage = () => {
           <div>
             <h2 className="font-semibold ">Statistik Kategori</h2>
           </div>
-          <DashStatisticCard title="Total Kategori" statistic={statistic?.total_category || 0} descriptions="Semua Kategori Terdaftar" icon={Package} />
+          <DashStatisticCard
+            title="Total Kategori"
+            statistic={statistic?.total_category || 0}
+            descriptions="Semua Kategori Terdaftar"
+            icon={Package}
+          />
         </Card>
         <Button onClick={handleOpenCreateModal} className="w-full">
           <Plus /> Tambah Kategori
@@ -85,13 +103,26 @@ const CategoryPage = () => {
           <div className="space-y-4">
             <Field>
               <Label htmlFor="search">Cari Kategori</Label>
-              <InputSearch id="search" name="search" onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari kategori..." />
+              <InputSearch
+                id="search"
+                name="search"
+                onSearchChange={handleSearchChange}
+                value={optimisticSearch}
+                placeholder="Cari kategori..."
+              />
             </Field>
           </div>
           <div className="flex justify-between w-full gap-4">
             <Field>
               <Label htmlFor="sort-by">Berdasarkan</Label>
-              <Select id="sort-by" name="sort-by" items={SORT_BY_OPTIONS} onValueChange={handleSortByChange} value={filters.sort_by || null} placeholder="Pilih Berdasarkan" />
+              <Select
+                id="sort-by"
+                name="sort-by"
+                items={SORT_BY_OPTIONS}
+                onValueChange={handleSortByChange}
+                value={filters.sort_by || null}
+                placeholder="Pilih Berdasarkan"
+              />
             </Field>
             <Field>
               <Label htmlFor="sort-direction">Urutan</Label>
@@ -136,10 +167,23 @@ const CategoryPage = () => {
         </Card>
       </div>
 
-      {selectedEditCategory && <CategoryModalEdit selectedCategory={selectedEditCategory} onOpenModal={handleOpenEditModal} />}
-      {selectedCreateCategory && <CategoryModalCreate isOpen={selectedCreateCategory} onOpenModal={handleOpenCreateModal} />}
-      {selectedDeleteCategory && <CategoryModalDelete selectedCategory={selectedDeleteCategory} onOpenModal={handleOpenDeleteModal} />}
-      {selectedBulkDeleteCategory && <CategoryModalBulkDelete isOpen={selectedBulkDeleteCategory} onOpenModal={handleOpenBulkDeleteModal} items={isChecked} setIsChecked={setIsChecked} />}
+      {selectedEditCategory && (
+        <CategoryModalEdit selectedCategory={selectedEditCategory} onOpenModal={handleOpenEditModal} />
+      )}
+      {selectedCreateCategory && (
+        <CategoryModalCreate isOpen={selectedCreateCategory} onOpenModal={handleOpenCreateModal} />
+      )}
+      {selectedDeleteCategory && (
+        <CategoryModalDelete selectedCategory={selectedDeleteCategory} onOpenModal={handleOpenDeleteModal} />
+      )}
+      {selectedBulkDeleteCategory && (
+        <CategoryModalBulkDelete
+          isOpen={selectedBulkDeleteCategory}
+          onOpenModal={handleOpenBulkDeleteModal}
+          items={isChecked}
+          setIsChecked={setIsChecked}
+        />
+      )}
     </div>
   );
 };

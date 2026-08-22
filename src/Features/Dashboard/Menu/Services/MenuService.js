@@ -28,8 +28,15 @@ const MenuService = {
     formData.append("hpp", menuData.hpp !== undefined && menuData.hpp !== null ? menuData.hpp : 0);
     formData.append("stock", menuData.stock);
     formData.append("category_id", menuData.category_id);
-    formData.append("description", menuData.description);
+    formData.append("description", menuData.description || "");
     formData.append("is_available", menuData.is_available);
+
+    if (Array.isArray(menuData.customs)) {
+      menuData.customs.forEach((id) => {
+        formData.append("customs[]", id);
+      });
+    }
+
     const response = await apiUtils.post(MENU_ENDPOINT, formData, {
       headers: { "Content-Type": undefined },
     });

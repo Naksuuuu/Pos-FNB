@@ -43,7 +43,8 @@ const DiningTablePage = () => {
     handlePerPageChange,
   } = useAllDiningTable();
 
-  const { allItemsChecked, handleAllCheckboxChange, handleCheckboxChange, isChecked, setIsChecked } = useCheckboxDiningTable();
+  const { allItemsChecked, handleAllCheckboxChange, handleCheckboxChange, isChecked, setIsChecked } =
+    useCheckboxDiningTable();
 
   // coupling reset checkbox ketika melakukan filter atau reset filter
   const { page: _page, ...filtersWithoutPage } = filters;
@@ -79,6 +80,7 @@ const DiningTablePage = () => {
       <div className="space-y-4">
         <Button
           className="w-full"
+          nativeButton={false}
           render={
             <Link to={ROUTES.DASHBOARD.INVENTORY.MENU} className="flex items-center gap-2">
               <ArrowLeft className="size-4" />
@@ -99,12 +101,25 @@ const DiningTablePage = () => {
           </div>
           <Field>
             <Label htmlFor="search">Cari Meja</Label>
-            <InputSearch id="search" name="search" onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari Meja" />
+            <InputSearch
+              id="search"
+              name="search"
+              onSearchChange={handleSearchChange}
+              value={optimisticSearch}
+              placeholder="Cari Meja"
+            />
           </Field>
           <div className="flex gap-4">
             <Field>
               <Label htmlFor="sort_staus">Status</Label>
-              <Select id="sort_status" name="sort_status" items={STATUS_OPTIONS} onValueChange={handleStatusChange} value={filters.status || null} placeholder="Pilih Status" />
+              <Select
+                id="sort_status"
+                name="sort_status"
+                items={STATUS_OPTIONS}
+                onValueChange={handleStatusChange}
+                value={filters.status || null}
+                placeholder="Pilih Status"
+              />
             </Field>
             <Field>
               <Label htmlFor="sort_direction">Urutan</Label>
@@ -153,10 +168,23 @@ const DiningTablePage = () => {
         </Card>
       </div>
 
-      {selectedCreateTable && <DiningTableModalCreate isOpen={!!selectedCreateTable} onOpenModal={handleOpenCreateModal} />}
-      {selectedEditTable && <DiningTableModalEdit selectedDiningTable={selectedEditTable} onOpenModal={handleOpenEditModal} />}
-      {selectedDeleteTable && <DiningTableModalDelete selectedDiningTable={selectedDeleteTable} onOpenModal={handleOpenDeleteModal} />}
-      {selectedBulkDeleteTable && <DiningTableModalBulkDelete isOpen={selectedBulkDeleteTable} onOpenModal={handleOpenBulkDeleteModal} items={allItemsChecked} setIsChecked={setIsChecked} />}
+      {selectedCreateTable && (
+        <DiningTableModalCreate isOpen={!!selectedCreateTable} onOpenModal={handleOpenCreateModal} />
+      )}
+      {selectedEditTable && (
+        <DiningTableModalEdit selectedDiningTable={selectedEditTable} onOpenModal={handleOpenEditModal} />
+      )}
+      {selectedDeleteTable && (
+        <DiningTableModalDelete selectedDiningTable={selectedDeleteTable} onOpenModal={handleOpenDeleteModal} />
+      )}
+      {selectedBulkDeleteTable && (
+        <DiningTableModalBulkDelete
+          isOpen={selectedBulkDeleteTable}
+          onOpenModal={handleOpenBulkDeleteModal}
+          items={allItemsChecked}
+          setIsChecked={setIsChecked}
+        />
+      )}
     </div>
   );
 };

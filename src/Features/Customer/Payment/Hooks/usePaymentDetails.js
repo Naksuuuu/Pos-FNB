@@ -55,8 +55,6 @@ const usePaymentDetails = () => {
     }
   }, [navigate, order]);
 
-  console.log(order);
-
   return {
     order,
     items,

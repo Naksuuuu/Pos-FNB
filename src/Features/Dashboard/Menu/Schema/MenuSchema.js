@@ -25,12 +25,15 @@ const hpp = z
   .transform((v) => Number(v))
   .refine((v) => v >= 0, "Minimal HPP 0 Rupiah!");
 
+const customs = z.array(z.string()).optional().default([]);
+
 const CreateMenuSchema = z.object({
   name,
   price,
   hpp,
   category_id,
   description,
+  customs,
   image: z
     .any()
     .refine((files) => !files || files instanceof FileList, "Foto wajib diisi")
@@ -48,6 +51,7 @@ const EditMenuSchema = z.object({
   hpp,
   category_id,
   description,
+  customs,
   image: z
     .any()
     .optional()

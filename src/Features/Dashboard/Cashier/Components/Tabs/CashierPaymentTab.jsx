@@ -140,9 +140,18 @@ const CashierPaymentTab = () => {
                 {selectedOrder.items?.map((item) => (
                   <div key={item.id} className="space-y-1">
                     <div className="flex items-center justify-between text-sm">
-                      <p>
-                        {item.qty}x {item.menu?.name}
-                      </p>
+                      <div className="flex flex-col">
+                        <p className="font-bold text-md">
+                          {item.qty}x {item.menu?.name} {item.menu?.price && `(${rupiah(item.menu.price)})`}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {item.customs?.map((custom) => (
+                            <span key={custom.id} className="ml-2">
+                              + {custom.custom_name} ({rupiah(custom.price || 0)}){" "}
+                            </span>
+                          ))}
+                        </p>
+                      </div>
                       <p className="font-medium">{rupiah(item.subtotal || 0)}</p>
                     </div>
                     <Separator className="w-full bg-transparent border-b border-dashed" />
@@ -150,7 +159,6 @@ const CashierPaymentTab = () => {
                 ))}
               </div>
             </div>
-
             <form onSubmit={handleSubmit(handleSubmitForm)} className="w-full space-y-4 ">
               <div className="space-y-1.5 text-sm">
                 <div className="flex items-center justify-between">

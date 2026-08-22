@@ -7,6 +7,8 @@ import { Select } from "@/Components/Elements/Inputs/Select";
 import { ImageWithFallback } from "@/Components/Elements/Images/ImageWithFallback";
 import { Textarea } from "@/Components/Elements/Shadcn/textarea";
 import { Switch } from "@/Components/Elements/Shadcn/switch";
+import { Checkbox } from "@/Components/Elements/Shadcn/checkbox";
+import { rupiah } from "@/Utils/rupiahHelper";
 import {
   Field,
   FieldContent,
@@ -16,8 +18,17 @@ import {
   FieldLabel,
   FieldSet,
 } from "@/Components/Elements/Shadcn/field";
+import { Button } from "@/Components/Elements/Shadcn/button";
 
-const MenuForm = ({ errors, control, register, categoryOptions, type = "create", selectedMenu = null }) => {
+const MenuForm = ({
+  errors,
+  control,
+  register,
+  categoryOptions,
+  customOptionOptions = [],
+  type = "create",
+  selectedMenu = null,
+}) => {
   const [imagePreview, setImagePreview] = useState(null);
 
   const onFileChange = useCallback((e) => {
@@ -183,6 +194,56 @@ const MenuForm = ({ errors, control, register, categoryOptions, type = "create",
             aria-invalid={errors.hpp ? "true" : "false"}
           />
           {errors.hpp && <FieldError>{errors.hpp.message}</FieldError>}
+        </Field>
+
+        <Field className="md:col-span-2">
+          <FieldLabel htmlFor="customs">Opsi Kustom</FieldLabel>
+          <FieldDescription>Pilih opsi kustom tambahan yang berlaku untuk menu ini.</FieldDescription>
+          <Controller
+            name="customs"
+            control={control}
+            render={({ field }) => {
+              const selectedValues = Array.isArray(field.value) ? field.value : [];
+
+              const handleToggle = (optionId) => {
+                if (selectedValues.includes(optionId)) {
+                  field.onChange(selectedValues.filter((id) => id !== optionId));
+                } else {
+                  field.onChange([...selectedValues, optionId]);
+                }
+              };
+
+              if (!customOptionOptions || customOptionOptions.length === 0) {
+                return (
+                  <p className="text-xs text-muted-foreground pt-1">
+                    Belum ada opsi kustom tersedia. Anda dapat menambahkannya di menu Custom.
+                  </p>
+                );
+              }
+
+              return (
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {customOptionOptions.map((opt) => {
+                    const isSelected = selectedValues.includes(opt.value);
+                    return (
+                      <Button
+                        type="button"
+                        key={opt.value}
+                        onClick={() => handleToggle(opt.value)}
+                        variant={"outline"}
+                        className={isSelected && "bg-primary/20 hover:bg-primary/20 border-primary"}
+                      >
+                        <Checkbox checked={isSelected} onCheckedChange={() => handleToggle(opt.value)} />
+                        <span>{opt.label}</span>
+                        {opt.price ? <span className="text-xs font-semibold">({rupiah(opt.price)})</span> : null}
+                      </Button>
+                    );
+                  })}
+                </div>
+              );
+            }}
+          />
+          {errors.customs && <FieldError>{errors.customs.message}</FieldError>}
         </Field>
 
         <Field orientation="horizontal" className="md:col-span-2">

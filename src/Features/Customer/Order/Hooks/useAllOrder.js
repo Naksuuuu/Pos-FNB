@@ -10,6 +10,7 @@ import { CUSTOMER_ORDER_QUERY_KEYS } from "@/Features/Customer/Order/Constants/O
 import { selectIsAuthenticated, selectAuthUser } from "@/Redux/Features/Auth/Login/LoginSelector";
 import useTenantTier from "@/Features/Shared/Hooks/useTenantTier";
 import useCustomerMyRewards from "@/Features/Customer/Reward/Hooks/useCustomerMyRewards";
+// import { custom } from "zod";
 
 const useAllOrder = (effectiveTableCode, onCheckoutSuccess) => {
   const { isTenantPro } = useTenantTier();
@@ -24,7 +25,9 @@ const useAllOrder = (effectiveTableCode, onCheckoutSuccess) => {
   const [selectedReward, setSelectedReward] = useState(null);
 
   const availableRewards = useMemo(() => {
-    return myRewards.filter((item) => item.status === "APPROVED" && !item.completed_at);
+    return myRewards.filter(
+      (item) => item.status === "APPROVED" && !item.completed_at && item.reward.category === "VOUCHER",
+    );
   }, [myRewards]);
 
   const {
@@ -75,18 +78,20 @@ const useAllOrder = (effectiveTableCode, onCheckoutSuccess) => {
       try {
         const orderPayload = {
           code: values.code || "A1",
+          payment_method: "tunai",
           customer_name: values.customer_name || "Guest",
           notes: values.notes || "",
           reward_redeem_id: selectedReward?.id || null,
           items: (orderItems || []).map((item) => ({
             menu_id: item.menu_id,
             qty: Number(item.qty) || 1,
+            customs: (item.selected_customs || []).map((c) => c.id),
           })),
         };
 
-        const response = await mutation.mutateAsync(orderPayload);
+        console.log(orderPayload);
 
-        console.log(response);
+        const response = await mutation.mutateAsync(orderPayload);
 
         // SAVE TO COOKIE WITH 1 YEAR EXPIRATION
         let orderHistory = [];

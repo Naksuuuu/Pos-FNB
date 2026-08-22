@@ -136,7 +136,23 @@ const MenuTable = memo(
                             </div>
 
                             <Separator orientation="vertical" className="w-px " />
-                            <div className="w-1/5 text-start">
+                            <div className="w-1/6 text-start">
+                              <p className="font-medium text-foreground">Opsi Kustom :</p>
+                              {menu.custom_options && menu.custom_options.length > 0 ? (
+                                <div className="flex flex-wrap gap-1 mt-1">
+                                  {menu.custom_options.map((opt) => (
+                                    <Badge key={opt.id} variant="outline" className="text-xs">
+                                      {opt.name} ({rupiah(Number(opt.price) || 0)})
+                                    </Badge>
+                                  ))}
+                                </div>
+                              ) : (
+                                <p className="text-xs text-muted-foreground">Tidak ada opsi kustom</p>
+                              )}
+                            </div>
+
+                            <Separator orientation="vertical" className="w-px " />
+                            <div className="w-1/6 text-start">
                               <p className="font-medium text-foreground">Deskripsi :</p>
                               <p className="w-full whitespace-normal line-clamp-6">
                                 {menu.description ?? "Tidak ada deskripsi"}
@@ -144,13 +160,13 @@ const MenuTable = memo(
                             </div>
 
                             <Separator orientation="vertical" className="w-px " />
-                            <div className="w-1/5 text-start">
+                            <div className="w-1/6 text-start">
                               <p className="font-medium text-foreground">HPP :</p>
                               <p>{rupiah(menu.hpp ?? 0)}</p>
                             </div>
 
                             <Separator orientation="vertical" className="w-px " />
-                            <div className="w-1/5 text-start">
+                            <div className="w-1/6 text-start">
                               <p className="font-medium text-foreground">Tanggal Dibuat :</p>
                               <p>
                                 {menu.created_at
@@ -160,7 +176,7 @@ const MenuTable = memo(
                             </div>
 
                             <Separator orientation="vertical" className="w-px " />
-                            <div className="w-1/5 text-start">
+                            <div className="w-1/6 text-start">
                               <p className="font-medium text-foreground">Terakhir Diperbaharui :</p>
                               <p>
                                 {menu.updated_at

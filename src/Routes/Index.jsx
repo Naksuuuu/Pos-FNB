@@ -17,7 +17,7 @@ import Toaster from "@/Components/Elements/Toasts/Toaster";
 
 export const Routes = createBrowserRouter([
   {
-    errorElement: <RootErrorBoundary />,
+    // errorElement: <RootErrorBoundary />,
     children: [
       ...PublicRoute,
       ...DashboardRoute,

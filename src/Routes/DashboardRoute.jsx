@@ -15,6 +15,7 @@ const CashierPage = lazy(() => import("@/Features/Dashboard/Cashier/Pages/Cashie
 const MenuPage = lazy(() => import("@/Features/Dashboard/Menu/Pages/MenuPage"));
 const CategoryPage = lazy(() => import("@/Features/Dashboard/Category/Pages/CategoryPage"));
 const DiningTablePage = lazy(() => import("@/Features/Dashboard/DiningTable/Pages/DiningTablePage"));
+const CustomOptionPage = lazy(() => import("@/Features/Dashboard/CustomOption/Pages/CustomOptionPage"));
 const UserPage = lazy(() => import("@/Features/Dashboard/User/Pages/UserPage"));
 const ProfilePage = lazy(() => import("@/Features/Dashboard/Profile/Pages/ProfilePage"));
 const SettingsPage = lazy(() => import("@/Features/Dashboard/Settings/Pages/SettingsPage"));
@@ -78,6 +79,10 @@ const DashboardRoute = [
       {
         path: ROUTES.DASHBOARD.INVENTORY.TABLE,
         element: <DiningTablePage />,
+      },
+      {
+        path: ROUTES.DASHBOARD.CUSTOM,
+        element: <CustomOptionPage />,
       },
       {
         path: ROUTES.DASHBOARD.ORDER,

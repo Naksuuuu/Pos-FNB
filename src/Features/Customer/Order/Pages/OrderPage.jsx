@@ -87,41 +87,55 @@ const OrderPage = () => {
               <div>
                 {orderItems.map((item, index) => (
                   <div key={index} className="py-4 border-b">
-                    <div key={`${item.menu_id}-${item.name}`} className="flex items-center justify-between ">
-                      <div className="flex items-center gap-3">
-                        <div>
-                          <p className="text-sm font-semibold">
-                            {item.name} <span className="text-xs font-light">(x{item.qty})</span>
-                          </p>
-                          <p className="text-sm text-muted-foreground">{rupiah(item.price)}</p>
+                        <div key={`${item.menu_id}-${item.name}`} className="flex items-center justify-between ">
+                          <div className="flex items-center gap-3">
+                            <div>
+                              <p className="text-sm font-semibold">
+                                {item.name} <span className="text-xs font-light">(x{item.qty})</span>
+                              </p>
+                                {item.selected_customs && item.selected_customs.length > 0 && (
+                                  <div className="flex flex-col text-xs text-muted-foreground">
+                                    {item.selected_customs.map((customItem, cIdx) => (
+                                      <p key={customItem.id || cIdx}>
+                                        - {customItem.name} {Number(customItem.price) > 0 ? `+${rupiah(customItem.price)}` : ""}
+                                      </p>
+                                    ))}
+                                  </div>
+                                )}
+                              <p className="text-sm text-muted-foreground">{rupiah(item.price)}</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              nativeButton={false}
+                              render={(props) => (
+                                <Link
+                                  {...props}
+                                  to={`${ROUTES.PUBLIC.CATALOG_DETAIL.replace(":catalogId", item.menu_id)}${queryWithCode}`}
+                                  state={{
+                                    fromOrder: true,
+                                    quantity: item.qty,
+                                    selectedCustoms: (item.selected_customs || []).map((c) => c.id),
+                                    custom_ids_key: item.custom_ids_key || "",
+                                  }}
+                                >
+                                  <div className="flex items-center gap-1">
+                                    <Pen className="size-3" />
+                                    <span className="text-sm font-semibold">Edit</span>
+                                  </div>
+                                </Link>
+                              )}
+                            />
+                            <Button onClick={() => deleteOrderItem(item.menu_id)} variant="destructive" size="sm">
+                              <Trash className="size-4" />
+                            </Button>
+                          </div>
                         </div>
+                        {errors.items?.[index] && <FieldError>{errors.items[index].message}</FieldError>}
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          nativeButton={false}
-                          render={(props) => (
-                            <Link
-                              {...props}
-                              to={`${ROUTES.PUBLIC.CATALOG_DETAIL.replace(":catalogId", item.menu_id)}${queryWithCode}`}
-                              state={{ fromOrder: true, quantity: item.qty }}
-                            >
-                              <div className="flex items-center gap-1">
-                                <Pen className="size-3" />
-                                <span className="text-sm font-semibold">Edit</span>
-                              </div>
-                            </Link>
-                          )}
-                        />
-                        <Button onClick={() => deleteOrderItem(item.menu_id)} variant="destructive" size="sm">
-                          <Trash className="size-4" />
-                        </Button>
-                      </div>
-                    </div>
-                    {errors.items?.[index] && <FieldError>{errors.items[index].message}</FieldError>}
-                  </div>
-                ))}
+                    ))}
 
                 {orderItems.length === 0 && <p className="py-4 text-sm text-muted-foreground">Belum ada pesanan.</p>}
               </div>

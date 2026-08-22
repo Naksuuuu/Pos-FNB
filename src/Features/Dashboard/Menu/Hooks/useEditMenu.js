@@ -5,6 +5,8 @@ import MenuService from "@/Features/Dashboard/Menu/Services/MenuService";
 import { MENU_QUERY_KEYS } from "@/Features/Dashboard/Menu/Constants/MenuConstant";
 import CategoryService from "@/Features/Dashboard/Category/Services/CategoryService";
 import { CATEGORY_QUERY_KEYS } from "@/Features/Dashboard/Category/Constants/CategoryConstant";
+import CustomOptionService from "@/Features/Dashboard/CustomOption/Services/CustomOptionService";
+import { CUSTOM_OPTION_QUERY_KEYS } from "@/Features/Dashboard/CustomOption/Constants/CustomOptionConstant";
 
 const useEditMenu = () => {
   const queryClient = useQueryClient();
@@ -22,7 +24,34 @@ const useEditMenu = () => {
     },
   });
 
+  const { data: customOptionsData } = useQuery({
+    queryKey: CUSTOM_OPTION_QUERY_KEYS.list({}),
+    queryFn: async () => {
+      const response = await CustomOptionService.customOptions();
+
+      if (!response.success) {
+        throw new Error(response.message || "Failed to fetch custom options");
+      }
+
+      return response.data;
+    },
+  });
+
   const categories = useMemo(() => categoryData?.categories || [], [categoryData?.categories]);
+  const customOptionsList = useMemo(() => {
+    if (Array.isArray(customOptionsData)) {
+      return customOptionsData;
+    }
+    return customOptionsData?.custom_options || customOptionsData?.options || customOptionsData?.data || [];
+  }, [customOptionsData]);
+
+  const customOptionOptions = useMemo(() => {
+    return customOptionsList.map((item) => ({
+      value: item.id,
+      label: item.name,
+      price: Number(item.price) || 0,
+    }));
+  }, [customOptionsList]);
 
   const mutation = useMutation({
     mutationFn: async ({ menuId, menuData }) => {
@@ -65,7 +94,7 @@ const useEditMenu = () => {
     [mutation],
   );
 
-  return { edit, loading: mutation.isPending, categoryOptions };
+  return { edit, loading: mutation.isPending, categoryOptions, customOptionOptions };
 };
 
 export default useEditMenu;

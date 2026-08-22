@@ -98,7 +98,9 @@ const PaymentPage = memo(() => {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground">
-                  Diskon ({order.reward_redeem.reward.discount_percentage}%)
+                  {order.reward_redeem?.reward
+                    ? `Diskon (${order.reward_redeem.reward.discount_percentage}%)`
+                    : "Diskon"}
                 </span>
                 <span className="font-medium text-foreground">{rupiah(order.discount_amount)}</span>
               </div>

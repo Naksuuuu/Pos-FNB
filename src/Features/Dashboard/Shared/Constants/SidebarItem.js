@@ -1,4 +1,4 @@
-import { Computer, LayoutDashboard, ConciergeBell, User, Package, Settings, Gift } from "lucide-react";
+import { Computer, LayoutDashboard, ConciergeBell, User, Package, Settings, Gift, SlidersHorizontal } from "lucide-react";
 
 import { ROUTES } from "@/Constants/RouteConstant";
 
@@ -21,6 +21,13 @@ export const SidebarItem = [
     title: "Inventaris",
     path: ROUTES.DASHBOARD.INVENTORY.MENU,
     icon: Package,
+    children: null,
+    allowed_roles: ["admin", "cashier"],
+  },
+  {
+    title: "Custom",
+    path: ROUTES.DASHBOARD.CUSTOM,
+    icon: SlidersHorizontal,
     children: null,
     allowed_roles: ["admin", "cashier"],
   },

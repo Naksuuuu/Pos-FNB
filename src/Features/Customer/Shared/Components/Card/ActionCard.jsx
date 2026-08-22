@@ -25,7 +25,7 @@ const ActionCard = memo(({ children, onActionClick, actionTitle, disabled }) => 
           </Button>
         </CardFooter>
       </Card>
-      <div style={{ height: `${cardHeight}px` }}>a</div>
+      <div style={{ height: `${cardHeight}px` }}></div>
     </>
   );
 });

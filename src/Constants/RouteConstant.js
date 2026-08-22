@@ -29,5 +29,6 @@ export const ROUTES = {
     ORDER: "/dashboard/orders",
     PROFILE: "/dashboard/profile",
     REWARD: "/dashboard/rewards",
+    CUSTOM: "/dashboard/custom-options",
   },
 };
