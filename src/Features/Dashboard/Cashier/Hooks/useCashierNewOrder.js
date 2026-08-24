@@ -35,7 +35,10 @@ const useCashierNewOrder = () => {
 
   const taxPercentage = Number(tenant?.tax_percentage || 0);
 
-  const subtotal = useMemo(() => cart.reduce((sum, item) => sum + Number(item.price || 0) * Number(item.qty || 0), 0), [cart]);
+  const subtotal = useMemo(
+    () => cart.reduce((sum, item) => sum + Number(item.unit_price || item.price || 0) * Number(item.qty || 0), 0),
+    [cart],
+  );
   const tax = useMemo(() => Math.round(subtotal * (taxPercentage / 100)), [subtotal, taxPercentage]);
   const grandTotal = useMemo(() => subtotal + tax, [subtotal, tax]);
 
@@ -49,51 +52,115 @@ const useCashierNewOrder = () => {
       cart.map((item) => ({
         menu_id: item.menu_id,
         qty: item.qty,
+        customs: (item.selected_customs || []).map((c) => c.id),
       })),
     );
   }, [cart, setValue]);
 
-  const addToCart = useCallback((menu) => {
+  const addToCart = useCallback((menu, selectedCustoms = [], addQty = 1) => {
     setCart((prev) => {
-      const itemIndex = prev.findIndex((item) => item.menu_id === menu.id);
+      const basePrice = Number(menu.price || 0);
+      const customTotalPrice = (selectedCustoms || []).reduce(
+        (sum, c) => sum + Number(c.price || 0),
+        0,
+      );
+      const unitPrice = basePrice + customTotalPrice;
+      const customIdsKey = (selectedCustoms || [])
+        .map((c) => c.id)
+        .sort()
+        .join(",");
+      const cartItemKey = `${menu.id}-${customIdsKey}`;
 
-      if (itemIndex >= 0) {
-        return prev.map((item, index) => (index === itemIndex ? { ...item, qty: item.qty + 1 } : item));
+      const existingIndex = prev.findIndex(
+        (item) => (item.cart_item_key || item.menu_id) === cartItemKey,
+      );
+
+      if (existingIndex >= 0) {
+        return prev.map((item, index) =>
+          index === existingIndex ? { ...item, qty: item.qty + addQty } : item,
+        );
       }
 
       return [
         ...prev,
         {
+          cart_item_key: cartItemKey,
           menu_id: menu.id,
           name: menu.name,
-          price: Number(menu.price || 0),
-          qty: 1,
+          base_price: basePrice,
+          unit_price: unitPrice,
+          price: unitPrice,
+          qty: addQty,
+          custom_ids_key: customIdsKey,
+          selected_customs: selectedCustoms,
         },
       ];
     });
   }, []);
 
-  const decreaseCartItem = useCallback((menuId) => {
+  const decreaseCartItem = useCallback((cartItemKey) => {
     setCart((prev) => {
-      const item = prev.find((itm) => itm.menu_id === menuId);
+      const item = prev.find((itm) => (itm.cart_item_key || itm.menu_id) === cartItemKey);
       if (!item) {
         return prev;
       }
 
       if (item.qty <= 1) {
-        return prev.filter((itm) => itm.menu_id !== menuId);
+        return prev.filter((itm) => (itm.cart_item_key || itm.menu_id) !== cartItemKey);
       }
 
-      return prev.map((itm) => (itm.menu_id === menuId ? { ...itm, qty: itm.qty - 1 } : itm));
+      return prev.map((itm) =>
+        (itm.cart_item_key || itm.menu_id) === cartItemKey ? { ...itm, qty: itm.qty - 1 } : itm,
+      );
     });
   }, []);
 
-  const increaseCartItem = useCallback((menuId) => {
-    setCart((prev) => prev.map((itm) => (itm.menu_id === menuId ? { ...itm, qty: itm.qty + 1 } : itm)));
+  const increaseCartItem = useCallback((cartItemKey) => {
+    setCart((prev) =>
+      prev.map((itm) =>
+        (itm.cart_item_key || itm.menu_id) === cartItemKey ? { ...itm, qty: itm.qty + 1 } : itm,
+      ),
+    );
   }, []);
 
-  const removeCartItem = useCallback((menuId) => {
-    setCart((prev) => prev.filter((itm) => itm.menu_id !== menuId));
+  const removeCartItem = useCallback((cartItemKey) => {
+    setCart((prev) => prev.filter((itm) => (itm.cart_item_key || itm.menu_id) !== cartItemKey));
+  }, []);
+
+  const updateCartItemCustoms = useCallback((targetCartItemKey, selectedCustoms = [], nextQty = 1) => {
+    setCart((prev) => {
+      const existingIndex = prev.findIndex(
+        (item) => (item.cart_item_key || item.menu_id) === targetCartItemKey,
+      );
+      if (existingIndex === -1) return prev;
+
+      const currentItem = prev[existingIndex];
+      const basePrice = Number(currentItem.base_price || currentItem.price || 0);
+      const customTotalPrice = (selectedCustoms || []).reduce(
+        (sum, c) => sum + Number(c.price || 0),
+        0,
+      );
+      const unitPrice = basePrice + customTotalPrice;
+      const customIdsKey = (selectedCustoms || [])
+        .map((c) => c.id)
+        .sort()
+        .join(",");
+      const newCartItemKey = `${currentItem.menu_id}-${customIdsKey}`;
+
+      const updatedItem = {
+        ...currentItem,
+        cart_item_key: newCartItemKey,
+        unit_price: unitPrice,
+        price: unitPrice,
+        qty: nextQty,
+        custom_ids_key: customIdsKey,
+        selected_customs: selectedCustoms,
+      };
+
+      const copy = [...prev];
+      copy.splice(existingIndex, 1, updatedItem);
+      return copy;
+    });
   }, []);
 
   const clearOrderForm = useCallback(() => {
@@ -139,6 +206,7 @@ const useCashierNewOrder = () => {
     decreaseCartItem,
     increaseCartItem,
     removeCartItem,
+    updateCartItemCustoms,
     clearOrderForm,
 
     subtotal,

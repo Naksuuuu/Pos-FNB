@@ -64,6 +64,32 @@ const CashierService = {
     const response = await apiUtils.post("/dashboard/cashier/members", payload);
     return response.data;
   },
+
+  rewardClaims: async (params = {}) => {
+    const { page = 1, search, status, sort_by, sort_direction, per_page = 15 } = params;
+
+    const queryParams = {
+      page,
+      search,
+      status,
+      per_page,
+      sort_by,
+      sort_direction,
+    };
+
+    const response = await apiUtils.get("/dashboard/cashier/rewards/claims", { params: queryParams });
+    return response.data;
+  },
+
+  approveRewardClaim: async (claimId) => {
+    const response = await apiUtils.post(`/dashboard/cashier/rewards/claims/${claimId}/approve`);
+    return response.data;
+  },
+
+  rejectRewardClaim: async (claimId, payload = { notes: "Klaim ditolak oleh kasir" }) => {
+    const response = await apiUtils.post(`/dashboard/cashier/rewards/claims/${claimId}/reject`, payload);
+    return response.data;
+  },
 };
 
 export default CashierService;

@@ -46,7 +46,7 @@ const useLogin = () => {
 
       setAuthToken(token);
       setUserData(user);
-      Cookies.remove("orderHistory");
+      Cookies.remove("orderHistory", { path: "/" });
       dispatch(setCredentials({ user, token }));
     },
     onError: () => {

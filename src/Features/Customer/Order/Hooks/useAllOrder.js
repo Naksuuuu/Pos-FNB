@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Cookies from "js-cookie";
 
 import { useSelector } from "react-redux";
@@ -10,9 +10,10 @@ import { CUSTOMER_ORDER_QUERY_KEYS } from "@/Features/Customer/Order/Constants/O
 import { selectIsAuthenticated, selectAuthUser } from "@/Redux/Features/Auth/Login/LoginSelector";
 import useTenantTier from "@/Features/Shared/Hooks/useTenantTier";
 import useCustomerMyRewards from "@/Features/Customer/Reward/Hooks/useCustomerMyRewards";
-// import { custom } from "zod";
+import { updateOrderInCookies } from "@/Features/Customer/Shared/Utils/orderHelper";
 
 const useAllOrder = (effectiveTableCode, onCheckoutSuccess) => {
+  const queryClient = useQueryClient();
   const { isTenantPro } = useTenantTier();
 
   const storedItems = sessionStorage.getItem("orderItems");
@@ -36,12 +37,15 @@ const useAllOrder = (effectiveTableCode, onCheckoutSuccess) => {
     setError,
     clearErrors,
     setValue,
+    watch,
+    control,
     formState: { errors, isSubmitting },
   } = useForm({
     defaultValues: {
       customer_name: isAuthenticated && isTenantPro ? user?.name || "" : "",
       customer_id: isAuthenticated && isTenantPro ? user?.id : null,
       code: effectiveTableCode,
+      payment_method: "",
       notes: "",
     },
     values: {
@@ -57,8 +61,10 @@ const useAllOrder = (effectiveTableCode, onCheckoutSuccess) => {
       const response = await OrderService.create(orderPayload);
 
       if (response.status !== 201) {
-        throw new Error(response.message || "Failed to create order");
+        throw new Error(response.message || "Gagal membuat pesanan");
       }
+
+      console.log(response.data);
 
       return response.data;
     },
@@ -73,13 +79,19 @@ const useAllOrder = (effectiveTableCode, onCheckoutSuccess) => {
         return;
       }
 
+      if (!values.payment_method) {
+        setError("payment_method", { type: "manual", message: "Metode pembayaran wajib dipilih." });
+        return;
+      }
+
       clearErrors();
 
       try {
         const orderPayload = {
           code: values.code || "A1",
-          payment_method: "tunai",
+          payment_method: values.payment_method,
           customer_name: values.customer_name || "Guest",
+          customer_id: isAuthenticated && isTenantPro ? user?.id || null : null,
           notes: values.notes || "",
           reward_redeem_id: selectedReward?.id || null,
           items: (orderItems || []).map((item) => ({
@@ -89,25 +101,11 @@ const useAllOrder = (effectiveTableCode, onCheckoutSuccess) => {
           })),
         };
 
-        console.log(orderPayload);
-
         const response = await mutation.mutateAsync(orderPayload);
+        queryClient.invalidateQueries({ queryKey: CUSTOMER_ORDER_QUERY_KEYS.root });
 
-        // SAVE TO COOKIE WITH 1 YEAR EXPIRATION
-        let orderHistory = [];
-        try {
-          const storedHistory = Cookies.get("orderHistory");
-          orderHistory = storedHistory ? JSON.parse(storedHistory) : [];
-        } catch {
-          orderHistory = [];
-        }
-
-        // Push new order response
-        orderHistory.push(response);
-
-        // Keep last 10 items to prevent cookie size bloat
-        const trimmedHistory = orderHistory.slice(-10);
-        Cookies.set("orderHistory", JSON.stringify(trimmedHistory), { expires: 365 });
+        // SAVE TO COOKIE WITH 1 YEAR EXPIRATION USING CENTRAL HELPER
+        updateOrderInCookies(response);
 
         sessionStorage.removeItem("orderItems");
 
@@ -123,7 +121,18 @@ const useAllOrder = (effectiveTableCode, onCheckoutSuccess) => {
         }
       }
     },
-    [orderItems, mutation, clearErrors, setError, onCheckoutSuccess, selectedReward],
+    [
+      orderItems,
+      mutation,
+      clearErrors,
+      setError,
+      onCheckoutSuccess,
+      selectedReward,
+      queryClient,
+      isAuthenticated,
+      isTenantPro,
+      user,
+    ],
   );
 
   const deleteOrderItem = useCallback((menuId) => {
@@ -150,6 +159,9 @@ const useAllOrder = (effectiveTableCode, onCheckoutSuccess) => {
     errors,
     isSubmitting,
     isAuthenticated,
+    setValue,
+    watch,
+    control,
     // Tenant status
     isTenantPro,
     // Checkout handler

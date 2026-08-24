@@ -84,7 +84,7 @@ const CustomerRewardPage = memo(() => {
           )}
 
           {!loadingRewards && !errorMessage && rewards.length > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 overflow-y-auto max-h-[60vh] no-scrollbar pb-6 px-1">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 overflow-y-auto max-h-[75vh] no-scrollbar pb-6 px-1">
               {rewards.map((reward) => {
                 const canRedeem = isAuthenticated && userPoints >= reward.point_cost;
 

@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { Controller } from "react-hook-form";
-import { Loader2, Minus, Plus, Trash2 } from "lucide-react";
+import { Loader2, Minus, Pen, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import useCashierNewOrder from "@/Features/Dashboard/Cashier/Hooks/useCashierNewOrder";
@@ -21,11 +21,17 @@ import { InputSearch } from "@/Components/Elements/Inputs/InputSearch";
 
 import CashierMenuCard from "@/Features/Dashboard/Cashier/Components/Card/CashierMenuCard";
 import CashierMemberModal from "@/Features/Dashboard/Cashier/Components/Modal/CashierMemberModal";
+import CashierCustomModal from "@/Features/Dashboard/Cashier/Components/Modal/CashierCustomModal";
 
 const NAVBAR_HEIGHT = 105;
 
 const CashierNewOrderTab = ({ onOrderCreated }) => {
   const [memberModalOpen, setMemberModalOpen] = useState(false);
+  const [customModalOpen, setCustomModalOpen] = useState(false);
+  const [selectedMenuForCustom, setSelectedMenuForCustom] = useState(null);
+  const [editingCartItemKey, setEditingCartItemKey] = useState(null);
+  const [editingCartItem, setEditingCartItem] = useState(null);
+
   const { isTenantPro } = useTenantTier();
   const {
     register,
@@ -38,6 +44,7 @@ const CashierNewOrderTab = ({ onOrderCreated }) => {
     decreaseCartItem,
     increaseCartItem,
     removeCartItem,
+    updateCartItemCustoms,
     clearOrderForm,
 
     subtotal,
@@ -60,6 +67,35 @@ const CashierNewOrderTab = ({ onOrderCreated }) => {
     handleCategoryChange,
     handleSearchChange,
   } = useCashierResources();
+
+  const handleEditCustom = useCallback(
+    (item) => {
+      const foundMenu = menus.find((m) => m.id === item.menu_id) || {
+        id: item.menu_id,
+        name: item.name,
+        price: item.base_price || item.price,
+        custom_options: item.selected_customs || [],
+      };
+      setSelectedMenuForCustom(foundMenu);
+      setEditingCartItemKey(item.cart_item_key || item.menu_id);
+      setEditingCartItem(item);
+      setCustomModalOpen(true);
+    },
+    [menus],
+  );
+
+  const handleSaveModalCustoms = useCallback(
+    (menu, selectedCustomObjects, quantity) => {
+      if (editingCartItemKey) {
+        updateCartItemCustoms(editingCartItemKey, selectedCustomObjects, quantity);
+      } else {
+        addToCart(menu, selectedCustomObjects, quantity);
+      }
+      setEditingCartItemKey(null);
+      setEditingCartItem(null);
+    },
+    [editingCartItemKey, updateCartItemCustoms, addToCart],
+  );
 
   const handleSubmitForm = useCallback(
     async (data) => {
@@ -116,7 +152,7 @@ const CashierNewOrderTab = ({ onOrderCreated }) => {
             </div>
           </div>
         </Card>
-        <div className="grid grid-cols-2 gap-3 pb-1  lg:grid-cols-3 2xl:grid-cols-4 flex-1 overflow-y-scroll min-h-0 auto-rows-max no-scrollbar ">
+        <div className="grid grid-cols-2 gap-3 pb-1 lg:grid-cols-3 2xl:grid-cols-4 flex-1 overflow-y-scroll min-h-0 auto-rows-max no-scrollbar ">
           <CashierMenuCard loadingResources={loadingResources} menus={menus} addToCart={addToCart} />
         </div>
       </div>
@@ -192,41 +228,66 @@ const CashierNewOrderTab = ({ onOrderCreated }) => {
               <p className="py-6 text-center text-sm text-muted-foreground">Belum ada item dipilih.</p>
             )}
 
-            {cart.map((item) => (
-              <div key={item.menu_id} className="rounded-lg border border-border p-2">
-                <div className="flex items-start justify-between gap-2">
-                  <div>
-                    <p className="line-clamp-1 text-sm font-medium">{item.name}</p>
-                    <p className="text-xs text-muted-foreground">{rupiah(item.price)} / item</p>
+            {cart.map((item) => {
+              const itemKey = item.cart_item_key || item.menu_id;
+              const unitPrice = item.unit_price || item.price || 0;
+              return (
+                <div key={itemKey} className="rounded-lg border border-border p-2">
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <p className="line-clamp-1 text-sm font-medium">{item.name}</p>
+                      {item.selected_customs && item.selected_customs.length > 0 && (
+                        <div className="flex flex-col text-xs text-muted-foreground mt-0.5">
+                          {item.selected_customs.map((c, cIdx) => (
+                            <span key={c.id || cIdx}>
+                              - {c.name || c.custom_name}{" "}
+                              {Number(c.price) > 0 ? `+${rupiah(c.price)}` : ""}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                      <p className="text-xs text-muted-foreground mt-0.5">{rupiah(unitPrice)} / item</p>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Button
+                        type="button"
+                        size="icon-xs"
+                        variant="ghost"
+                        title="Opsi Extra Custom"
+                        onClick={() => handleEditCustom(item)}
+                      >
+                        <Pen className="size-3.5 text-muted-foreground hover:text-foreground" />
+                      </Button>
+                      <Button type="button" size="icon-xs" variant="ghost" onClick={() => removeCartItem(itemKey)}>
+                        <Trash2 className="text-destructive" />
+                      </Button>
+                    </div>
                   </div>
-                  <Button type="button" size="icon-xs" variant="ghost" onClick={() => removeCartItem(item.menu_id)}>
-                    <Trash2 className="text-destructive" />
-                  </Button>
-                </div>
-                <div className="mt-2 flex items-center justify-between">
-                  <div className="flex items-center gap-1">
-                    <Button
-                      type="button"
-                      size="icon-xs"
-                      variant="outline"
-                      onClick={() => decreaseCartItem(item.menu_id)}
-                    >
-                      <Minus />
-                    </Button>
-                    <span className="min-w-6 text-center text-sm font-medium">{item.qty}</span>
-                    <Button
-                      type="button"
-                      size="icon-xs"
-                      variant="outline"
-                      onClick={() => increaseCartItem(item.menu_id)}
-                    >
-                      <Plus />
-                    </Button>
+                  <div className="mt-2 flex items-center justify-between">
+                    <div className="flex items-center gap-1">
+                      <Button
+                        type="button"
+                        size="icon-xs"
+                        variant="outline"
+                        onClick={() => decreaseCartItem(itemKey)}
+                      >
+                        <Minus />
+                      </Button>
+                      <span className="min-w-6 text-center text-sm font-medium">{item.qty}</span>
+                      <Button
+                        type="button"
+                        size="icon-xs"
+                        variant="outline"
+                        onClick={() => increaseCartItem(itemKey)}
+                      >
+                        <Plus />
+                      </Button>
+                    </div>
+                    <p className="text-sm font-semibold">{rupiah(unitPrice * item.qty)}</p>
                   </div>
-                  <p className="text-sm font-semibold">{rupiah(item.price * item.qty)}</p>
                 </div>
-              </div>
-            ))}
+              );
+            })}
 
             {errors.items && <FieldError className="mt-2">{errors.items.message}</FieldError>}
           </div>
@@ -267,6 +328,19 @@ const CashierNewOrderTab = ({ onOrderCreated }) => {
         </form>
       </Card>
       <CashierMemberModal isOpen={memberModalOpen} onOpenModal={setMemberModalOpen} />
+      <CashierCustomModal
+        key={editingCartItemKey || selectedMenuForCustom?.id || "new-custom-modal"}
+        isOpen={customModalOpen}
+        onClose={() => {
+          setCustomModalOpen(false);
+          setEditingCartItemKey(null);
+          setEditingCartItem(null);
+        }}
+        menu={selectedMenuForCustom}
+        initialSelectedCustoms={editingCartItem?.selected_customs || []}
+        initialQty={editingCartItem?.qty || 1}
+        onAddToCart={handleSaveModalCustoms}
+      />
     </div>
   );
 };

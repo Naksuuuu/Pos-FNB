@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Banknote, Plus } from "lucide-react";
+import { Banknote, Gift, Plus } from "lucide-react";
 
 import { useNavbar } from "@/Features/Dashboard/Shared/Context/DashNavbarContext";
 import useFilterParams from "@/Hooks/useFilterParams";
@@ -7,6 +7,7 @@ import useFilterParams from "@/Hooks/useFilterParams";
 import { Button } from "@/Components/Elements/Shadcn/button";
 import CashierNewOrderTab from "@/Features/Dashboard/Cashier/Components/Tabs/CashierNewOrderTab";
 import CashierPaymentTab from "@/Features/Dashboard/Cashier/Components/Tabs/CashierPaymentTab";
+import CashierRewardTab from "@/Features/Dashboard/Cashier/Components/Tabs/CashierRewardTab";
 
 const CashierPage = () => {
   const { resetFilters } = useFilterParams();
@@ -32,6 +33,10 @@ const CashierPage = () => {
           <Banknote />
           Pembayaran
         </Button>
+        <Button variant={activeTab === "reward" ? "default" : "ghost"} className="rounded-lg" onClick={() => handleChangeTab("reward")}>
+          <Gift />
+          Klaim Hadiah
+        </Button>
       </div>,
     );
 
@@ -42,6 +47,7 @@ const CashierPage = () => {
     <div className="space-y-4">
       {activeTab === "new-order" && <CashierNewOrderTab onOrderCreated={() => handleChangeTab("payment")} />}
       {activeTab === "payment" && <CashierPaymentTab />}
+      {activeTab === "reward" && <CashierRewardTab />}
     </div>
   );
 };

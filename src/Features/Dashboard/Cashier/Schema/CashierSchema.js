@@ -5,6 +5,7 @@ const normalizeCashAmount = (value) => String(value ?? "").replace(/[^0-9]/g, ""
 const CashierOrderItemSchema = z.object({
   menu_id: z.string().min(1, "Menu wajib dipilih"),
   qty: z.number().int().min(1, "Jumlah menu minimal 1"),
+  customs: z.array(z.string()).optional(),
 });
 
 const CreateCashierOrderSchema = z.object({

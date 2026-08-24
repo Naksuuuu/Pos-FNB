@@ -1,5 +1,5 @@
 import { Link, useNavigate, useSearchParams } from "react-router";
-import { Pen, Plus, Trash } from "lucide-react";
+import { Banknote, Pen, Plus, QrCode, Trash } from "lucide-react";
 
 import { ROUTES } from "@/Constants/RouteConstant";
 
@@ -35,6 +35,8 @@ const OrderPage = () => {
     deleteOrderItem,
     register,
     handleSubmit,
+    setValue,
+    watch,
     errors,
     isSubmitting,
     handleCheckout,
@@ -51,6 +53,8 @@ const OrderPage = () => {
       search: `?code=${encodeURIComponent(tableCode || effectiveTableCode)}&orderId=${encodeURIComponent(orderId)}`,
     });
   });
+
+  const currentPaymentMethod = watch("payment_method");
 
   const discountPercentage = selectedReward?.reward?.discount_percentage || 0;
   const discountAmount = totalPrice * (discountPercentage / 100);
@@ -87,55 +91,56 @@ const OrderPage = () => {
               <div>
                 {orderItems.map((item, index) => (
                   <div key={index} className="py-4 border-b">
-                        <div key={`${item.menu_id}-${item.name}`} className="flex items-center justify-between ">
-                          <div className="flex items-center gap-3">
-                            <div>
-                              <p className="text-sm font-semibold">
-                                {item.name} <span className="text-xs font-light">(x{item.qty})</span>
-                              </p>
-                                {item.selected_customs && item.selected_customs.length > 0 && (
-                                  <div className="flex flex-col text-xs text-muted-foreground">
-                                    {item.selected_customs.map((customItem, cIdx) => (
-                                      <p key={customItem.id || cIdx}>
-                                        - {customItem.name} {Number(customItem.price) > 0 ? `+${rupiah(customItem.price)}` : ""}
-                                      </p>
-                                    ))}
-                                  </div>
-                                )}
-                              <p className="text-sm text-muted-foreground">{rupiah(item.price)}</p>
+                    <div key={`${item.menu_id}-${item.name}`} className="flex items-center justify-between ">
+                      <div className="flex items-center gap-3">
+                        <div>
+                          <p className="text-sm font-semibold">
+                            {item.name} <span className="text-xs font-light">(x{item.qty})</span>
+                          </p>
+                          {item.selected_customs && item.selected_customs.length > 0 && (
+                            <div className="flex flex-col text-xs text-muted-foreground">
+                              {item.selected_customs.map((customItem, cIdx) => (
+                                <p key={customItem.id || cIdx}>
+                                  - {customItem.name}{" "}
+                                  {Number(customItem.price) > 0 ? `+${rupiah(customItem.price)}` : ""}
+                                </p>
+                              ))}
                             </div>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              nativeButton={false}
-                              render={(props) => (
-                                <Link
-                                  {...props}
-                                  to={`${ROUTES.PUBLIC.CATALOG_DETAIL.replace(":catalogId", item.menu_id)}${queryWithCode}`}
-                                  state={{
-                                    fromOrder: true,
-                                    quantity: item.qty,
-                                    selectedCustoms: (item.selected_customs || []).map((c) => c.id),
-                                    custom_ids_key: item.custom_ids_key || "",
-                                  }}
-                                >
-                                  <div className="flex items-center gap-1">
-                                    <Pen className="size-3" />
-                                    <span className="text-sm font-semibold">Edit</span>
-                                  </div>
-                                </Link>
-                              )}
-                            />
-                            <Button onClick={() => deleteOrderItem(item.menu_id)} variant="destructive" size="sm">
-                              <Trash className="size-4" />
-                            </Button>
-                          </div>
+                          )}
+                          <p className="text-sm text-muted-foreground">{rupiah(item.price)}</p>
                         </div>
-                        {errors.items?.[index] && <FieldError>{errors.items[index].message}</FieldError>}
                       </div>
-                    ))}
+                      <div className="flex items-center gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          nativeButton={false}
+                          render={(props) => (
+                            <Link
+                              {...props}
+                              to={`${ROUTES.PUBLIC.CATALOG_DETAIL.replace(":catalogId", item.menu_id)}${queryWithCode}`}
+                              state={{
+                                fromOrder: true,
+                                quantity: item.qty,
+                                selectedCustoms: (item.selected_customs || []).map((c) => c.id),
+                                custom_ids_key: item.custom_ids_key || "",
+                              }}
+                            >
+                              <div className="flex items-center gap-1">
+                                <Pen className="size-3" />
+                                <span className="text-sm font-semibold">Edit</span>
+                              </div>
+                            </Link>
+                          )}
+                        />
+                        <Button onClick={() => deleteOrderItem(item.menu_id)} variant="destructive" size="sm">
+                          <Trash className="size-4" />
+                        </Button>
+                      </div>
+                    </div>
+                    {errors.items?.[index] && <FieldError>{errors.items[index].message}</FieldError>}
+                  </div>
+                ))}
 
                 {orderItems.length === 0 && <p className="py-4 text-sm text-muted-foreground">Belum ada pesanan.</p>}
               </div>
@@ -188,6 +193,43 @@ const OrderPage = () => {
                 />
                 {errors.notes?.message && <FieldError>{errors.notes.message}</FieldError>}
               </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="md:px-4">
+          <p className="text-xs font-semibold tracking-widest uppercase text-muted-foreground">Metode Pembayaran</p>
+
+          <Card className="py-0 mt-3 border-none rounded-md shadow-md">
+            <CardContent className="px-4 py-4 space-y-3">
+              <div className="grid grid-cols-2 gap-3">
+                <Button
+                  type="button"
+                  variant={currentPaymentMethod === "tunai" ? "default" : "outline"}
+                  className="h-auto flex-col py-3 px-2 gap-1 rounded-xl"
+                  onClick={() => setValue("payment_method", "tunai", { shouldValidate: true })}
+                >
+                  <Banknote className="size-5" />
+                  <span className="text-sm font-semibold">Tunai</span>
+                  <span className="text-[10px] opacity-80">Bayar di Kasir</span>
+                </Button>
+
+                <Button
+                  type="button"
+                  variant={currentPaymentMethod === "nontunai" ? "default" : "outline"}
+                  className="h-auto flex-col py-3 px-2 gap-1 rounded-xl"
+                  onClick={() => setValue("payment_method", "nontunai", { shouldValidate: true })}
+                >
+                  <QrCode className="size-5" />
+                  <span className="text-sm font-semibold">Non-Tunai</span>
+                  <span className="text-[10px] opacity-80">QRIS / E-Wallet</span>
+                </Button>
+              </div>
+              <input
+                type="hidden"
+                {...register("payment_method", { required: "Metode pembayaran wajib dipilih." })}
+              />
+              {errors.payment_method?.message && <FieldError>{errors.payment_method.message}</FieldError>}
             </CardContent>
           </Card>
         </div>

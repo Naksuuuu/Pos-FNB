@@ -59,7 +59,7 @@ const CustomerMyRewardPage = memo(() => {
               )}
 
               {!loading && !errorMessage && myRewards.length > 0 && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 overflow-y-auto max-h-[75vh] no-scrollbar pb-6 px-1">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 overflow-y-auto max-h-[85vh] no-scrollbar pb-6 px-1">
                   {myRewards.map((item) => {
                     const rewardDetail = item.reward;
                     if (!rewardDetail) return null;
@@ -75,7 +75,18 @@ const CustomerMyRewardPage = memo(() => {
                             <Badge variant="outline" className="capitalize border-primary/30 text-primary">
                               {rewardDetail.category?.toLowerCase()}
                             </Badge>
-                            <Badge variant={item.status === "APPROVED" ? "success" : "warning"} className="capitalize">
+                            <Badge
+                              variant={
+                                item.status === "APPROVED"
+                                  ? "outline"
+                                  : item.status === "COMPLETED"
+                                    ? "success"
+                                    : item.status === "REJECTED"
+                                      ? "destructive"
+                                      : "info"
+                              }
+                              className="capitalize"
+                            >
                               {item.status?.toLowerCase()}
                             </Badge>
                           </div>

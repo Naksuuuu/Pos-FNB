@@ -12,6 +12,11 @@ const OrderService = {
     const response = await apiUtils.get(`${ORDER_ENDPOINT}/${customerId}`);
     return response.data;
   },
+
+  getByOrderId: async (orderId) => {
+    const response = await apiUtils.get(`${ORDER_ENDPOINT}/detail/${orderId}`);
+    return response.data;
+  },
 };
 
 export default OrderService;

@@ -26,7 +26,7 @@ const useLogout = () => {
     onSettled: () => {
       clearAllAuthData();
       dispatch(clearCredentials());
-      Cookies.remove("orderHistory");
+      Cookies.remove("orderHistory", { path: "/" });
 
       window.location.href = ROUTES.AUTH.LOGIN;
     },

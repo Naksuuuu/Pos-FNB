@@ -13,9 +13,21 @@ import usePaymentDetails from "@/Features/Customer/Payment/Hooks/usePaymentDetai
 
 const PaymentPage = memo(() => {
   const navigate = useNavigate();
-  const { order, items, taxAmount, displayIndex, backLink } = usePaymentDetails();
+  const {
+    order,
+    items,
+    taxAmount,
+    displayIndex,
+    backLink,
+    handlePayWithMidtrans,
+    isProcessingPayment,
+    paymentStatus,
+  } = usePaymentDetails();
 
   if (!order) return null;
+
+  const isNonTunai = order.isNonTunai;
+  const isSettled = paymentStatus === "settlement" || order.isSettled;
 
   return (
     <>
@@ -40,7 +52,7 @@ const PaymentPage = memo(() => {
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground">Nomor Order</span>
                 <span className="font-semibold text-foreground">
-                  {order.order_no || "-"}{" "}
+                  {order.orderNo}{" "}
                   <Badge variant="secondary" className="ml-1 font-semibold">
                     #{displayIndex}
                   </Badge>
@@ -49,20 +61,41 @@ const PaymentPage = memo(() => {
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground">Nomor Meja</span>
                 <Badge variant="outline" className="font-semibold bg-background">
-                  {order.table?.code || "Take Away"}
+                  {order.tableCode}
+                </Badge>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground">Metode Pembayaran</span>
+                <Badge variant="secondary" className="capitalize font-semibold">
+                  {order.paymentMethod}
                 </Badge>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground">Nama Pelanggan</span>
-                <span className="font-medium text-foreground">{order.customer_name || "Pelanggan"}</span>
+                <span className="font-medium text-foreground">{order.customerName}</span>
               </div>
             </div>
 
-            {/* Premium Kasir Alert Box */}
-            <div className="p-3.5 border rounded-lg border-primary/20 bg-primary/5 text-xs text-muted-foreground leading-relaxed mt-2">
-              <p className="font-bold text-primary mb-1">Langkah Selanjutnya:</p>
-              Silakan lakukan pembayaran di kasir agar pesanan kamu dapat langsung diproses oleh dapur kami.
-            </div>
+            {/* Premium Kasir / Midtrans Alert Box */}
+            {isNonTunai ? (
+              isSettled ? (
+                <div className="p-3.5 border rounded-lg border-emerald-500/20 bg-emerald-500/5 text-xs text-emerald-600 dark:text-emerald-400 leading-relaxed mt-2">
+                  <p className="font-bold mb-1">Pembayaran Lunas:</p>
+                  Pembayaran Non-Tunai Anda telah berhasil diproses. Pesanan sedang disiapkan dapur.
+                </div>
+              ) : (
+                <div className="p-3.5 border rounded-lg border-primary/20 bg-primary/5 text-xs text-muted-foreground leading-relaxed mt-2">
+                  <p className="font-bold text-primary mb-1">Metode Pembayaran Non-Tunai:</p>
+                  Klik tombol <strong>"Bayar Sekarang"</strong> di bawah untuk membuka pop-up pembayaran Midtrans (QRIS
+                  / E-Wallet).
+                </div>
+              )
+            ) : (
+              <div className="p-3.5 border rounded-lg border-primary/20 bg-primary/5 text-xs text-muted-foreground leading-relaxed mt-2">
+                <p className="font-bold text-primary mb-1">Langkah Selanjutnya:</p>
+                Silakan lakukan pembayaran di kasir agar pesanan kamu dapat langsung diproses oleh dapur kami.
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -73,12 +106,12 @@ const PaymentPage = memo(() => {
               <p className="font-semibold text-base mb-3">Rincian Menu</p>
               <div className="space-y-3">
                 {items.map((item) => (
-                  <div key={item.id || item.menu_id} className="flex items-center justify-between text-sm">
+                  <div key={item.id || item.menuId} className="flex items-center justify-between text-sm">
                     <div className="flex flex-col">
-                      <span className="font-medium text-foreground">{item.menu?.name || item.name || "Menu"}</span>
+                      <span className="font-medium text-foreground">{item.name}</span>
                       <span className="text-muted-foreground text-xs">Qty: {item.qty}</span>
                     </div>
-                    <span className="font-medium text-foreground">{rupiah(item.subtotal || item.price || 0)}</span>
+                    <span className="font-medium text-foreground">{rupiah(item.subtotal)}</span>
                   </div>
                 ))}
               </div>
@@ -90,19 +123,15 @@ const PaymentPage = memo(() => {
             <div className="space-y-2.5 text-sm">
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground">Subtotal</span>
-                <span className="font-medium text-foreground">{rupiah(order.subtotal_amount)}</span>
+                <span className="font-medium text-foreground">{rupiah(order.subtotalAmount)}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">Pajak ({order.tax_percentage}%)</span>
+                <span className="text-muted-foreground">Pajak ({order.taxPercentage}%)</span>
                 <span className="font-medium text-foreground">{rupiah(taxAmount)}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">
-                  {order.reward_redeem?.reward
-                    ? `Diskon (${order.reward_redeem.reward.discount_percentage}%)`
-                    : "Diskon"}
-                </span>
-                <span className="font-medium text-foreground">{rupiah(order.discount_amount)}</span>
+                <span className="text-muted-foreground">Diskon</span>
+                <span className="font-medium text-foreground">{rupiah(order.discountAmount)}</span>
               </div>
             </div>
 
@@ -111,13 +140,21 @@ const PaymentPage = memo(() => {
             {/* Dynamic Brand Primary Grand Total */}
             <div className="flex items-center justify-between font-bold text-sm">
               <span>Total Tagihan</span>
-              <span className="text-primary text-base font-bold">{rupiah(order.total_amount)}</span>
+              <span className="text-primary text-base font-bold">{rupiah(order.totalAmount)}</span>
             </div>
           </CardContent>
         </Card>
       </div>
 
-      <ActionCard onActionClick={() => navigate(ROUTES.PUBLIC.CATALOG)} actionTitle="Selesai" />
+      {isNonTunai && !isSettled ? (
+        <ActionCard
+          onActionClick={handlePayWithMidtrans}
+          actionTitle={isProcessingPayment ? "Memuat Pembayaran..." : "Bayar Sekarang"}
+          disabled={isProcessingPayment}
+        />
+      ) : (
+        <ActionCard onActionClick={() => navigate(ROUTES.PUBLIC.CATALOG)} actionTitle="Selesai" />
+      )}
     </>
   );
 });
