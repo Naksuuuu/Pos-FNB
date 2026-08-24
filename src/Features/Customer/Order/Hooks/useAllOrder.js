@@ -64,9 +64,11 @@ const useAllOrder = (effectiveTableCode, onCheckoutSuccess) => {
         throw new Error(response.message || "Gagal membuat pesanan");
       }
 
-      console.log(response.data);
-
       return response.data;
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: CUSTOMER_ORDER_QUERY_KEYS.root });
     },
   });
 

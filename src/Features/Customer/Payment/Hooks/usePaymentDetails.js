@@ -2,11 +2,11 @@ import { useMemo, useEffect, useState, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
-import Cookies from "js-cookie";
 import { toast } from "sonner";
 
 import { ROUTES } from "@/Constants/RouteConstant";
 import { CUSTOMER_ORDER_QUERY_KEYS } from "@/Features/Customer/Order/Constants/OrderConstant";
+import useHistoryOrders from "@/Features/Customer/Order/Hooks/useHistoryOrders";
 import OrderService from "@/Features/Customer/Order/Services/OrderService";
 import PaymentService from "@/Features/Customer/Payment/Services/PaymentService";
 import { normalizeOrder, updateOrderInCookies } from "@/Features/Customer/Shared/Utils/orderHelper";
@@ -28,32 +28,21 @@ const usePaymentDetails = () => {
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState("idle");
 
-  const orderHistory = useMemo(() => {
-    try {
-      const stored = Cookies.get("orderHistory");
-      return stored ? JSON.parse(stored) : [];
-    } catch {
-      return [];
-    }
-  }, []);
+  const { rawOrders } = useHistoryOrders();
 
   const storedOrder = useMemo(() => {
     if (orderIdFromQuery) {
-      const found = orderHistory.find((o) => {
+      const found = rawOrders.find((o) => {
         const oData = o?.order || o?.data?.order || o || {};
         return oData.id === orderIdFromQuery;
       });
       if (found) return found;
     }
-    return orderHistory[orderHistory.length - 1] || null;
-  }, [orderHistory, orderIdFromQuery]);
+    return rawOrders[rawOrders.length - 1] || null;
+  }, [rawOrders, orderIdFromQuery]);
 
   const targetOrderId =
-    orderIdFromQuery ||
-    storedOrder?.order?.id ||
-    storedOrder?.data?.order?.id ||
-    storedOrder?.id ||
-    "";
+    orderIdFromQuery || storedOrder?.order?.id || storedOrder?.data?.order?.id || storedOrder?.id || "";
 
   const shouldFetchByOrderId = Boolean(targetOrderId && (!isAuthenticated || !isTenantPro));
 
@@ -77,13 +66,13 @@ const usePaymentDetails = () => {
 
   const orderIndex = useMemo(() => {
     if (!order) return -1;
-    return orderHistory.findIndex((o) => {
+    return rawOrders.findIndex((o) => {
       const oId = o?.order?.id || o?.data?.order?.id || o?.id;
       return oId === order?.id;
     });
-  }, [order, orderHistory]);
+  }, [order, rawOrders]);
 
-  const displayIndex = orderIndex !== -1 ? orderIndex + 1 : orderHistory.length || 1;
+  const displayIndex = orderIndex !== -1 ? orderIndex + 1 : rawOrders.length || 1;
 
   const handlePayWithMidtrans = useCallback(async () => {
     if (!order?.id) {

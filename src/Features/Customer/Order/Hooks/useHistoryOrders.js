@@ -50,22 +50,20 @@ const useHistoryOrders = () => {
   }, [isAuthenticated, orders, orderHistory, isTenantPro]);
 
   const formattedOrders = useMemo(() => {
-    return rawOrders
-      .map((item, index) => {
-        const order = item?.order || item?.data?.order || item || {};
-        const grandTotal = order?.total_amount;
+    return rawOrders.map((item, index) => {
+      const order = item?.order || item?.data?.order || item || {};
+      const grandTotal = order?.total_amount;
 
-        return {
-          id: order.id,
-          orderNo: order.order_no,
-          customerName: order.customer_name || "Pelanggan",
-          tableCode: order.table?.code || "-",
-          createdAt: order.created_at || null,
-          grandTotal: grandTotal,
-          displayIndex: index + 1,
-        };
-      })
-      .reverse();
+      return {
+        id: order.id,
+        orderNo: order.order_no,
+        customerName: order.customer_name || "Pelanggan",
+        tableCode: order.table?.code || "-",
+        createdAt: order.created_at || null,
+        grandTotal: grandTotal,
+        displayIndex: index + 1,
+      };
+    });
   }, [rawOrders]);
 
   const handleOrderClick = useCallback(
