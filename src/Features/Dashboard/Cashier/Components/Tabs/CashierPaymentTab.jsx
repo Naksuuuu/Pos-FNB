@@ -121,7 +121,7 @@ const CashierPaymentTab = () => {
         {selectedOrder && (
           <>
             <div className="flex flex-col flex-1 gap-4 overflow-y-hidden ">
-              <div className="grid grid-cols-1 gap-3 md:grid-cols-3 ">
+              <div className="grid grid-cols-1 gap-3 md:grid-cols-4 ">
                 <div>
                   <p className="text-sm text-muted-foreground">Pelanggan</p>
                   <p className="text-lg font-semibold">{selectedOrder.customer_name || "Pelanggan"}</p>
@@ -130,7 +130,11 @@ const CashierPaymentTab = () => {
                   <p className="text-sm text-muted-foreground">No. Antrian</p>
                   <p className="text-lg font-semibold">{selectedOrder.order_no || "-"}</p>
                 </div>
-                <div className="text-end">
+                <div>
+                  <p className="text-sm text-muted-foreground">Tipe Pesanan</p>
+                  <p className="text-lg font-semibold">{selectedOrder.table_code ? "DINE_IN" : "TAKE_AWAY"}</p>
+                </div>
+                <div>
                   <p className="text-sm text-muted-foreground ">Meja</p>
                   <p className="text-lg font-semibold">{selectedOrder.table_code || "-"}</p>
                 </div>

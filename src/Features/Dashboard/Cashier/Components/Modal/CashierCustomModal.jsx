@@ -18,8 +18,6 @@ const CashierCustomModal = ({ isOpen, onClose, menu, onAddToCart, initialSelecte
     onClose();
   }, [onClose]);
 
-  console.log(menu);
-
   const customOptions = useMemo(() => {
     return Array.isArray(menu?.custom_options) ? menu.custom_options : [];
   }, [menu]);

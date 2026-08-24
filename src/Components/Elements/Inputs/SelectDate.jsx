@@ -1,5 +1,5 @@
-import { memo, useCallback, useState } from "react";
-import { format } from "date-fns";
+import { memo, useCallback, useMemo, useState } from "react";
+import { format, differenceInCalendarDays } from "date-fns";
 import { CalendarSearch } from "lucide-react";
 import { id } from "date-fns/locale";
 
@@ -9,10 +9,16 @@ import { Dialog, DialogContent, DialogHeader, DialogFooter, DialogTitle } from "
 
 import { Select as SelectMain, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/Components/Elements/Shadcn/select";
 
-const SelectDate = memo(({ items, label, placeholder, onValueChange, value, ...props }) => {
+const SelectDate = memo(({ items, label, placeholder, onValueChange, value, maxRangeDays, ...props }) => {
   const ariaInvalid = props["aria-invalid"] || false;
   const [openCustom, setOpenCustom] = useState(false);
   const [range, setRange] = useState(undefined);
+
+  const isRangeExceeded = useMemo(() => {
+    if (!maxRangeDays || !range || !range.from || !range.to) return false;
+    const diffDays = differenceInCalendarDays(range.to, range.from) + 1;
+    return diffDays > maxRangeDays;
+  }, [maxRangeDays, range]);
 
   const handleRootValueChange = useCallback(
     (v) => {
@@ -81,6 +87,11 @@ const SelectDate = memo(({ items, label, placeholder, onValueChange, value, ...p
               </div>
               <span className="text-lg font-semibold">Pilih Rentang Tanggal</span>
             </DialogTitle>
+            {isRangeExceeded && (
+              <p className="text-xs font-semibold text-destructive mt-1">
+                Maksimal rentang yang diperbolehkan adalah {maxRangeDays} hari.
+              </p>
+            )}
           </DialogHeader>
 
           <div className="grid gap-4">
@@ -92,7 +103,7 @@ const SelectDate = memo(({ items, label, placeholder, onValueChange, value, ...p
               <Button variant="outline" onClick={() => setOpenCustom(false)}>
                 Batal
               </Button>
-              <Button disabled={!(range && range.from && range.to)} onClick={() => handleConfirmRange(range)}>
+              <Button disabled={!(range && range.from && range.to) || isRangeExceeded} onClick={() => handleConfirmRange(range)}>
                 Terapkan
               </Button>
             </div>

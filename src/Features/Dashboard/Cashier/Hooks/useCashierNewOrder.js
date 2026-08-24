@@ -23,6 +23,7 @@ const useCashierNewOrder = () => {
   } = useForm({
     resolver: zodResolver(CreateCashierOrderSchema),
     defaultValues: {
+      order_type: "DINE_IN",
       code: "",
       customer_name: "",
       notes: "",
@@ -30,6 +31,7 @@ const useCashierNewOrder = () => {
     },
   });
 
+  const orderType = useWatch({ control, name: "order_type" }) || "DINE_IN";
   const selectedTableCode = useWatch({ control, name: "code" }) || "";
   const customerName = useWatch({ control, name: "customer_name" }) || "";
 
@@ -43,8 +45,10 @@ const useCashierNewOrder = () => {
   const grandTotal = useMemo(() => subtotal + tax, [subtotal, tax]);
 
   const canSubmitQueue = useMemo(() => {
-    return cart.length > 0 && !!customerName.trim() && !!selectedTableCode;
-  }, [cart, customerName, selectedTableCode]);
+    if (cart.length === 0 || !customerName.trim()) return false;
+    if (orderType === "DINE_IN" && !selectedTableCode) return false;
+    return true;
+  }, [cart, customerName, orderType, selectedTableCode]);
 
   useEffect(() => {
     setValue(
@@ -174,6 +178,9 @@ const useCashierNewOrder = () => {
       if (!payload.customer_id) {
         delete payload.customer_id;
       }
+      if (payload.order_type === "TAKE_AWAY") {
+        delete payload.code;
+      }
       const response = await CashierService.createOrder(payload);
 
       if (!response.success || (response.status !== 200 && response.status !== 201)) {
@@ -198,8 +205,10 @@ const useCashierNewOrder = () => {
   return {
     register,
     control,
+    setValue,
     errors,
     handleSubmit,
+    orderType,
 
     cart,
     addToCart,

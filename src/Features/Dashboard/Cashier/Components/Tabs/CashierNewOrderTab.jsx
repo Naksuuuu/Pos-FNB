@@ -36,8 +36,10 @@ const CashierNewOrderTab = ({ onOrderCreated }) => {
   const {
     register,
     control,
+    setValue,
     errors,
     handleSubmit,
+    orderType,
 
     cart,
     addToCart,
@@ -164,6 +166,42 @@ const CashierNewOrderTab = ({ onOrderCreated }) => {
               <p className="text-base font-semibold">Pesanan Saat Ini</p>
               <p className="text-sm text-muted-foreground">Susun item pesanan sebelum dikirim ke antrian</p>
             </FieldLegend>
+
+            {/* Field Tipe Pesanan */}
+            <Field>
+              <Label htmlFor="order_type">Tipe Pesanan</Label>
+              <Controller
+                name="order_type"
+                control={control}
+                render={({ field }) => (
+                  <div className="inline-flex w-full p-1 border rounded-lg border-border bg-input/20">
+                    <Button
+                      type="button"
+                      variant={field.value === "DINE_IN" ? "default" : "ghost"}
+                      size="sm"
+                      className="flex-1 h-8 rounded-md text-xs font-semibold cursor-pointer"
+                      onClick={() => field.onChange("DINE_IN")}
+                    >
+                      Makan di Tempat (Dine In)
+                    </Button>
+                    <Button
+                      type="button"
+                      variant={field.value === "TAKE_AWAY" ? "default" : "ghost"}
+                      size="sm"
+                      className="flex-1 h-8 rounded-md text-xs font-semibold cursor-pointer"
+                      onClick={() => {
+                        field.onChange("TAKE_AWAY");
+                        setValue("code", "");
+                      }}
+                    >
+                      Bawa Pulang (Take Away)
+                    </Button>
+                  </div>
+                )}
+              />
+              {errors.order_type && <FieldError>{errors.order_type.message}</FieldError>}
+            </Field>
+
             <Field>
               <div className="flex justify-between items-center">
                 <Label htmlFor="customer_name">Nama Pelanggan</Label>
@@ -188,7 +226,9 @@ const CashierNewOrderTab = ({ onOrderCreated }) => {
             </Field>
 
             <Field>
-              <Label htmlFor="code">Nomor Meja</Label>
+              <Label htmlFor="code">
+                Nomor Meja {orderType === "DINE_IN" ? <span className="text-destructive">*</span> : "(Opsional)"}
+              </Label>
 
               <Controller
                 name="code"
@@ -198,7 +238,8 @@ const CashierNewOrderTab = ({ onOrderCreated }) => {
                     items={tables}
                     id="code_select"
                     name="code"
-                    placeholder="contoh: 01"
+                    disabled={orderType === "TAKE_AWAY"}
+                    placeholder={orderType === "TAKE_AWAY" ? "Bawa Pulang (Tidak Perlu Meja)" : "contoh: 01"}
                     value={field.value || ""}
                     onValueChange={(val) => field.onChange(val)}
                     aria-invalid={!!errors.code}
@@ -215,7 +256,7 @@ const CashierNewOrderTab = ({ onOrderCreated }) => {
                 name="notes"
                 {...register("notes")}
                 placeholder="contoh: tanpa bawang"
-                className="min-h-20"
+                className="min-h-16"
               />
               {errors.notes && <FieldError>{errors.notes.message}</FieldError>}
             </Field>
@@ -240,8 +281,7 @@ const CashierNewOrderTab = ({ onOrderCreated }) => {
                         <div className="flex flex-col text-xs text-muted-foreground mt-0.5">
                           {item.selected_customs.map((c, cIdx) => (
                             <span key={c.id || cIdx}>
-                              - {c.name || c.custom_name}{" "}
-                              {Number(c.price) > 0 ? `+${rupiah(c.price)}` : ""}
+                              + {c.name || c.custom_name} {Number(c.price) > 0 ? `(${rupiah(c.price)})` : "(Gratis)"}
                             </span>
                           ))}
                         </div>
@@ -265,21 +305,11 @@ const CashierNewOrderTab = ({ onOrderCreated }) => {
                   </div>
                   <div className="mt-2 flex items-center justify-between">
                     <div className="flex items-center gap-1">
-                      <Button
-                        type="button"
-                        size="icon-xs"
-                        variant="outline"
-                        onClick={() => decreaseCartItem(itemKey)}
-                      >
+                      <Button type="button" size="icon-xs" variant="outline" onClick={() => decreaseCartItem(itemKey)}>
                         <Minus />
                       </Button>
                       <span className="min-w-6 text-center text-sm font-medium">{item.qty}</span>
-                      <Button
-                        type="button"
-                        size="icon-xs"
-                        variant="outline"
-                        onClick={() => increaseCartItem(itemKey)}
-                      >
+                      <Button type="button" size="icon-xs" variant="outline" onClick={() => increaseCartItem(itemKey)}>
                         <Plus />
                       </Button>
                     </div>

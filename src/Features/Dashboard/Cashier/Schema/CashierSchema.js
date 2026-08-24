@@ -8,12 +8,25 @@ const CashierOrderItemSchema = z.object({
   customs: z.array(z.string()).optional(),
 });
 
-const CreateCashierOrderSchema = z.object({
-  code: z.string().min(1, "Nomor meja wajib dipilih"),
-  customer_name: z.string().trim().min(1, "Nama pelanggan wajib diisi"),
-  notes: z.string().optional(),
-  items: z.array(CashierOrderItemSchema).min(1, "Tambahkan minimal 1 menu"),
-});
+const CreateCashierOrderSchema = z
+  .object({
+    order_type: z.enum(["DINE_IN", "TAKE_AWAY"], {
+      errorMap: () => ({ message: "Tipe pesanan wajib dipilih" }),
+    }),
+    code: z.string().optional(),
+    customer_name: z.string().trim().min(1, "Nama pelanggan wajib diisi"),
+    notes: z.string().optional(),
+    items: z.array(CashierOrderItemSchema).min(1, "Tambahkan minimal 1 menu"),
+  })
+  .superRefine((data, ctx) => {
+    if (data.order_type === "DINE_IN" && (!data.code || !data.code.trim())) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Nomor meja wajib dipilih untuk Makan di Tempat",
+        path: ["code"],
+      });
+    }
+  });
 
 const CashierPaymentSchema = z.object({
   cash_amount: z

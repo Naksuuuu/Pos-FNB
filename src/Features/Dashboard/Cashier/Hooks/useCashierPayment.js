@@ -12,6 +12,7 @@ import { ORDER_QUERY_KEYS } from "@/Features/Dashboard/Order/Constants/OrderCons
 import { useBluetoothPrinter } from "@/Features/Shared/Context/BluetoothPrinterContext";
 import useTenant from "@/Features/Shared/Hooks/useTenant";
 import { buildReceiptBytes } from "@/Utils/ReceiptFormatter";
+import echoInstance from "@/Services/Common/echoService";
 
 const defaultQuickCash = [20000, 50000, 100000];
 
@@ -42,6 +43,31 @@ const useCashierPayment = () => {
   });
 
   const notificationAudioRef = useRef(null);
+  const lastSoundTimeRef = useRef(0);
+  const lastToastTimeRef = useRef(0);
+
+  const playNotificationSound = useCallback(() => {
+    const now = Date.now();
+    if (now - lastSoundTimeRef.current < 2500) {
+      return;
+    }
+    lastSoundTimeRef.current = now;
+
+    const notificationAudio = notificationAudioRef.current || new Audio("/notification/new-order.mp3");
+    if (notificationAudio) {
+      notificationAudio.currentTime = 0;
+      notificationAudio.play().catch(() => {});
+    }
+  }, []);
+
+  const triggerToast = useCallback((msg) => {
+    const now = Date.now();
+    if (now - lastToastTimeRef.current < 2500) {
+      return;
+    }
+    lastToastTimeRef.current = now;
+    toast.info(msg);
+  }, []);
 
   const {
     handleSubmit,
@@ -112,7 +138,7 @@ const useCashierPayment = () => {
     setIsNewOrder(false);
   }, []);
 
-  // Audio Notification initialization and trigger
+  // Audio Notification initialization
   useEffect(() => {
     notificationAudioRef.current = new Audio("/notification/new-order.mp3");
   }, []);
@@ -122,14 +148,45 @@ const useCashierPayment = () => {
       return;
     }
 
-    const notificationAudio = notificationAudioRef.current;
-    if (notificationAudio) {
-      notificationAudio.currentTime = 0;
-      notificationAudio.play().catch(() => {});
-    }
-
+    playNotificationSound();
     clearNewOrder();
-  }, [isNewOrder, clearNewOrder]);
+  }, [isNewOrder, clearNewOrder, playNotificationSound]);
+
+  // Real-Time Pusher WebSocket Event Listener for New Orders
+  useEffect(() => {
+    if (!echoInstance) return;
+
+    const channel = echoInstance.channel("orders");
+
+    const handleOrderCreatedEvent = (payload) => {
+      // 1. Play notification sound (deduplicated)
+      playNotificationSound();
+
+      // 2. Display Toast Notification (deduplicated)
+      const tableLabel = payload?.table_label || payload?.table_code || payload?.code || "";
+      const customerName = payload?.customer_name || "Pelanggan";
+      const infoMsg = tableLabel
+        ? `Pesanan baru dari ${customerName} (Meja ${tableLabel})!`
+        : `Pesanan baru dari ${customerName}!`;
+      triggerToast(infoMsg);
+
+      // 3. Invalidate React Query submitted orders cache to refresh UI instanly
+      queryClient.invalidateQueries({
+        queryKey: CASHIER_QUERY_KEYS.submittedOrders(),
+      });
+    };
+
+    channel.listen(".order.created", handleOrderCreatedEvent);
+    channel.listen("order.created", handleOrderCreatedEvent);
+    channel.listen("OrderCreated", handleOrderCreatedEvent);
+
+    return () => {
+      channel.stopListening(".order.created", handleOrderCreatedEvent);
+      channel.stopListening("order.created", handleOrderCreatedEvent);
+      channel.stopListening("OrderCreated", handleOrderCreatedEvent);
+      echoInstance.leaveChannel("orders");
+    };
+  }, [queryClient, playNotificationSound, triggerToast]);
 
   const selectedOrder = useMemo(
     () => submittedOrders.find((order) => order.id === selectedOrderId) || submittedOrders[0] || null,
