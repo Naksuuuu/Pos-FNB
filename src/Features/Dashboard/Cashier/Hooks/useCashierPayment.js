@@ -13,6 +13,7 @@ import { useBluetoothPrinter } from "@/Features/Shared/Context/BluetoothPrinterC
 import useTenant from "@/Features/Shared/Hooks/useTenant";
 import { buildReceiptBytes } from "@/Utils/ReceiptFormatter";
 import echoInstance from "@/Services/Common/echoService";
+import { rupiah } from "@/Utils/rupiahHelper";
 
 const defaultQuickCash = [20000, 50000, 100000];
 
@@ -85,21 +86,21 @@ const useCashierPayment = () => {
 
   const {
     data,
-    isLoading: loadingSubmittedOrders,
+    isLoading: loadingOrders,
     refetch,
   } = useQuery({
-    queryKey: CASHIER_QUERY_KEYS.submittedOrders(),
+    queryKey: CASHIER_QUERY_KEYS.orders(),
     queryFn: async () => {
       const response = await CashierService.orders();
       if (!response.success) {
-        throw new Error(response.message || "Failed to fetch submitted orders");
+        throw new Error(response.message || "Failed to fetch orders");
       }
       return response.data;
     },
     refetchInterval: 30000,
   });
 
-  const refreshSubmittedOrders = useCallback(async () => {
+  const refreshOrders = useCallback(async () => {
     setIsRefreshing(true);
     try {
       await refetch();
@@ -109,7 +110,7 @@ const useCashierPayment = () => {
     }
   }, [refetch]);
 
-  const submittedOrders = useMemo(() => {
+  const orders = useMemo(() => {
     if (Array.isArray(data)) {
       return data;
     }
@@ -117,10 +118,10 @@ const useCashierPayment = () => {
   }, [data]);
 
   useEffect(() => {
-    const nextIds = new Set(submittedOrders.map((order) => String(order.id)));
+    const nextIds = new Set(orders.map((order) => String(order.id)));
     const prevIds = previousOrderIdsRef.current;
 
-    const hasNewOrder = submittedOrders.some((order) => !prevIds.has(String(order.id)));
+    const hasNewOrder = orders.some((order) => !prevIds.has(String(order.id)));
     if (prevIds.size > 0 && hasNewOrder) {
       const timeoutId = window.setTimeout(() => {
         setIsNewOrder(true);
@@ -132,7 +133,7 @@ const useCashierPayment = () => {
     }
 
     previousOrderIdsRef.current = nextIds;
-  }, [submittedOrders]);
+  }, [orders]);
 
   const clearNewOrder = useCallback(() => {
     setIsNewOrder(false);
@@ -163,16 +164,14 @@ const useCashierPayment = () => {
       playNotificationSound();
 
       // 2. Display Toast Notification (deduplicated)
-      const tableLabel = payload?.table_label || payload?.table_code || payload?.code || "";
-      const customerName = payload?.customer_name || "Pelanggan";
-      const infoMsg = tableLabel
-        ? `Pesanan baru dari ${customerName} (Meja ${tableLabel})!`
-        : `Pesanan baru dari ${customerName}!`;
+      const orderNumber = payload.order_no || "";
+      const totalAmount = payload.total_amount ? rupiah(payload.total_amount) : "";
+      const infoMsg = `Pesanan baru dengan no ${orderNumber} sebesar ${totalAmount}`;
       triggerToast(infoMsg);
 
       // 3. Invalidate React Query submitted orders cache to refresh UI instanly
       queryClient.invalidateQueries({
-        queryKey: CASHIER_QUERY_KEYS.submittedOrders(),
+        queryKey: CASHIER_QUERY_KEYS.orders(),
       });
     };
 
@@ -189,8 +188,8 @@ const useCashierPayment = () => {
   }, [queryClient, playNotificationSound, triggerToast]);
 
   const selectedOrder = useMemo(
-    () => submittedOrders.find((order) => order.id === selectedOrderId) || submittedOrders[0] || null,
-    [selectedOrderId, submittedOrders],
+    () => orders.find((order) => order.id === selectedOrderId) || orders[0] || null,
+    [selectedOrderId, orders],
   );
 
   const paymentTotal = Number(selectedOrder?.total_amount || 0);
@@ -231,7 +230,7 @@ const useCashierPayment = () => {
       return response;
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: CASHIER_QUERY_KEYS.submittedOrders() });
+      await queryClient.invalidateQueries({ queryKey: CASHIER_QUERY_KEYS.orders() });
       await queryClient.invalidateQueries({ queryKey: ORDER_QUERY_KEYS.root });
     },
   });
@@ -263,7 +262,7 @@ const useCashierPayment = () => {
 
       reset();
       setPaymentMethod("tunai");
-      await refreshSubmittedOrders();
+      await refreshOrders();
 
       return response;
     } finally {
@@ -276,7 +275,7 @@ const useCashierPayment = () => {
     paymentMethod,
     updatePaymentMutation,
     reset,
-    refreshSubmittedOrders,
+    refreshOrders,
   ]);
 
   const cancelOrder = useCallback(async () => {
@@ -302,13 +301,13 @@ const useCashierPayment = () => {
 
       reset();
       setPaymentMethod("tunai");
-      await refreshSubmittedOrders();
+      await refreshOrders();
 
       return response;
     } finally {
       setIsCanceling(false);
     }
-  }, [selectedOrder, paymentMethod, updatePaymentMutation, reset, refreshSubmittedOrders]);
+  }, [selectedOrder, paymentMethod, updatePaymentMutation, reset, refreshOrders]);
 
   const canProcessPayment = !!selectedOrder && !isConfirming && !isCanceling && isCashEnough;
 
@@ -322,9 +321,15 @@ const useCashierPayment = () => {
       }
 
       try {
-        const method = details ? details.method : paymentMethod;
-        const cash = details ? details.cashAmount : parsedCashAmount;
-        const change = details ? details.changeAmount : changeAmount;
+        const method = details
+          ? details.method
+          : order.payment_method || order.payment_type || paymentMethod;
+        const cash = details
+          ? details.cashAmount
+          : Number(order.cash_amount ?? order.cash_received ?? order.total_amount ?? parsedCashAmount);
+        const change = details
+          ? details.changeAmount
+          : Number(order.change_amount ?? order.change ?? 0);
 
         const bytes = buildReceiptBytes({
           order,
@@ -342,7 +347,7 @@ const useCashierPayment = () => {
         toast.error(`Gagal mencetak struk: ${err.message}`);
       }
     },
-    [isConnected, paymentMethod, parsedCashAmount, changeAmount, tenant, printRaw],
+    [isConnected, paymentMethod, parsedCashAmount, tenant, printRaw],
   );
 
   const handleConfirmPrint = useCallback(async () => {
@@ -387,8 +392,8 @@ const useCashierPayment = () => {
   }, [cancelOrder]);
 
   return {
-    submittedOrders,
-    loadingSubmittedOrders,
+    orders,
+    loadingOrders,
     selectedOrder,
     selectedOrderId,
     setSelectedOrderId,
@@ -416,8 +421,8 @@ const useCashierPayment = () => {
     loadingCancel: isCanceling,
     isNewOrder,
     clearNewOrder,
-    loadSubmittedOrders: refreshSubmittedOrders,
-    refreshSubmittedOrders,
+    loadOrders: refreshOrders,
+    refreshOrders,
     isRefreshing,
     processPayment,
     cancelOrder,

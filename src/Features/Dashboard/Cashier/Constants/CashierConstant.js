@@ -3,7 +3,7 @@ const CASHIER_QUERY_KEYS = {
   menus: (filters = {}) => ["dashboard", "cashier", "menus", filters],
   categories: () => ["dashboard", "cashier", "categories"],
   tables: () => ["dashboard", "cashier", "tables"],
-  submittedOrders: () => ["dashboard", "cashier", "submitted-orders"],
+  orders: () => ["dashboard", "cashier", "orders"],
   members: (filters = {}) => ["dashboard", "cashier", "members", filters],
   rewardClaims: (filters = {}) => ["dashboard", "cashier", "reward-claims", filters],
 };

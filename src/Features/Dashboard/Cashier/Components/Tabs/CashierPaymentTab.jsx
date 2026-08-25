@@ -7,7 +7,7 @@ import { rupiah } from "@/Utils/rupiahHelper";
 
 import { Card } from "@/Components/Elements/Cards/Card";
 import { Button } from "@/Components/Elements/Shadcn/button";
-import { Input, InputRupiah } from "@/Components/Elements/Inputs/Input";
+import { InputRupiah } from "@/Components/Elements/Inputs/Input";
 import { Badge } from "@/Components/Elements/Shadcn/badge";
 import { Separator } from "@/Components/Elements/Shadcn/separator";
 import { Field, FieldError } from "@/Components/Elements/Shadcn/field";
@@ -17,8 +17,8 @@ const NAVBAR_HEIGHT = 105;
 
 const CashierPaymentTab = () => {
   const {
-    submittedOrders,
-    loadingSubmittedOrders,
+    orders,
+    loadingOrders,
     selectedOrder,
     setSelectedOrderId,
 
@@ -41,7 +41,7 @@ const CashierPaymentTab = () => {
     canProcessPayment,
     loadingPayment,
     loadingCancel,
-    refreshSubmittedOrders,
+    refreshOrders,
     isRefreshing,
 
     // Modal and print values
@@ -53,40 +53,44 @@ const CashierPaymentTab = () => {
     handleSubmitForm,
     handleCancel,
     handleConfirmCancel,
+    handlePrintReceipt,
   } = useCashierPayment();
 
   const handleRefresh = async () => {
-    refreshSubmittedOrders();
+    refreshOrders();
   };
+
+  const isOrderCompleted =
+    selectedOrder?.status === "completed" || selectedOrder?.status === "complete";
 
   return (
     <div className="grid grid-cols-1 gap-4 xl:grid-cols-3" style={{ height: `calc(100dvh - ${NAVBAR_HEIGHT}px)` }}>
       <Card className="flex flex-col h-full gap-8 overflow-hidden">
         <div className="flex items-center justify-between gap-2">
           <div>
-            <p className="text-base font-semibold">Pesanan Menunggu</p>
-            <p className="text-sm text-muted-foreground">Hanya order dengan status submitted</p>
+            <p className="text-base font-semibold">Pesanan Masuk</p>
+            <p className="text-sm text-muted-foreground">Daftar pesanan aktif & selesai</p>
           </div>
-          <Button variant="outline" size="sm" onClick={handleRefresh} disabled={loadingSubmittedOrders || isRefreshing}>
+          <Button variant="outline" size="sm" onClick={handleRefresh} disabled={loadingOrders || isRefreshing}>
             {isRefreshing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Refresh
           </Button>
         </div>
 
-        {loadingSubmittedOrders && (
+        {loadingOrders && (
           <div className="flex items-center justify-center h-full p-4 text-sm text-center border border-dashed rounded-lg text-destructive">
             <p>Loading...</p>
           </div>
         )}
-        {!loadingSubmittedOrders && submittedOrders.length === 0 && (
+        {!loadingOrders && orders.length === 0 && (
           <div className="flex items-center justify-center h-full p-4 text-sm text-center border border-dashed rounded-lg text-destructive">
             <p>Semua Pesanan Sudah Diproses.</p>
           </div>
         )}
 
-        {!loadingSubmittedOrders && (
+        {!loadingOrders && (
           <div className="flex-1 min-h-0 space-y-3 overflow-y-scroll no-scrollbar">
-            {submittedOrders.map((order) => (
+            {orders.map((order) => (
               <button
                 type="button"
                 key={order.id}
@@ -95,12 +99,8 @@ const CashierPaymentTab = () => {
               >
                 <div className="flex items-center justify-between gap-2">
                   <p className="font-semibold">{order.order_no || order.code}</p>
-                  <Badge
-                    variant={
-                      order.status === "submitted" ? "info" : order.status === "canceled" ? "destructive" : "secondary"
-                    }
-                  >
-                    {order.status ? order.status.charAt(0).toUpperCase() + order.status.slice(1) : "Submitted"}
+                  <Badge variant={order.status === "submitted" ? "info" : "success"}>
+                    {order.status ? order.status.toUpperCase() : "SUBMITTED"}
                   </Badge>
                 </div>
                 <p className="text-sm">{order.customer_name || "Pelanggan"}</p>
@@ -163,107 +163,149 @@ const CashierPaymentTab = () => {
                 ))}
               </div>
             </div>
-            <form onSubmit={handleSubmit(handleSubmitForm)} className="w-full space-y-4 ">
-              <div className="space-y-1.5 text-sm">
-                <div className="flex items-center justify-between">
-                  <span className="text-muted-foreground">Subtotal</span>
-                  <span className="font-medium text-foreground">{rupiah(orderSubtotal)}</span>
-                </div>
-                <div className="flex items-center justify-between text-muted-foreground">
-                  <span>Pajak ({taxPercentage}%)</span>
-                  <span>{rupiah(taxAmount)}</span>
-                </div>
-                <div className="flex items-center justify-between pt-1 border-t border-dashed">
-                  <span className="font-semibold text-muted-foreground">Total Tagihan</span>
-                  <span className="text-lg font-semibold text-primary">{rupiah(paymentTotal)}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-muted-foreground">Metode Pembayaran</span>
-                  <div className="inline-flex p-0.5 border rounded-lg border-border bg-input/20">
-                    <Button
-                      type="button"
-                      variant={paymentMethod === "tunai" ? "default" : "ghost"}
-                      size="sm"
-                      className="h-8 px-3 rounded-md text-xs cursor-pointer"
-                      onClick={() => setPaymentMethod("tunai")}
-                    >
-                      Tunai
-                    </Button>
-                    <Button
-                      type="button"
-                      variant={paymentMethod === "nontunai" ? "default" : "ghost"}
-                      size="sm"
-                      className="h-8 px-3 rounded-md text-xs cursor-pointer"
-                      onClick={() => setPaymentMethod("nontunai")}
-                    >
-                      Non-Tunai
-                    </Button>
+
+            {/* If Completed: Show Completed Summary & Direct Print Button */}
+            {isOrderCompleted ? (
+              <div className="w-full space-y-4 border-t border-dashed pt-4">
+                <div className="space-y-2 text-sm">
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground">Subtotal</span>
+                    <span className="font-medium text-foreground">{rupiah(orderSubtotal)}</span>
                   </div>
-                </div>
-              </div>
-
-              <Field>
-                <Label htmlFor="cash_amount">Uang Diterima</Label>
-                <InputRupiah
-                  id="cash_amount"
-                  name="cash_amount"
-                  control={control}
-                  placeholder="Masukkan uang diterima"
-                />
-                {errors.cash_amount && <FieldError>{errors.cash_amount.message}</FieldError>}
-              </Field>
-
-              <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
-                {defaultQuickCash.map((amount) => (
-                  <Button key={amount} type="button" variant="outline" onClick={() => setCashAmount(String(amount))}>
-                    {rupiah(amount)}
-                  </Button>
-                ))}
-                <Button type="button" variant="outline" onClick={() => setCashAmount(String(paymentTotal))}>
-                  Uang Pas
-                </Button>
-              </div>
-
-              <div className="p-3 border rounded-lg border-border bg-input/15">
-                <div className="flex items-center justify-between gap-2">
-                  <span className="text-sm text-muted-foreground">Kembalian</span>
-                  <span className="text-lg font-semibold text-success">{rupiah(changeAmount)}</span>
-                </div>
-                {!isCashEnough && (
-                  <div className="inline-flex items-center gap-1 mt-2 text-xs text-destructive">
-                    <CircleMinus className="size-3" />
-                    Uang diterima masih kurang
+                  <div className="flex items-center justify-between text-muted-foreground">
+                    <span>Pajak ({taxPercentage}%)</span>
+                    <span>{rupiah(taxAmount)}</span>
                   </div>
-                )}
-                {isCashEnough && (
-                  <div className="inline-flex items-center gap-1 mt-2 text-xs text-success">
-                    <CirclePlus className="size-3" />
-                    Siap diproses
+                  <div className="flex items-center justify-between pt-1 border-t border-dashed">
+                    <span className="font-semibold text-muted-foreground">Total Tagihan</span>
+                    <span className="text-lg font-semibold text-primary">{rupiah(paymentTotal)}</span>
                   </div>
-                )}
-              </div>
+                  <div className="flex items-center justify-between pt-1">
+                    <span className="text-muted-foreground">Status Pembayaran</span>
+                    <Badge variant="success">LUNAS / SELESAI</Badge>
+                  </div>
+                  {selectedOrder?.payment_method && (
+                    <div className="flex items-center justify-between pt-1">
+                      <span className="text-muted-foreground">Metode Pembayaran</span>
+                      <span className="font-semibold text-foreground uppercase">{selectedOrder.payment_method}</span>
+                    </div>
+                  )}
+                </div>
 
-              <div className="flex gap-2 w-full">
                 <Button
                   type="button"
-                  variant="destructive"
-                  onClick={handleCancel}
-                  disabled={loadingPayment || loadingCancel}
-                  className="flex-1 cursor-pointer"
+                  variant="default"
+                  className="w-full cursor-pointer"
+                  onClick={() => handlePrintReceipt(selectedOrder)}
                 >
-                  {loadingCancel ? <Loader2 className="animate-spin mr-1" /> : null}
-                  Batalkan Pesanan
-                </Button>
-                <Button
-                  type="submit"
-                  disabled={!canProcessPayment || loadingPayment || loadingCancel}
-                  className="flex-1 cursor-pointer"
-                >
-                  {loadingPayment ? <Loader2 className="animate-spin mr-1" /> : null}
-                  Konfirmasi Pembayaran
+                  <Printer className="size-4 mr-2" />
+                  Cetak Struk
                 </Button>
               </div>
-            </form>
+            ) : (
+              /* If Submitted: Show Payment Processing Form */
+              <form onSubmit={handleSubmit(handleSubmitForm)} className="w-full space-y-4">
+                <div className="space-y-1.5 text-sm">
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground">Subtotal</span>
+                    <span className="font-medium text-foreground">{rupiah(orderSubtotal)}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-muted-foreground">
+                    <span>Pajak ({taxPercentage}%)</span>
+                    <span>{rupiah(taxAmount)}</span>
+                  </div>
+                  <div className="flex items-center justify-between pt-1 border-t border-dashed">
+                    <span className="font-semibold text-muted-foreground">Total Tagihan</span>
+                    <span className="text-lg font-semibold text-primary">{rupiah(paymentTotal)}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground">Metode Pembayaran</span>
+                    <div className="inline-flex p-0.5 border rounded-lg border-border bg-input/20">
+                      <Button
+                        type="button"
+                        variant={paymentMethod === "tunai" ? "default" : "ghost"}
+                        size="sm"
+                        className="h-8 px-3 rounded-md text-xs cursor-pointer"
+                        onClick={() => setPaymentMethod("tunai")}
+                      >
+                        Tunai
+                      </Button>
+                      <Button
+                        type="button"
+                        variant={paymentMethod === "nontunai" ? "default" : "ghost"}
+                        size="sm"
+                        className="h-8 px-3 rounded-md text-xs cursor-pointer"
+                        onClick={() => setPaymentMethod("nontunai")}
+                      >
+                        Non-Tunai
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
+                <Field>
+                  <Label htmlFor="cash_amount">Uang Diterima</Label>
+                  <InputRupiah
+                    id="cash_amount"
+                    name="cash_amount"
+                    control={control}
+                    placeholder="Masukkan uang diterima"
+                  />
+                  {errors.cash_amount && <FieldError>{errors.cash_amount.message}</FieldError>}
+                </Field>
+
+                <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
+                  {defaultQuickCash.map((amount) => (
+                    <Button key={amount} type="button" variant="outline" onClick={() => setCashAmount(String(amount))}>
+                      {rupiah(amount)}
+                    </Button>
+                  ))}
+                  <Button type="button" variant="outline" onClick={() => setCashAmount(String(paymentTotal))}>
+                    Uang Pas
+                  </Button>
+                </div>
+
+                <div className="p-3 border rounded-lg border-border bg-input/15">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-sm text-muted-foreground">Kembalian</span>
+                    <span className="text-lg font-semibold text-success">{rupiah(changeAmount)}</span>
+                  </div>
+                  {!isCashEnough && (
+                    <div className="inline-flex items-center gap-1 mt-2 text-xs text-destructive">
+                      <CircleMinus className="size-3" />
+                      Uang diterima masih kurang
+                    </div>
+                  )}
+                  {isCashEnough && (
+                    <div className="inline-flex items-center gap-1 mt-2 text-xs text-success">
+                      <CirclePlus className="size-3" />
+                      Siap diproses
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex gap-2 w-full">
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    onClick={handleCancel}
+                    disabled={loadingPayment || loadingCancel}
+                    className="flex-1 cursor-pointer"
+                  >
+                    {loadingCancel ? <Loader2 className="animate-spin mr-1" /> : null}
+                    Batalkan Pesanan
+                  </Button>
+                  <Button
+                    type="submit"
+                    disabled={!canProcessPayment || loadingPayment || loadingCancel}
+                    className="flex-1 cursor-pointer"
+                  >
+                    {loadingPayment ? <Loader2 className="animate-spin mr-1" /> : null}
+                    Konfirmasi Pembayaran
+                  </Button>
+                </div>
+              </form>
+            )}
           </>
         )}
       </Card>

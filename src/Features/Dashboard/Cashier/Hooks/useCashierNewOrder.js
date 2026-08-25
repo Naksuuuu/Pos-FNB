@@ -190,7 +190,7 @@ const useCashierNewOrder = () => {
       return response;
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: CASHIER_QUERY_KEYS.submittedOrders({ status: "submitted" }) });
+      await queryClient.invalidateQueries({ queryKey: CASHIER_QUERY_KEYS.orders() });
     },
   });
 
