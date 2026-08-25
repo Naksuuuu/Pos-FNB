@@ -48,37 +48,7 @@ const useAllMenu = () => {
     },
   });
 
-  const { data: customOptionsData } = useQuery({
-    queryKey: CUSTOM_OPTION_QUERY_KEYS.list({}),
-    queryFn: async () => {
-      const response = await CustomOptionService.customOptions();
-
-      if (!response.success) {
-        throw new Error(response.message || "Failed to fetch custom options");
-      }
-
-      return response.data;
-    },
-  });
-
   const categories = useMemo(() => categoriesData?.categories || [], [categoriesData?.categories]);
-  const customOptionsList = useMemo(() => {
-    if (Array.isArray(customOptionsData)) {
-      return customOptionsData;
-    }
-    return customOptionsData?.custom_options || customOptionsData?.options || customOptionsData?.data || [];
-  }, [customOptionsData]);
-
-  const customOptionOptions = useMemo(
-    () =>
-      customOptionsList.map((item) => ({
-        value: item.id,
-        label: item.name,
-        price: Number(item.price) || 0,
-        name: item.name,
-      })),
-    [customOptionsList],
-  );
 
   const menus = data?.menus || [];
   const statistic = data?.statistic
@@ -204,8 +174,6 @@ const useAllMenu = () => {
     errorMessage,
     pagination,
     categoryOptions,
-    customOptionOptions,
-    customOptionsList,
     statistic,
     filters,
     showReset,

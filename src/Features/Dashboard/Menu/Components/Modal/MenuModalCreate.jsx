@@ -10,7 +10,7 @@ import MenuForm from "@/Features/Dashboard/Menu/Components/Form/MenuForm";
 import { PackagePlus } from "lucide-react";
 
 const MenuModalCreate = ({ isOpen, onOpenModal }) => {
-  const { create, loading, categoryOptions, customOptionOptions } = useCreateMenu();
+  const { create, loading, categoryOptions } = useCreateMenu();
 
   const {
     register,
@@ -63,7 +63,6 @@ const MenuModalCreate = ({ isOpen, onOpenModal }) => {
         control={control}
         errors={errors}
         categoryOptions={categoryOptions}
-        customOptionOptions={customOptionOptions}
         type="create"
       />
     </DashModalForm>

@@ -10,7 +10,7 @@ import MenuForm from "@/Features/Dashboard/Menu/Components/Form/MenuForm";
 import { PackageSearch } from "lucide-react";
 
 const MenuModalEdit = ({ selectedMenu, onOpenModal }) => {
-  const { edit, loading, categoryOptions, customOptionOptions } = useEditMenu();
+  const { edit, loading, categoryOptions } = useEditMenu();
 
   const {
     register,
@@ -63,7 +63,6 @@ const MenuModalEdit = ({ selectedMenu, onOpenModal }) => {
         control={control}
         errors={errors}
         categoryOptions={categoryOptions}
-        customOptionOptions={customOptionOptions}
         type="edit"
         selectedMenu={selectedMenu}
       />

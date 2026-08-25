@@ -27,34 +27,7 @@ const useCreateMenu = () => {
     },
   });
 
-  const { data: customOptionsData } = useQuery({
-    queryKey: CUSTOM_OPTION_QUERY_KEYS.list({}),
-    queryFn: async () => {
-      const response = await CustomOptionService.customOptions();
-
-      if (!response.success) {
-        throw new Error(response.message || "Failed to fetch custom options");
-      }
-
-      return response.data;
-    },
-  });
-
   const categories = useMemo(() => categoryData?.categories || [], [categoryData?.categories]);
-  const customOptionsList = useMemo(() => {
-    if (Array.isArray(customOptionsData)) {
-      return customOptionsData;
-    }
-    return customOptionsData?.custom_options || customOptionsData?.options || customOptionsData?.data || [];
-  }, [customOptionsData]);
-
-  const customOptionOptions = useMemo(() => {
-    return customOptionsList.map((item) => ({
-      value: item.id,
-      label: item.name,
-      price: Number(item.price) || 0,
-    }));
-  }, [customOptionsList]);
 
   const mutation = useMutation({
     mutationFn: async (menuData) => {
@@ -94,7 +67,7 @@ const useCreateMenu = () => {
     [mutation, setFilters],
   );
 
-  return { create, loading: mutation.isPending, categoryOptions, customOptionOptions };
+  return { create, loading: mutation.isPending, categoryOptions };
 };
 
 export default useCreateMenu;
