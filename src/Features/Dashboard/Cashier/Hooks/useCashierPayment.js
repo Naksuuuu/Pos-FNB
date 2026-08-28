@@ -323,13 +323,13 @@ const useCashierPayment = () => {
       try {
         const method = details
           ? details.method
-          : order.payment_method || order.payment_type || paymentMethod;
+          : order.payment?.method || order.payment_method || order.payment_type || paymentMethod;
         const cash = details
           ? details.cashAmount
-          : Number(order.cash_amount ?? order.cash_received ?? order.total_amount ?? parsedCashAmount);
+          : Number(order.payment?.payment_amount ?? order.cash_amount ?? order.cash_received ?? order.total_amount ?? parsedCashAmount);
         const change = details
           ? details.changeAmount
-          : Number(order.change_amount ?? order.change ?? 0);
+          : Number(order.payment?.amount_change ?? order.change_amount ?? order.change ?? 0);
 
         const bytes = buildReceiptBytes({
           order,

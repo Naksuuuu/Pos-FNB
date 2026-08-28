@@ -60,8 +60,7 @@ const CashierPaymentTab = () => {
     refreshOrders();
   };
 
-  const isOrderCompleted =
-    selectedOrder?.status === "completed" || selectedOrder?.status === "complete";
+  const isOrderCompleted = selectedOrder?.status === "completed" || selectedOrder?.status === "complete";
 
   return (
     <div className="grid grid-cols-1 gap-4 xl:grid-cols-3" style={{ height: `calc(100dvh - ${NAVBAR_HEIGHT}px)` }}>

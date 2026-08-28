@@ -1,11 +1,5 @@
 import { useMemo } from "react";
-import {
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-} from "recharts";
+import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/Components/Elements/Shadcn/card";
 import { Skeleton } from "@/Components/Elements/Shadcn/skeleton";
 import { CreditCard, UtensilsCrossed } from "lucide-react";
@@ -21,8 +15,8 @@ const ORDER_TYPE_COLORS = {
 };
 
 const ORDER_TYPE_LABELS = {
-  DINE_IN: "Makan di Tempat",
-  TAKE_AWAY: "Bawa Pulang",
+  DINE_IN: "Dine in",
+  TAKE_AWAY: "Take away",
 };
 
 const CustomPieTooltip = ({ active, payload }) => {
@@ -101,7 +95,7 @@ const PaymentAndOrderTypeCharts = ({ paymentMethods, orderTypes, loading }) => {
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
       {/* Chart 1: Payment Methods */}
-      <Card className="shadow-sm border-border/80 flex flex-col">
+      <Card className="shadow-sm border-border/80 flex flex-col h-full">
         <CardHeader className="pb-2">
           <CardTitle className="text-base font-semibold flex items-center gap-2">
             <CreditCard className="size-4 text-chart-1" /> Metode Pembayaran
@@ -128,7 +122,12 @@ const PaymentAndOrderTypeCharts = ({ paymentMethods, orderTypes, loading }) => {
                     dataKey="value"
                   >
                     {paymentData.map((entry, index) => (
-                      <Cell key={`payment-cell-${index}`} fill={entry.fill} stroke="var(--background)" strokeWidth={2} />
+                      <Cell
+                        key={`payment-cell-${index}`}
+                        fill={entry.fill}
+                        stroke="var(--background)"
+                        strokeWidth={2}
+                      />
                     ))}
                   </Pie>
                 </PieChart>
@@ -138,7 +137,10 @@ const PaymentAndOrderTypeCharts = ({ paymentMethods, orderTypes, loading }) => {
 
           <div className="grid grid-cols-2 gap-2 pt-2 border-t border-border mt-2">
             {paymentData.map((item) => (
-              <div key={item.method} className="flex items-center justify-between p-2 rounded-lg bg-muted/40 border border-border/50">
+              <div
+                key={item.method}
+                className="flex items-center justify-between p-2 rounded-lg bg-muted/40 border border-border/50"
+              >
                 <div className="flex items-center gap-2 truncate">
                   <span className="size-2.5 rounded-full shrink-0" style={{ backgroundColor: item.fill }} />
                   <span className="text-xs font-medium truncate">{item.name}</span>
@@ -156,9 +158,7 @@ const PaymentAndOrderTypeCharts = ({ paymentMethods, orderTypes, loading }) => {
           <CardTitle className="text-base font-semibold flex items-center gap-2">
             <UtensilsCrossed className="size-4 text-chart-3" /> Tipe Pesanan
           </CardTitle>
-          <CardDescription className="text-xs">
-            Distribusi tipe pesanan (Dine In & Take Away)
-          </CardDescription>
+          <CardDescription className="text-xs">Distribusi tipe pesanan (Dine In & Take Away)</CardDescription>
         </CardHeader>
         <CardContent className="flex-1 flex flex-col justify-between pt-2">
           <div className="h-48 w-full relative flex items-center justify-center">
@@ -188,7 +188,10 @@ const PaymentAndOrderTypeCharts = ({ paymentMethods, orderTypes, loading }) => {
 
           <div className="grid grid-cols-2 gap-2 pt-2 border-t border-border mt-2">
             {orderTypeData.map((item) => (
-              <div key={item.type} className="flex items-center justify-between p-2 rounded-lg bg-muted/40 border border-border/50">
+              <div
+                key={item.type}
+                className="flex items-center justify-between p-2 rounded-lg bg-muted/40 border border-border/50"
+              >
                 <div className="flex items-center gap-2 truncate">
                   <span className="size-2.5 rounded-full shrink-0" style={{ backgroundColor: item.fill }} />
                   <span className="text-xs font-medium truncate">{item.name}</span>

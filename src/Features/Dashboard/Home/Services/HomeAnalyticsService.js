@@ -8,10 +8,9 @@ const JOINED_MEMBERS_ENDPOINT = "/dashboard/analytic/joined-members";
 
 const HomeAnalyticsService = {
   getAnalytics: async (params = {}) => {
-    const { period = "this_month", start_date, end_date } = params;
+    const { start_date, end_date } = params;
 
     const queryParams = {
-      period,
       ...(start_date ? { start_date } : {}),
       ...(end_date ? { end_date } : {}),
     };

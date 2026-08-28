@@ -74,7 +74,7 @@ const HomePage = () => {
       {/* Section 3: Main Analytics Grid */}
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
         {/* Left Column (2 Cols): Busy Hours & Payment/Order Types */}
-        <div className="space-y-6 xl:col-span-2">
+        <div className="space-y-6 xl:col-span-2 ">
           <BusyHoursChart busyHours={busyHours} loading={loading} />
           <PaymentAndOrderTypeCharts paymentMethods={paymentMethods} orderTypes={orderTypes} loading={loading} />
         </div>

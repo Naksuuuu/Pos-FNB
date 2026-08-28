@@ -1,44 +1,26 @@
 import { useState, useMemo, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import HomeAnalyticsService from "../Services/HomeAnalyticsService";
-import { DASHBOARD_ANALYTICS_QUERY_KEYS } from "../Constants/HomeAnalyticsConstant";
+import { DASHBOARD_ANALYTICS_QUERY_KEYS, resolveDateFilterToRange, getThisMonthRange } from "../Constants/HomeAnalyticsConstant";
 
 const useJoinedMembers = () => {
-  const [dateFilter, setDateFilter] = useState("this_month");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [dateFilter, setDateFilter] = useState(getThisMonthRange);
+
+  const { startDate, endDate, rangeString } = useMemo(() => {
+    return resolveDateFilterToRange(dateFilter);
+  }, [dateFilter]);
 
   const handleDateFilterChange = useCallback((val) => {
-    if (!val) {
-      setDateFilter("this_month");
-      setStartDate("");
-      setEndDate("");
-      return;
-    }
-
-    if (typeof val === "string" && val.includes(",")) {
-      const [from, to] = val.split(", ").map((s) => s.trim());
-      setStartDate(from || "");
-      setEndDate(to || "");
-      setDateFilter(val);
-    } else {
-      setDateFilter(val);
-      setStartDate("");
-      setEndDate("");
-    }
+    const { rangeString: nextRange } = resolveDateFilterToRange(val);
+    setDateFilter(nextRange);
   }, []);
 
   const queryParams = useMemo(() => {
-    if (startDate && endDate) {
-      return {
-        start_date: startDate,
-        end_date: endDate,
-      };
-    }
     return {
-      period: dateFilter || "this_month",
+      start_date: startDate,
+      end_date: endDate,
     };
-  }, [dateFilter, startDate, endDate]);
+  }, [startDate, endDate]);
 
   const { data, isLoading, refetch, isRefetching } = useQuery({
     queryKey: DASHBOARD_ANALYTICS_QUERY_KEYS.joinedMembers(queryParams),
@@ -49,6 +31,7 @@ const useJoinedMembers = () => {
       }
       return response.data;
     },
+    enabled: Boolean(startDate && endDate),
   });
 
   const joinedMembersData = useMemo(() => data?.joined_members || {}, [data?.joined_members]);
@@ -58,7 +41,7 @@ const useJoinedMembers = () => {
   return {
     total,
     members,
-    dateFilter,
+    dateFilter: rangeString,
     handleDateFilterChange,
     startDate,
     endDate,

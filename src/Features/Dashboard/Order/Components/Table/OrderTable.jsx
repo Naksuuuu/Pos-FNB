@@ -42,8 +42,8 @@ const OrderTable = memo(
           order,
           tenant,
           paymentMethod: order.payment?.method || "tunai",
-          parsedCashAmount: order.payment?.amount || order.total_amount,
-          changeAmount: 0,
+          parsedCashAmount: Number(order.payment?.payment_amount || order.payment?.amount || order.total_amount || 0),
+          changeAmount: Number(order.payment?.amount_change || 0),
         });
         const success = await printRaw(bytes);
         if (success) {
@@ -193,18 +193,63 @@ const OrderTable = memo(
                                   </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                  {order.items.map((item) => (
-                                    <TableRow key={item.id} className="hover:bg-muted/10">
-                                      <TableCell className="font-medium text-foreground">
-                                        {item.menu?.name || "Item Tidak Diketahui"}
-                                      </TableCell>
-                                      <TableCell className="text-center">{item.qty}</TableCell>
-                                      <TableCell className="text-right">{rupiah(item.price)}</TableCell>
-                                      <TableCell className="text-right font-medium text-foreground">
-                                        {rupiah(item.subtotal)}
-                                      </TableCell>
-                                    </TableRow>
-                                  ))}
+                                  {order.items.map((item) => {
+                                    const qty = Number(item.qty || 1);
+                                    const customs = item.customs || [];
+                                    const totalCustomsUnitPrice = customs.reduce(
+                                      (sum, c) => sum + Number(c.price || 0),
+                                      0,
+                                    );
+                                    const totalCustomsSubtotal = totalCustomsUnitPrice * qty;
+                                    const baseUnitPrice =
+                                      item.menu?.price != null
+                                        ? Number(item.menu.price)
+                                        : Math.max(Number(item.price || 0) - totalCustomsUnitPrice, 0);
+                                    const baseSubtotal = baseUnitPrice * qty;
+                                    // const totalItemSubtotal = Number(
+                                    //   item.subtotal || baseSubtotal + totalCustomsSubtotal,
+                                    // );
+
+                                    return (
+                                      <TableRow key={item.id} className="hover:bg-muted/10">
+                                        <TableCell className="font-medium text-foreground">
+                                          <div>
+                                            <p className="font-semibold">{item.menu?.name || "Item Tidak Diketahui"}</p>
+                                            {customs.length > 0 && (
+                                              <div className="flex flex-wrap gap-1 mt-1.5">
+                                                {customs.map((c, cIdx) => (
+                                                  <span
+                                                    key={c.id || `${c.custom_name}-${cIdx}`}
+                                                    className="inline-flex items-center text-xs text-muted-foreground bg-muted/60 px-2 py-0.5 rounded border border-border/60"
+                                                  >
+                                                    + {c.custom_name || c.name} ({rupiah(Number(c.price || 0))} x {qty}{" "}
+                                                    = {rupiah(Number(c.price || 0) * qty)})
+                                                  </span>
+                                                ))}
+                                              </div>
+                                            )}
+                                          </div>
+                                        </TableCell>
+                                        <TableCell className="text-center">{qty}</TableCell>
+                                        <TableCell className="text-right">
+                                          <p className="font-medium">{rupiah(baseUnitPrice)}</p>
+                                          {totalCustomsUnitPrice > 0 && (
+                                            <p className="text-[11px] text-muted-foreground">
+                                              + {rupiah(totalCustomsUnitPrice)}
+                                            </p>
+                                          )}
+                                        </TableCell>
+                                        <TableCell className="text-right font-medium text-foreground">
+                                          <p className="font-semibold">{rupiah(baseSubtotal)}</p>
+                                          {totalCustomsSubtotal > 0 && (
+                                            <p className="text-[11px] text-muted-foreground">
+                                              + {rupiah(totalCustomsSubtotal)}
+                                            </p>
+                                          )}
+                                        </TableCell>
+                                      </TableRow>
+                                    );
+                                  })}
                                 </TableBody>
                               </Table>
                             </div>

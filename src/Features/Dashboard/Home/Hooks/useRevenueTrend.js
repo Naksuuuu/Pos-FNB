@@ -1,20 +1,17 @@
 import { useState, useMemo, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { format, subDays } from "date-fns";
 import HomeAnalyticsService from "../Services/HomeAnalyticsService";
-import { DASHBOARD_ANALYTICS_QUERY_KEYS } from "../Constants/HomeAnalyticsConstant";
-
-const getTodayString = () => format(new Date(), "yyyy-MM-dd");
-const getSevenDaysAgoString = () => format(subDays(new Date(), 6), "yyyy-MM-dd");
+import { DASHBOARD_ANALYTICS_QUERY_KEYS, getSevenDaysRange, getSevenDaysAgoString, getTodayString } from "../Constants/HomeAnalyticsConstant";
 
 const useRevenueTrend = () => {
-  const [dateFilter, setDateFilter] = useState("7_days");
+  const [dateFilter, setDateFilter] = useState(getSevenDaysRange);
   const [startDate, setStartDate] = useState(getSevenDaysAgoString);
   const [endDate, setEndDate] = useState(getTodayString);
 
   const handleDateFilterChange = useCallback((val) => {
     if (!val || val === "7_days") {
-      setDateFilter("7_days");
+      const defaultRange = getSevenDaysRange();
+      setDateFilter(defaultRange);
       setStartDate(getSevenDaysAgoString());
       setEndDate(getTodayString());
       return;

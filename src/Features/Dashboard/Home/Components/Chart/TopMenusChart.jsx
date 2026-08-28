@@ -5,23 +5,14 @@ import { Skeleton } from "@/Components/Elements/Shadcn/skeleton";
 import { Award, Flame } from "lucide-react";
 
 const TopMenusChart = ({ topMenus, loading }) => {
-  const sortedMenus = useMemo(() => {
-    const list = (topMenus || []).map((item) => ({
-      name: item.name,
-      quantity: Number(item.quantity || 0),
-    }));
-    // Sort descending by quantity
-    return list.sort((a, b) => b.quantity - a.quantity);
+  const maxQty = useMemo(() => {
+    if (!topMenus?.length) return 1;
+    return Math.max(...topMenus.map((m) => m.qty), 1);
   }, [topMenus]);
 
-  const maxQty = useMemo(() => {
-    if (!sortedMenus.length) return 1;
-    return Math.max(...sortedMenus.map((m) => m.quantity), 1);
-  }, [sortedMenus]);
-
   const totalQtySold = useMemo(() => {
-    return sortedMenus.reduce((sum, item) => sum + item.quantity, 0);
-  }, [sortedMenus]);
+    return topMenus.reduce((sum, item) => sum + item.qty, 0);
+  }, [topMenus]);
 
   if (loading) {
     return (
@@ -52,13 +43,13 @@ const TopMenusChart = ({ topMenus, loading }) => {
         </Badge>
       </CardHeader>
       <CardContent className="flex-1 pt-1 space-y-3">
-        {sortedMenus.length === 0 ? (
+        {topMenus?.length === 0 ? (
           <p className="py-8 text-center text-xs text-muted-foreground italic">
             Belum ada data penjualan menu pada periode ini.
           </p>
         ) : (
-          sortedMenus.slice(0, 8).map((menu, idx) => {
-            const percentage = Math.round((menu.quantity / maxQty) * 100);
+          topMenus?.map((menu, idx) => {
+            const percentage = Math.round((menu.qty / maxQty) * 100);
             const chartColorVar =
               idx === 0
                 ? "var(--chart-1)"
@@ -84,7 +75,7 @@ const TopMenusChart = ({ topMenus, loading }) => {
                     {idx === 0 && <Flame className="size-3.5 text-chart-1 shrink-0 animate-pulse" />}
                   </div>
                   <span className="font-bold text-foreground shrink-0">
-                    {menu.quantity} <span className="font-normal text-muted-foreground text-[11px]">porsi</span>
+                    {menu.qty} <span className="font-normal text-muted-foreground text-[11px]">porsi</span>
                   </span>
                 </div>
                 {/* Progress bar */}
