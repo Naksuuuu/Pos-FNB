@@ -8,9 +8,11 @@ import useCreateMenu from "@/Features/Dashboard/Menu/Hooks/useCreateMenu";
 import DashModalForm from "@/Features/Dashboard/Shared/Component/Modal/DashModalForm";
 import MenuForm from "@/Features/Dashboard/Menu/Components/Form/MenuForm";
 import { PackagePlus } from "lucide-react";
+import useTenantTier from "@/Features/Shared/Hooks/useTenantTier";
 
 const MenuModalCreate = ({ isOpen, onOpenModal }) => {
   const { create, loading, categoryOptions } = useCreateMenu();
+  const { isTenantPro, loading: loadingTenant } = useTenantTier();
 
   const {
     register,
@@ -33,7 +35,8 @@ const MenuModalCreate = ({ isOpen, onOpenModal }) => {
 
   const handleSubmitForm = async (data) => {
     try {
-      const response = await create(data);
+      const payload = !loadingTenant && isTenantPro ? data : { ...data, customs: [] };
+      const response = await create(payload);
       onOpenModal(false);
       toast.success(response.message || "Menu berhasil dibuat");
     } catch (error) {
@@ -49,22 +52,8 @@ const MenuModalCreate = ({ isOpen, onOpenModal }) => {
   };
 
   return (
-    <DashModalForm
-      isOpen={isOpen}
-      onOpenModal={onOpenModal}
-      loading={loading}
-      handleSubmit={handleSubmit}
-      onSubmitForm={handleSubmitForm}
-      title="Tambah Menu"
-      icon={PackagePlus}
-    >
-      <MenuForm
-        register={register}
-        control={control}
-        errors={errors}
-        categoryOptions={categoryOptions}
-        type="create"
-      />
+    <DashModalForm isOpen={isOpen} onOpenModal={onOpenModal} loading={loading} handleSubmit={handleSubmit} onSubmitForm={handleSubmitForm} title="Tambah Menu" icon={PackagePlus}>
+      <MenuForm register={register} control={control} errors={errors} categoryOptions={categoryOptions} type="create" />
     </DashModalForm>
   );
 };

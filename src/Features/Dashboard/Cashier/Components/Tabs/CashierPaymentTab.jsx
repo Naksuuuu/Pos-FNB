@@ -1,6 +1,7 @@
 import { CircleMinus, CirclePlus, Loader2, AlertTriangle, Printer } from "lucide-react";
 
 import useCashierPayment from "@/Features/Dashboard/Cashier/Hooks/useCashierPayment";
+import useTenantTier from "@/Features/Shared/Hooks/useTenantTier";
 import DashModalConfirmation from "@/Features/Dashboard/Shared/Component/Modal/DashModalConfirmation";
 
 import { rupiah } from "@/Utils/rupiahHelper";
@@ -16,6 +17,7 @@ import { Label } from "@/Components/Elements/Shadcn/label";
 const NAVBAR_HEIGHT = 105;
 
 const CashierPaymentTab = () => {
+  const { isTenantPro } = useTenantTier();
   const {
     orders,
     loadingOrders,
@@ -98,9 +100,7 @@ const CashierPaymentTab = () => {
               >
                 <div className="flex items-center justify-between gap-2">
                   <p className="font-semibold">{order.order_no || order.code}</p>
-                  <Badge variant={order.status === "submitted" ? "info" : "success"}>
-                    {order.status ? order.status.toUpperCase() : "SUBMITTED"}
-                  </Badge>
+                  <Badge variant={order.status === "submitted" ? "info" : "success"}>{order.status ? order.status.toUpperCase() : "SUBMITTED"}</Badge>
                 </div>
                 <p className="text-sm">{order.customer_name || "Pelanggan"}</p>
                 <p className="text-xs text-muted-foreground">
@@ -113,9 +113,7 @@ const CashierPaymentTab = () => {
       </Card>
 
       <Card className="flex flex-col h-full gap-4 overflow-hidden " outerClassName="xl:col-span-2">
-        {!selectedOrder && (
-          <p className="py-16 text-center text-muted-foreground">Pilih pesanan untuk proses pembayaran.</p>
-        )}
+        {!selectedOrder && <p className="py-16 text-center text-muted-foreground">Pilih pesanan untuk proses pembayaran.</p>}
 
         {selectedOrder && (
           <>
@@ -191,12 +189,7 @@ const CashierPaymentTab = () => {
                   )}
                 </div>
 
-                <Button
-                  type="button"
-                  variant="default"
-                  className="w-full cursor-pointer"
-                  onClick={() => handlePrintReceipt(selectedOrder)}
-                >
+                <Button type="button" variant="default" className="w-full cursor-pointer" onClick={() => handlePrintReceipt(selectedOrder)}>
                   <Printer className="size-4 mr-2" />
                   Cetak Struk
                 </Button>
@@ -229,27 +222,24 @@ const CashierPaymentTab = () => {
                       >
                         Tunai
                       </Button>
-                      <Button
-                        type="button"
-                        variant={paymentMethod === "nontunai" ? "default" : "ghost"}
-                        size="sm"
-                        className="h-8 px-3 rounded-md text-xs cursor-pointer"
-                        onClick={() => setPaymentMethod("nontunai")}
-                      >
-                        Non-Tunai
-                      </Button>
+                      {isTenantPro && (
+                        <Button
+                          type="button"
+                          variant={paymentMethod === "nontunai" ? "default" : "ghost"}
+                          size="sm"
+                          className="h-8 px-3 rounded-md text-xs cursor-pointer"
+                          onClick={() => setPaymentMethod("nontunai")}
+                        >
+                          Non-Tunai
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </div>
 
                 <Field>
                   <Label htmlFor="cash_amount">Uang Diterima</Label>
-                  <InputRupiah
-                    id="cash_amount"
-                    name="cash_amount"
-                    control={control}
-                    placeholder="Masukkan uang diterima"
-                  />
+                  <InputRupiah id="cash_amount" name="cash_amount" control={control} placeholder="Masukkan uang diterima" />
                   {errors.cash_amount && <FieldError>{errors.cash_amount.message}</FieldError>}
                 </Field>
 
@@ -284,21 +274,11 @@ const CashierPaymentTab = () => {
                 </div>
 
                 <div className="flex gap-2 w-full">
-                  <Button
-                    type="button"
-                    variant="destructive"
-                    onClick={handleCancel}
-                    disabled={loadingPayment || loadingCancel}
-                    className="flex-1 cursor-pointer"
-                  >
+                  <Button type="button" variant="destructive" onClick={handleCancel} disabled={loadingPayment || loadingCancel} className="flex-1 cursor-pointer">
                     {loadingCancel ? <Loader2 className="animate-spin mr-1" /> : null}
                     Batalkan Pesanan
                   </Button>
-                  <Button
-                    type="submit"
-                    disabled={!canProcessPayment || loadingPayment || loadingCancel}
-                    className="flex-1 cursor-pointer"
-                  >
+                  <Button type="submit" disabled={!canProcessPayment || loadingPayment || loadingCancel} className="flex-1 cursor-pointer">
                     {loadingPayment ? <Loader2 className="animate-spin mr-1" /> : null}
                     Konfirmasi Pembayaran
                   </Button>

@@ -35,6 +35,9 @@ const CreateSidebar = memo(({ pathname }) => {
       if (item.path === ROUTES.DASHBOARD.REWARD && !isTenantPro) {
         return false;
       }
+      if (item.path === ROUTES.DASHBOARD.CUSTOM && !isTenantPro) {
+        return false;
+      }
       return item.allowed_roles.includes(currentRole);
     });
   }, [currentRole, isTenantPro]);
@@ -52,13 +55,7 @@ const CreateSidebar = memo(({ pathname }) => {
             <SidebarMenuButton
               className="w-full py-6 text-center"
               render={
-                <Link to={ROUTES.PUBLIC.HOME}>
-                  {tenant?.restaurant_name && (
-                    <h1 className="text-2xl w-full font-extrabold tracking-tight text-primary text-center">
-                      {tenant.restaurant_name}
-                    </h1>
-                  )}
-                </Link>
+                <Link to={ROUTES.PUBLIC.HOME}>{tenant?.restaurant_name && <h1 className="text-2xl w-full font-extrabold tracking-tight text-primary text-center">{tenant.restaurant_name}</h1>}</Link>
               }
             ></SidebarMenuButton>
           </SidebarMenuItem>

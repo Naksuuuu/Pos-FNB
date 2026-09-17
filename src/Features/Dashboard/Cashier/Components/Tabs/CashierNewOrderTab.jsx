@@ -59,16 +59,7 @@ const CashierNewOrderTab = ({ onOrderCreated }) => {
     loadingCreateOrder,
   } = useCashierNewOrder();
 
-  const {
-    filters,
-    categories,
-    menus,
-    tables,
-    optimisticSearch,
-    loadingResources,
-    handleCategoryChange,
-    handleSearchChange,
-  } = useCashierResources();
+  const { filters, categories, menus, tables, optimisticSearch, loadingResources, handleCategoryChange, handleSearchChange } = useCashierResources();
 
   const handleEditCustom = useCallback(
     (item) => {
@@ -113,21 +104,12 @@ const CashierNewOrderTab = ({ onOrderCreated }) => {
   );
 
   return (
-    <div
-      className="grid grid-cols-1 gap-4 md:grid-cols-3 xl:grid-cols-4 "
-      style={{ height: `calc(100dvh - ${NAVBAR_HEIGHT}px)` }}
-    >
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-3 xl:grid-cols-4 " style={{ height: `calc(100dvh - ${NAVBAR_HEIGHT}px)` }}>
       <div className="space-y-4 md:col-span-2 xl:col-span-3 min-h-0 flex flex-col">
         <Card className="flex items-center gap-4">
           <Field className="w-1/5 mb-0">
             <Label htmlFor="search">Cari Menu</Label>
-            <InputSearch
-              id="search"
-              name="search"
-              onSearchChange={handleSearchChange}
-              value={optimisticSearch}
-              placeholder="Cari menu..."
-            />
+            <InputSearch id="search" name="search" onSearchChange={handleSearchChange} value={optimisticSearch} placeholder="Cari menu..." />
           </Field>
 
           <div className="flex-1 min-w-0">
@@ -138,11 +120,7 @@ const CashierNewOrderTab = ({ onOrderCreated }) => {
                 {categories.map((category) => (
                   <Button
                     key={category.value}
-                    variant={
-                      filters.category_id === category.value || (!filters.category_id && category.value === "")
-                        ? "default"
-                        : "outline"
-                    }
+                    variant={filters.category_id === category.value || (!filters.category_id && category.value === "") ? "default" : "outline"}
                     size="sm"
                     className="shrink-0"
                     onClick={() => handleCategoryChange(category.value)}
@@ -206,29 +184,17 @@ const CashierNewOrderTab = ({ onOrderCreated }) => {
               <div className="flex justify-between items-center">
                 <Label htmlFor="customer_name">Nama Pelanggan</Label>
                 {isTenantPro && (
-                  <Button
-                    type="button"
-                    variant="link"
-                    className="h-auto p-0 text-xs font-semibold text-primary hover:no-underline"
-                    onClick={() => setMemberModalOpen(true)}
-                  >
+                  <Button type="button" variant="link" className="h-auto p-0 text-xs font-semibold text-primary hover:no-underline" onClick={() => setMemberModalOpen(true)}>
                     Daftar/Kelola Member
                   </Button>
                 )}
               </div>
-              <Input
-                id="customer_name"
-                name="customer_name"
-                placeholder="contoh: John Doe"
-                {...register("customer_name")}
-              />
+              <Input id="customer_name" name="customer_name" placeholder="contoh: John Doe" {...register("customer_name")} />
               {errors.customer_name && <FieldError>{errors.customer_name.message}</FieldError>}
             </Field>
 
             <Field>
-              <Label htmlFor="code">
-                Nomor Meja {orderType === "DINE_IN" ? <span className="text-destructive">*</span> : "(Opsional)"}
-              </Label>
+              <Label htmlFor="code">Nomor Meja {orderType === "DINE_IN" ? <span className="text-destructive">*</span> : "(Opsional)"}</Label>
 
               <Controller
                 name="code"
@@ -251,13 +217,7 @@ const CashierNewOrderTab = ({ onOrderCreated }) => {
 
             <Field>
               <Label htmlFor="notes">Catatan</Label>
-              <Textarea
-                id="notes"
-                name="notes"
-                {...register("notes")}
-                placeholder="contoh: tanpa bawang"
-                className="min-h-16"
-              />
+              <Textarea id="notes" name="notes" {...register("notes")} placeholder="contoh: tanpa bawang" className="min-h-16" />
               {errors.notes && <FieldError>{errors.notes.message}</FieldError>}
             </Field>
           </FieldSet>
@@ -265,9 +225,7 @@ const CashierNewOrderTab = ({ onOrderCreated }) => {
           <Separator className="w-full border-b border-dashed bg-transparent" />
 
           <div className="flex-1 overflow-y-auto min-h-0 no-scrollbar space-y-2">
-            {cart.length === 0 && (
-              <p className="py-6 text-center text-sm text-muted-foreground">Belum ada item dipilih.</p>
-            )}
+            {cart.length === 0 && <p className="py-6 text-center text-sm text-muted-foreground">Belum ada item dipilih.</p>}
 
             {cart.map((item) => {
               const itemKey = item.cart_item_key || item.menu_id;
@@ -289,15 +247,11 @@ const CashierNewOrderTab = ({ onOrderCreated }) => {
                       <p className="text-xs text-muted-foreground mt-0.5">{rupiah(unitPrice)} / item</p>
                     </div>
                     <div className="flex items-center gap-1">
-                      <Button
-                        type="button"
-                        size="icon-xs"
-                        variant="ghost"
-                        title="Opsi Extra Custom"
-                        onClick={() => handleEditCustom(item)}
-                      >
-                        <Pen className="size-3.5 text-muted-foreground hover:text-foreground" />
-                      </Button>
+                      {isTenantPro && (
+                        <Button type="button" size="icon-xs" variant="ghost" title="Opsi Extra Custom" onClick={() => handleEditCustom(item)}>
+                          <Pen className="size-3.5 text-muted-foreground hover:text-foreground" />
+                        </Button>
+                      )}
                       <Button type="button" size="icon-xs" variant="ghost" onClick={() => removeCartItem(itemKey)}>
                         <Trash2 className="text-destructive" />
                       </Button>
@@ -342,12 +296,7 @@ const CashierNewOrderTab = ({ onOrderCreated }) => {
           </div>
 
           <div className="grid grid-cols-2 gap-2">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={clearOrderForm}
-              disabled={loadingCreateOrder || cart.length === 0}
-            >
+            <Button type="button" variant="outline" onClick={clearOrderForm} disabled={loadingCreateOrder || cart.length === 0}>
               Kosongkan
             </Button>
             <Button type="submit" disabled={!canSubmitQueue}>

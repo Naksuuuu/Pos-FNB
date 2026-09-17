@@ -11,6 +11,7 @@ import { ORDER_QUERY_KEYS } from "@/Features/Dashboard/Order/Constants/OrderCons
 
 import { useBluetoothPrinter } from "@/Features/Shared/Context/BluetoothPrinterContext";
 import useTenant from "@/Features/Shared/Hooks/useTenant";
+import useTenantTier from "@/Features/Shared/Hooks/useTenantTier";
 import { buildReceiptBytes } from "@/Utils/ReceiptFormatter";
 import echoInstance from "@/Services/Common/echoService";
 import { rupiah } from "@/Utils/rupiahHelper";
@@ -31,6 +32,7 @@ const useCashierPayment = () => {
 
   // Bluetooth printer and tenant contexts
   const { tenant } = useTenant();
+  const { isTenantPro } = useTenantTier();
   const { isConnected, printRaw } = useBluetoothPrinter();
 
   // Print and cancel modal states
@@ -187,10 +189,7 @@ const useCashierPayment = () => {
     };
   }, [queryClient, playNotificationSound, triggerToast]);
 
-  const selectedOrder = useMemo(
-    () => orders.find((order) => order.id === selectedOrderId) || orders[0] || null,
-    [selectedOrderId, orders],
-  );
+  const selectedOrder = useMemo(() => orders.find((order) => order.id === selectedOrderId) || orders[0] || null, [selectedOrderId, orders]);
 
   const paymentTotal = Number(selectedOrder?.total_amount || 0);
   const taxPercentage = Number(selectedOrder?.tax_percentage) || 0;
@@ -202,6 +201,12 @@ const useCashierPayment = () => {
     name: "cash_amount",
   });
 
+  useEffect(() => {
+    if (!isTenantPro && paymentMethod !== "tunai") {
+      setPaymentMethod("tunai");
+    }
+  }, [isTenantPro, paymentMethod]);
+
   const parsedCashAmount = useMemo(() => {
     const normalized = Number(normalizeCashDigits(cashAmountField));
     return Number.isFinite(normalized) ? normalized : 0;
@@ -209,6 +214,7 @@ const useCashierPayment = () => {
 
   const changeAmount = Math.max(parsedCashAmount - paymentTotal, 0);
   const isCashEnough = parsedCashAmount >= paymentTotal && parsedCashAmount > 0;
+  const effectivePaymentMethod = isTenantPro ? paymentMethod : "tunai";
 
   const setCashAmount = useCallback(
     (value) => {
@@ -254,8 +260,8 @@ const useCashierPayment = () => {
       const response = await updatePaymentMutation.mutateAsync({
         orderId,
         payload: {
-          method: paymentMethod,
-          payment_amount: paymentMethod === "tunai" ? parsedCashAmount : paymentTotal,
+          method: effectivePaymentMethod,
+          payment_amount: effectivePaymentMethod === "tunai" ? parsedCashAmount : paymentTotal,
           status: "completed",
         },
       });
@@ -268,15 +274,7 @@ const useCashierPayment = () => {
     } finally {
       setIsConfirming(false);
     }
-  }, [
-    selectedOrder,
-    parsedCashAmount,
-    paymentTotal,
-    paymentMethod,
-    updatePaymentMutation,
-    reset,
-    refreshOrders,
-  ]);
+  }, [selectedOrder, parsedCashAmount, paymentTotal, effectivePaymentMethod, updatePaymentMutation, reset, refreshOrders]);
 
   const cancelOrder = useCallback(async () => {
     if (!selectedOrder) {
@@ -293,7 +291,7 @@ const useCashierPayment = () => {
       const response = await updatePaymentMutation.mutateAsync({
         orderId,
         payload: {
-          method: paymentMethod,
+          method: effectivePaymentMethod,
           payment_amount: 0,
           status: "canceled",
         },
@@ -307,7 +305,7 @@ const useCashierPayment = () => {
     } finally {
       setIsCanceling(false);
     }
-  }, [selectedOrder, paymentMethod, updatePaymentMutation, reset, refreshOrders]);
+  }, [selectedOrder, effectivePaymentMethod, updatePaymentMutation, reset, refreshOrders]);
 
   const canProcessPayment = !!selectedOrder && !isConfirming && !isCanceling && isCashEnough;
 
@@ -321,15 +319,9 @@ const useCashierPayment = () => {
       }
 
       try {
-        const method = details
-          ? details.method
-          : order.payment?.method || order.payment_method || order.payment_type || paymentMethod;
-        const cash = details
-          ? details.cashAmount
-          : Number(order.payment?.payment_amount ?? order.cash_amount ?? order.cash_received ?? order.total_amount ?? parsedCashAmount);
-        const change = details
-          ? details.changeAmount
-          : Number(order.payment?.amount_change ?? order.change_amount ?? order.change ?? 0);
+        const method = details ? details.method : order.payment?.method || order.payment_method || order.payment_type || effectivePaymentMethod;
+        const cash = details ? details.cashAmount : Number(order.payment?.payment_amount ?? order.cash_amount ?? order.cash_received ?? order.total_amount ?? parsedCashAmount);
+        const change = details ? details.changeAmount : Number(order.payment?.amount_change ?? order.change_amount ?? order.change ?? 0);
 
         const bytes = buildReceiptBytes({
           order,
@@ -347,7 +339,7 @@ const useCashierPayment = () => {
         toast.error(`Gagal mencetak struk: ${err.message}`);
       }
     },
-    [isConnected, paymentMethod, parsedCashAmount, tenant, printRaw],
+    [isConnected, effectivePaymentMethod, parsedCashAmount, tenant, printRaw],
   );
 
   const handleConfirmPrint = useCallback(async () => {
@@ -361,7 +353,7 @@ const useCashierPayment = () => {
     try {
       const orderToPrint = { ...selectedOrder };
       const paymentDetails = {
-        method: paymentMethod,
+        method: effectivePaymentMethod,
         cashAmount: parsedCashAmount,
         changeAmount: changeAmount,
       };
@@ -375,7 +367,7 @@ const useCashierPayment = () => {
     } catch (error) {
       toast.error(error?.message || "Gagal memproses pembayaran");
     }
-  }, [selectedOrder, paymentMethod, parsedCashAmount, changeAmount, processPayment]);
+  }, [selectedOrder, effectivePaymentMethod, parsedCashAmount, changeAmount, processPayment]);
 
   const handleCancel = useCallback(() => {
     setIsOpenCancelModal(true);

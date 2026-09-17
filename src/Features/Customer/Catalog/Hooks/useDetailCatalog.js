@@ -5,12 +5,15 @@ import { useQuery } from "@tanstack/react-query";
 import CatalogService from "@/Features/Customer/Catalog/Services/CatalogService";
 import { CUSTOMER_CATALOG_QUERY_KEYS } from "@/Features/Customer/Catalog/Constants/CatalogConstant";
 import { ROUTES } from "@/Constants/RouteConstant";
+import useTenantTier from "@/Features/Shared/Hooks/useTenantTier";
 
 const useDetailCatalog = () => {
   const catalogId = useParams().catalogId;
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const location = useLocation();
+  const { isTenantPro, loading: loadingTenant } = useTenantTier();
+  const canUseCustom = !loadingTenant && isTenantPro;
 
   const isFromOrder = Boolean(location.state?.fromOrder);
   const [quantity, setQuantity] = useState(isFromOrder ? location.state.quantity : 1);
@@ -36,20 +39,21 @@ const useDetailCatalog = () => {
 
   const catalog = useMemo(() => catalogs.find((item) => item.id.toString() === catalogId), [catalogs, catalogId]);
 
-  const [selectedCustoms, setSelectedCustoms] = useState(
-    isFromOrder && Array.isArray(location.state?.selectedCustoms) ? location.state.selectedCustoms : [],
+  const [selectedCustoms, setSelectedCustoms] = useState(isTenantPro && isFromOrder && Array.isArray(location.state?.selectedCustoms) ? location.state.selectedCustoms : []);
+
+  const toggleCustomOption = useCallback(
+    (optionId) => {
+      if (!canUseCustom) return;
+
+      setSelectedCustoms((prev) => (prev.includes(optionId) ? prev.filter((id) => id !== optionId) : [...prev, optionId]));
+    },
+    [canUseCustom],
   );
 
-  const toggleCustomOption = useCallback((optionId) => {
-    setSelectedCustoms((prev) =>
-      prev.includes(optionId) ? prev.filter((id) => id !== optionId) : [...prev, optionId]
-    );
-  }, []);
-
   const selectedCustomObjects = useMemo(() => {
-    if (!catalog?.custom_options || !Array.isArray(catalog.custom_options)) return [];
+    if (!canUseCustom || !catalog?.custom_options || !Array.isArray(catalog.custom_options)) return [];
     return catalog.custom_options.filter((opt) => selectedCustoms.includes(opt.id));
-  }, [catalog, selectedCustoms]);
+  }, [canUseCustom, catalog, selectedCustoms]);
 
   const customOptionsTotalPrice = useMemo(() => {
     return selectedCustomObjects.reduce((sum, opt) => sum + (Number(opt.price) || 0), 0);
@@ -74,20 +78,16 @@ const useDetailCatalog = () => {
       const customPrice = selectedCustomObjects.reduce((acc, opt) => acc + (Number(opt.price) || 0), 0);
       const unitPrice = basePrice + customPrice;
 
-      const customIdsKey = [...selectedCustoms].sort().join(",");
+      const customIdsKey = canUseCustom ? [...selectedCustoms].sort().join(",") : "";
       const previousKey = location.state?.custom_ids_key;
 
       let existingIndex = -1;
       if (isFromOrder && previousKey !== undefined) {
-        existingIndex = storedOrders.findIndex(
-          (item) => item.menu_id === catalog.id && (item.custom_ids_key || "") === previousKey
-        );
+        existingIndex = storedOrders.findIndex((item) => item.menu_id === catalog.id && (item.custom_ids_key || "") === previousKey);
       }
 
       if (existingIndex === -1) {
-        existingIndex = storedOrders.findIndex(
-          (item) => item.menu_id === catalog.id && (item.custom_ids_key || "") === customIdsKey
-        );
+        existingIndex = storedOrders.findIndex((item) => item.menu_id === catalog.id && (item.custom_ids_key || "") === customIdsKey);
       }
 
       if (existingIndex !== -1) {
@@ -118,7 +118,7 @@ const useDetailCatalog = () => {
         search: queryWithCode,
       });
     },
-    [isFromOrder, location.state, navigate, queryWithCode, selectedCustomObjects, selectedCustoms],
+    [canUseCustom, isFromOrder, location.state, navigate, queryWithCode, selectedCustomObjects, selectedCustoms],
   );
 
   return {

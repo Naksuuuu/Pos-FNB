@@ -20,9 +20,7 @@ const UserPage = lazy(() => import("@/Features/Dashboard/User/Pages/UserPage"));
 const ProfilePage = lazy(() => import("@/Features/Dashboard/Profile/Pages/ProfilePage"));
 const SettingsPage = lazy(() => import("@/Features/Dashboard/Settings/Pages/SettingsPage"));
 const RewardPage = lazy(() => import("@/Features/Dashboard/Reward/Pages/RewardPage"));
-const SidebarProvider = lazy(() =>
-  import("@/Components/Elements/Shadcn/sidebar").then((m) => ({ default: m.SidebarProvider })),
-);
+const SidebarProvider = lazy(() => import("@/Components/Elements/Shadcn/sidebar").then((m) => ({ default: m.SidebarProvider })));
 
 const DashboardLayout = () => {
   return (
@@ -82,7 +80,11 @@ const DashboardRoute = [
       },
       {
         path: ROUTES.DASHBOARD.CUSTOM,
-        element: <CustomOptionPage />,
+        element: (
+          <TenantTierGuard allowedTiers={["pro"]}>
+            <CustomOptionPage />
+          </TenantTierGuard>
+        ),
       },
       {
         path: ROUTES.DASHBOARD.ORDER,

@@ -8,9 +8,11 @@ import useEditMenu from "@/Features/Dashboard/Menu/Hooks/useEditMenu";
 import DashModalForm from "@/Features/Dashboard/Shared/Component/Modal/DashModalForm";
 import MenuForm from "@/Features/Dashboard/Menu/Components/Form/MenuForm";
 import { PackageSearch } from "lucide-react";
+import useTenantTier from "@/Features/Shared/Hooks/useTenantTier";
 
 const MenuModalEdit = ({ selectedMenu, onOpenModal }) => {
   const { edit, loading, categoryOptions } = useEditMenu();
+  const { isTenantPro, loading: loadingTenant } = useTenantTier();
 
   const {
     register,
@@ -33,7 +35,8 @@ const MenuModalEdit = ({ selectedMenu, onOpenModal }) => {
 
   const handleSubmitForm = async (data) => {
     try {
-      const response = await edit(selectedMenu.id, data);
+      const payload = !loadingTenant && isTenantPro ? data : { ...data, customs: [] };
+      const response = await edit(selectedMenu.id, payload);
       onOpenModal(null);
       toast.success(response.message || "Menu berhasil diperbarui");
     } catch (error) {
@@ -49,23 +52,8 @@ const MenuModalEdit = ({ selectedMenu, onOpenModal }) => {
   };
 
   return (
-    <DashModalForm
-      isOpen={!!selectedMenu}
-      onOpenModal={onOpenModal}
-      loading={loading}
-      handleSubmit={handleSubmit}
-      onSubmitForm={handleSubmitForm}
-      title="Edit Menu"
-      icon={PackageSearch}
-    >
-      <MenuForm
-        register={register}
-        control={control}
-        errors={errors}
-        categoryOptions={categoryOptions}
-        type="edit"
-        selectedMenu={selectedMenu}
-      />
+    <DashModalForm isOpen={!!selectedMenu} onOpenModal={onOpenModal} loading={loading} handleSubmit={handleSubmit} onSubmitForm={handleSubmitForm} title="Edit Menu" icon={PackageSearch}>
+      <MenuForm register={register} control={control} errors={errors} categoryOptions={categoryOptions} type="edit" selectedMenu={selectedMenu} />
     </DashModalForm>
   );
 };
